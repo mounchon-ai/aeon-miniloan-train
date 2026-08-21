@@ -1,0 +1,732 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "req/scripts/export-contract.mjs",
+  "source": {
+    "plugin": "req",
+    "specSchemaVersion": "0.4.0",
+    "module": "miniloan",
+    "specStatus": "draft",
+    "specUpdatedAt": "2026-08-15T15:18+07:00"
+  },
+  "terms": [
+    {
+      "id": "UL-miniloan-001",
+      "termTh": "ใบสมัครสินเชื่อ",
+      "termEn": "LoanApplication",
+      "definition": "ใบสมัครสินเชื่อ ตั้งแต่ร่างจนถึงเบิกจ่าย เป็น Aggregate ฝั่ง Origination · 1 ผู้สมัครมีได้หลายใบสมัคร",
+      "aka": [
+        "ใบสมัคร",
+        "คำขอสินเชื่อ"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-004"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**LoanApplication** | ใบสมัครสินเชื่อ ตั้งแต่ร่างจนถึงเบิกจ่าย (Aggregate ฝั่ง Origination)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-002",
+      "termTh": "ข้อมูลผู้สมัคร",
+      "termEn": "ApplicantProfile",
+      "definition": "ข้อมูลผู้สมัคร: อายุ รายได้ อายุงาน ภาระหนี้ปัจจุบัน",
+      "aka": [],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**Applicant Profile** | ข้อมูลผู้สมัคร: อายุ รายได้ อายุงาน ภาระหนี้ปัจจุบัน",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-003",
+      "termTh": "ผลการประเมินสินเชื่อ",
+      "termEn": "CreditAssessment",
+      "definition": "ผลการประเมินจาก rule engine ประกอบด้วยคะแนน เหตุผล และวงเงินที่อนุมัติได้",
+      "aka": [
+        "ผลประเมิน"
+      ],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**CreditAssessment** | ผลการประเมินจาก rule engine (คะแนน + เหตุผล + วงเงินที่อนุมัติได้)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-004",
+      "termTh": "บัญชีสินเชื่อ",
+      "termEn": "LoanAccount",
+      "definition": "บัญชีสินเชื่อหลังเบิกจ่าย เป็น Aggregate ฝั่ง Servicing · 1 ใบสมัครที่ Disbursed สร้าง 1 บัญชี",
+      "aka": [
+        "บัญชีเงินกู้"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-001"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**LoanAccount** | บัญชีสินเชื่อหลังเบิกจ่าย (Aggregate ฝั่ง Servicing)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-005",
+      "termTh": "ตารางผ่อน",
+      "termEn": "RepaymentSchedule",
+      "definition": "ตารางผ่อนรายงวดของบัญชีสินเชื่อหนึ่งบัญชี แต่ละแถวแยกเงินต้น ดอกเบี้ย และยอดคงเหลือ",
+      "aka": [
+        "ตารางการชำระ"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-006"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**RepaymentSchedule** | ตารางผ่อนรายงวด (ต้น/ดอก/ยอดคงเหลือ)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-006",
+      "termTh": "งวดผ่อน",
+      "termEn": "Installment",
+      "definition": "งวดผ่อน 1 งวดในตารางผ่อน — หนึ่งแถวของ RepaymentSchedule",
+      "aka": [
+        "งวด"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-005",
+        "UL-miniloan-012"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**Installment** | งวดผ่อน 1 งวดในตาราง",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-007",
+      "termTh": "รายการชำระเงิน",
+      "termEn": "Payment",
+      "definition": "รายการชำระเงินที่บันทึกเข้าบัญชีสินเชื่อ · รอบการเรียนนี้บันทึกด้วยมือ ไม่เชื่อม payment gateway จริง",
+      "aka": [
+        "การชำระ"
+      ],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**Payment** | รายการชำระเงินที่บันทึกเข้าบัญชี",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-008",
+      "termTh": "การปิดบัญชีก่อนกำหนด",
+      "termEn": "EarlySettlement",
+      "definition": "การปิดบัญชีสินเชื่อก่อนครบกำหนดงวดสุดท้าย โดยชำระยอดปิดบัญชีตาม BR-07",
+      "aka": [
+        "ปิดก่อนกำหนด",
+        "โปะปิดบัญชี"
+      ],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**Early Settlement** | การปิดบัญชีก่อนครบกำหนด",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-009",
+      "termTh": "จำนวนเงิน",
+      "termEn": "Money",
+      "definition": "จำนวนเงินพร้อมสกุลเงิน เป็น Value Object · ห้ามใช้ทศนิยมลอย (floating point) · รอบการเรียนนี้ใช้ THB อย่างเดียว",
+      "aka": [],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "4 · Ubiquitous Language"
+          },
+          "quote": "**Money** | จำนวนเงินพร้อมสกุล (Value Object — ไม่ใช้ทศนิยมลอย/floating point)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-010",
+      "termTh": "วงเงินอนุมัติสูงสุด",
+      "termEn": "MaxApprovableAmount",
+      "definition": "วงเงินสูงสุดที่ระบบอนุมัติให้ผู้สมัครรายนี้ได้ = 5 เท่าของรายได้ต่อเดือน และไม่เกิน 1,000,000 บาท — คำนวณโดยระบบ ไม่ใช่ตัวเลขที่ผู้สมัครกรอก",
+      "aka": [
+        "วงเงินที่อนุมัติได้",
+        "วงเงินสูงสุด"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-011"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-03"
+          },
+          "quote": "วงเงินอนุมัติสูงสุด = 5 เท่าของรายได้ต่อเดือน และไม่เกิน 1,000,000 บาท",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "7 · US-05"
+          },
+          "quote": "**Given** วงเงินที่ขอ > วงเงินอนุมัติได้ (BR-03) **When** อนุมัติ **Then** ระบบเตือนและให้ปรับวงเงินก่อนอนุมัติ",
+          "confidence": 0.9
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-011",
+      "termTh": "จำนวนเงินกู้ที่ขอ",
+      "termEn": "RequestedAmount",
+      "definition": "จำนวนเงินที่ผู้สมัครกรอกในใบสมัคร ต้องอยู่ในช่วง 10,000 – 1,000,000 บาท — เป็นตัวเลขที่คนกรอก ไม่ใช่ตัวเลขที่ระบบคำนวณ",
+      "aka": [
+        "วงเงินที่ขอ",
+        "จำนวนเงินกู้"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-010"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-04"
+          },
+          "quote": "จำนวนเงินกู้: 10,000 – 1,000,000 บาท",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "7 · US-05"
+          },
+          "quote": "**Given** วงเงินที่ขอ > วงเงินอนุมัติได้ (BR-03) **When** อนุมัติ **Then** ระบบเตือนและให้ปรับวงเงินก่อนอนุมัติ",
+          "confidence": 0.9
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-012",
+      "termTh": "จำนวนงวด",
+      "termEn": "Term",
+      "definition": "จำนวนงวดที่ตกลงกันในสัญญา เป็นตัวเลขนับ ต้องอยู่ในช่วง 6 – 60 งวด (รายเดือน) — เป็นค่าที่ผู้สมัครเลือกตอนกรอกใบสมัคร และเป็น n ในสูตร EMI · ไม่ใช่แถวในตารางผ่อน",
+      "aka": [
+        "งวด",
+        "ระยะเวลาผ่อน"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-006"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-04"
+          },
+          "quote": "จำนวนงวด: 6 – 60 งวด (รายเดือน)",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "10 · เชื่อมต่อสู่ Domain Model"
+          },
+          "quote": "| `Money`, `InterestRate`, `Term` | Value Object | BR-04, BR-06 |",
+          "confidence": 0.9
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-013",
+      "termTh": "การมอบหมายใบสมัคร",
+      "termEn": "ApplicationAssignment",
+      "definition": "การผูกใบสมัครหนึ่งใบเข้ากับ Loan Officer หนึ่งคนเพื่อให้เป็นผู้พิจารณา · เฉพาะคนที่ถูกมอบหมายเท่านั้นที่กดอนุมัติหรือปฏิเสธใบสมัครนั้นได้ · แนวคิดนี้ไม่มีในเอกสารต้นทาง เกิดจากการตัดสินของเจ้าของในรอบ /req:ask permission",
+      "aka": [
+        "assign ใบสมัคร",
+        "ผู้รับผิดชอบใบสมัคร"
+      ],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-002",
+          "locator": {
+            "section": "[3] QB-perm-02"
+          },
+          "quote": "เฉพาะ Loan Officer ที่ถูก assign ใบสมัครนั้นเท่านั้นที่กดอนุมัติหรือปฏิเสธใบสมัครนั้นได้ (เอกสารต้นทางไม่มีแนวคิด assignment เลย ข้อนี้เป็นการตัดสินใหม่ที่ไม่มีอินพุตหนุน)",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-014",
+      "termTh": "อัตราดอกเบี้ย",
+      "termEn": "InterestRate",
+      "definition": "อัตราดอกเบี้ยแบบลดต้นลดดอกที่ใช้คำนวณตารางผ่อน · เป็นข้อมูลหลักที่มีเวอร์ชันและมีวันเริ่มมีผล (effective date) ไม่ใช่ค่าคงที่ในโค้ด — บัญชีสินเชื่อผูกกับเวอร์ชันที่มีผลอยู่ ณ วันเบิกจ่าย และเวอร์ชันที่เคยถูกใช้ห้ามลบ",
+      "aka": [
+        "เรทดอกเบี้ย",
+        "อัตราต่อปี"
+      ],
+      "notToConfuseWith": [],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "10 · เชื่อมต่อสู่ Domain Model"
+          },
+          "quote": "| `Money`, `InterestRate`, `Term` | Value Object | BR-04, BR-06 |",
+          "confidence": 0.9
+        },
+        {
+          "source": "SRC-003",
+          "locator": {
+            "section": "[2] QB-tmp-01 · [3] QB-tmp-02"
+          },
+          "quote": "อัตราดอกเบี้ยและสูตรคำนวณกำหนดวันเริ่มมีผล (effective date) ได้ บัญชีใช้เวอร์ชันที่มีผลอยู่ ณ วันเบิกจ่าย · บัญชีเก็บ id ของเวอร์ชันอัตราที่ใช้ ไม่ได้คัดลอกตัวเลขมาเก็บ · master ของอัตรามีเวอร์ชันและห้ามลบ",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-015",
+      "termTh": "การปรับปรุงบัญชีหลังปิด",
+      "termEn": "ClosedAccountAdjustment",
+      "definition": "รายการขอแก้ไขข้อมูลของบัญชีสินเชื่อที่ปิดแล้ว (Closed) ต้องผ่านการอนุมัติจากผู้ถือบทบาทผู้อนุมัติ (UL-miniloan-016) ก่อนจึงมีผล ไม่ใช่การแก้ทับทันที · เก็บเป็นรายการปรับปรุงแยกจากตัวบัญชี ค่าเดิมของบัญชีคงไว้ไม่ถูกทับ และรายการเก็บค่าเดิม ค่าใหม่ ผู้ขอแก้ ผู้อนุมัติ และเวลาอนุมัติ",
+      "aka": [
+        "แก้ข้อมูลหลังปิดบัญชี",
+        "ปรับปรุงย้อนหลัง"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-008"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-004",
+          "locator": {
+            "section": "[3] QB-frz-01"
+          },
+          "quote": "บัญชีสินเชื่อที่ปิดแล้ว (Closed) ยังแก้ข้อมูลได้ แต่ต้องผ่านการอนุมัติก่อนจึงมีผล",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-005",
+          "locator": {
+            "section": "[3] QB-aud-01"
+          },
+          "quote": "แก้ข้อมูลบัญชีที่ปิดแล้วเก็บเป็นรายการปรับปรุง (adjustment) แยกจากตัวบัญชี ค่าเดิมคงไว้ไม่ถูกทับ",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-016",
+      "termTh": "บทบาทผู้อนุมัติ",
+      "termEn": "ApproverRole",
+      "definition": "role ที่ระบบกำหนดให้มีสิทธิ์อนุมัติการปรับปรุงบัญชีสินเชื่อที่ปิดแล้ว — เป็นค่าที่ตั้งไว้ในระบบและเปลี่ยนได้ภายหลัง ไม่ผูกตายกับ actor ใด actor หนึ่งในโค้ด · ถ้ายังไม่ตั้ง ฟีเจอร์ปรับปรุงบัญชีที่ปิดแล้วใช้ไม่ได้ (ไม่มีค่าเริ่มต้น) · ใครตั้งค่าได้ และต้องต่างจากผู้ขอแก้หรือไม่ ยังไม่ตัดสิน — ดู Q-miniloan-009",
+      "aka": [
+        "role ผู้อนุมัติ",
+        "ผู้มีสิทธิ์อนุมัติการปรับปรุง"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-013"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-005",
+          "locator": {
+            "section": "[1] QB-apr-01"
+          },
+          "quote": "ผู้อนุมัติการปรับปรุงบัญชีสินเชื่อที่ปิดแล้วกำหนดเป็น role ได้ ตั้งค่าในระบบภายหลังได้ ไม่ fix ตายตัวในโค้ด",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-017",
+      "termTh": "ตารางผ่อนฉบับที่ออกใหม่",
+      "termEn": "RepaymentScheduleRevision",
+      "definition": "ตารางผ่อนฉบับใหม่ที่ออกทับฉบับเดิมของบัญชีสินเชื่อเดียวกัน เมื่อจำเป็นต้องเปลี่ยนตารางผ่อนที่ออกให้ผู้กู้ไปแล้ว — ออกทับทั้งฉบับ ไม่ใช่แก้บางแถวของฉบับเดิม · ฉบับเดิมยังเก็บไว้ดูย้อนหลังได้และห้ามลบ แนวเดียวกับเวอร์ชันของอัตราดอกเบี้ยใน BR-miniloan-037@v1",
+      "aka": [
+        "ตารางผ่อนฉบับใหม่",
+        "ออกตารางผ่อนใหม่ทับ"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-005"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-006",
+          "locator": {
+            "section": "[3] QB-frz-02"
+          },
+          "quote": "ตารางผ่อนที่ออกให้ผู้กู้แล้วหลังเบิกจ่าย แก้แถวในฉบับเดิมไม่ได้ ต้องออกตารางผ่อนฉบับใหม่ทับทั้งฉบับ และฉบับเดิมต้องเก็บไว้ดูย้อนหลังได้ ห้ามลบ",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-018",
+      "termTh": "การโปะเงินต้น",
+      "termEn": "PartialPrepayment",
+      "definition": "การชำระเกินยอดงวด โดยส่วนที่เกินถูกนำไปตัดเงินต้นของบัญชีสินเชื่อที่ยังเป็น Active — บัญชีไม่ปิด ยังผ่อนต่อ แต่เงินต้นลดลงจึงต้องออกตารางผ่อนฉบับใหม่ทับตาม BR-miniloan-044@v1 · ส่วนเกินไปลดจำนวนงวดโดยค่างวดคงเดิม (Q-miniloan-010) · มีค่าธรรมเนียม 1% ของยอดส่วนที่เกิน หักออกจากส่วนเกินก่อนนำไปตัดเงินต้น (Q-miniloan-013 → BR-miniloan-050@v1) · ถ้าส่วนเกินมากพอปิดบัญชีได้ในครั้งเดียว ไม่ใช่การโปะแล้ว แต่เป็นการปิดบัญชีก่อนกำหนดตาม BR-miniloan-051@v1",
+      "aka": [
+        "ชำระเกินยอดงวด",
+        "โปะ"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-008"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-008",
+          "locator": {
+            "section": "[2] ชำระเกินยอดงวด"
+          },
+          "quote": "รับชำระ ปิดงวดนั้น และส่วนที่เกินไปตัดเงินต้น ทำให้ตารางผ่อนเปลี่ยน",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-013",
+          "locator": {
+            "section": "[3] Q-miniloan-013 · คำตอบข้อ 3ก และ 3ข"
+          },
+          "quote": "ค่าธรรมเนียมหักจากส่วนเกินก่อนตัดเงินต้น · ส่วนเกินที่พอปิดบัญชีได้ถือเป็นการปิดบัญชีก่อนกำหนด ไม่ใช่การโปะ",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-019",
+      "termTh": "หัวหน้าเจ้าหน้าที่สินเชื่อ",
+      "termEn": "Supervisor",
+      "definition": "ผู้ที่มีอำนาจสั่งมอบหมายใบสมัครให้ Loan Officer รายคน — เอกสารต้นทาง §3 ไม่มี actor นี้ (มีแค่ Applicant / Loan Officer / Operations / System) เกิดขึ้นจากคำตอบของ Q-miniloan-005 · ยังไม่ตัดสินว่ามีกี่ระดับ ทำอย่างอื่นได้อีกไหม และเห็นข้อมูลของลูกน้องแค่ไหน — ส่วนขอบเขตข้อมูลค้างอยู่ที่ DQ-miniloan-002",
+      "aka": [
+        "หัวหน้า",
+        "หัวหน้าทีมสินเชื่อ"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-013"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-010",
+          "locator": {
+            "section": "[1] Q-miniloan-005"
+          },
+          "quote": "หัวหน้าเป็นคนสั่งมอบหมายใบสมัครให้ Loan Officer",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-020",
+      "termTh": "การยกเลิกใบสมัคร",
+      "termEn": "ApplicationCancellation",
+      "definition": "การจบใบสมัครก่อนถึงการเบิกจ่าย โดยใบนั้นไปอยู่สถานะสุดท้าย Cancelled — ทำได้ตั้งแต่ Draft ถึง Approved เท่านั้น ใบที่ Disbursed แล้วยกเลิกไม่ได้ · **สั่งได้เฉพาะเจ้าหน้าที่ (Loan Officer) และต้องระบุเหตุผลเสมอ** — Applicant ยกเลิกใบของตัวเองไม่ได้ ต้องแจ้งเจ้าหน้าที่ · เป็นวิธีแก้เดียวเมื่อใบสมัครเดินสถานะผิด เพราะ BR-miniloan-010@v1 ไม่มีเส้นถอยกลับ · ใครยกเลิกใบที่ยังไม่ถูกมอบหมายได้ ยังไม่ตัดสิน — ดู Q-miniloan-012",
+      "aka": [
+        "ยกเลิกใบสมัคร",
+        "Cancel"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-008"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-010",
+          "locator": {
+            "section": "[2] Q-miniloan-007 ท่อน 1"
+          },
+          "quote": "ใบที่ถูกยกเลิกไปอยู่สถานะใหม่ Cancelled แยกขาดจาก Rejected",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-011",
+          "locator": {
+            "section": "[1] Q-miniloan-011"
+          },
+          "quote": "ยกเลิกได้เฉพาะเจ้าหน้าที่ และต้องระบุเหตุผลเสมอ",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-021",
+      "termTh": "ค่าธรรมเนียมการโปะ",
+      "termEn": "PrepaymentFee",
+      "definition": "ค่าธรรมเนียม 1% ของยอดส่วนที่เกิน ซึ่งเกิดขึ้นเมื่อผู้กู้โปะเงินต้นของบัญชีที่ยังเป็น Active — หักออกจากยอดส่วนเกินก่อนนำไปตัดเงินต้น ไม่ใช่รายการเรียกเก็บแยก (BR-miniloan-050@v1) · ต่างจากค่าธรรมเนียมปิดก่อนกำหนดซึ่งคิด 1% ของเงินต้นคงเหลือและใช้เมื่อบัญชีปิด (BR-miniloan-022@v1) · ที่ขอบซึ่งส่วนเกินพอปิดบัญชีได้พอดี ให้ใช้ฐานปิดก่อนกำหนดเสมอตาม BR-miniloan-051@v1",
+      "aka": [
+        "ค่าธรรมเนียมโปะ",
+        "ค่าธรรมเนียมชำระเกิน"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-008"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-013",
+          "locator": {
+            "section": "[3] Q-miniloan-013 · คำตอบข้อ 3ก"
+          },
+          "quote": "ค่าธรรมเนียมการโปะ 1% ของส่วนเกิน หักจากส่วนเกินก่อนนำไปตัดเงินต้น",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-022",
+      "termTh": "เงินต้นคงเหลือ",
+      "termEn": "OutstandingPrincipal",
+      "definition": "เงินต้นที่ยังไม่ได้ชำระของบัญชีสินเชื่อ ณ เวลาหนึ่ง — เป็นฐานของดอกเบี้ยรายงวด (ดอกเบี้ยงวด = เงินต้นคงเหลือ × อัตราต่อเดือน ตาม BR-miniloan-016@v1) · เป็นฐานของยอดปิดบัญชีก่อนกำหนดและค่าธรรมเนียม 1% ตาม BR-miniloan-022@v1 · เป็นคอลัมน์สุดท้ายของตารางผ่อน ซึ่งต้องเป็น 0 พอดีหลังงวดสุดท้าย · **\"ยอดคงเหลือ\" ที่พบในเอกสารต้นทางและในกฎหลายข้อคือคำเดียวกันกับคำนี้** ไม่ใช่ยอดที่ต้องจ่ายทั้งหมดที่เหลือ (ซึ่งจะรวมดอกเบี้ยในอนาคต) — ยืนยันแล้วในรอบ QB-lang-01 · คำหลักเลือก \"เงินต้นคงเหลือ\" เพราะเป็นคำที่ไม่กำกวม · **แหล่งอ้างอิงเดียวของค่านี้คือคอลัมน์ยอดคงเหลือของตารางผ่อนฉบับล่าสุด** ไม่ใช่การคำนวณขึ้นใหม่จากสูตร — ตัดสินในรอบตอบการ์ดแดง Q-miniloan-016 และเขียนเป็น BR-miniloan-053@v1",
+      "aka": [
+        "ยอดคงเหลือ",
+        "ยอดเงินต้นคงเหลือ",
+        "เงินต้นที่เหลือ"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-008"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "§5 BR-06 บรรทัด 113 · BR-07 บรรทัด 117"
+          },
+          "quote": "แต่ละงวดแยกเป็นดอกเบี้ย (ยอดคงเหลือ × r) และเงินต้น (EMI − ดอกเบี้ย) · ยอดปิดบัญชี = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด (สมมติ 1% ของเงินต้นคงเหลือ)",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-014",
+          "locator": {
+            "section": "[1] QB-lang-01 · คู่ที่ 1"
+          },
+          "quote": "ตอบ a : สิ่งเดียวกัน ใช้คำเดียวทั้งระบบ",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-017",
+          "locator": {
+            "section": "คำตอบข้อ [1]"
+          },
+          "quote": "คอลัมน์ในตารางผ่อนเป็นแหล่งเดียว · บัญชีภายในเต็มความละเอียดมีอยู่แค่ตอนสร้างตาราง ไม่เก็บต่อ ไม่มีกฎไหนอ่านจากมัน",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-023",
+      "termTh": "ยอดที่อนุมัติจริง",
+      "termEn": "ApprovedAmount",
+      "definition": "จำนวนเงินที่ Loan Officer อนุมัติจริงให้ใบสมัครหนึ่งใบ — อาจต่ำกว่าจำนวนเงินกู้ที่ขอ (UL-miniloan-011) เมื่อยอดที่ขอเกินวงเงินอนุมัติสูงสุด (UL-miniloan-010) และเจ้าหน้าที่ปรับลงตาม BR-miniloan-012@v1 · เป็นตัวเลขที่กลายเป็นเงินต้นตั้งต้น (P) ของตารางผ่อนตอนเบิกจ่าย · **ไม่ใช่ตัวเดียวกับจำนวนเงินกู้ที่ขอ** — DTI ที่บันทึกไว้ตอนยื่นผูกกับยอดที่ขอและไม่คำนวณใหม่แม้เจ้าหน้าที่จะปรับวงเงินลง (Q-miniloan-002) ถ้าใช้คำเดียวกัน ตัวเลขที่ DTI อ้างถึงจะหายไป · **กฎที่ระบุว่า P ของ BR-miniloan-016@v1 มาจากยอดนี้ยังไม่ถูกเขียนเป็น BR** เพราะรอบที่คลอดคำนี้เป็นรอบชั้น 1 ซึ่งเขียน rules[] ไม่ได้ — เส้นทางที่เหลือคือ /req:calc BR-miniloan-016@v1 ซึ่งต้องระบุ input ของสูตรอยู่แล้ว",
+      "aka": [
+        "ยอดอนุมัติ",
+        "วงเงินที่อนุมัติจริง"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-011",
+        "UL-miniloan-010",
+        "UL-miniloan-022"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-014",
+          "locator": {
+            "section": "[2] QB-lang-01 · คู่ที่ 2"
+          },
+          "quote": "ตอบ b : คนละสิ่ง ต้องมีคำใหม่สำหรับยอดที่อนุมัติจริง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-024",
+      "termTh": "ผู้สมัคร",
+      "termEn": "Applicant",
+      "definition": "คนที่ยื่นขอสินเชื่อ และเป็นคนเดียวกับคนที่ถือบัญชีสินเชื่อหลังเบิกจ่าย — **หนึ่งคน หนึ่งคำ** ไม่แยกเป็นคนละแนวคิดตามช่วงเวลา · คำว่า \"ผู้กู้\" และ \"ลูกค้า\" ที่ปรากฏใน spec เป็นคำเรียกอย่างอื่นของคนคนเดียวกัน ไม่ใช่ actor คนละตัว — ทั้งสองคำไม่มีในเอกสารต้นทางเลย เกิดขึ้นระหว่างการเก็บกฎ · เลือก \"ผู้สมัคร / Applicant\" เป็นคำหลักจากอินพุต (§3 ตาราง actor) — **เป็นการอ่าน ไม่ใช่คำตอบ เจ้าของยังไม่ได้ระบุคำหลัก**",
+      "aka": [
+        "ผู้กู้",
+        "ลูกค้า"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-002"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "§3 ตาราง actor บรรทัด 57"
+          },
+          "quote": "**Applicant** | ผู้สมัครสินเชื่อ กรอกและยื่นใบสมัคร ดูสถานะ",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-014",
+          "locator": {
+            "section": "[3] QB-lang-01 · คู่ที่ 3"
+          },
+          "quote": "ตอบ a : สิ่งเดียวกัน ใช้คำเดียวทั้งระบบ",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-025",
+      "termTh": "ยอดปิดบัญชี",
+      "termEn": "PayoffAmount",
+      "definition": "จำนวนเงินทั้งหมดที่ต้องชำระเพื่อปิดบัญชีสินเชื่อก่อนครบกำหนด = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด 1% ของเงินต้นคงเหลือ ตาม BR-miniloan-022@v1 · **เป็นเส้นแบ่งที่ระบบใช้ตัดสินว่าการชำระที่เกินยอดงวดเป็นอะไร** ตาม BR-miniloan-051@v1 — เท่ากันพอดี = ปิดบัญชี · น้อยกว่า = การโปะ · มากกว่า = ปฏิเสธทั้งรายการตาม BR-miniloan-052@v1 · **ไม่ใช่เงินต้นคงเหลือ** ซึ่งเป็นเพียงส่วนหนึ่งของยอดนี้ และไม่ใช่ตัวการปิดบัญชีเอง",
+      "aka": [
+        "ยอดปิดบัญชีก่อนกำหนด",
+        "ยอดที่ต้องจ่ายเพื่อปิดบัญชี"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-022",
+        "UL-miniloan-008"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "§5 BR-07 บรรทัด 117"
+          },
+          "quote": "ยอดปิดบัญชี = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด (สมมติ 1% ของเงินต้นคงเหลือ)",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-015",
+          "locator": {
+            "section": "[3] Q-miniloan-014 ท่อน 2"
+          },
+          "quote": "เทียบด้วยยอดส่วนเกินเต็มจำนวนกับยอดปิดบัญชี แยกได้สามทาง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    }
+  ],
+  "extensions": {}
+}

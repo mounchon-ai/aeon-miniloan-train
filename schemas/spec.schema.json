@@ -1,0 +1,687 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mounchons/aeon/schemas/spec.schema.json",
+  "title": "aeon spec.json",
+  "description": "Phase 1 artifact produced by the `req` plugin of the `aeon` marketplace, stored at <state-dir>/spec.json (default .aeon, resolved by plugins/req/scripts/state-dir.mjs). Authority: docs/requirement/req-skill-design.md (design) and plugins/req/scripts/verify-rules.mjs (the checks actually enforced). Rule is the unit of coverage; every rule version is its own node.",
+  "type": "object",
+  "required": ["meta", "sources", "glossary", "stakeholders", "requirements", "rules", "examples", "calculations", "golden_datasets", "changes", "questions", "deferred_questions", "rollup"],
+  "additionalProperties": false,
+
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["module", "schema_version", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "module": { "$ref": "#/$defs/slug" },
+        "schema_version": { "const": "0.4.0" },
+        "scale": { "enum": ["QUICK", "FULL"] },
+        "status": { "$ref": "#/$defs/status" },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      }
+    },
+
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } },
+    "glossary": { "type": "array", "items": { "$ref": "#/$defs/glossaryTerm" } },
+    "stakeholders": {
+      "type": "array",
+      "description": "Who touches this module and in what capacity. Added in 0.4.0 for one concrete consumer: the design plugin's permission matrix, whose rule V23 requires every role to trace back to a stakeholder recorded here. Kept as its own top-level array rather than folded into glossary[] because a stakeholder is a party, not a term — a term is defined so rules stop being ambiguous, a stakeholder is recorded so a permission can be traced to somebody who asked for it.",
+      "items": { "$ref": "#/$defs/stakeholder" }
+    },
+    "requirements": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/requirement" } },
+    "rules": { "type": "array", "items": { "$ref": "#/$defs/ruleVersion" } },
+    "examples": { "type": "array", "items": { "$ref": "#/$defs/example" } },
+    "calculations": { "type": "array", "items": { "$ref": "#/$defs/calculation" } },
+    "golden_datasets": { "type": "array", "items": { "$ref": "#/$defs/goldenDataset" } },
+    "changes": { "type": "array", "items": { "$ref": "#/$defs/changeSet" } },
+    "questions": { "type": "array", "items": { "$ref": "#/$defs/question" } },
+    "deferred_questions": { "type": "array", "items": { "$ref": "#/$defs/deferredQuestion" } },
+
+    "rollup": {
+      "type": "object",
+      "description": "Derived counts. verify-rules.mjs check #9 recomputes these from the file; a mismatch is a violation. rules_* count is_current rules only.",
+      "required": ["rules_total", "rules_with_example", "rules_with_green_test", "open_questions", "open_deferred", "rule_coverage", "ready_for_next_step"],
+      "additionalProperties": false,
+      "properties": {
+        "rules_total": { "type": "integer", "minimum": 0 },
+        "rules_with_example": { "type": "integer", "minimum": 0 },
+        "rules_with_green_test": { "type": "integer", "minimum": 0 },
+        "open_questions": { "type": "integer", "minimum": 0 },
+        "open_deferred": { "type": "integer", "minimum": 0 },
+        "rule_coverage": { "type": "number", "minimum": 0, "maximum": 1 },
+        "ready_for_next_step": {
+          "type": "boolean",
+          "description": "The CP1 condition and nothing else: rules exist, every is_current rule has an example, zero open red cards. Spillover (open_deferred) is deliberately excluded — a DQ needs entities to answer, so it blocks CP2, never CP1. Computed by plugins/req/scripts/rollup.mjs; never hand-written."
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "slug": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "status": {
+      "description": "State machine in §5.1. locked is only escapable via /req:change; superseded is terminal.",
+      "enum": ["draft", "validated", "locked", "superseded"]
+    },
+    "timestamp": { "type": "string", "minLength": 10 },
+
+    "srcId": { "type": "string", "pattern": "^SRC-[0-9]{3}$" },
+    "reqId": { "type": "string", "pattern": "^REQ-[a-z0-9-]+-[0-9]{3}$" },
+    "ruleBaseId": { "type": "string", "pattern": "^BR-[a-z0-9-]+-[0-9]{3}$" },
+    "ruleVersionId": {
+      "description": "Rule references MUST carry @v (§5 invariant 4). A bare base id is a violation.",
+      "type": "string",
+      "pattern": "^BR-[a-z0-9-]+-[0-9]{3}@v[0-9]+$"
+    },
+    "exId": { "type": "string", "pattern": "^EX-[a-z0-9-]+-[0-9]{3}$" },
+    "ulId": { "type": "string", "pattern": "^UL-[a-z0-9-]+-[0-9]{3}$" },
+    "stkId": { "type": "string", "pattern": "^STK-[a-z0-9-]+-[0-9]{3}$" },
+    "qId": { "type": "string", "pattern": "^Q-[a-z0-9-]+-[0-9]{3}$" },
+    "dqId": { "type": "string", "pattern": "^DQ-[a-z0-9-]+-[0-9]{3}$" },
+    "calcBaseId": { "type": "string", "pattern": "^CALC-[a-z0-9-]+-[0-9]{3}$" },
+    "calcVersionId": {
+      "description": "Calculation contracts carry @v for the same reason rules do, and it is the sharper of the two cases: change a rounding mode and every number already produced under the old contract is wrong, while the statement of the rule may not have changed a word. A figure that went out to a customer must still be explainable by pointing at the contract version that produced it (§7.4).",
+      "type": "string",
+      "pattern": "^CALC-[a-z0-9-]+-[0-9]{3}@v[0-9]+$"
+    },
+    "gdId": { "type": "string", "pattern": "^GD-[a-z0-9-]+-[0-9]{3}$" },
+    "chgId": { "type": "string", "pattern": "^CHG-[a-z0-9-]+-[0-9]{3}$" },
+    "effectiveDate": {
+      "description": "When this version starts to apply in the real world — a date (2026-09-01) or a full timestamp. Distinct from superseded_at, which is when the previous version stopped being current in this file. The two differ whenever a change is agreed before it takes effect, which is the normal case.",
+      "type": "string",
+      "minLength": 10
+    },
+
+    "docsPath": {
+      "description": "Every source file must resolve under docs/ (§4.6 invariant). Files already there are referenced; files from outside are copied into docs/sources/.",
+      "type": "string",
+      "pattern": "^docs/"
+    },
+
+    "provenanceEntry": {
+      "type": "object",
+      "required": ["source", "locator"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "$ref": "#/$defs/srcId" },
+        "locator": {
+          "description": "Points at page/sheet/cell/region level, never just the file name (§4.4).",
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "page": { "type": "integer", "minimum": 1 },
+            "section": { "type": "string" },
+            "sheet": { "type": "string" },
+            "cell": { "type": "string" },
+            "range": { "type": "string" },
+            "line": { "type": "integer", "minimum": 1 },
+            "region": { "type": "string" }
+          }
+        },
+        "quote": { "type": "string", "description": "The literal text shown to a client when they ask where a rule came from." },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "validation": {
+      "description": "Three states, not a boolean (§4.6). deferred means asked-and-unsure, which mints a red card and blocks CP1.",
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "enum": ["confirmed", "corrected", "deferred"] },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "corrected_to": { "type": ["string", "null"] },
+        "question": { "anyOf": [{ "$ref": "#/$defs/qId" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "deferred" } }, "required": ["state"] },
+          "then": { "required": ["question"], "properties": { "question": { "$ref": "#/$defs/qId" } } }
+        },
+        {
+          "if": { "properties": { "state": { "const": "corrected" } }, "required": ["state"] },
+          "then": { "required": ["corrected_to"], "properties": { "corrected_to": { "type": "string", "minLength": 1 } } }
+        }
+      ]
+    },
+
+    "source": {
+      "type": "object",
+      "required": ["id", "kind", "captured_at", "captured_by"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/srcId" },
+        "kind": {
+          "description": "sample_data is deliberately NOT `file`: a document answers 'what is the rule', a customer's data extract answers 'what is the correct value'. Mixing them lets 500 rows of production data get read as a rule source, which yields a rule that describes that one extract and nothing else. sample_data feeds GD-xxx (step 9), never BR-xxx (step 5) — it may only raise a suspicion that goes to the confirmation round.",
+          "enum": ["chat", "file", "image", "url", "sample_data"]
+        },
+        "captured_at": { "$ref": "#/$defs/timestamp" },
+        "captured_by": { "type": "string", "description": "The command invocation that brought this in." },
+        "content": { "type": "string", "description": "kind=chat only — stored inline, verbatim." },
+        "path": { "$ref": "#/$defs/docsPath" },
+        "imported_from": { "type": ["string", "null"], "description": "Original path when the file was copied in from outside the project." },
+        "hash_at_import": { "type": "string", "pattern": "^sha256:[0-9a-f]{8,64}$" },
+        "url": { "type": "string" },
+
+        "masked": {
+          "type": "boolean",
+          "description": "kind=sample_data only, and REQUIRED there. Customer data extracts usually carry real names, ids and phone numbers, and docs/ is under git — once it lands, it is in history forever. true = personal fields were replaced before the file was written; false = the owner was asked and chose to keep it verbatim. There is no third state: the point of making this required is that the question cannot be skipped, only answered."
+        },
+        "masked_note": {
+          "type": "string",
+          "description": "What was masked, or why masking was declined. Written from the owner's answer, not inferred."
+        },
+
+        "extracted": {
+          "description": "Deterministic machine reading. Trustworthy. NEVER mix with interpretation.",
+          "type": "object",
+          "required": ["by"],
+          "additionalProperties": false,
+          "properties": {
+            "by": { "type": "string" },
+            "text": { "type": "string" },
+            "pages": { "type": "integer", "minimum": 1 },
+            "sheets": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "type": "string" },
+                  "cells": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["ref"],
+                      "additionalProperties": false,
+                      "properties": {
+                        "ref": { "type": "string" },
+                        "value": {},
+                        "formula": {
+                          "type": "string",
+                          "description": "MANDATORY where present. Rules hide in formulas, not values (§4.4). Reading only values returns 930 when the rule is 'over 1000 gets 7% off'."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "schema": {
+              "description": "kind=sample_data — the columns of the extract, read from the file, not guessed. Naming the columns is what lets a golden dataset say which column is the expected value and which are inputs.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name"],
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "type": "string" },
+                  "type": { "type": "string", "description": "As read from the file (text/number/date/…), not a decision about storage. Deciding decimal(p,s) needs entities and belongs to a DQ-xxx." },
+                  "example": {}
+                }
+              }
+            },
+            "rows": {
+              "description": "kind=sample_data — a BOUNDED sample of the extract, kept so a later /req:golden has concrete input to work from. The whole file already lives under docs/ with a hash; copying every row into spec.json makes the file unreadable for the same reason rollup exists. Read row_count, never rows.length, when stating how many rows the customer sent.",
+              "type": "array",
+              "items": { "type": "object" }
+            },
+            "row_count": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Total rows in the source file. Counted by a parser. A suspicion like '47 of 500 rows behave this way' is meaningless without the real denominator, and rows[] is only a sample."
+            },
+            "sidecar": { "$ref": "#/$defs/docsPath" }
+          }
+        },
+
+        "interpretation": {
+          "description": "AI reading of an image/scan. A GUESS until confirmed. Separated from extracted so a rule derived from a misread screenshot never looks as trustworthy as one from a document.",
+          "type": "object",
+          "required": ["by", "transcript", "validation"],
+          "additionalProperties": false,
+          "properties": {
+            "by": { "type": "string" },
+            "at": { "$ref": "#/$defs/timestamp" },
+            "transcript": { "type": "string" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "validation": { "$ref": "#/$defs/validation" }
+          }
+        }
+      },
+
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "chat" } }, "required": ["kind"] },
+          "then": { "required": ["content"] }
+        },
+        {
+          "if": { "properties": { "kind": { "enum": ["file", "image", "sample_data"] } }, "required": ["kind"] },
+          "then": { "required": ["path", "hash_at_import"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "image" } }, "required": ["kind"] },
+          "then": { "required": ["interpretation"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "sample_data" } }, "required": ["kind"] },
+          "then": { "required": ["masked"] }
+        }
+      ]
+    },
+
+    "stakeholder": {
+      "type": "object",
+      "description": "A party that touches this module. Recorded by /req:ask tier 1 (the framing round already asks who else touches the data) and consumed by the design plugin's permission matrix. Like every other node here it must carry provenance: a stakeholder nobody can trace to a source is a role somebody assumed, and an assumed role is how a permission ends up in a signed document with no one accountable for it.",
+      "required": ["id", "name", "kind", "status", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/stkId" },
+        "name": { "type": "string", "minLength": 1, "description": "What the client calls this party, in their own words." },
+        "kind": {
+          "description": "internal = inside the client's organisation · external = outside it, including the client's own customers · system = not a person at all, an upstream or downstream system that acts on the data. The split exists because permissions and integrations are decided differently for each.",
+          "enum": ["internal", "external", "system"]
+        },
+        "description": { "type": "string", "description": "What this party does with the module. Free text — the structure lives in the design plugin's permission matrix, not here." },
+        "aka": { "type": "array", "items": { "type": "string" }, "description": "Other words the client uses for the SAME party." },
+        "status": { "$ref": "#/$defs/status" },
+        "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/provenanceEntry" } },
+        "becomes_role": {
+          "type": ["string", "null"],
+          "description": "Filled in Phase 2 when the design plugin turns this party into a ROLE- in the permission matrix. Same pattern as glossaryTerm.becomes_entity: Phase 2 BINDS, it does not invent. Written through a /req:* command — the design plugin never writes spec.json itself."
+        }
+      }
+    },
+    "glossaryTerm": {
+      "description": "Ubiquitous Language — the vocabulary layer, which belongs to Phase 1 and must exist BEFORE rules are elicited, or every rule is ambiguous from birth. Distinct from the domain model (entities), which grows OUT of rules in Phase 2: hand-run Example Mapping on BunTrukHub produced ApprovalPolicy and JobCostAdjustment, two entities no prior design had.",
+      "type": "object",
+      "required": ["id", "term_th", "definition", "status", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/ulId" },
+        "term_th": { "type": "string", "minLength": 1 },
+        "term_en": { "type": "string", "description": "The name that will surface in code. May be empty while still undecided." },
+        "definition": { "type": "string", "minLength": 1 },
+        "aka": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Other words the client uses for the SAME thing."
+        },
+        "not_to_confuse_with": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ulId" },
+          "description": "Terms deliberately kept distinct — the most frequent source of client argument (งาน vs เที่ยววิ่ง)."
+        },
+        "status": { "$ref": "#/$defs/status" },
+        "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/provenanceEntry" } },
+        "becomes_entity": {
+          "type": ["string", "null"],
+          "description": "Filled by /domain:bind in Phase 2. Phase 2 BINDS vocabulary to entities; it does not invent vocabulary. Same pattern as BR.enforced_by."
+        }
+      }
+    },
+
+    "requirement": {
+      "type": "object",
+      "required": ["id", "title", "actor", "goal", "status", "rules", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/reqId" },
+        "title": { "type": "string", "minLength": 1 },
+        "actor": { "type": "string", "minLength": 1 },
+        "goal": { "type": "string", "minLength": 1 },
+        "business_value": { "type": "string" },
+        "narrative": { "type": "string", "description": "Human-written context, markdown. Lives here because the .md doc is 100% generated." },
+        "narrative_file": { "anyOf": [{ "$ref": "#/$defs/docsPath" }, { "type": "null" }] },
+        "priority": { "enum": ["high", "medium", "low"] },
+        "status": { "$ref": "#/$defs/status" },
+        "has_ui": { "type": "boolean" },
+        "domain_concepts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ulId" },
+          "description": "References into glossary[], not bare strings — a concept with no agreed definition produces ambiguous rules."
+        },
+        "rules": { "type": "array", "items": { "$ref": "#/$defs/ruleBaseId" }, "description": "Base ids owned by this requirement." },
+        "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/provenanceEntry" } },
+        "nfr": {
+          "type": "array",
+          "description": "Separate track — never enters Gherkin (§2).",
+          "items": {
+            "type": "object",
+            "required": ["id", "kind", "statement"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^NFR-[a-z0-9-]+-[0-9]{3}$" },
+              "kind": { "enum": ["performance", "security", "availability", "usability", "compliance", "other"] },
+              "statement": { "type": "string" },
+              "verified_by": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "ruleVersion": {
+      "description": "One node per version. Never nested, never overwritten — a superseded version stays so old features/tests can still point at it (§4.5).",
+      "type": "object",
+      "required": ["id", "base_id", "version", "is_current", "status", "belongs_to", "statement", "kind", "examples", "questions", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/ruleVersionId" },
+        "base_id": { "$ref": "#/$defs/ruleBaseId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "is_current": {
+          "type": "boolean",
+          "description": "Exactly one true per base_id (§5 invariant 3). rule_coverage counts only these."
+        },
+        "status": { "$ref": "#/$defs/status" },
+        "belongs_to": { "$ref": "#/$defs/reqId" },
+        "statement": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["invariant", "policy", "calculation", "constraint"] },
+        "enforced_by": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Aggregate methods. Filled by /domain:bind. CP2 requires this for kind=invariant."
+        },
+        "examples": { "type": "array", "items": { "$ref": "#/$defs/exId" } },
+        "questions": { "type": "array", "items": { "$ref": "#/$defs/qId" } },
+        "test_design": {
+          "type": "array",
+          "items": { "enum": ["EP", "BVA", "decision_table", "state_transition", "pairwise"] }
+        },
+        "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/provenanceEntry" } },
+        "effective_from": {
+          "anyOf": [{ "$ref": "#/$defs/effectiveDate" }, { "type": "null" }],
+          "description": "Lives on the version node itself, NOT derived by walking back from a change set (§7.2 gap 4). Check 14 is warn-level, so a spec can legitimately have a superseded node with no CHG pointing at it — if the date only existed on the CHG, 'which version applied when this application was created' would become unanswerable exactly when it matters."
+        },
+        "golden": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/gdId" },
+          "description": "Back-edge to the answer keys covering this rule version. Written by /req:golden. Check 13 reads it together with golden_datasets[].proves."
+        },
+        "constrained_by": {
+          "anyOf": [{ "$ref": "#/$defs/calcVersionId" }, { "type": "null" }],
+          "description": "Back-edge to the Calculation Contract that pins this rule's arithmetic. Written by /req:calc. A rule with kind=calculation and no CALC is a rule whose numbers everyone will reimplement differently."
+        },
+        "supersedes": { "anyOf": [{ "$ref": "#/$defs/ruleVersionId" }, { "type": "null" }] },
+        "superseded_by": { "anyOf": [{ "$ref": "#/$defs/ruleVersionId" }, { "type": "null" }] },
+        "superseded_at": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+        "change_reason": { "type": ["string", "null"] },
+        "traces_down": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "features": { "type": "array", "items": { "type": "string" } },
+            "test_cases": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "superseded" } }, "required": ["status"] },
+          "then": {
+            "required": ["superseded_by"],
+            "properties": { "is_current": { "const": false }, "superseded_by": { "$ref": "#/$defs/ruleVersionId" } }
+          }
+        },
+        {
+          "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+          "then": { "required": ["supersedes", "change_reason"] }
+        }
+      ]
+    },
+
+    "calcInput": {
+      "type": "object",
+      "required": ["name", "type"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The shape the number must have — money(2), rate(10), int. Not a DB column type: that is a Phase 2 answer and belongs in a DQ."
+        },
+        "description": { "type": "string" }
+      }
+    },
+
+    "calculation": {
+      "description": "Calculation Contract (design §2.1). Split out of the rule because a rule states WHAT must hold while a calculation pins HOW the number is produced — and the seven fields below are exactly the ones that, left unstated, make two correct implementations disagree by satang. One CALC pins one rule version (constrains). Written by /req:calc; every field answered with 'not sure' becomes a Q red card, every field that needs an entity first becomes a DQ.",
+      "type": "object",
+      "required": ["id", "base_id", "version", "is_current", "constrains", "formula", "inputs", "numeric_type", "rounding_mode", "rounding_points", "boundary_behavior", "status", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/calcVersionId" },
+        "base_id": { "$ref": "#/$defs/calcBaseId" },
+        "version": { "type": "integer", "minimum": 1 },
+        "is_current": { "type": "boolean", "description": "Exactly one true per base_id — check 7, same invariant as rules." },
+        "effective_from": { "anyOf": [{ "$ref": "#/$defs/effectiveDate" }, { "type": "null" }] },
+        "supersedes": { "anyOf": [{ "$ref": "#/$defs/calcVersionId" }, { "type": "null" }] },
+        "superseded_by": { "anyOf": [{ "$ref": "#/$defs/calcVersionId" }, { "type": "null" }] },
+        "superseded_at": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+        "change_reason": { "type": ["string", "null"] },
+        "constrains": {
+          "$ref": "#/$defs/ruleVersionId",
+          "description": "The rule version this contract pins, carrying @v: change the rule and the contract does not silently follow. One CALC per rule version is the intent; the duplicate check lands in round 4 with the rest of CALC consistency."
+        },
+        "formula": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Verbatim, as the owner states it. Written down once so nobody reconstructs it from memory."
+        },
+        "inputs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/calcInput" } },
+        "numeric_type": {
+          "enum": ["decimal", "integer"],
+          "description": "float is deliberately absent from this enum, not merely discouraged: binary floating point cannot represent 0.1, so money computed in float drifts by satang and no amount of care downstream repairs it."
+        },
+        "rounding_mode": {
+          "enum": ["HALF_UP", "HALF_EVEN", "HALF_DOWN", "UP", "DOWN", "CEILING", "FLOOR"],
+          "description": "Named explicitly because languages disagree on the default — .NET rounds half to even, most people mean half up."
+        },
+        "rounding_points": {
+          "type": "string",
+          "minLength": 1,
+          "description": "WHERE rounding happens, not just how. Rounding each instalment and rounding once at the end give answers that differ by whole baht on a long enough schedule."
+        },
+        "residual_policy": {
+          "type": ["string", "null"],
+          "description": "Who absorbs the remainder — typically the final instalment, so the balance closes at exactly 0. Optional: a calculation with no remainder has no policy to state, and inventing one to satisfy a schema is worse than leaving it null."
+        },
+        "boundary_behavior": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "The edge inputs and what happens at each (n = 0, r = 0, minimum principal). Required because every calculation has a divide-by-zero or empty-set edge, and the one nobody wrote down is the one that reaches production."
+        },
+        "status": { "$ref": "#/$defs/status" },
+        "questions": { "type": "array", "items": { "$ref": "#/$defs/qId" }, "description": "Red cards minted while eliciting this contract. Open ones block CP1 like any other." },
+        "deferred_questions": { "type": "array", "items": { "$ref": "#/$defs/dqId" }, "description": "Spillover — answers that need an entity first (decimal(p,s)). Blocks CP2, never CP1." },
+        "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/provenanceEntry" } },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "superseded" } }, "required": ["status"] },
+          "then": {
+            "required": ["superseded_by"],
+            "properties": { "is_current": { "const": false }, "superseded_by": { "$ref": "#/$defs/calcVersionId" } }
+          }
+        },
+        {
+          "if": { "properties": { "version": { "minimum": 2 } }, "required": ["version"] },
+          "then": { "required": ["supersedes", "change_reason"] }
+        }
+      ]
+    },
+
+    "changeSet": {
+      "description": "One decision to change something, as a first-class node (§7.3). Not a log line, because one decision moves several nodes at once — drop an interest rate and the rule, the calculation contract and the answer key all move together. Keeping the reason inside each node instead would copy it three times and lose the fact that it was one event. This is what answers 'what did the 13 Aug round change, who asked for it, and which document did it come from' — a question customers ask and change_reason alone cannot answer.",
+      "type": "object",
+      "required": ["id", "at", "reason", "affects"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/chgId" },
+        "at": { "$ref": "#/$defs/timestamp" },
+        "requested_by": { "type": "string", "description": "Who asked — the customer, by name and channel where possible. 'ลูกค้า (คุณเอ) ทางไลน์' beats 'customer'." },
+        "approved_by": {
+          "type": ["string", "null"],
+          "description": "Who signed it off on our side. Nullable rather than required so an unapproved change is a state the file can hold honestly; check 14 warns about it instead of the schema forbidding it."
+        },
+        "triggered_by": { "type": "array", "items": { "$ref": "#/$defs/srcId" }, "description": "The meeting, message or document that caused the change." },
+        "reason": { "type": "string", "minLength": 1 },
+        "affects": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "anyOf": [{ "$ref": "#/$defs/ruleVersionId" }, { "$ref": "#/$defs/calcVersionId" }] },
+          "description": "The NEW versions this change produced, carrying @v."
+        },
+        "invalidates": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/gdId" },
+          "description": "Answer keys that were computed under the old contract and are therefore no longer evidence of anything. Listed rather than deleted: the numbers stay readable so anyone can see what the old contract produced. Check 14 reports any listed here that has no verified replacement."
+        },
+        "effective_from": { "anyOf": [{ "$ref": "#/$defs/effectiveDate" }, { "type": "null" }] },
+        "notes": { "type": "string" }
+      }
+    },
+
+    "goldenRow": {
+      "description": "One case: the inputs going in, the answer that must come out. Free-form objects because the keys mirror the calculation's own inputs — pinning them here would mean two places to change when a formula gains a parameter.",
+      "type": "object",
+      "required": ["input", "expected"],
+      "additionalProperties": false,
+      "properties": {
+        "input": { "type": "object", "minProperties": 1, "additionalProperties": true },
+        "expected": { "type": "object", "minProperties": 1, "additionalProperties": true },
+        "from_source_row": {
+          "type": "string",
+          "description": "Which row of the customer's own extract this case was taken from. Present means the customer already believes this answer — the most valuable kind of row, because a mismatch is a rule nobody told us about."
+        },
+        "note": { "type": "string" }
+      }
+    },
+
+    "goldenDataset": {
+      "description": "The answer key (design §2.2). Exists because a formula everyone agreed to is not the same as numbers anyone has checked — the slide's EMI final instalment of 9,504.43 was only discovered by actually running it. Two rules govern this node and neither is negotiable: the numbers come from RUNNING code (computed_by), never from a model's arithmetic, and they are a proposal until a human signs (verified_by + verified_at). When the numbers disagree with the contract, the contract is what changes — never the answer key.",
+      "type": "object",
+      "required": ["id", "proves", "rows", "computed_by", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/gdId" },
+        "proves": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "anyOf": [{ "$ref": "#/$defs/ruleVersionId" }, { "$ref": "#/$defs/calcVersionId" }] },
+          "description": "The rule version and/or calculation contract these numbers hold for. Rule refs carry @v: numbers computed under one version of a rule do not silently become evidence for the next."
+        },
+        "rows": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/goldenRow" } },
+        "computed_by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path to the script that produced these rows, RELATIVE TO THE STATE DIRECTORY (e.g. golden/CALC-job-001.mjs). Relative on purpose: the state directory name is a parameter, so an absolute or .aeon-prefixed path would break the moment someone renames it. The script is kept so the answer key can be re-derived instead of trusted."
+        },
+        "computed_at": { "$ref": "#/$defs/timestamp" },
+        "status": { "$ref": "#/$defs/status" },
+        "verified_by": {
+          "type": ["string", "null"],
+          "description": "The human who signed off. null means the script has run but nobody has confirmed the numbers — a legitimate intermediate state, and exactly what check 13 warns about."
+        },
+        "verified_at": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+        "source": {
+          "anyOf": [{ "$ref": "#/$defs/srcId" }, { "type": "null" }],
+          "description": "The sample_data extract these inputs came from, when they came from one. This is the only sanctioned use of customer data in Phase 1: evidence of correct VALUES to diff against, never a source rules are guessed from."
+        },
+        "mismatches": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Rows where our result and the customer's differ. Recorded rather than reconciled: design §2.2 point 3 — a mismatch means going back to /req:calc, and silently adjusting the answer key to fit the formula destroys the only independent check in Phase 1."
+        },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "verified_by": { "type": "string" } }, "required": ["verified_by"] },
+          "then": { "required": ["verified_at"], "properties": { "verified_at": { "$ref": "#/$defs/timestamp" } } }
+        }
+      ]
+    },
+
+    "example": {
+      "description": "Green card — proves a rule. An example that proves nothing is noise (§5 invariant 2). No independent version: it belongs to a rule version.",
+      "type": "object",
+      "required": ["id", "proves", "kind", "status", "given", "when", "then"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/exId" },
+        "proves": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/ruleVersionId" },
+          "description": "Array so an example carried forward to v2 stays ONE node with two edges, not a copy."
+        },
+        "kind": { "enum": ["happy", "alternate", "exception", "boundary"] },
+        "status": { "$ref": "#/$defs/status" },
+        "given": { "type": "string", "minLength": 1 },
+        "when": { "type": "string", "minLength": 1 },
+        "then": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Verbatim Thai UI/error text the user actually sees — not 'shows an error' (step-flow §2.5 item 2)."
+        },
+        "has_ui": { "type": "boolean" }
+      }
+    },
+
+    "question": {
+      "description": "Red card. Any open question blocks CP1 (§4). This is the scope-creep guard ScenarioForge lacked.",
+      "type": "object",
+      "required": ["id", "question", "raised_by", "state"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/qId" },
+        "question": { "type": "string", "minLength": 1 },
+        "raised_by": { "type": "string", "description": "SRC-xxx or BR-xxx@vN that raised it." },
+        "state": { "enum": ["open", "answered"] },
+        "answer": { "type": ["string", "null"] },
+        "answered_at": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "answered" } }, "required": ["state"] },
+          "then": { "required": ["answer"], "properties": { "answer": { "type": "string", "minLength": 1 } } }
+        }
+      ]
+    },
+
+    "deferredQuestion": {
+      "description": "Spillover queue (§4.2). Answerable in principle but not until entities exist — so it blocks CP2, NOT CP1. Mixing these with red cards would make CP1 unreachable by design.",
+      "type": "object",
+      "required": ["id", "question", "raised_by", "category", "answer_phase", "state"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/dqId" },
+        "question": { "type": "string", "minLength": 1 },
+        "raised_by": { "$ref": "#/$defs/ruleVersionId" },
+        "category": {
+          "enum": ["permission", "reversal", "freeze_point", "approval", "audit", "calculation", "temporal", "data_scope", "integration", "idempotency"]
+        },
+        "blocked_until": { "type": "string", "description": "What must exist before this can be answered, e.g. entity:Job.TotalCost" },
+        "answer_phase": { "enum": ["domain", "screen", "plan", "build"] },
+        "state": { "enum": ["open", "answered"] },
+        "answer": { "type": ["string", "null"] },
+        "answered_at": { "anyOf": [{ "$ref": "#/$defs/timestamp" }, { "type": "null" }] },
+        "resulted_in": { "type": "array", "items": { "type": "string" } }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "state": { "const": "answered" } }, "required": ["state"] },
+          "then": { "required": ["answer"], "properties": { "answer": { "type": "string", "minLength": 1 } } }
+        }
+      ]
+    }
+  }
+}

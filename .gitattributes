@@ -1,0 +1,8 @@
+# ทุกไฟล์ commit เป็น LF และ checkout เป็น LF ทุกเครื่อง
+# เหตุผล: hash ของ docs/wiki/** และตัวเลขสัญญาใน .aeon/golden/** คำนวณจาก byte จริง
+# ตัวติดตั้ง git บน Windows ตั้ง core.autocrlf=true ไว้ที่ system config
+# ถ้าปล่อยไว้ ตอน clone จะแปลง LF เป็น CRLF แล้ว hash เพี้ยนยกชุด
+#
+# ใช้ text=auto ไม่ใช่ -text เพราะ -text ทำให้ git มองทุกไฟล์เป็น binary
+# แล้ว git diff / git show จะไม่แสดงส่วนต่างรายบรรทัดของ .md .json .mjs อีกเลย
+* text=auto eol=lf

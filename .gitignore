@@ -1,0 +1,18 @@
+# Claude Code — local machine settings (permissions allowlist)
+.claude/settings.local.json
+
+# Graph Brain runtime state
+.brain/
+
+# Remember plugin buffers / logs (also self-ignored via .remember/.gitignore)
+.remember/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS / editor junk
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp

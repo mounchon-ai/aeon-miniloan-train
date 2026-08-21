@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "req/scripts/export-contract.mjs",
+  "source": {
+    "plugin": "req",
+    "specSchemaVersion": "0.4.0",
+    "module": "miniloan",
+    "specStatus": "draft",
+    "specUpdatedAt": "2026-08-15T15:18+07:00"
+  },
+  "changes": [
+    {
+      "id": "CHG-miniloan-001",
+      "at": "2026-08-15T11:06+07:00",
+      "reason": "หัวหน้าเจ้าหน้าที่สินเชื่อถูกตัดสินแล้วว่าเป็น actor แยก ไม่ใช่ Loan Officer คนหนึ่ง (คำตอบ Q-miniloan-012) · ประโยคเดิมที่ว่า \"ยกเลิกได้เฉพาะ Loan Officer เท่านั้น\" จึงแคบเกินความจริง และทำให้เส้นยกเลิกใบสถานะ Draft กับ Submitted ที่ BR-miniloan-010@v1 เปิดไว้ ไม่มีใครเดินได้",
+      "requestedBy": "เจ้าของสเปก (ตอบในแชท รอบ /req:ask ตอบการ์ดแดง Q-miniloan-012)",
+      "approvedBy": "เจ้าของสเปก",
+      "triggeredBy": [
+        "SRC-013",
+        "SRC-015"
+      ],
+      "effectiveFrom": "2026-08-14",
+      "affects": [
+        "BR-miniloan-031@v2"
+      ],
+      "invalidates": [],
+      "notes": "ไม่มีเลขเฉลยถูกทำให้ใช้ไม่ได้ เพราะยังไม่มี CALC และยังไม่มี golden dataset ในโมดูลนี้เลย · EX-miniloan-063 ไม่ถูกยกไป @v2 ตามการตัดสินของเจ้าของ — ข้อความที่ผู้ใช้เห็น \"กรุณาติดต่อเจ้าหน้าที่\" ไม่ตรงกับกฎใหม่ที่ให้เฉพาะหัวหน้ายกเลิกใบที่ยังไม่ถูกมอบหมาย · ผลคือท่อนที่เปลี่ยน (เส้นยกเลิกใบที่ยังไม่ถูกมอบหมาย) ยังไม่มีใครพิสูจน์ ต้องตามด้วย /req:example BR-miniloan-031@v2",
+      "extensions": {}
+    }
+  ],
+  "extensions": {}
+}

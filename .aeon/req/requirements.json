@@ -1,0 +1,1828 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "req/scripts/export-contract.mjs",
+  "source": {
+    "plugin": "req",
+    "specSchemaVersion": "0.4.0",
+    "module": "miniloan",
+    "specStatus": "draft",
+    "specUpdatedAt": "2026-08-15T15:18+07:00"
+  },
+  "requirements": [
+    {
+      "id": "REQ-miniloan-001",
+      "title": "รับและประเมินใบสมัคร",
+      "actor": "Applicant / System",
+      "goal": "รับใบสมัครสินเชื่อส่วนบุคคลตั้งแต่ร่างจนยื่น และให้ระบบประเมินตามกฎที่กำหนดเพื่อจัด Credit Band พร้อมเหตุผล",
+      "businessValue": "คัดกรองผู้สมัครที่ไม่ผ่านเกณฑ์ออกอัตโนมัติ และให้เจ้าหน้าที่เห็นเหตุผลของคะแนนก่อนตัดสินใจ",
+      "priority": "high",
+      "status": "draft",
+      "hasUi": true,
+      "domainConcepts": [
+        "UL-miniloan-001",
+        "UL-miniloan-002",
+        "UL-miniloan-003",
+        "UL-miniloan-009",
+        "UL-miniloan-010",
+        "UL-miniloan-011",
+        "UL-miniloan-012",
+        "UL-miniloan-014",
+        "UL-miniloan-023",
+        "UL-miniloan-024"
+      ],
+      "nfr": [],
+      "rules": [
+        {
+          "id": "BR-miniloan-001@v1",
+          "baseId": "BR-miniloan-001",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "ผู้สมัครต้องมีอายุ 20–60 ปี · รายได้ต่อเดือน ≥ 15,000 บาท · อายุงานปัจจุบัน ≥ 4 เดือน",
+          "examples": [
+            "EX-miniloan-015",
+            "EX-miniloan-016",
+            "EX-miniloan-017",
+            "EX-miniloan-018"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-01"
+              },
+              "quote": "อายุ 20–60 ปี · รายได้ต่อเดือน ≥ 15,000 บาท · อายุงานปัจจุบัน ≥ 4 เดือน",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-002@v1",
+          "baseId": "BR-miniloan-002",
+          "version": 1,
+          "status": "draft",
+          "kind": "calculation",
+          "statement": "Debt-to-Income หลังรวมงวดใหม่ ต้อง ≤ 70% ของรายได้ต่อเดือน โดย DTI = (ภาระหนี้เดิมต่อเดือน + งวดใหม่) / รายได้ต่อเดือน · \"งวดใหม่\" คือค่างวด EMI ที่คำนวณด้วยสูตรเดียวกับ BR-miniloan-016@v1 จากจำนวนเงินกู้ที่ขอ จำนวนงวดที่ขอ และอัตราดอกเบี้ยที่มีผล ณ วันประเมิน — ไม่มีสูตรประมาณแยกอีกชุด · DTI คำนวณครั้งเดียวตอนยื่นจากจำนวนเงินกู้ที่ขอ และไม่คำนวณใหม่แม้เจ้าหน้าที่จะปรับวงเงินลงตาม BR-miniloan-012@v1",
+          "examples": [
+            "EX-miniloan-037",
+            "EX-miniloan-038",
+            "EX-miniloan-039",
+            "EX-miniloan-040"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-02"
+              },
+              "quote": "Debt-to-Income หลังรวมงวดใหม่ ต้อง ≤ 70% ของรายได้ต่อเดือน · สูตร: `DTI = (ภาระหนี้เดิมต่อเดือน + งวดใหม่โดยประมาณ) / รายได้ต่อเดือน`",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-009",
+              "locator": {
+                "section": "[1] Q-miniloan-001"
+              },
+              "quote": "งวดใหม่โดยประมาณ คือ EMI ตาม BR-miniloan-016@v1 คำนวณจากจำนวนเงินกู้ที่ขอ จำนวนงวดที่ขอ และอัตราดอกเบี้ยที่มีผล ณ วันประเมิน — ใช้สูตรเดียวกับที่สร้างตารางผ่อนจริง ไม่มีสูตรประมาณแยกอีกชุด",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-009",
+              "locator": {
+                "section": "[2] Q-miniloan-002"
+              },
+              "quote": "DTI คิดจากจำนวนเงินกู้ที่ขอ ครั้งเดียวตอนยื่น ไม่คำนวณใหม่แม้เจ้าหน้าที่จะปรับวงเงินลง",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-003@v1",
+          "baseId": "BR-miniloan-003",
+          "version": 1,
+          "status": "draft",
+          "kind": "calculation",
+          "statement": "วงเงินอนุมัติสูงสุด = 5 เท่าของรายได้ต่อเดือน และไม่เกิน 1,000,000 บาท",
+          "examples": [
+            "EX-miniloan-019",
+            "EX-miniloan-020",
+            "EX-miniloan-021",
+            "EX-miniloan-022"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-03"
+              },
+              "quote": "วงเงินอนุมัติสูงสุด = 5 เท่าของรายได้ต่อเดือน และไม่เกิน 1,000,000 บาท",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-004@v1",
+          "baseId": "BR-miniloan-004",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "ใบสมัครรับได้เฉพาะจำนวนเงินกู้ 10,000 – 1,000,000 บาท และจำนวนงวด 6 – 60 งวด (รายเดือน)",
+          "examples": [
+            "EX-miniloan-023",
+            "EX-miniloan-024",
+            "EX-miniloan-025",
+            "EX-miniloan-026"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-04"
+              },
+              "quote": "จำนวนเงินกู้: 10,000 – 1,000,000 บาท · จำนวนงวด: 6 – 60 งวด (รายเดือน)",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-02"
+              },
+              "quote": "**Given** จำนวนเงินกู้/งวด อยู่นอกช่วง BR-04 **When** กดยื่น **Then** ระบบแจ้ง error และไม่เปลี่ยนสถานะ",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-005@v1",
+          "baseId": "BR-miniloan-005",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "อัตราดอกเบี้ยเป็นแบบลดต้นลดดอก 25% ต่อปี",
+          "examples": [
+            "EX-miniloan-027",
+            "EX-miniloan-028"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-04"
+              },
+              "quote": "อัตราดอกเบี้ย: แบบลดต้นลดดอก 25% ต่อปี (สมมติ ภายใต้เพดานที่กฎหมายกำหนด)",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-006@v1",
+          "baseId": "BR-miniloan-006",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "จัด Credit Band จากผลประเมิน: Band A = ผ่านทุกเกณฑ์ + DTI ≤ 50% → อนุมัติอัตโนมัติได้ (ยังต้องให้เจ้าหน้าที่ยืนยัน) · Band B = ผ่านเกณฑ์ + DTI มากกว่า 50% ถึง 70% → ส่งเจ้าหน้าที่พิจารณา · Band C = ผิดเกณฑ์ข้อใดข้อหนึ่ง → ปฏิเสธพร้อมเหตุผล · DTI เท่ากับ 50% พอดีได้ Band A ไม่ใช่ Band B — ขอบทั้งสองแบนด์ไม่ซ้อนกันอีกต่อไป",
+          "examples": [
+            "EX-miniloan-041",
+            "EX-miniloan-042",
+            "EX-miniloan-043",
+            "EX-miniloan-044"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-05"
+              },
+              "quote": "Band A: ผ่านทุกเกณฑ์ + DTI ≤ 50% → **อนุมัติอัตโนมัติได้** (ยังต้องให้เจ้าหน้าที่ยืนยัน) · Band B: ผ่านเกณฑ์ + DTI 50–70% → **ส่งเจ้าหน้าที่พิจารณา** · Band C: ผิดเกณฑ์ข้อใดข้อหนึ่ง → **ปฏิเสธ** พร้อมเหตุผล",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-009",
+              "locator": {
+                "section": "[3] Q-miniloan-003"
+              },
+              "quote": "DTI เท่ากับ 50% พอดี ได้ Band A · อ่านตามเอกสารต้นทาง §7 US-06 ที่เขียน \"DTI ≤ 50% → Band A\" ซึ่งเครื่องหมาย ≤ นับรวม 50 พอดี",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-007@v1",
+          "baseId": "BR-miniloan-007",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ยื่นใบสมัครได้เฉพาะเมื่อกรอกครบ (ชื่อ อายุ รายได้ อายุงาน จำนวนเงินกู้ จำนวนงวด) — ครบแล้วสถานะเปลี่ยนเป็น Submitted และล็อกการแก้ไข · ไม่ครบ ระบบต้องปฏิเสธพร้อมระบุ field ที่ขาด และคงสถานะ Draft",
+          "examples": [
+            "EX-miniloan-029",
+            "EX-miniloan-030",
+            "EX-miniloan-031"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-02"
+              },
+              "quote": "**Given** ใบสมัครกรอกครบ (ชื่อ อายุ รายได้ อายุงาน จำนวนเงินกู้ จำนวนงวด) **When** กดยื่น **Then** สถานะเปลี่ยนเป็น `Submitted` และล็อกการแก้ไข",
+              "confidence": 0.9
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-008@v1",
+          "baseId": "BR-miniloan-008",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "บันทึกร่างใบสมัครได้แม้กรอกไม่ครบ — ขั้นร่างยังไม่ตรวจ business rule เต็ม และได้ใบสมัครสถานะ Draft",
+          "examples": [
+            "EX-miniloan-032",
+            "EX-miniloan-033"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-01"
+              },
+              "quote": "**Given** ยังกรอกไม่ครบ **When** บันทึกร่าง **Then** อนุญาตให้บันทึกได้ (ยังไม่ตรวจ business rule เต็ม)",
+              "confidence": 0.9
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-009@v1",
+          "baseId": "BR-miniloan-009",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "เมื่อใบสมัครถูกยื่น ระบบต้องประเมินอัตโนมัติและสร้าง CreditAssessment ที่มีคะแนน Band (A/B/C) วงเงินที่อนุมัติได้ และเหตุผลที่ผ่าน/ไม่ผ่านรายเกณฑ์",
+          "examples": [
+            "EX-miniloan-034",
+            "EX-miniloan-035",
+            "EX-miniloan-036"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-03"
+              },
+              "quote": "**Given** ใบสมัครถูกยื่น **When** ระบบประเมิน **Then** สร้าง CreditAssessment ที่มีคะแนน, Band (A/B/C), วงเงินที่อนุมัติได้ และเหตุผล",
+              "confidence": 0.9
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-04"
+              },
+              "quote": "**Given** มี CreditAssessment **When** เปิดดูใบสมัคร **Then** เห็นรายการเกณฑ์ที่ผ่าน/ไม่ผ่าน และวงเงินสูงสุดตาม BR-03",
+              "confidence": 0.85
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "1 · เป้าหมายปลายทาง"
+          },
+          "quote": "1. **รับและประเมินใบสมัคร** (Origination)",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "7 · Epic 1–2"
+          },
+          "quote": "### Epic 1 — ยื่นใบสมัคร (Loan Application)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "REQ-miniloan-002",
+      "title": "อนุมัติและเบิกจ่าย",
+      "actor": "Loan Officer (พิจารณา อนุมัติ ปฏิเสธ เบิกจ่าย) / หัวหน้าเจ้าหน้าที่สินเชื่อ (สั่งมอบหมายใบสมัคร)",
+      "goal": "ให้เจ้าหน้าที่พิจารณาอนุมัติหรือปฏิเสธใบสมัครแบบ 1 ระดับ แล้วสั่งเบิกจ่ายเพื่อเปิดบัญชีสินเชื่อ",
+      "businessValue": "มีจุดตัดสินใจของคนที่ตรวจสอบย้อนหลังได้ และกันการเดินสถานะข้ามขั้นที่ทำให้สัญญาเริ่มโดยไม่มีคนอนุมัติ",
+      "priority": "high",
+      "status": "draft",
+      "hasUi": true,
+      "domainConcepts": [
+        "UL-miniloan-001",
+        "UL-miniloan-003",
+        "UL-miniloan-004",
+        "UL-miniloan-010",
+        "UL-miniloan-011",
+        "UL-miniloan-013",
+        "UL-miniloan-019",
+        "UL-miniloan-020"
+      ],
+      "nfr": [],
+      "rules": [
+        {
+          "id": "BR-miniloan-010@v1",
+          "baseId": "BR-miniloan-010",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "LoanApplication เดินสถานะได้เฉพาะตามเส้นทางที่กำหนด: Draft → Submitted → UnderReview → Approved → Disbursed และ UnderReview → Rejected · มีเส้นยกเลิกเพิ่ม: Draft, Submitted, UnderReview และ Approved → Cancelled ได้ · ใบที่ Disbursed แล้วยกเลิกไม่ได้ทุกกรณี ต้องไปทางปิดบัญชีตาม BR-miniloan-021@v1 แทน · Rejected และ Cancelled เป็นสถานะสุดท้ายทั้งคู่ ไม่มีเส้นออก · เปลี่ยนสถานะได้ผ่าน method บน Aggregate เท่านั้น (Submit(), Approve(), Reject(), Disburse(), Cancel()) — ถอยสถานะกลับไม่ได้ วิธีแก้เมื่อเดินผิดคือยกเลิกแล้วสร้างใบใหม่",
+          "examples": [
+            "EX-miniloan-045",
+            "EX-miniloan-046",
+            "EX-miniloan-047",
+            "EX-miniloan-048"
+          ],
+          "questions": [
+            "Q-miniloan-011"
+          ],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "6 · LoanApplication"
+              },
+              "quote": "Draft → Submitted → UnderReview → Approved → Disbursed / └──────→ Rejected · เปลี่ยนสถานะได้ผ่าน method บน Aggregate เท่านั้น",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-004",
+              "locator": {
+                "section": "[1] QB-rev-01"
+              },
+              "quote": "เดินสถานะผิดแล้วถอยกลับไม่ได้ ไม่มีเส้นถอยในระบบ · วิธีแก้คือยกเลิกแล้วสร้างใบใหม่",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-010",
+              "locator": {
+                "section": "[2] Q-miniloan-007 ท่อน 1"
+              },
+              "quote": "ใบที่ถูกยกเลิกไปอยู่สถานะใหม่ Cancelled แยกขาดจาก Rejected",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-010",
+              "locator": {
+                "section": "[3] Q-miniloan-007 ท่อน 2+3"
+              },
+              "quote": "ยกเลิกได้ตั้งแต่ Draft ถึง Approved เท่านั้น · ใบที่ Disbursed แล้วยกเลิกไม่ได้ ต้องไปทางปิดบัญชีตาม BR-miniloan-021@v1",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-011@v1",
+          "baseId": "BR-miniloan-011",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "อนุมัติได้เฉพาะใบสมัครสถานะ UnderReview และเมื่ออนุมัติต้องบันทึกผู้อนุมัติและเวลาไว้ด้วย",
+          "examples": [
+            "EX-miniloan-049",
+            "EX-miniloan-050",
+            "EX-miniloan-051"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-05"
+              },
+              "quote": "**Given** ใบสมัครสถานะ `UnderReview` **When** เจ้าหน้าที่กดอนุมัติ **Then** สถานะเปลี่ยนเป็น `Approved` พร้อมบันทึกผู้อนุมัติและเวลา",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-012@v1",
+          "baseId": "BR-miniloan-012",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ถ้าจำนวนเงินกู้ที่ขอ > วงเงินอนุมัติสูงสุดตาม BR-miniloan-003@v1 ระบบต้องเตือนและให้ปรับวงเงินก่อน จึงจะอนุมัติได้",
+          "examples": [
+            "EX-miniloan-052",
+            "EX-miniloan-053",
+            "EX-miniloan-054"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-05"
+              },
+              "quote": "**Given** วงเงินที่ขอ > วงเงินอนุมัติได้ (BR-03) **When** อนุมัติ **Then** ระบบเตือนและให้ปรับวงเงินก่อนอนุมัติ",
+              "confidence": 0.9
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-013@v1",
+          "baseId": "BR-miniloan-013",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ปฏิเสธใบสมัครต้องระบุเหตุผลเสมอ และสถานะ Rejected เป็นสถานะสุดท้าย — พยายามอนุมัติใบที่ Rejected แล้วต้องถูกปฏิเสธเป็น invalid transition",
+          "examples": [
+            "EX-miniloan-055",
+            "EX-miniloan-056",
+            "EX-miniloan-057"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-06"
+              },
+              "quote": "**Given** ใบสมัครสถานะ `UnderReview` หรือ Band C **When** กดปฏิเสธพร้อมระบุเหตุผล **Then** สถานะเปลี่ยนเป็น `Rejected` (final) · **Given** ใบสมัคร `Rejected` แล้ว **When** พยายามอนุมัติ **Then** ระบบปฏิเสธการกระทำ (invalid transition)",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-014@v1",
+          "baseId": "BR-miniloan-014",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "เบิกจ่ายได้เฉพาะใบสมัครสถานะ Approved · เมื่อเบิกจ่ายสำเร็จ ใบสมัครเปลี่ยนเป็น Disbursed และระบบสร้าง LoanAccount สถานะ Active หนึ่งบัญชีต่อหนึ่งใบสมัคร",
+          "examples": [
+            "EX-miniloan-058",
+            "EX-miniloan-059",
+            "EX-miniloan-060"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-07"
+              },
+              "quote": "**Given** ใบสมัครสถานะ `Approved` **When** สั่งเบิกจ่าย **Then** สถานะเปลี่ยนเป็น `Disbursed` และสร้าง LoanAccount สถานะ `Active` · **Given** ใบสมัครยังไม่ `Approved` **When** สั่งเบิกจ่าย **Then** ระบบปฏิเสธ",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "9 · สมมติฐาน"
+              },
+              "quote": "1 ผู้สมัครมีได้หลายใบสมัคร แต่ 1 ใบสมัครที่ `Disbursed` สร้าง 1 บัญชี",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-031@v2",
+          "baseId": "BR-miniloan-031",
+          "version": 2,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "สิทธิ์เดินสถานะ LoanApplication แยกตามเส้น: Draft → Submitted ทำได้เฉพาะ Applicant ที่เป็นเจ้าของใบสมัครนั้น · Submitted → UnderReview เกิดจากผลการประเมินของ System ไม่มีคนกด · UnderReview → Approved, UnderReview → Rejected และ Approved → Disbursed ทำได้เฉพาะ Loan Officer · **การยกเลิก (→ Cancelled) แยกตามว่าใบนั้นถูกมอบหมายแล้วหรือยัง — ใบที่ถูกมอบหมายแล้ว ยกเลิกได้เฉพาะ Loan Officer ที่ถูกมอบหมายตาม BR-miniloan-032@v1 · ใบที่ยังไม่ถูกมอบหมาย (Draft และ Submitted) ยกเลิกได้เฉพาะหัวหน้าเจ้าหน้าที่สินเชื่อ (UL-miniloan-019) เท่านั้น Loan Officer ทั่วไปทำไม่ได้** · Applicant ทำ Approve, Reject, Disburse และ Cancel ไม่ได้ทุกกรณีทุกสถานะ — ต้องการยกเลิกต้องแจ้งเจ้าหน้าที่ และถ้าใบยังไม่ถูกมอบหมายต้องถึงหัวหน้า",
+          "examples": [
+            "EX-miniloan-061",
+            "EX-miniloan-062",
+            "EX-miniloan-064",
+            "EX-miniloan-091",
+            "EX-miniloan-092",
+            "EX-miniloan-093",
+            "EX-miniloan-047"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": "2026-08-14",
+          "provenance": [
+            {
+              "source": "SRC-002",
+              "locator": {
+                "section": "[2] QB-perm-01"
+              },
+              "quote": "สิทธิ์เดินสถานะใบสมัคร: Draft→Submitted เฉพาะ Applicant เจ้าของใบสมัคร · Submitted→UnderReview เกิดจากผลการประเมินของ System ไม่มีคนกด · UnderReview→Approved, UnderReview→Rejected, Approved→Disbursed เฉพาะ Loan Officer",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-002",
+              "locator": {
+                "section": "[1] QB-actor-02"
+              },
+              "quote": "Applicant ห้ามทำสิ่งที่ย้อนกลับไม่ได้: อนุมัติ ปฏิเสธ เบิกจ่าย บันทึกการชำระ ปิดบัญชี",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "3 · ผู้ใช้งาน (Actors)"
+              },
+              "quote": "**Loan Officer** | เจ้าหน้าที่พิจารณา อนุมัติ/ปฏิเสธ และสั่งเบิกจ่าย",
+              "confidence": 0.9
+            },
+            {
+              "source": "SRC-011",
+              "locator": {
+                "section": "[1] Q-miniloan-011 ท่อน 1"
+              },
+              "quote": "การยกเลิกใบสมัครทำได้เฉพาะเจ้าหน้าที่ (Loan Officer) เท่านั้น · Applicant ยกเลิกใบของตัวเองไม่ได้ทุกสถานะ ต้องแจ้งเจ้าหน้าที่",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-013",
+              "locator": {
+                "section": "[2] Q-miniloan-012 · คำตอบข้อ 2ก"
+              },
+              "quote": "ตอบ b : เฉพาะหัวหน้าเจ้าหน้าที่สินเชื่อเท่านั้น",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-015",
+              "locator": {
+                "section": "[1] Q-miniloan-012 · A/B"
+              },
+              "quote": "ตอบ B (supervisor) : หัวหน้าเป็น actor แยก ไม่ใช่ Loan Officer",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-032@v1",
+          "baseId": "BR-miniloan-032",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ใบสมัครที่เข้าสู่การพิจารณาต้องถูกมอบหมาย (assign) ให้ Loan Officer หนึ่งคน โดย**หัวหน้าเป็นผู้สั่งมอบหมาย** — ระบบไม่กระจายงานเอง และเจ้าหน้าที่หยิบงานเองไม่ได้ · เฉพาะคนที่ถูกมอบหมายเท่านั้นที่กดอนุมัติหรือปฏิเสธใบสมัครนั้นได้ Loan Officer คนอื่นทำไม่ได้แม้จะมีสิทธิ์ระดับเดียวกัน · ใบสมัครที่ยังไม่ถูกมอบหมายจึงอนุมัติหรือปฏิเสธไม่ได้เลย ต้องรอหัวหน้าจ่ายงานก่อน",
+          "examples": [
+            "EX-miniloan-065",
+            "EX-miniloan-066",
+            "EX-miniloan-067"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-002",
+              "locator": {
+                "section": "[3] QB-perm-02"
+              },
+              "quote": "เฉพาะ Loan Officer ที่ถูก assign ใบสมัครนั้นเท่านั้นที่กดอนุมัติหรือปฏิเสธใบสมัครนั้นได้ (เอกสารต้นทางไม่มีแนวคิด assignment เลย ข้อนี้เป็นการตัดสินใหม่ที่ไม่มีอินพุตหนุน)",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-010",
+              "locator": {
+                "section": "[1] Q-miniloan-005"
+              },
+              "quote": "หัวหน้าเป็นคนสั่งมอบหมายใบสมัครให้ Loan Officer · ใบสมัครเข้าคิวรอหัวหน้าจ่ายงาน ไม่ใช่ระบบกระจายเองและไม่ใช่เจ้าหน้าที่หยิบเอง",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-047@v1",
+          "baseId": "BR-miniloan-047",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ยกเลิกใบสมัครต้องระบุเหตุผลเสมอ และเก็บเหตุผลนั้นไว้กับใบสมัคร — เช่นเดียวกับที่ BR-miniloan-013@v1 บังคับกับการปฏิเสธ · สั่งยกเลิกโดยไม่ระบุเหตุผลต้องถูกปฏิเสธและใบสมัครไม่เปลี่ยนสถานะ",
+          "examples": [
+            "EX-miniloan-068",
+            "EX-miniloan-069"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-011",
+              "locator": {
+                "section": "[2] Q-miniloan-011 ท่อน 2"
+              },
+              "quote": "การยกเลิกต้องระบุเหตุผลเสมอ เช่นเดียวกับการปฏิเสธตาม BR-miniloan-013@v1 · ยกเลิกโดยไม่ระบุเหตุผลต้องถูกปฏิเสธ",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "1 · เป้าหมายปลายทาง"
+          },
+          "quote": "2. **อนุมัติและเบิกจ่าย** (Approval & Disbursement)",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "6 · วงจรสถานะ"
+          },
+          "quote": "Draft → Submitted → UnderReview → Approved → Disbursed",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "REQ-miniloan-003",
+      "title": "สร้างบัญชีและตารางผ่อน",
+      "actor": "System (สร้างตารางผ่อน) / Applicant (ดูตารางของบัญชีตัวเองอย่างเดียว)",
+      "goal": "เมื่อเบิกจ่ายสำเร็จ ให้ระบบสร้างตารางผ่อนแบบลดต้นลดดอกที่ถูกต้อง และให้เจ้าของบัญชีเปิดดูได้",
+      "businessValue": "ผู้กู้รู้ยอดผ่อนและกำหนดชำระตั้งแต่วันแรก และตัวเลขในตารางเป็นฐานเดียวที่ทุกฝ่ายอ้างอิงตรงกัน",
+      "priority": "high",
+      "status": "draft",
+      "hasUi": true,
+      "domainConcepts": [
+        "UL-miniloan-004",
+        "UL-miniloan-005",
+        "UL-miniloan-006",
+        "UL-miniloan-009",
+        "UL-miniloan-012",
+        "UL-miniloan-014",
+        "UL-miniloan-017",
+        "UL-miniloan-022",
+        "UL-miniloan-023",
+        "UL-miniloan-024"
+      ],
+      "nfr": [],
+      "rules": [
+        {
+          "id": "BR-miniloan-015@v1",
+          "baseId": "BR-miniloan-015",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "เมื่อเบิกจ่ายสำเร็จ ระบบต้องสร้าง RepaymentSchedule ให้บัญชีนั้นทันทีตามกฎการคำนวณงวดผ่อน",
+          "examples": [
+            "EX-miniloan-094",
+            "EX-miniloan-095",
+            "EX-miniloan-096"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-07"
+              },
+              "quote": "**Given** สร้าง LoanAccount **When** เบิกจ่ายสำเร็จ **Then** ระบบสร้าง RepaymentSchedule ตาม BR-06 ทันที",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-016@v1",
+          "baseId": "BR-miniloan-016",
+          "version": 1,
+          "status": "draft",
+          "kind": "calculation",
+          "statement": "งวดผ่อนเท่ากันทุกงวด (EMI) = P × r × (1+r)^n / ((1+r)^n − 1) โดย P = เงินต้น, r = อัตราดอกเบี้ยต่อเดือน (= อัตราต่อปี / 12), n = จำนวนงวด · แต่ละงวดแยกเป็นดอกเบี้ย (ยอดคงเหลือ × r) และเงินต้น (EMI − ดอกเบี้ย)",
+          "examples": [
+            "EX-miniloan-097",
+            "EX-miniloan-098"
+          ],
+          "questions": [
+            "Q-miniloan-016"
+          ],
+          "constrainedBy": "CALC-miniloan-001@v1",
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-06"
+              },
+              "quote": "งวดผ่อนเท่ากันทุกงวด (EMI): `EMI = P × r × (1+r)^n / ((1+r)^n − 1)` · `P` = เงินต้น, `r` = อัตราดอกเบี้ยต่อเดือน (= อัตราต่อปี / 12), `n` = จำนวนงวด · แต่ละงวดแยกเป็นดอกเบี้ย (ยอดคงเหลือ × r) และเงินต้น (EMI − ดอกเบี้ย)",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-017@v1",
+          "baseId": "BR-miniloan-017",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ผลรวมเงินต้นทุกงวดในตารางผ่อนต้องเท่ากับเงินต้นตั้งต้นพอดี และยอดคงเหลือหลังงวดสุดท้ายต้องเป็น 0 — งวดสุดท้ายเป็นงวดที่รับเศษจากการปัด",
+          "examples": [
+            "EX-miniloan-001",
+            "EX-miniloan-002",
+            "EX-miniloan-003"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-06"
+              },
+              "quote": "งวดสุดท้ายปัดเศษให้ยอดคงเหลือเป็น 0 พอดี",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-08"
+              },
+              "quote": "**Given** ตารางถูกสร้าง **When** รวมเงินต้นทุกงวด **Then** เท่ากับเงินต้นตั้งต้นพอดี (งวดสุดท้ายปัดเศษ) · **Given** ยอดคงเหลือหลังงวดสุดท้าย **When** ตรวจสอบ **Then** เท่ากับ 0",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-018@v1",
+          "baseId": "BR-miniloan-018",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "เจ้าของบัญชีเปิดดูตารางผ่อนของบัญชีสถานะ Active ของตัวเองได้ทั้งตาราง พร้อมสถานะรายงวด (จ่ายแล้ว / ค้าง)",
+          "examples": [
+            "EX-miniloan-099",
+            "EX-miniloan-100"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-09"
+              },
+              "quote": "**Given** บัญชี `Active` **When** เปิดดู **Then** เห็นตารางผ่อนทั้งหมดพร้อมสถานะแต่ละงวด (จ่ายแล้ว/ค้าง)",
+              "confidence": 0.85
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-036@v1",
+          "baseId": "BR-miniloan-036",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "อัตราดอกเบี้ยและสูตรคำนวณมีเวอร์ชันและมีวันเริ่มมีผล (effective date) · บัญชีสินเชื่อใช้เวอร์ชันที่มีผลอยู่ ณ วันเบิกจ่าย และการประกาศอัตราใหม่ไม่กระทบตารางผ่อนที่สร้างไปแล้ว · **วันเริ่มมีผลนับรวมวันนั้น (inclusive)** — เบิกจ่ายตรงวัน effective date พอดี ใช้อัตราเวอร์ชันใหม่ ไม่ใช่เวอร์ชันเก่า · **ประกาศอัตราย้อนหลังไม่ได้** — effective date ต้องเป็นวันที่ประกาศหรือวันในอนาคตเท่านั้น ใส่วันในอดีตระบบต้องปฏิเสธและไม่บันทึกเวอร์ชันนั้น จึงไม่มีกรณีที่บัญชีซึ่งเบิกจ่ายไปแล้วต้องคำนวณตารางผ่อนใหม่",
+          "examples": [
+            "EX-miniloan-101",
+            "EX-miniloan-102",
+            "EX-miniloan-103",
+            "EX-miniloan-104"
+          ],
+          "questions": [
+            "Q-miniloan-006"
+          ],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-003",
+              "locator": {
+                "section": "[2] QB-tmp-01"
+              },
+              "quote": "อัตราดอกเบี้ยและสูตรคำนวณกำหนดวันเริ่มมีผล (effective date) ได้ บัญชีใช้เวอร์ชันที่มีผลอยู่ ณ วันเบิกจ่าย ไม่ใช่แค่ \"ของใหม่เท่านั้น\"",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-013",
+              "locator": {
+                "section": "[1] Q-miniloan-006 · คำตอบข้อ 1ก และ 1ข"
+              },
+              "quote": "1ก → a ใช้อัตราใหม่ วันเริ่มมีผลนับรวมวันนั้น (inclusive) · 1ข → a ประกาศอัตราย้อนหลังไม่ได้ effective date ต้องเป็นวันที่ประกาศหรือวันในอนาคตเท่านั้น",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-037@v1",
+          "baseId": "BR-miniloan-037",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "บัญชีสินเชื่อผูกกับเวอร์ชันของอัตราดอกเบี้ยที่ใช้ตอนสร้างตารางผ่อน ไม่ได้คัดลอกตัวเลขมาเก็บไว้ในตัวบัญชี — เปิดบัญชีเก่าต้องเห็นอัตราเดิมเสมอแม้ master จะเปลี่ยนไปแล้ว และเวอร์ชันของอัตราที่เคยถูกใช้ห้ามลบ",
+          "examples": [
+            "EX-miniloan-105",
+            "EX-miniloan-106",
+            "EX-miniloan-107"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-003",
+              "locator": {
+                "section": "[3] QB-tmp-02"
+              },
+              "quote": "บัญชีเก็บ id ของเวอร์ชันอัตราที่ใช้ ไม่ได้คัดลอกตัวเลขมาเก็บ · master ของอัตรามีเวอร์ชันและห้ามลบ",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-044@v1",
+          "baseId": "BR-miniloan-044",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ตารางผ่อนที่ออกให้ผู้กู้แล้วหลังเบิกจ่าย แก้แถวในฉบับเดิมไม่ได้ — ถ้าต้องเปลี่ยน ต้องออกตารางผ่อนฉบับใหม่ทับทั้งฉบับ และฉบับเดิมต้องเก็บไว้ดูย้อนหลังได้ ห้ามลบ",
+          "examples": [
+            "EX-miniloan-008",
+            "EX-miniloan-009",
+            "EX-miniloan-010",
+            "EX-miniloan-011"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-006",
+              "locator": {
+                "section": "[3] QB-frz-02"
+              },
+              "quote": "ตารางผ่อนที่ออกให้ผู้กู้แล้วหลังเบิกจ่าย แก้แถวในฉบับเดิมไม่ได้ ต้องออกตารางผ่อนฉบับใหม่ทับทั้งฉบับ และฉบับเดิมต้องเก็บไว้ดูย้อนหลังได้ ห้ามลบ",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-045@v1",
+          "baseId": "BR-miniloan-045",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "ตารางผ่อนของบัญชีสินเชื่อที่ปิดแล้ว (Closed) ล็อกถาวร — ออกตารางผ่อนฉบับใหม่ทับไม่ได้ทุกกรณี · ข้อนี้เป็นข้อยกเว้นที่กันตารางผ่อนออกจากเส้นทางการปรับปรุงบัญชีหลังปิดตาม BR-miniloan-038@v1 ด้วย คือถึงมีผู้อนุมัติก็ออกฉบับใหม่ไม่ได้ · การออกฉบับใหม่ทับตาม BR-miniloan-044@v1 ทำได้เฉพาะขณะบัญชียังเป็น Active เท่านั้น",
+          "examples": [
+            "EX-miniloan-108",
+            "EX-miniloan-109",
+            "EX-miniloan-110"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-008",
+              "locator": {
+                "section": "[1] บัญชี Closed ออกตารางใหม่"
+              },
+              "quote": "ไม่ได้เด็ดขาด · ตารางผ่อนของบัญชีที่ปิดแล้วล็อกถาวร ออกฉบับใหม่ทับไม่ได้ทุกกรณี และไม่เข้าเส้นทางการปรับปรุงบัญชีหลังปิดตาม BR-miniloan-038@v1 ด้วย",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "1 · เป้าหมายปลายทาง"
+          },
+          "quote": "3. **สร้างบัญชีและตารางผ่อน** (Servicing setup)",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-06"
+          },
+          "quote": "งวดผ่อนเท่ากันทุกงวด (EMI): `EMI = P × r × (1+r)^n / ((1+r)^n − 1)`",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "REQ-miniloan-004",
+      "title": "รับชำระและปิดบัญชี",
+      "actor": "Operations (บันทึกการชำระและปิดบัญชี) / Applicant (ขอยอดปิดบัญชีและดูสถานะเท่านั้น — ปิดบัญชีเองไม่ได้)",
+      "goal": "เงินไหลนอกระบบ — ระบบเป็นผู้บันทึกผลและคิดยอด: บันทึกการชำระรายงวดที่เกิดขึ้นไปแล้วเข้าบัญชีสินเชื่อ คิดยอดปิดบัญชีก่อนกำหนด และปิดบัญชีได้ทั้งแบบชำระครบทุกงวดและแบบปิดก่อนกำหนด",
+      "businessValue": "ยอดคงเหลือของทุกบัญชีตรงกับความจริงตลอดเวลาโดยไม่ต้องเชื่อมระบบชำระเงินภายนอก และผู้กู้ปิดบัญชีก่อนกำหนดได้โดยรู้ยอดที่ต้องจ่ายล่วงหน้า",
+      "priority": "high",
+      "status": "draft",
+      "hasUi": true,
+      "domainConcepts": [
+        "UL-miniloan-004",
+        "UL-miniloan-005",
+        "UL-miniloan-006",
+        "UL-miniloan-007",
+        "UL-miniloan-008",
+        "UL-miniloan-009",
+        "UL-miniloan-015",
+        "UL-miniloan-016",
+        "UL-miniloan-018",
+        "UL-miniloan-021",
+        "UL-miniloan-022",
+        "UL-miniloan-024",
+        "UL-miniloan-025"
+      ],
+      "nfr": [],
+      "rules": [
+        {
+          "id": "BR-miniloan-019@v1",
+          "baseId": "BR-miniloan-019",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ไม่รับชำระบางส่วน — ชำระน้อยกว่ายอดงวด ระบบต้องแจ้งว่าไม่ครบงวด และไม่ปิดงวดนั้น",
+          "examples": [
+            "EX-miniloan-012",
+            "EX-miniloan-013",
+            "EX-miniloan-014"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-10"
+              },
+              "quote": "**Given** ชำระน้อยกว่ายอดงวด **When** บันทึก **Then** ระบบแจ้งว่าไม่ครบงวด และไม่ปิดงวด (สมมติ: ไม่รับชำระบางส่วน)",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-020@v1",
+          "baseId": "BR-miniloan-020",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "บันทึก Payment ตรงตามยอดงวดของบัญชี Active ที่มีงวดค้าง → งวดนั้นเปลี่ยนสถานะเป็น Paid และยอดคงเหลือของบัญชีลดลง",
+          "examples": [
+            "EX-miniloan-013"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-10"
+              },
+              "quote": "**Given** บัญชี `Active` มีงวดค้าง **When** บันทึก Payment ตรงจำนวนงวด **Then** งวดนั้นสถานะ `Paid` และยอดคงเหลือลดลง",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-021@v1",
+          "baseId": "BR-miniloan-021",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "LoanAccount เปลี่ยนเป็น Closed ได้เฉพาะสองทาง: ชำระครบทุกงวด หรือปิดก่อนกำหนดสำเร็จ",
+          "examples": [
+            "EX-miniloan-004",
+            "EX-miniloan-005",
+            "EX-miniloan-006",
+            "EX-miniloan-007"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "6 · LoanAccount"
+              },
+              "quote": "Active → Closed · ปิดได้เมื่อชำระครบทุกงวด หรือปิดก่อนกำหนดสำเร็จ",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-10"
+              },
+              "quote": "**Given** ชำระครบทุกงวด **When** บันทึกงวดสุดท้าย **Then** บัญชีเปลี่ยนเป็น `Closed`",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-022@v1",
+          "baseId": "BR-miniloan-022",
+          "version": 1,
+          "status": "draft",
+          "kind": "calculation",
+          "statement": "ยอดปิดบัญชีก่อนกำหนด = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด 1% ของเงินต้นคงเหลือ · ไม่คิดดอกเบี้ยของงวดในอนาคตที่ยังไม่ถึงกำหนด · ดอกเบี้ยค้างจ่ายใช้ฐานนับวัน actual/365 (นับวันจริง หารด้วย 365) นับจากวันครบกำหนดงวดล่าสุดที่ชำระแล้วถึงวันที่ปิด — ปิดตรงวันครบกำหนดที่เพิ่งชำระ ดอกเบี้ยค้างจ่ายเป็น 0",
+          "examples": [
+            "EX-miniloan-074",
+            "EX-miniloan-075",
+            "EX-miniloan-076"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "5 · BR-07"
+              },
+              "quote": "ยอดปิดบัญชี = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด (สมมติ 1% ของเงินต้นคงเหลือ) · ดอกเบี้ยของงวดในอนาคตที่ยังไม่ถึงกำหนด **ไม่คิด**",
+              "confidence": 0.95
+            },
+            {
+              "source": "SRC-012",
+              "locator": {
+                "section": "[1] Q-miniloan-004"
+              },
+              "quote": "ดอกเบี้ยค้างจ่ายของยอดปิดบัญชีก่อนกำหนดใช้ฐานนับวัน actual/365 นับจากวันครบกำหนดงวดล่าสุดที่ชำระแล้วถึงวันที่ปิด",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-023@v1",
+          "baseId": "BR-miniloan-023",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "เมื่อชำระยอดปิดบัญชีก่อนกำหนดครบ บัญชีเปลี่ยนเป็น Closed และงวดที่เหลือในตารางผ่อนถูกยกเลิก",
+          "examples": [
+            "EX-miniloan-005"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-11"
+              },
+              "quote": "**Given** ชำระยอดปิดบัญชีครบ **When** บันทึก **Then** บัญชีเปลี่ยนเป็น `Closed` และงวดที่เหลือถูกยกเลิก",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-034@v1",
+          "baseId": "BR-miniloan-034",
+          "version": 1,
+          "status": "draft",
+          "kind": "invariant",
+          "statement": "บันทึก Payment และปิดบัญชีสินเชื่อทำได้เฉพาะ Operations · Applicant ขอยอดปิดบัญชีก่อนกำหนดได้ แต่บันทึกการชำระเองและปิดบัญชีเองไม่ได้",
+          "examples": [
+            "EX-miniloan-070",
+            "EX-miniloan-071",
+            "EX-miniloan-072",
+            "EX-miniloan-073"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-002",
+              "locator": {
+                "section": "[1] QB-actor-02"
+              },
+              "quote": "Applicant ห้ามทำสิ่งที่ย้อนกลับไม่ได้: อนุมัติ ปฏิเสธ เบิกจ่าย บันทึกการชำระ ปิดบัญชี · ทำได้แค่ กรอกและยื่นใบสมัคร ดูสถานะและตารางผ่อนของตัวเอง และขอยอดปิดบัญชี",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "3 · ผู้ใช้งาน (Actors)"
+              },
+              "quote": "**Operations** | บันทึกการชำระเงิน และดำเนินการปิดบัญชี",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-038@v1",
+          "baseId": "BR-miniloan-038",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "แก้ข้อมูลของบัญชีสินเชื่อที่ปิดแล้ว (Closed) ทำได้ แต่ต้องผ่านการอนุมัติก่อนจึงมีผล — แก้ทับทันทีไม่ได้ และการยกเลิกบัญชีทิ้งอย่างเดียวก็ไม่ใช่ทางแก้",
+          "examples": [
+            "EX-miniloan-077",
+            "EX-miniloan-078",
+            "EX-miniloan-079"
+          ],
+          "questions": [
+            "Q-miniloan-008"
+          ],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-004",
+              "locator": {
+                "section": "[3] QB-frz-01"
+              },
+              "quote": "บัญชีสินเชื่อที่ปิดแล้ว (Closed) ยังแก้ข้อมูลได้ แต่ต้องผ่านการอนุมัติก่อนจึงมีผล",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-039@v1",
+          "baseId": "BR-miniloan-039",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ผู้อนุมัติการปรับปรุงบัญชีสินเชื่อที่ปิดแล้ว (Closed) กำหนดเป็น role ได้ — เป็นค่าที่ตั้งไว้ในระบบและเปลี่ยนได้ภายหลังโดยไม่ต้องแก้โปรแกรม ไม่ผูกตายกับ actor ใด actor หนึ่งในโค้ด",
+          "examples": [
+            "EX-miniloan-083",
+            "EX-miniloan-090"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-005",
+              "locator": {
+                "section": "[1] QB-apr-01"
+              },
+              "quote": "ผู้อนุมัติการปรับปรุงบัญชีสินเชื่อที่ปิดแล้วกำหนดเป็น role ได้ ตั้งค่าในระบบภายหลังได้ ไม่ fix ตายตัวในโค้ด",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-007",
+              "locator": {
+                "section": "[2] ยืนยันการตีความ"
+              },
+              "quote": "โมดูลนี้ไม่มีแนวคิด tenant มีองค์กรเดียว ตั้ง role ผู้อนุมัติชุดเดียวทั้งระบบ — การตัดคำว่า tenant ออกจากตัวเลือก QB-apr-01 ตรงกับเจตนา",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-040@v1",
+          "baseId": "BR-miniloan-040",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ถ้ายังไม่ได้ตั้ง role ผู้อนุมัติตาม BR-miniloan-039@v1 ระบบต้องปฏิเสธคำขอปรับปรุงบัญชีที่ปิดแล้วทุกกรณีพร้อมแจ้งเหตุผล — ไม่มีผู้อนุมัติค่าเริ่มต้น (default) และห้ามให้การแก้มีผลไปก่อนแล้วค่อยหาคนอนุมัติทีหลัง",
+          "examples": [
+            "EX-miniloan-081",
+            "EX-miniloan-082"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-005",
+              "locator": {
+                "section": "[2] QB-apr-02"
+              },
+              "quote": "ยังไม่ได้ตั้ง role ผู้อนุมัติ = ใช้ฟีเจอร์แก้ข้อมูลบัญชีที่ปิดแล้วไม่ได้ ไม่มีค่า default และห้ามปล่อยผ่าน",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-041@v1",
+          "baseId": "BR-miniloan-041",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "การแก้ข้อมูลบัญชีสินเชื่อที่ปิดแล้วต้องบันทึกเป็นรายการปรับปรุง (adjustment) แยกจากตัวบัญชี — ค่าเดิมของบัญชีคงไว้ไม่ถูกทับ · รายการปรับปรุงต้องเก็บค่าเดิม ค่าใหม่ ผู้ขอแก้ ผู้อนุมัติ และเวลาอนุมัติ (บันทึกผู้อนุมัติและเวลาแนวเดียวกับ BR-miniloan-011@v1)",
+          "examples": [
+            "EX-miniloan-085",
+            "EX-miniloan-086"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-005",
+              "locator": {
+                "section": "[3] QB-aud-01"
+              },
+              "quote": "แก้ข้อมูลบัญชีที่ปิดแล้วเก็บเป็นรายการปรับปรุง (adjustment) แยกจากตัวบัญชี ค่าเดิมคงไว้ไม่ถูกทับ",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-007",
+              "locator": {
+                "section": "[3] ยืนยันการตีความ"
+              },
+              "quote": "รายการปรับปรุงต้องเก็บครบทั้งห้าอย่าง: ค่าเดิม ค่าใหม่ ผู้ขอแก้ ผู้อนุมัติ และเวลาอนุมัติ",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-046@v1",
+          "baseId": "BR-miniloan-046",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ชำระเกินยอดงวด ระบบต้องรับชำระ ปิดงวดนั้น และนำส่วนที่เกินไปตัดเงินต้นของบัญชี (โปะเงินต้น) — ไม่ปฏิเสธและไม่ทอนคืน · เมื่อเงินต้นลดลง ตารางผ่อนที่ออกไปแล้วไม่ตรงอีกต่อไป ระบบจึงต้องออกตารางผ่อนฉบับใหม่ทับตาม BR-miniloan-044@v1 ทุกครั้งที่มีการโปะ · ส่วนเกินไปลดจำนวนงวด โดยค่างวด (EMI) คงเดิม · การโปะมีค่าธรรมเนียม 1% ของยอดส่วนที่เกิน ฐานเดียวกับค่าธรรมเนียมปิดก่อนกำหนดตาม BR-miniloan-022@v1 · กลไกการเก็บค่าธรรมเนียมนั้น (หักจากส่วนเกิน หรือเก็บเพิ่ม) ยังไม่ตัดสิน (ดู Q-miniloan-013)",
+          "examples": [
+            "EX-miniloan-087",
+            "EX-miniloan-088",
+            "EX-miniloan-089"
+          ],
+          "questions": [
+            "Q-miniloan-013"
+          ],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-008",
+              "locator": {
+                "section": "[2] ชำระเกินยอดงวด"
+              },
+              "quote": "รับชำระ ปิดงวดนั้น และส่วนที่เกินไปตัดเงินต้น ทำให้ตารางผ่อนเปลี่ยน",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-012",
+              "locator": {
+                "section": "[3] Q-miniloan-010"
+              },
+              "quote": "ส่วนที่ชำระเกินไปลดจำนวนงวด โดยค่างวด (EMI) คงเดิม · และการโปะมีค่าธรรมเนียม 1% ของยอดส่วนที่เกิน",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-048@v1",
+          "baseId": "BR-miniloan-048",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ผู้มีสิทธิ์ตั้งค่าและเปลี่ยน role ผู้อนุมัติตาม BR-miniloan-039@v1 คือ Loan Officer เท่านั้น — Operations และ Applicant ตั้งค่าไม่ได้ ทั้งจากหน้าจอและผ่าน API · โมดูลนี้ไม่เพิ่ม actor ผู้ดูแลระบบ (System Admin) เข้ามาในรอบนี้",
+          "examples": [
+            "EX-miniloan-083",
+            "EX-miniloan-084"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-012",
+              "locator": {
+                "section": "[2] Q-miniloan-009 ท่อนที่ 1"
+              },
+              "quote": "ผู้มีสิทธิ์ตั้งค่าและเปลี่ยน role ผู้อนุมัติคือ Loan Officer เท่านั้น ไม่เพิ่ม actor ผู้ดูแลระบบเข้ามาในรอบนี้",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-049@v1",
+          "baseId": "BR-miniloan-049",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ผู้อนุมัติคำขอปรับปรุงบัญชีสินเชื่อที่ปิดแล้วต้องเป็นคนละคนกับผู้ขอแก้ (four-eyes) — ผู้ที่ยื่นคำขออนุมัติคำขอของตัวเองไม่ได้ แม้จะถือ role ผู้อนุมัติที่ตั้งไว้ตาม BR-miniloan-039@v1 · ข้อห้ามนี้ต้องบังคับที่ฝั่ง API ตาม BR-miniloan-025@v1 ไม่ใช่แค่ซ่อนปุ่มบนหน้าจอ",
+          "examples": [
+            "EX-miniloan-077",
+            "EX-miniloan-080"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-012",
+              "locator": {
+                "section": "[2] Q-miniloan-009 ท่อนที่ 2"
+              },
+              "quote": "บังคับ four-eyes คือผู้อนุมัติต้องเป็นคนละคนกับผู้ขอแก้ เพราะผู้ขอแก้มักเป็น Operations ซึ่งเป็นคนบันทึกยอดผิด",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "1 · เป้าหมายปลายทาง"
+          },
+          "quote": "4. **รับชำระและปิดบัญชี** (Servicing operation)",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-07"
+          },
+          "quote": "ยอดปิดบัญชี = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด (สมมติ 1% ของเงินต้นคงเหลือ)",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "REQ-miniloan-005",
+      "title": "ภาพรวมสถานะ (แดชบอร์ด)",
+      "actor": "Loan Officer",
+      "goal": "เห็นจำนวนใบสมัครและบัญชีแยกตามสถานะในหน้าเดียว เพื่อจัดลำดับงาน",
+      "businessValue": "เจ้าหน้าที่รู้ว่ามีงานค้างอยู่กี่ใบและอยู่ขั้นไหน โดยไม่ต้องไล่เปิดทีละใบ",
+      "priority": "low",
+      "status": "draft",
+      "hasUi": true,
+      "domainConcepts": [
+        "UL-miniloan-001",
+        "UL-miniloan-004"
+      ],
+      "nfr": [],
+      "rules": [
+        {
+          "id": "BR-miniloan-024@v1",
+          "baseId": "BR-miniloan-024",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "แดชบอร์ดของ Loan Officer แสดงจำนวนแยกตามสถานะ Submitted / UnderReview / Approved / Active / Closed โดยนับข้ามทั้ง LoanApplication และ LoanAccount",
+          "examples": [
+            "EX-miniloan-120",
+            "EX-miniloan-121",
+            "EX-miniloan-122"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-12"
+              },
+              "quote": "**Given** มีใบสมัครหลายสถานะ **When** เปิดแดชบอร์ด **Then** เห็นจำนวนแยกตามสถานะ (Submitted/UnderReview/Approved/Active/Closed)",
+              "confidence": 0.9
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "7 · Epic 8 · US-12"
+          },
+          "quote": "**Given** มีใบสมัครหลายสถานะ **When** เปิดแดชบอร์ด **Then** เห็นจำนวนแยกตามสถานะ (Submitted/UnderReview/Approved/Active/Closed)",
+          "confidence": 0.9
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "REQ-miniloan-006",
+      "title": "สถาปัตยกรรมแยก Web กับ API",
+      "actor": "Web (client) / API",
+      "goal": "ให้ business logic และกฎธุรกิจทั้งหมดอยู่หลัง API เท่านั้น โดย Web เป็น client ที่เรียกใช้และไม่ถือกฎเอง เพื่อให้ทั้งสองส่วน deploy และทดสอบแยกกันได้",
+      "businessValue": "เปลี่ยนหรือทดสอบ Web และ API ได้อิสระ และกันไม่ให้กฎธุรกิจถูกบังคับเฉพาะฝั่งหน้าจอ ซึ่งข้ามได้ด้วยการเรียก API ตรง",
+      "priority": "high",
+      "status": "draft",
+      "hasUi": false,
+      "domainConcepts": [],
+      "nfr": [
+        {
+          "id": "NFR-miniloan-001",
+          "kind": "other",
+          "statement": "ความถูกต้องของการเงิน: จำนวนเงินเป็นชนิดข้อมูลที่แม่นยำ (ไม่ใช้ floating point) และปัดเศษสม่ำเสมอทั้งระบบ",
+          "verifiedBy": "unit_test",
+          "extensions": {}
+        },
+        {
+          "id": "NFR-miniloan-002",
+          "kind": "compliance",
+          "statement": "ตรวจสอบย้อนหลัง: ทุกการเปลี่ยนสถานะบันทึกผู้กระทำและเวลา",
+          "verifiedBy": "audit_log_review",
+          "extensions": {}
+        },
+        {
+          "id": "NFR-miniloan-003",
+          "kind": "security",
+          "statement": "ตรวจสอบ input ทั้งฝั่ง Web และฝั่ง API โดย API เป็นด่านสุดท้ายเสมอ และไม่เก็บข้อมูลอ่อนไหวจริง",
+          "verifiedBy": "api_contract_test",
+          "extensions": {}
+        },
+        {
+          "id": "NFR-miniloan-004",
+          "kind": "other",
+          "statement": "business logic อยู่ที่ฝั่ง API และรวมศูนย์อยู่ในชั้น domain (domain-centric / layered) — Web ไม่ทำ business logic",
+          "verifiedBy": "architecture_review",
+          "extensions": {}
+        },
+        {
+          "id": "NFR-miniloan-005",
+          "kind": "other",
+          "statement": "API เป็นแบบ stateless สื่อสารด้วยรูปแบบมาตรฐาน (เช่น REST/JSON) · Web กับ API deploy และทดสอบแยกกันได้อิสระ · มีสัญญา API (เช่น OpenAPI) ให้อ้างอิงและทดสอบ · ตั้งค่า CORS/Origin ให้ Web เรียก API ได้ถูกต้อง",
+          "verifiedBy": "deployment_test",
+          "extensions": {}
+        },
+        {
+          "id": "NFR-miniloan-006",
+          "kind": "other",
+          "statement": "ความเป็นอิสระจากภาษา: requirement ไม่ผูกภาษา/เฟรมเวิร์ก ทีมเลือกได้อิสระ ตราบใดที่พฤติกรรมตรงตาม Acceptance Criteria",
+          "verifiedBy": "acceptance_test",
+          "extensions": {}
+        }
+      ],
+      "rules": [
+        {
+          "id": "BR-miniloan-025@v1",
+          "baseId": "BR-miniloan-025",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "ทุกความสามารถใน Epic 1–8 ต้องมี API endpoint รองรับ และ business rule ต้องถูกบังคับที่ฝั่ง API เสมอ",
+          "examples": [
+            "EX-miniloan-123",
+            "EX-miniloan-124"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-13"
+              },
+              "quote": "**Given** ความสามารถใดๆ ใน Epic 1–8 **When** Web ต้องใช้งาน **Then** มี API endpoint รองรับ และ business rule ถูกบังคับที่ฝั่ง API เสมอ",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-026@v1",
+          "baseId": "BR-miniloan-026",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "เรียก API ด้วยข้อมูลที่ผิด business rule → API ต้องปฏิเสธพร้อมรหัสและข้อความ error ที่ชัดเจน โดยไม่พึ่งการ validate ของ Web เพียงอย่างเดียว",
+          "examples": [
+            "EX-miniloan-125",
+            "EX-miniloan-126"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-13"
+              },
+              "quote": "**Given** เรียก API ด้วยข้อมูลที่ผิด business rule **When** ประมวลผล **Then** API ปฏิเสธพร้อมรหัส/ข้อความ error ที่ชัดเจน (ไม่พึ่งการ validate ของ Web เพียงอย่างเดียว)",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-027@v1",
+          "baseId": "BR-miniloan-027",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "Web ไม่ตัดสินใจเชิงธุรกิจเอง — เมื่อต้องตัดสิน (เช่น อนุมัติได้ไหม วงเงินเท่าไร) ต้องเรียก API เท่านั้น ห้ามคำนวณเอง",
+          "examples": [
+            "EX-miniloan-127",
+            "EX-miniloan-128"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-14"
+              },
+              "quote": "**Given** Web แสดงผลและรับ input **When** ต้องตัดสินใจเชิงธุรกิจ (เช่น อนุมัติได้ไหม, วงเงินเท่าไร) **Then** Web เรียก API เท่านั้น ไม่คำนวณเอง",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-028@v1",
+          "baseId": "BR-miniloan-028",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "เมื่อ API ปิดให้บริการ Web ต้องแสดงสถานะข้อผิดพลาดอย่างเหมาะสม และต้องไม่ crash",
+          "examples": [
+            "EX-miniloan-129",
+            "EX-miniloan-130"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-14"
+              },
+              "quote": "**Given** API ปิดให้บริการ **When** เปิด Web **Then** Web แสดงสถานะข้อผิดพลาดอย่างเหมาะสม (ไม่ crash)",
+              "confidence": 0.95
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-029@v1",
+          "baseId": "BR-miniloan-029",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "API ต้องมีสัญญาที่ทดสอบได้ — คำอธิบาย endpoint และ request/response schema (เช่น OpenAPI) — และ request/response จริงต้องตรงตาม schema ที่ประกาศไว้",
+          "examples": [
+            "EX-miniloan-131",
+            "EX-miniloan-132"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-15"
+              },
+              "quote": "**Given** API พร้อมใช้งาน **When** เปิดดูสัญญา **Then** มีคำอธิบาย endpoint, request/response schema (เช่น OpenAPI) ที่ใช้ทดสอบและอ้างอิงได้ · **Given** request/response **When** ตรวจสอบ **Then** ตรงตาม schema ที่ประกาศไว้",
+              "confidence": 0.9
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-030@v1",
+          "baseId": "BR-miniloan-030",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "Web เรียก API ต้องแนบ token จำลองทุกครั้ง และ API ต้องตรวจสอบ token ก่อนให้บริการ (ระบบ auth จริงอยู่นอกขอบเขต)",
+          "examples": [
+            "EX-miniloan-133",
+            "EX-miniloan-134",
+            "EX-miniloan-135"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-16"
+              },
+              "quote": "**Given** Web เรียก API **When** ส่ง request **Then** แนบ token จำลอง และ API ตรวจสอบก่อนให้บริการ (auth จริงอยู่นอกขอบเขต)",
+              "confidence": 0.85
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-033@v1",
+          "baseId": "BR-miniloan-033",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "Applicant เห็นและเรียกดูได้เฉพาะใบสมัครและบัญชีสินเชื่อที่ตัวเองเป็นเจ้าของเท่านั้น · ขอบเขตนี้ต้องถูกบังคับที่ฝั่ง API ไม่ใช่แค่ซ่อนบนหน้าจอ — เรียก API ด้วย id ของคนอื่นต้องถูกปฏิเสธ",
+          "examples": [
+            "EX-miniloan-136",
+            "EX-miniloan-137",
+            "EX-miniloan-138"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-002",
+              "locator": {
+                "section": "[4] QB-scope-01"
+              },
+              "quote": "Applicant เห็นและเรียกดูได้เฉพาะใบสมัครและบัญชีสินเชื่อที่ตัวเองเป็นเจ้าของ",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "7 · US-09"
+              },
+              "quote": "**Given** บัญชี `Active` **When** เปิดดู **Then** เห็นตารางผ่อนทั้งหมดพร้อมสถานะแต่ละงวด (จ่ายแล้ว/ค้าง)",
+              "confidence": 0.8
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-035@v1",
+          "baseId": "BR-miniloan-035",
+          "version": 1,
+          "status": "draft",
+          "kind": "constraint",
+          "statement": "ค่าเงินทุกจุดที่เกิดขึ้นในระบบต้องปัดทันทีที่เกิดด้วยวิธี round half up ไม่ใช่เก็บค่าเต็มไว้แล้วปัดตอนแสดงผล — EMI ปัดก่อน ดอกเบี้ยรายงวดปัด แล้วเงินต้นของงวด = EMI − ดอกเบี้ยที่ปัดแล้ว · จำนวนตำแหน่งทศนิยมยังไม่ถูกกำหนด (ดู DQ-miniloan-001)",
+          "examples": [
+            "EX-miniloan-139",
+            "EX-miniloan-140"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-003",
+              "locator": {
+                "section": "[1] QB-calc-01"
+              },
+              "quote": "ค่าเงินทุกจุดที่เกิดขึ้นปัดทันทีด้วยวิธี round half up ไม่เก็บค่าเต็มแล้วปัดตอนแสดงผล · จำนวนตำแหน่งทศนิยมยังไม่ตัดสิน",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-001",
+              "locator": {
+                "section": "8 · Non-Functional Requirements"
+              },
+              "quote": "**ความถูกต้องของการเงิน:** จำนวนเงินเป็นชนิดข้อมูลที่แม่นยำ (ไม่ใช้ floating point) ปัดเศษสม่ำเสมอทั้งระบบ",
+              "confidence": 0.85
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-042@v1",
+          "baseId": "BR-miniloan-042",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "เมื่อ Web เรียก API แล้วล้มเหลวหรือ timeout ระบบต้องล้มทันทีและแจ้งผู้ใช้ให้สั่งใหม่เอง — ไม่มีคิว retry อัตโนมัติ และห้ามค้างรอจนกว่าจะสำเร็จ · รูปแบบการแสดงข้อผิดพลาดเป็นไปตาม BR-miniloan-028@v1",
+          "examples": [
+            "EX-miniloan-141",
+            "EX-miniloan-142"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-006",
+              "locator": {
+                "section": "[1] QB-int-01"
+              },
+              "quote": "Web เรียก API แล้วล่มหรือ timeout ให้ล้มทันทีและแจ้งผู้ใช้ให้สั่งใหม่เอง ไม่มีคิว retry อัตโนมัติ และไม่ค้างรอจนกว่าจะสำเร็จ",
+              "confidence": 1
+            },
+            {
+              "source": "SRC-007",
+              "locator": {
+                "section": "[1] ยืนยันการตีความ"
+              },
+              "quote": "เป็นกฎคนละข้อกับ BR-miniloan-028@v1 แยกกันตามที่ร่างไว้ — BR-028 คือหน้าจอต้องแสดงอะไรและห้าม crash ส่วน BR-042 คือระบบจะไม่ลองเองซ้ำและจะไม่ค้างรอ",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        },
+        {
+          "id": "BR-miniloan-043@v1",
+          "baseId": "BR-miniloan-043",
+          "version": 1,
+          "status": "draft",
+          "kind": "policy",
+          "statement": "ทุกคำสั่งที่เขียนข้อมูล (สร้างรายการใหม่ หรือเปลี่ยนสถานะ) ต้องกันการยิงซ้ำด้วยข้อจำกัดไม่ซ้ำ (unique constraint) ที่ฐานข้อมูล — คำสั่งซ้ำต้องถูกปฏิเสธพร้อม error ที่ผู้ใช้เห็น ไม่ใช่คืนผลของครั้งแรกเงียบๆ และไม่ใช่ปล่อยให้เกิดรายการซ้ำแล้วให้ผู้ใช้ไปลบเอง · ฟิลด์ที่ใช้เป็น key กันซ้ำของแต่ละคำสั่งยังไม่ถูกกำหนด (ดู DQ-miniloan-009)",
+          "examples": [
+            "EX-miniloan-143",
+            "EX-miniloan-144"
+          ],
+          "questions": [],
+          "constrainedBy": null,
+          "effectiveFrom": null,
+          "provenance": [
+            {
+              "source": "SRC-006",
+              "locator": {
+                "section": "[2] QB-idem-01"
+              },
+              "quote": "กันการยิงซ้ำด้วยข้อจำกัดไม่ซ้ำ (unique constraint) ที่ฐานข้อมูล · ยิงซ้ำต้องถูกปฏิเสธพร้อม error ไม่ใช่คืนผลของครั้งแรกเงียบๆ และไม่ใช่ปล่อยให้เกิดรายการซ้ำแล้วให้ผู้ใช้ไปลบเอง",
+              "confidence": 1
+            }
+          ],
+          "extensions": {}
+        }
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "7 · Epic 9"
+          },
+          "quote": "business logic และกฎทั้งหมด (Epic 1–8) ต้องอยู่ฝั่ง API ส่วน Web เป็นเพียง client ที่เรียกใช้",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "2 · ขอบเขต"
+          },
+          "quote": "**แยกเป็น 2 ส่วนที่ deploy แยกกัน: Backend API (ให้บริการ business logic ทั้งหมด) + Web (client ที่เรียกใช้ API)**",
+          "confidence": 0.95
+        }
+      ],
+      "extensions": {}
+    }
+  ],
+  "extensions": {}
+}
