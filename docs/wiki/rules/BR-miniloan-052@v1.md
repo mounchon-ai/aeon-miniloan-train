@@ -5,16 +5,17 @@ description: ถ้ายอดส่วนที่เกินมากกว�
 resource: ../requirements/REQ-miniloan-004.md
 tags: [miniloan, invariant]
 id: BR-miniloan-052@v1
-status: draft
+status: superseded
 belongs_to: REQ-miniloan-004
 kind: invariant
-is_current: true
+is_current: false
 test_design: [BVA, decision_table]
 proven_by: [EX-miniloan-117, EX-miniloan-118, EX-miniloan-119]
 golden: []
+superseded_by: BR-miniloan-052@v2
 provenance: [SRC-015]
 timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:2a42cb0d9645293f1fe86bf515d0d1aa39c6172e8f30d3aa6c00191640dfe99d
+spec_hash: sha256:87aafba35f199cdcfc9e683cd650cd7d31816e920af1f9afcc74d4e481e46c27
 ---
 
 # BR-miniloan-052@v1
@@ -37,4 +38,5 @@ spec_hash: sha256:2a42cb0d9645293f1fe86bf515d0d1aa39c6172e8f30d3aa6c00191640dfe9
 
 | เวอร์ชัน | มีผลตั้งแต่ | เหตุผล | change set |
 |---|---|---|---|
-| **BR-miniloan-052@v1** (หน้านี้) ✅ | — | ตั้งต้น | — |
+| **BR-miniloan-052@v1** (หน้านี้) ❄️ | — | ตั้งต้น | — |
+| [BR-miniloan-052@v2](BR-miniloan-052@v2.md) ✅ | 2026-08-21 | Q-miniloan-015 ข้อ (2) สั่งให้ขยายเงื่อนไขของกฎข้อนี้จาก "ส่วนเกินมากกว่ายอดปิดบัญชี" ให้ครอบ "ส่วนเกินหลังหักค่าธรรมเนียมการโปะมากกว่าเงินต้นคงเหลือ" ด้วย — BR-miniloan-050@v2 (CHG-miniloan-003) อ้างถึงกฎข้อนี้ไปแล้วในฐานะปลายทางของการปฏิเสธ แต่เงื่อนไขเดิมของกฎข้อนี้ยังไม่ครอบกรณีนั้นจริง ผลลัพธ์เหมือนกันทั้งสองทริกเกอร์ (ปฏิเสธทั้งรายการ) จึงรวมเป็นเงื่อนไข OR เดียว ไม่แยกเป็นกฎคนละข้อ | [CHG-miniloan-004](../changes/CHG-miniloan-004.md) |

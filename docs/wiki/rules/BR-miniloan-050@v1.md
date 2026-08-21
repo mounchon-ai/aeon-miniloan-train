@@ -5,16 +5,17 @@ description: ค่าธรรมเนียมการโปะ 1% ของ
 resource: ../requirements/REQ-miniloan-004.md
 tags: [miniloan, calculation]
 id: BR-miniloan-050@v1
-status: draft
+status: superseded
 belongs_to: REQ-miniloan-004
 kind: calculation
-is_current: true
+is_current: false
 test_design: [BVA, decision_table]
 proven_by: [EX-miniloan-111, EX-miniloan-112, EX-miniloan-113]
 golden: []
+superseded_by: BR-miniloan-050@v2
 provenance: [SRC-013, SRC-015]
 timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:e70f31932a86b048b7b06f9840a68b1585bebfb2b32afc6b529f851b2fea78af
+spec_hash: sha256:d3b7ba18a5bdc5c25898f45af549832314cff8a9eb1298f37251f5681aaf7261
 ---
 
 # BR-miniloan-050@v1
@@ -40,4 +41,5 @@ spec_hash: sha256:e70f31932a86b048b7b06f9840a68b1585bebfb2b32afc6b529f851b2fea78
 
 | เวอร์ชัน | มีผลตั้งแต่ | เหตุผล | change set |
 |---|---|---|---|
-| **BR-miniloan-050@v1** (หน้านี้) ✅ | — | ตั้งต้น | — |
+| **BR-miniloan-050@v1** (หน้านี้) ❄️ | — | ตั้งต้น | — |
+| [BR-miniloan-050@v2](BR-miniloan-050@v2.md) ✅ | 2026-08-21 | Q-miniloan-015 ตอบแล้ว (2026-08-21) — กรณีที่ส่วนเกินหลังหักค่าธรรมเนียมการโปะ 1% แล้วมากกว่าเงินต้นคงเหลือ เจ้าของสเปกตัดสินให้ปฏิเสธการบันทึกทั้งรายการ สอดคล้องกับหลักการที่ตัดสินไว้แล้วใน BR-miniloan-052@v1 ที่ระบบไม่ทอนคืนและไม่เก็บยอดค้างไว้ในระบบ ไม่ใช่ตัดเท่าที่เหลือแล้วทอนคืนส่วนล้น และไม่ใช่ถือเป็นการปิดบัญชีก่อนกำหนดทั้งที่ยอดไม่ถึงยอดปิดบัญชี — ประโยค "ยังไม่ตัดสิน (ดู Q-miniloan-015)" จึงตกยุคและถูกแทนที่ด้วยผลการตัดสิน | [CHG-miniloan-003](../changes/CHG-miniloan-003.md) |
