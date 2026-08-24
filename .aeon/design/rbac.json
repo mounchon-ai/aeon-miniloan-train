@@ -1,0 +1,499 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/rbac.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "defaultEffect": "deny",
+  "roles": [
+    {
+      "id": "ROLE-001",
+      "label": "ผู้สมัคร (Applicant)",
+      "stakeholder": "STK-miniloan-001"
+    },
+    {
+      "id": "ROLE-002",
+      "label": "เจ้าหน้าที่สินเชื่อ (Loan Officer)",
+      "stakeholder": "STK-miniloan-002"
+    },
+    {
+      "id": "ROLE-003",
+      "label": "หัวหน้าเจ้าหน้าที่สินเชื่อ",
+      "stakeholder": "STK-miniloan-003"
+    },
+    {
+      "id": "ROLE-004",
+      "label": "ฝ่ายปฏิบัติการ (Operations)",
+      "stakeholder": "STK-miniloan-004"
+    },
+    {
+      "id": "ROLE-005",
+      "label": "ระบบ (System / rule engine อัตโนมัติ)",
+      "stakeholder": "STK-miniloan-005"
+    }
+  ],
+  "entries": [
+    {
+      "id": "ACL-001",
+      "role": "ROLE-001",
+      "resource": "UC-miniloan-001",
+      "action": "กรอกและบันทึกร่างใบสมัคร",
+      "scope": "own",
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-002",
+      "role": "ROLE-001",
+      "resource": "UC-miniloan-001",
+      "action": "ยื่นใบสมัคร",
+      "scope": "own",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "Draft"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-003",
+      "role": "ROLE-005",
+      "resource": "UC-miniloan-002",
+      "action": "ประเมินสินเชื่ออัตโนมัติ",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "Submitted"
+        ]
+      },
+      "enforceAt": [
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-004",
+      "role": "ROLE-003",
+      "resource": "UC-miniloan-003",
+      "action": "มอบหมายใบสมัครให้เจ้าหน้าที่",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "UnderReview"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-005",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-004",
+      "action": "อนุมัติใบสมัคร",
+      "scope": "own",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "UnderReview"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-006",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-004",
+      "action": "ปฏิเสธใบสมัคร",
+      "scope": "own",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "UnderReview"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-007",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-004",
+      "action": "สั่งเบิกจ่าย",
+      "scope": "own",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "Approved"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-008",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-005",
+      "action": "ยกเลิกใบสมัครที่ถูกมอบหมายให้ตนแล้ว",
+      "scope": "own",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "UnderReview",
+          "Approved"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-009",
+      "role": "ROLE-003",
+      "resource": "UC-miniloan-005",
+      "action": "ยกเลิกใบสมัครที่ยังไม่ถูกมอบหมาย",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-001",
+        "state": [
+          "Draft",
+          "Submitted"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-010",
+      "role": "ROLE-005",
+      "resource": "UC-miniloan-006",
+      "action": "สร้างตารางผ่อนอัตโนมัติ",
+      "scope": "all",
+      "enforceAt": [
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-011",
+      "role": "ROLE-001",
+      "resource": "UC-miniloan-007",
+      "action": "ดูตารางผ่อนของตัวเอง",
+      "scope": "own",
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-012",
+      "role": "ROLE-004",
+      "resource": "UC-miniloan-008",
+      "action": "บันทึกการชำระรายงวด (รวมโปะเงินต้น)",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-003",
+        "state": [
+          "Due"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-013",
+      "role": "ROLE-001",
+      "resource": "UC-miniloan-009",
+      "action": "ขอยอดปิดบัญชีก่อนกำหนด",
+      "scope": "own",
+      "condition": {
+        "stateMachine": "STM-miniloan-002",
+        "state": [
+          "Active"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-014",
+      "role": "ROLE-004",
+      "resource": "UC-miniloan-009",
+      "action": "บันทึกการปิดบัญชีก่อนกำหนด",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-002",
+        "state": [
+          "Active"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-015",
+      "role": "ROLE-004",
+      "resource": "UC-miniloan-010",
+      "action": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-002",
+        "state": [
+          "Closed"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-016",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-010",
+      "action": "อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+      "scope": "all",
+      "condition": {
+        "stateMachine": "STM-miniloan-004",
+        "state": [
+          "Pending"
+        ]
+      },
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-017",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-010",
+      "action": "ตั้งค่า/เปลี่ยนผู้ถือบทบาทผู้อนุมัติ",
+      "scope": "all",
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-018",
+      "role": "ROLE-002",
+      "resource": "UC-miniloan-011",
+      "action": "ดูแดชบอร์ดภาพรวมสถานะ",
+      "scope": "all",
+      "enforceAt": [
+        "api",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-019",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-001",
+      "action": "เข้าถึงหน้าแรกของฉัน",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-020",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-002",
+      "action": "เข้าถึงหน้ากรอก/แก้ไขใบสมัคร",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-021",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-003",
+      "action": "เข้าถึงหน้าตารางผ่อนของฉัน",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-022",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-004",
+      "action": "เข้าถึงหน้าขอยอดปิดบัญชีก่อนกำหนด",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-023",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-005",
+      "action": "เข้าถึงแดชบอร์ด",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-024",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-006",
+      "action": "เข้าถึงคิวใบสมัคร (เฉพาะที่มอบหมายให้ตน)",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-025",
+      "role": "ROLE-003",
+      "resource": "UI-miniloan-006",
+      "action": "เข้าถึงคิวใบสมัคร (ทั้งหมดที่รอมอบหมาย)",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-026",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-007",
+      "action": "เข้าถึงรายละเอียดใบสมัคร (เฉพาะที่มอบหมายให้ตน)",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-027",
+      "role": "ROLE-003",
+      "resource": "UI-miniloan-007",
+      "action": "เข้าถึงรายละเอียดใบสมัคร (เพื่อมอบหมาย/ยกเลิกใบที่ยังไม่มอบหมาย)",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-028",
+      "role": "ROLE-004",
+      "resource": "UI-miniloan-008",
+      "action": "เข้าถึงหน้าบันทึกการชำระเงิน",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-029",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-009",
+      "action": "เข้าถึงหน้าจัดการบัญชีที่ปิดแล้ว (ตั้งค่า/อนุมัติ)",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    },
+    {
+      "id": "ACL-030",
+      "role": "ROLE-004",
+      "resource": "UI-miniloan-009",
+      "action": "เข้าถึงหน้าจัดการบัญชีที่ปิดแล้ว (ยื่นคำขอ)",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "api"
+      ]
+    }
+  ],
+  "fieldRules": [
+    {
+      "entity": "ENT-001",
+      "field": "applicantName",
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002",
+        "ROLE-003",
+        "ROLE-004"
+      ],
+      "classification": "confidential"
+    },
+    {
+      "entity": "ENT-001",
+      "field": "applicantAge",
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ],
+      "classification": "internal"
+    },
+    {
+      "entity": "ENT-001",
+      "field": "monthlyIncome",
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ],
+      "classification": "confidential"
+    },
+    {
+      "entity": "ENT-001",
+      "field": "employmentMonths",
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ],
+      "classification": "internal"
+    },
+    {
+      "entity": "ENT-001",
+      "field": "existingMonthlyDebt",
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ],
+      "classification": "confidential"
+    }
+  ],
+  "delegation": {
+    "enabled": false,
+    "scopeInheritance": null
+  }
+}

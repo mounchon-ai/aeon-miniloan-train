@@ -9,7 +9,7 @@ status: draft
 term_th: อัตราดอกเบี้ย
 term_en: InterestRate
 not_to_confuse_with: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:2f78201b64650d492eee2262d10d8e2876966fe7873a2abeb8da79f96dee0584
 ---
 

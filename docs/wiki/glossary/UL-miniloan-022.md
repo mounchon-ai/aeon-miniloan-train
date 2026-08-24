@@ -9,7 +9,7 @@ status: draft
 term_th: เงินต้นคงเหลือ
 term_en: OutstandingPrincipal
 not_to_confuse_with: [UL-miniloan-008]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:00a38b6fe525514bdd47babf652c518434caf762ca5c86be29367e8c128181fd
 ---
 

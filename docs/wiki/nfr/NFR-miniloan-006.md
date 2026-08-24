@@ -8,7 +8,7 @@ id: NFR-miniloan-006
 kind: other
 belongs_to: REQ-miniloan-006
 verified_by: acceptance_test
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:09799873c96f79de6cebb78561271425c3dbecf93f0dba7f5f0c3d06dc669582
 ---
 

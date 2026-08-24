@@ -9,8 +9,8 @@ status: draft
 actor: Applicant / System
 rules: [BR-miniloan-001, BR-miniloan-002, BR-miniloan-003, BR-miniloan-004, BR-miniloan-005, BR-miniloan-006, BR-miniloan-007, BR-miniloan-008, BR-miniloan-009]
 domain_concepts: [UL-miniloan-001, UL-miniloan-002, UL-miniloan-003, UL-miniloan-009, UL-miniloan-010, UL-miniloan-011, UL-miniloan-012, UL-miniloan-014, UL-miniloan-023, UL-miniloan-024]
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:486ad9b8616ea3a3dd9127b1893a9f58be338d167556b89a1c6b650004c5cbdd
+timestamp: 2026-08-24T09:30:00+07:00
+spec_hash: sha256:1c3726ae13351b2c2c5ac744a66fd57217060d0d9bf859af2ed590efbf3c9d88
 ---
 
 # REQ-miniloan-001
@@ -28,7 +28,7 @@ spec_hash: sha256:486ad9b8616ea3a3dd9127b1893a9f58be338d167556b89a1c6b650004c5cb
 | กฎ | ชนิด | ข้อความ | ตัวอย่าง |
 |---|---|---|---|
 | [BR-miniloan-001@v1](../rules/BR-miniloan-001@v1.md) | constraint | ผู้สมัครต้องมีอายุ 20–60 ปี · รายได้ต่อเดือน ≥ 15,000 บาท · อายุงานปัจจุบัน ≥ 4 เดือน | 4 |
-| [BR-miniloan-002@v1](../rules/BR-miniloan-002@v1.md) | calculation | Debt-to-Income หลังรวมงวดใหม่ ต้อง ≤ 70% ของรายได้ต่อเดือน โดย DTI = (ภาระหนี้เดิมต่อเดือน + งวดใหม่) / รายได้ต่อเดือน · "งวดใหม่" คือค่างวด EMI ที่คำนวณด้วยสูตรเดียวกับ BR-miniloan-016@v1 จากจำนวนเงินกู้ที่ขอ จำนวนงวดที่ขอ และอัตราดอกเบี้ยที่มีผล ณ วันประเมิน — ไม่มีสูตรประมาณแยกอีกชุด · DTI คำนวณครั้งเดียวตอนยื่นจากจำนวนเงินกู้ที่ขอ และไม่คำนวณใหม่แม้เจ้าหน้าที่จะปรับวงเงินลงตาม BR-miniloan-012@v1 | 4 |
+| [BR-miniloan-002@v1](../rules/BR-miniloan-002@v1.md) | calculation | Debt-to-Income หลังรวมงวดใหม่ ต้อง ≤ 70% ของรายได้ต่อเดือน โดย DTI = (ภาระหนี้เดิมต่อเดือน + งวดใหม่) / รายได้ต่อเดือน · "งวดใหม่" คือค่างวด EMI ที่คำนวณด้วยสูตรเดียวกับ BR-miniloan-016@v1 จากจำนวนเงินกู้ที่ขอ จำนวนงวดที่ขอ และอัตราดอกเบี้ยที่มีผล ณ วันประเมิน — ไม่มีสูตรประมาณแยกอีกชุด · DTI คำนวณครั้งเดียวตอนยื่นจากจำนวนเงินกู้ที่ขอ และไม่คำนวณใหม่แม้เจ้าหน้าที่จะปรับวงเงินลงตาม BR-miniloan-012@v1 | 5 |
 | [BR-miniloan-003@v1](../rules/BR-miniloan-003@v1.md) | calculation | วงเงินอนุมัติสูงสุด = 5 เท่าของรายได้ต่อเดือน และไม่เกิน 1,000,000 บาท | 4 |
 | [BR-miniloan-004@v1](../rules/BR-miniloan-004@v1.md) | constraint | ใบสมัครรับได้เฉพาะจำนวนเงินกู้ 10,000 – 1,000,000 บาท และจำนวนงวด 6 – 60 งวด (รายเดือน) | 4 |
 | [BR-miniloan-005@v1](../rules/BR-miniloan-005@v1.md) | policy | อัตราดอกเบี้ยเป็นแบบลดต้นลดดอก 25% ต่อปี | 2 |

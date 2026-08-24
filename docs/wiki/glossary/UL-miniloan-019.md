@@ -9,7 +9,7 @@ status: draft
 term_th: หัวหน้าเจ้าหน้าที่สินเชื่อ
 term_en: Supervisor
 not_to_confuse_with: [UL-miniloan-013]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:e1aa87a842e85fdedf2c175ccc9ff4ae1db4d3041fd5d1380cd91ade89043399
 ---
 

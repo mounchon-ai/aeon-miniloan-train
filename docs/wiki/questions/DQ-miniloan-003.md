@@ -8,7 +8,7 @@ id: DQ-miniloan-003
 state: open
 raised_by: BR-miniloan-033@v1
 answer_phase: domain
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:307e55b49e9edfe46566b7c12b7edce5fe224aac9181f6ffcd22e62b47742adb
 ---
 

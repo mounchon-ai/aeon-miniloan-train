@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/nfr.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "entries": [
+    {
+      "id": "NFR-miniloan-001",
+      "metric": "สัดส่วนของการคำนวณ/เก็บค่าเงินในระบบที่ใช้ชนิดข้อมูลแม่นยำ (decimal) และปัดเศษตาม BR-miniloan-035@v1 อย่างสม่ำเสมอ ไม่มีจุดใดใช้ floating point",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทุกจุดคำนวณเงินในระบบ (EMI ดอกเบี้ยรายงวด ยอดปิดบัญชี ค่าธรรมเนียม) ทั้งใน unit test และการตรวจโค้ด ไม่มีข้อยกเว้น",
+      "measuredBy": "unit_test"
+    },
+    {
+      "id": "NFR-miniloan-002",
+      "metric": "สัดส่วนของการเปลี่ยนสถานะ (LoanApplication, LoanAccount, Installment, ClosedAccountAdjustment) ที่มีการบันทึกผู้กระทำและเวลาไว้ในระบบ",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทุกการเปลี่ยนสถานะที่เกิดขึ้นจริงในระบบ ตรวจย้อนหลังได้จาก audit log",
+      "measuredBy": "audit_log_review"
+    },
+    {
+      "id": "NFR-miniloan-003",
+      "metric": "สัดส่วนของ API endpoint ที่ปฏิเสธ request ซึ่งผิดกฎธุรกิจ แม้ Web จะไม่ได้ validate มาก่อนหรือ validate ผิดพลาด (API เป็นด่านสุดท้ายเสมอ)",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ยิง request ตรงไปที่ API ข้าม Web สำหรับทุก endpoint ที่มีผลทางธุรกิจ ในชุดทดสอบสัญญา API",
+      "measuredBy": "api_contract_test"
+    },
+    {
+      "id": "NFR-miniloan-004",
+      "metric": "สัดส่วนของกฎธุรกิจ (BR-) ที่บังคับใช้อยู่ที่ชั้น API/domain เท่านั้น ไม่มีกฎใดถูกบังคับเฉพาะฝั่ง Web",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ตรวจสอบทุกกฎที่ผูกกับฟังก์ชันผ่าน governedBy edge ใน interfaces.json (ผลจาก /design:interface) ว่าประกาศชั้นบังคับเป็น api หรือ domain",
+      "measuredBy": "architecture_review"
+    },
+    {
+      "id": "NFR-miniloan-005",
+      "metric": "สัดส่วนของรายการตรวจสอบการ deploy ที่ผ่าน จากทั้งหมด 4 ข้อ: (1) API เป็นแบบ stateless (2) มีสัญญา API แบบ OpenAPI ที่ request/response จริงตรงตามที่ประกาศ (3) ตั้งค่า CORS ให้ Web เรียก API ได้ถูกต้อง (4) Web กับ API แยก deploy และแยกทดสอบได้อิสระจริง",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ตรวจซ้ำทุกครั้งที่มีการปล่อยเวอร์ชันใหม่ของ Web หรือ API",
+      "measuredBy": "deployment_test"
+    },
+    {
+      "id": "NFR-miniloan-006",
+      "metric": "สัดส่วนของ Acceptance Criteria (ทุก AC ในเอกสาร requirement) ที่ผ่านโดยไม่ขึ้นกับภาษาหรือเฟรมเวิร์กที่ทีมเลือกใช้จริง",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "รันชุด acceptance test ทั้งหมดกับ implementation ที่เลือกภาษา/เฟรมเวิร์กใดก็ได้ตามที่ทีมกำหนด",
+      "measuredBy": "acceptance_test"
+    }
+  ]
+}

@@ -9,7 +9,7 @@ status: draft
 term_th: การปิดบัญชีก่อนกำหนด
 term_en: EarlySettlement
 not_to_confuse_with: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:6abe4a7bccaaa4f56b1f5ae0bb39892c4304a5b695371aef06e60b67cb124476
 ---
 

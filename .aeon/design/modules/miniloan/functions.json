@@ -1,0 +1,481 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/functions.mjs",
+  "project": "miniloan",
+  "module": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "functions": [
+    {
+      "id": "FUN-miniloan-001",
+      "title": "กรอก บันทึกร่าง และยื่นใบสมัครสินเชื่อ",
+      "description": "ผู้สมัครกรอกข้อมูลส่วนตัวและเงื่อนไขสินเชื่อที่ขอ บันทึกเป็นร่างระหว่างทางได้ แล้วยื่นเมื่อกรอกครบเพื่อเข้าสู่การประเมิน",
+      "requirements": [
+        "REQ-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-004@v1",
+        "BR-miniloan-007@v1",
+        "BR-miniloan-008@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-001"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-002",
+      "title": "ประเมินสินเชื่ออัตโนมัติ (Credit Assessment)",
+      "description": "เมื่อใบสมัครถูกยื่น ระบบประเมินคุณสมบัติ คำนวณ DTI และวงเงินอนุมัติสูงสุด แล้วจัด Credit Band พร้อมเหตุผลโดยอัตโนมัติ ไม่มีคนกด",
+      "requirements": [
+        "REQ-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-001@v1",
+        "BR-miniloan-002@v1",
+        "BR-miniloan-003@v1",
+        "BR-miniloan-005@v1",
+        "BR-miniloan-006@v1",
+        "BR-miniloan-009@v1",
+        "CALC-miniloan-004@v1",
+        "CALC-miniloan-005@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-002"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-003",
+      "title": "มอบหมายใบสมัครให้เจ้าหน้าที่",
+      "description": "หัวหน้าเจ้าหน้าที่สินเชื่อสั่งมอบหมายใบสมัครที่รอพิจารณาให้ Loan Officer หนึ่งคนรับผิดชอบ",
+      "requirements": [
+        "REQ-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-032@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-003"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-004",
+      "title": "พิจารณาอนุมัติ/ปฏิเสธ และสั่งเบิกจ่ายใบสมัคร",
+      "description": "Loan Officer ที่ถูกมอบหมายพิจารณาใบสมัคร อนุมัติหรือปฏิเสธพร้อมเหตุผล แล้วสั่งเบิกจ่ายเพื่อเปิดบัญชีสินเชื่อ",
+      "requirements": [
+        "REQ-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-010@v1",
+        "BR-miniloan-011@v1",
+        "BR-miniloan-012@v1",
+        "BR-miniloan-013@v1",
+        "BR-miniloan-014@v1",
+        "BR-miniloan-031@v2",
+        "BR-miniloan-032@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-004"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-005",
+      "title": "ยกเลิกใบสมัคร",
+      "description": "ยกเลิกใบสมัครก่อนเบิกจ่าย โดยสิทธิ์แยกตามว่าใบนั้นถูกมอบหมายแล้วหรือยัง และต้องระบุเหตุผลเสมอ",
+      "requirements": [
+        "REQ-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-010@v1",
+        "BR-miniloan-031@v2",
+        "BR-miniloan-047@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-005"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-006",
+      "title": "สร้างตารางผ่อนอัตโนมัติหลังเบิกจ่าย",
+      "description": "ทันทีที่เบิกจ่ายสำเร็จ ระบบสร้างตารางผ่อนแบบลดต้นลดดอกโดยอิงเวอร์ชันอัตราดอกเบี้ยที่มีผล ณ วันเบิกจ่าย",
+      "requirements": [
+        "REQ-miniloan-003"
+      ],
+      "rules": [
+        "BR-miniloan-015@v1",
+        "BR-miniloan-016@v1",
+        "BR-miniloan-017@v1",
+        "BR-miniloan-036@v1",
+        "BR-miniloan-037@v1",
+        "CALC-miniloan-001@v2"
+      ],
+      "useCases": [
+        "UC-miniloan-006"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-007",
+      "title": "ดูตารางผ่อนของบัญชีตัวเอง",
+      "description": "เจ้าของบัญชีเปิดดูตารางผ่อนทั้งหมดของบัญชีตัวเองพร้อมสถานะรายงวด",
+      "requirements": [
+        "REQ-miniloan-003"
+      ],
+      "rules": [
+        "BR-miniloan-018@v1",
+        "BR-miniloan-033@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-007"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-008",
+      "title": "บันทึกการชำระรายงวด (รวมโปะเงินต้น)",
+      "description": "Operations บันทึกการชำระเงินที่เกิดขึ้นแล้วนอกระบบ — ชำระตรงยอดปิดงวด ชำระน้อยกว่าถูกปฏิเสธ ชำระเกินกลายเป็นการโปะเงินต้นพร้อมค่าธรรมเนียมและออกตารางผ่อนฉบับใหม่",
+      "requirements": [
+        "REQ-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-019@v1",
+        "BR-miniloan-020@v1",
+        "BR-miniloan-034@v1",
+        "BR-miniloan-044@v1",
+        "BR-miniloan-046@v2",
+        "BR-miniloan-050@v2",
+        "BR-miniloan-051@v1",
+        "BR-miniloan-052@v2",
+        "BR-miniloan-053@v1",
+        "CALC-miniloan-003@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-008"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-009",
+      "title": "ขอยอดและปิดบัญชีก่อนกำหนด",
+      "description": "ผู้กู้ขอยอดปิดบัญชี ระบบคำนวณเงินต้นคงเหลือ ดอกเบี้ยค้างจ่าย และค่าธรรมเนียม แล้ว Operations บันทึกการชำระเพื่อปิดบัญชี",
+      "requirements": [
+        "REQ-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-021@v1",
+        "BR-miniloan-022@v1",
+        "BR-miniloan-023@v1",
+        "BR-miniloan-034@v1",
+        "CALC-miniloan-002@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-009"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-010",
+      "title": "แก้ไขข้อมูลบัญชีที่ปิดแล้ว (ต้องมีผู้อนุมัติ)",
+      "description": "แก้ไขยอดหรือข้อมูลของบัญชีที่ปิดไปแล้วผ่านรายการปรับปรุงที่ต้องมีผู้ถือ role ผู้อนุมัติซึ่งเป็นคนละคนกับผู้ขอแก้เห็นชอบก่อนจึงมีผล",
+      "requirements": [
+        "REQ-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-038@v1",
+        "BR-miniloan-039@v1",
+        "BR-miniloan-040@v1",
+        "BR-miniloan-041@v1",
+        "BR-miniloan-045@v1",
+        "BR-miniloan-048@v1",
+        "BR-miniloan-049@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-010"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-011",
+      "title": "ดูแดชบอร์ดภาพรวมสถานะ",
+      "description": "Loan Officer เห็นจำนวนใบสมัครและบัญชีแยกตามสถานะในหน้าเดียวเพื่อจัดลำดับงาน",
+      "requirements": [
+        "REQ-miniloan-005"
+      ],
+      "rules": [
+        "BR-miniloan-024@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-011"
+      ]
+    },
+    {
+      "id": "FUN-miniloan-012",
+      "title": "บังคับกฎธุรกิจและสัญญา API ที่ชั้น API",
+      "description": "ทุกความสามารถของระบบเปิดเป็น API endpoint ที่บังคับกฎธุรกิจ ตรวจสิทธิ์ และตรวจ input เสมอ โดย Web เป็นเพียง client ที่เรียกใช้และไม่ตัดสินใจเชิงธุรกิจเอง",
+      "requirements": [
+        "REQ-miniloan-006"
+      ],
+      "rules": [
+        "BR-miniloan-025@v1",
+        "BR-miniloan-026@v1",
+        "BR-miniloan-027@v1",
+        "BR-miniloan-028@v1",
+        "BR-miniloan-029@v1",
+        "BR-miniloan-030@v1",
+        "BR-miniloan-033@v1",
+        "BR-miniloan-035@v1",
+        "BR-miniloan-042@v1",
+        "BR-miniloan-043@v1"
+      ],
+      "useCases": [
+        "UC-miniloan-012"
+      ]
+    }
+  ],
+  "useCases": [
+    {
+      "id": "UC-miniloan-001",
+      "function": "FUN-miniloan-001",
+      "actor": "Applicant",
+      "preconditions": [
+        "ผู้สมัครเข้าสู่ระบบแล้ว (token จำลอง)"
+      ],
+      "mainFlow": [
+        "กรอกข้อมูลส่วนตัว รายได้ อายุงาน จำนวนเงินกู้ที่ขอ และจำนวนงวดที่ขอ",
+        "กดยื่นเมื่อกรอกครบทุกช่อง — ระบบตรวจความครบถ้วนและตรวจช่วงตาม BR-miniloan-004@v1",
+        "ยื่นผ่าน — สถานะเปลี่ยนเป็น Submitted และล็อกการแก้ไข (BR-miniloan-007@v1)"
+      ],
+      "alternateFlows": [
+        "กดบันทึกร่างขณะกรอกไม่ครบ — ระบบอนุญาตให้บันทึกได้โดยยังไม่ตรวจ business rule เต็ม ได้ใบสมัครสถานะ Draft กลับมาแก้ต่อได้ภายหลัง (BR-miniloan-008@v1)"
+      ],
+      "exceptionFlows": [
+        "ยื่นทั้งที่กรอกไม่ครบ — ระบบปฏิเสธ ระบุ field ที่ขาด และคงสถานะ Draft (BR-miniloan-007@v1)",
+        "ยื่นด้วยจำนวนเงินกู้หรือจำนวนงวดนอกช่วงที่กำหนด — ระบบแจ้ง error และไม่เปลี่ยนสถานะ (BR-miniloan-004@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-002",
+      "function": "FUN-miniloan-002",
+      "actor": "System",
+      "preconditions": [
+        "ใบสมัครถูกยื่นแล้ว (สถานะ Submitted)"
+      ],
+      "mainFlow": [
+        "ตรวจคุณสมบัติผู้สมัครตาม BR-miniloan-001@v1 (อายุ รายได้ อายุงาน)",
+        "คำนวณ DTI ตาม BR-miniloan-002@v1 และ CALC-miniloan-004@v1",
+        "คำนวณวงเงินอนุมัติสูงสุดตาม BR-miniloan-003@v1 และ CALC-miniloan-005@v1",
+        "จัด Credit Band (A/B/C) ตาม BR-miniloan-006@v1",
+        "สร้าง CreditAssessment พร้อมคะแนน Band วงเงินที่อนุมัติได้ และเหตุผลรายเกณฑ์ (BR-miniloan-009@v1)",
+        "ใบสมัครเปลี่ยนสถานะเป็น UnderReview"
+      ],
+      "alternateFlows": [
+        "ผ่านทุกเกณฑ์และ DTI ≤ 50% — ได้ Band A ซึ่งอนุมัติอัตโนมัติได้ แต่ยังต้องให้ Loan Officer ยืนยันก่อนเปลี่ยนเป็น Approved จริง (BR-miniloan-005@v1/006@v1)"
+      ],
+      "exceptionFlows": [
+        "ผิดเกณฑ์คุณสมบัติข้อใดข้อหนึ่ง หรือ DTI มากกว่า 70% — ได้ Band C พร้อมเหตุผล ใบสมัครพร้อมถูกปฏิเสธ (BR-miniloan-006@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-003",
+      "function": "FUN-miniloan-003",
+      "actor": "หัวหน้าเจ้าหน้าที่สินเชื่อ",
+      "preconditions": [
+        "ใบสมัครอยู่ในสถานะ UnderReview และยังไม่ถูกมอบหมาย"
+      ],
+      "mainFlow": [
+        "หัวหน้าเปิดรายการใบสมัครที่รอมอบหมาย",
+        "เลือก Loan Officer ที่จะรับผิดชอบใบสมัครนั้น",
+        "ระบบบันทึกการมอบหมาย ผูกใบสมัครกับ Loan Officer คนนั้นโดยเฉพาะ (BR-miniloan-032@v1)"
+      ],
+      "alternateFlows": [
+        "หัวหน้ามอบหมายใบสมัครหลายใบให้ Loan Officer คนเดียวกันในรอบเดียว"
+      ],
+      "exceptionFlows": [
+        "Loan Officer หรือ Applicant พยายามกดอนุมัติหรือปฏิเสธใบที่ยังไม่ถูกมอบหมาย — ระบบปฏิเสธ ต้องรอหัวหน้ามอบหมายก่อน (BR-miniloan-032@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-004",
+      "function": "FUN-miniloan-004",
+      "actor": "Loan Officer",
+      "preconditions": [
+        "ใบสมัครอยู่ในสถานะ UnderReview และถูกมอบหมายให้ Loan Officer คนนี้แล้ว (BR-miniloan-032@v1)"
+      ],
+      "mainFlow": [
+        "Loan Officer เปิดดูใบสมัครและเหตุผลของ CreditAssessment",
+        "กดอนุมัติ — สถานะเปลี่ยนเป็น Approved พร้อมบันทึกผู้อนุมัติและเวลา (BR-miniloan-011@v1)",
+        "กดสั่งเบิกจ่าย — สถานะเปลี่ยนเป็น Disbursed และสร้าง LoanAccount สถานะ Active หนึ่งบัญชี (BR-miniloan-014@v1)"
+      ],
+      "alternateFlows": [
+        "จำนวนเงินกู้ที่ขอมากกว่าวงเงินอนุมัติสูงสุด — ระบบเตือนและให้ปรับวงเงินก่อนจึงจะอนุมัติได้ (BR-miniloan-012@v1)",
+        "กดปฏิเสธพร้อมระบุเหตุผล — สถานะเปลี่ยนเป็น Rejected ซึ่งเป็นสถานะสุดท้าย (BR-miniloan-013@v1)"
+      ],
+      "exceptionFlows": [
+        "Loan Officer ที่ไม่ได้ถูกมอบหมายพยายามอนุมัติหรือปฏิเสธใบสมัครนี้ — ระบบปฏิเสธ (BR-miniloan-031@v2, BR-miniloan-032@v1)",
+        "พยายามอนุมัติใบที่ Rejected แล้ว — ระบบปฏิเสธเป็น invalid transition (BR-miniloan-013@v1, BR-miniloan-010@v1)",
+        "พยายามสั่งเบิกจ่ายใบที่ยังไม่ Approved — ระบบปฏิเสธ (BR-miniloan-014@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-005",
+      "function": "FUN-miniloan-005",
+      "actor": "Loan Officer",
+      "preconditions": [
+        "ใบสมัครอยู่ในสถานะ Draft, Submitted, UnderReview หรือ Approved (ยังไม่ Disbursed)"
+      ],
+      "mainFlow": [
+        "ผู้มีสิทธิ์ตามสถานะการมอบหมายกดยกเลิกพร้อมระบุเหตุผล",
+        "ระบบตรวจสิทธิ์: ใบที่ถูกมอบหมายแล้วยกเลิกได้เฉพาะ Loan Officer ที่ถูกมอบหมาย (BR-miniloan-031@v2)",
+        "สถานะเปลี่ยนเป็น Cancelled พร้อมเก็บเหตุผลไว้กับใบสมัคร (BR-miniloan-047@v1)"
+      ],
+      "alternateFlows": [
+        "ใบสมัครยังไม่ถูกมอบหมาย (Draft/Submitted) — ยกเลิกได้เฉพาะหัวหน้าเจ้าหน้าที่สินเชื่อ ไม่ใช่ Loan Officer ทั่วไป (BR-miniloan-031@v2)"
+      ],
+      "exceptionFlows": [
+        "สั่งยกเลิกโดยไม่ระบุเหตุผล — ระบบปฏิเสธ ใบสมัครไม่เปลี่ยนสถานะ (BR-miniloan-047@v1)",
+        "พยายามยกเลิกใบที่ Disbursed แล้ว — ระบบปฏิเสธทุกกรณี ต้องไปทางปิดบัญชีแทน (BR-miniloan-010@v1)",
+        "Applicant พยายามยกเลิกใบสมัครของตัวเองโดยตรง — ระบบปฏิเสธ ต้องแจ้งเจ้าหน้าที่ (BR-miniloan-031@v2)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-006",
+      "function": "FUN-miniloan-006",
+      "actor": "System",
+      "preconditions": [
+        "ใบสมัครเพิ่งเบิกจ่ายสำเร็จ และ LoanAccount ถูกสร้างสถานะ Active"
+      ],
+      "mainFlow": [
+        "ระบบดึงเวอร์ชันอัตราดอกเบี้ยที่มีผล ณ วันเบิกจ่าย (BR-miniloan-036@v1)",
+        "คำนวณ EMI ตามสูตรลดต้นลดดอก ปัดเศษทันทีทุกจุดที่เกิดด้วย round half up (BR-miniloan-016@v1, CALC-miniloan-001@v2)",
+        "สร้างแต่ละงวดแยกดอกเบี้ยและเงินต้น จนครบจำนวนงวดที่ขอ (BR-miniloan-015@v1)",
+        "งวดสุดท้ายปัดเศษให้ยอดคงเหลือเป็น 0 พอดี (BR-miniloan-017@v1)",
+        "บัญชีเก็บ id ของเวอร์ชันอัตราที่ใช้ ไม่คัดลอกตัวเลขมาเก็บแยก (BR-miniloan-037@v1)"
+      ],
+      "alternateFlows": [
+        "ไม่มีเวอร์ชันอัตราใหม่ประกาศระหว่างทาง — ใช้เวอร์ชันเดียวกับที่มีผล ณ วันเบิกจ่ายตลอดทั้งตาราง"
+      ],
+      "exceptionFlows": [
+        "ผลรวมเงินต้นทุกงวดไม่เท่ากับเงินต้นตั้งต้นพอดีจากการปัดเศษสะสม — ปรับที่งวดสุดท้ายเพื่อให้ยอดคงเหลือเป็น 0 (BR-miniloan-017@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-007",
+      "function": "FUN-miniloan-007",
+      "actor": "Applicant",
+      "preconditions": [
+        "ผู้สมัครมีบัญชีสินเชื่อสถานะ Active เป็นของตัวเอง"
+      ],
+      "mainFlow": [
+        "เปิดหน้าดูตารางผ่อนของบัญชีตัวเอง",
+        "ระบบแสดงตารางผ่อนทั้งหมดพร้อมสถานะรายงวด (จ่ายแล้ว/ค้าง) (BR-miniloan-018@v1)"
+      ],
+      "alternateFlows": [
+        "บัญชีมีการออกตารางผ่อนฉบับใหม่ทับ (เช่นหลังโปะเงินต้น) — แสดงเฉพาะฉบับล่าสุด"
+      ],
+      "exceptionFlows": [
+        "พยายามเรียกดูตารางผ่อนของบัญชีที่ไม่ใช่ของตัวเอง — API ปฏิเสธ แม้จะรู้ id ของบัญชีนั้น (BR-miniloan-033@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-008",
+      "function": "FUN-miniloan-008",
+      "actor": "Operations",
+      "preconditions": [
+        "บัญชีสินเชื่ออยู่ในสถานะ Active และมีงวดค้างชำระ"
+      ],
+      "mainFlow": [
+        "Operations บันทึก Payment ตรงตามยอดงวด",
+        "งวดนั้นเปลี่ยนสถานะเป็น Paid และยอดคงเหลือของบัญชีลดลง (BR-miniloan-020@v1, BR-miniloan-053@v1)",
+        "ถ้าเป็นงวดสุดท้ายและชำระครบทุกงวดแล้ว บัญชีเปลี่ยนเป็น Closed"
+      ],
+      "alternateFlows": [
+        "ชำระเกินยอดงวด — รับชำระ ปิดงวดนั้น หักค่าธรรมเนียมโปะ 1% จากส่วนเกินก่อนตัดเงินต้น (BR-miniloan-050@v2, CALC-miniloan-003@v1) แล้วนำที่เหลือไปตัดเงินต้น ลดจำนวนงวดโดยค่างวดคงเดิม และออกตารางผ่อนฉบับใหม่ทับ (BR-miniloan-046@v2, BR-miniloan-044@v1)",
+        "ส่วนเกินมากพอปิดบัญชีได้พอดี — ถือเป็นการปิดบัญชีก่อนกำหนดแทนการโปะ ใช้ฐานค่าธรรมเนียม 1% ของเงินต้นคงเหลือ ไม่ใช่ของส่วนเกิน (BR-miniloan-051@v1)"
+      ],
+      "exceptionFlows": [
+        "ชำระน้อยกว่ายอดงวด — ระบบแจ้งว่าไม่ครบงวด ไม่ปิดงวดนั้น (BR-miniloan-019@v1)",
+        "ส่วนเกินมากกว่ายอดปิดบัญชี หรือส่วนเกินหลังหักค่าธรรมเนียมโปะมากกว่าเงินต้นคงเหลือ — ระบบปฏิเสธการบันทึกทั้งรายการ ไม่ทอนคืนและไม่เก็บเป็นยอดค้าง (BR-miniloan-052@v2)",
+        "Applicant พยายามบันทึกการชำระเอง — ระบบปฏิเสธ ทำได้เฉพาะ Operations (BR-miniloan-034@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-009",
+      "function": "FUN-miniloan-009",
+      "actor": "Applicant",
+      "preconditions": [
+        "บัญชีสินเชื่ออยู่ในสถานะ Active"
+      ],
+      "mainFlow": [
+        "Applicant ขอยอดปิดบัญชี ณ วันที่กำหนด",
+        "ระบบคำนวณยอดปิดบัญชี = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่าย (actual/365) + ค่าธรรมเนียม 1% ของเงินต้นคงเหลือ (BR-miniloan-022@v1, CALC-miniloan-002@v1, BR-miniloan-053@v1)",
+        "Operations บันทึกการชำระยอดปิดบัญชีเมื่อผู้กู้จ่ายครบ",
+        "บัญชีเปลี่ยนเป็น Closed และงวดที่เหลือในตารางผ่อนถูกยกเลิก (BR-miniloan-021@v1, BR-miniloan-023@v1)"
+      ],
+      "alternateFlows": [
+        "ปิดตรงวันครบกำหนดงวดที่เพิ่งชำระพอดี — ดอกเบี้ยค้างจ่ายเป็น 0 (BR-miniloan-022@v1)"
+      ],
+      "exceptionFlows": [
+        "Applicant พยายามบันทึกการปิดบัญชีเอง ไม่ใช่แค่ขอยอด — ระบบปฏิเสธ ทำได้เฉพาะ Operations (BR-miniloan-034@v1)",
+        "ยอดที่ชำระไม่ครบยอดปิดบัญชีที่คำนวณไว้ — ระบบไม่เปลี่ยนบัญชีเป็น Closed"
+      ]
+    },
+    {
+      "id": "UC-miniloan-010",
+      "function": "FUN-miniloan-010",
+      "actor": "Operations",
+      "preconditions": [
+        "บัญชีสินเชื่ออยู่ในสถานะ Closed และมีการตั้งค่า role ผู้อนุมัติไว้แล้ว (BR-miniloan-039@v1)"
+      ],
+      "mainFlow": [
+        "Operations ยื่นคำขอปรับปรุงข้อมูลบัญชีที่ปิดแล้ว ระบุค่าเดิมและค่าใหม่",
+        "ระบบสร้างรายการปรับปรุง (adjustment) แยกจากตัวบัญชี ค่าเดิมของบัญชีคงไว้ไม่ถูกทับ (BR-miniloan-041@v1)",
+        "ผู้ถือ role ผู้อนุมัติซึ่งเป็นคนละคนกับผู้ขอแก้อนุมัติคำขอ (BR-miniloan-049@v1)",
+        "การแก้ไขมีผลหลังอนุมัติเท่านั้น ระบบบันทึกผู้อนุมัติและเวลา (BR-miniloan-038@v1, BR-miniloan-041@v1)"
+      ],
+      "alternateFlows": [
+        "Loan Officer ตั้งค่าหรือเปลี่ยน role ผู้อนุมัติล่วงหน้าก่อนมีคำขอใดๆ (BR-miniloan-048@v1)"
+      ],
+      "exceptionFlows": [
+        "ยังไม่มีการตั้งค่า role ผู้อนุมัติ — ระบบปฏิเสธคำขอปรับปรุงทุกกรณีพร้อมแจ้งเหตุผล ไม่มีค่า default (BR-miniloan-040@v1)",
+        "ผู้ขอแก้พยายามอนุมัติคำขอของตัวเอง — ระบบปฏิเสธตามหลัก four-eyes (BR-miniloan-049@v1)",
+        "พยายามออกตารางผ่อนฉบับใหม่ทับให้บัญชีที่ปิดแล้ว — ระบบปฏิเสธ ตารางผ่อนของบัญชีที่ปิดแล้วล็อกถาวร (BR-miniloan-045@v1)"
+      ]
+    },
+    {
+      "id": "UC-miniloan-011",
+      "function": "FUN-miniloan-011",
+      "actor": "Loan Officer",
+      "preconditions": [
+        "Loan Officer เข้าสู่ระบบแล้ว"
+      ],
+      "mainFlow": [
+        "เปิดหน้าแดชบอร์ด",
+        "ระบบนับจำนวนใบสมัครและบัญชีแยกตามสถานะ (Submitted/UnderReview/Approved/Active/Closed) ข้ามทั้ง LoanApplication และ LoanAccount (BR-miniloan-024@v1)",
+        "แสดงจำนวนแยกตามสถานะในหน้าเดียว"
+      ],
+      "alternateFlows": [
+        "ไม่มีใบสมัครหรือบัญชีในสถานะใดสถานะหนึ่ง — แสดงจำนวน 0 สำหรับสถานะนั้น ไม่ซ่อนแถว"
+      ],
+      "exceptionFlows": [
+        "เรียกแดชบอร์ดขณะไม่มีข้อมูลเลยในระบบ — แสดงทุกสถานะเป็น 0 ไม่ error"
+      ]
+    },
+    {
+      "id": "UC-miniloan-012",
+      "function": "FUN-miniloan-012",
+      "actor": "Web",
+      "preconditions": [
+        "Web ต้องดำเนินการที่มีผลทางธุรกิจ เช่น อนุมัติหรือคำนวณวงเงิน"
+      ],
+      "mainFlow": [
+        "Web แนบ token จำลองแล้วเรียก API endpoint ที่ตรงกับความสามารถนั้น (BR-miniloan-025@v1, BR-miniloan-030@v1)",
+        "API ตรวจสอบ token และ input ตาม schema ที่ประกาศไว้ (BR-miniloan-029@v1)",
+        "API บังคับกฎธุรกิจ ตรวจขอบเขตข้อมูล และคำนวณผลทั้งหมด — Web ไม่ตัดสินใจหรือคำนวณเอง (BR-miniloan-027@v1, BR-miniloan-033@v1, BR-miniloan-035@v1)",
+        "API คืนผลให้ Web แสดง"
+      ],
+      "alternateFlows": [
+        "Web ตรวจ validate เบื้องต้นฝั่งตัวเองก่อนส่ง — API ยังคงตรวจซ้ำทุกครั้งเสมอ ไม่พึ่งผลจาก Web (BR-miniloan-026@v1)"
+      ],
+      "exceptionFlows": [
+        "เรียก API ด้วยข้อมูลที่ผิดกฎธุรกิจ — API ปฏิเสธพร้อมรหัสและข้อความ error ที่ชัดเจน (BR-miniloan-026@v1)",
+        "API ปิดให้บริการหรือ timeout — Web แสดงสถานะข้อผิดพลาดโดยไม่ crash ไม่มีคิว retry อัตโนมัติ และไม่ค้างรอจนกว่าจะสำเร็จ (BR-miniloan-028@v1, BR-miniloan-042@v1)",
+        "เรียกคำสั่งเขียนข้อมูลซ้ำ (เช่นกดยื่นซ้ำ) — ฐานข้อมูลกันด้วย unique constraint ปฏิเสธพร้อม error ที่ผู้ใช้เห็น ไม่คืนผลครั้งแรกเงียบๆ (BR-miniloan-043@v1)"
+      ]
+    }
+  ]
+}

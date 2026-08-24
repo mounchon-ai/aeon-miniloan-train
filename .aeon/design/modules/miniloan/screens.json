@@ -1,0 +1,637 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/screens.mjs",
+  "project": "miniloan",
+  "module": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "screens": [
+    {
+      "id": "UI-miniloan-001",
+      "title": "รายการใบสมัคร/บัญชีของฉัน",
+      "purpose": "ผู้สมัครเห็นภาพรวมใบสมัครและบัญชีสินเชื่อทั้งหมดของตัวเอง แล้วเลือกไปยื่นใหม่ ดูตารางผ่อน หรือขอยอดปิดบัญชี",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-001"
+      ],
+      "fields": [
+        {
+          "name": "รายการใบสมัคร",
+          "entity": "ENT-001",
+          "attribute": "status",
+          "required": false,
+          "validation": "แสดงทุกใบสมัครที่ applicantId ตรงกับผู้ใช้ที่ล็อกอิน เรียงจากล่าสุด",
+          "rules": [
+            "BR-miniloan-033@v1"
+          ]
+        },
+        {
+          "name": "รายการบัญชีสินเชื่อ",
+          "entity": "ENT-004",
+          "attribute": "status",
+          "required": false,
+          "validation": "แสดงทุกบัญชีที่เกิดจากใบสมัครของผู้ใช้ที่ล็อกอิน",
+          "rules": [
+            "BR-miniloan-033@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "new-application",
+          "name": "ยื่นใบสมัครใหม่",
+          "effect": "ไปหน้ากรอกใบสมัคร",
+          "destination": "UI-miniloan-002",
+          "rules": []
+        },
+        {
+          "key": "view-application",
+          "name": "เปิดดูใบสมัคร",
+          "effect": "ไม่เปลี่ยนข้อมูล เปิดดูรายละเอียด",
+          "destination": "UI-miniloan-002",
+          "rules": []
+        },
+        {
+          "key": "view-schedule",
+          "name": "ดูตารางผ่อน",
+          "effect": "ไม่เปลี่ยนข้อมูล เปิดดูตารางผ่อนของบัญชีนั้น",
+          "destination": "UI-miniloan-003",
+          "rules": []
+        }
+      ],
+      "states": {
+        "empty": "ผู้สมัครที่ยังไม่เคยยื่นใบสมัครเลย — แสดงข้อความ 'ยังไม่มีใบสมัคร' พร้อมปุ่มยื่นใบสมัครใหม่เด่นชัด",
+        "loading": "แสดง skeleton แถวรายการระหว่างโหลด ปุ่มยื่นใบสมัครใหม่ยังกดได้ทันที",
+        "error": "แสดง 'ไม่สามารถโหลดรายการได้ ลองใหม่อีกครั้ง' พร้อมปุ่มลองใหม่ ไม่แสดงรายการเก่าค้าง",
+        "unauthorized": "ไม่เกิด — หน้านี้กรองด้วย applicantId ของผู้ใช้ที่ล็อกอินเองเสมอ ไม่มีทางเห็นของคนอื่นจนต้องกันสิทธิ์ซ้ำ",
+        "overflow": "ผู้สมัครที่มีมากกว่า 20 ใบสมัคร/บัญชี — แบ่งหน้า (pagination) 20 รายการต่อหน้า เรียงล่าสุดก่อน"
+      }
+    },
+    {
+      "id": "UI-miniloan-002",
+      "title": "กรอก/แก้ไขใบสมัครสินเชื่อ",
+      "purpose": "ผู้สมัครกรอกข้อมูลส่วนตัวและเงื่อนไขที่ขอกู้ บันทึกร่างหรือยื่นเข้าสู่การประเมิน",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-001"
+      ],
+      "fields": [
+        {
+          "name": "ชื่อ-นามสกุล",
+          "entity": "ENT-001",
+          "attribute": "applicantName",
+          "required": true,
+          "validation": "ไม่ว่าง",
+          "rules": []
+        },
+        {
+          "name": "อายุ",
+          "entity": "ENT-001",
+          "attribute": "applicantAge",
+          "required": true,
+          "validation": "จำนวนเต็ม 20–60",
+          "rules": [
+            "BR-miniloan-001@v1"
+          ]
+        },
+        {
+          "name": "รายได้ต่อเดือน",
+          "entity": "ENT-001",
+          "attribute": "monthlyIncome",
+          "required": true,
+          "validation": "ตัวเลข ≥ 15,000 บาท",
+          "rules": [
+            "BR-miniloan-001@v1"
+          ]
+        },
+        {
+          "name": "อายุงานปัจจุบัน (เดือน)",
+          "entity": "ENT-001",
+          "attribute": "employmentMonths",
+          "required": true,
+          "validation": "จำนวนเต็ม ≥ 4",
+          "rules": [
+            "BR-miniloan-001@v1"
+          ]
+        },
+        {
+          "name": "ภาระหนี้เดิมต่อเดือน",
+          "entity": "ENT-001",
+          "attribute": "existingMonthlyDebt",
+          "required": true,
+          "validation": "ตัวเลข ≥ 0",
+          "rules": [
+            "BR-miniloan-002@v1"
+          ]
+        },
+        {
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "entity": "ENT-001",
+          "attribute": "requestedAmount",
+          "required": true,
+          "validation": "10,000–1,000,000 บาท",
+          "rules": [
+            "BR-miniloan-004@v1"
+          ]
+        },
+        {
+          "name": "จำนวนงวดที่ขอ",
+          "entity": "ENT-001",
+          "attribute": "requestedTerm",
+          "required": true,
+          "validation": "จำนวนเต็ม 6–60 งวด",
+          "rules": [
+            "BR-miniloan-004@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "save-draft",
+          "name": "บันทึกร่าง",
+          "effect": "บันทึกสถานะ Draft แม้กรอกไม่ครบ",
+          "destination": "UI-miniloan-001",
+          "rules": [
+            "BR-miniloan-008@v1"
+          ]
+        },
+        {
+          "key": "submit",
+          "name": "ยื่นใบสมัคร",
+          "effect": "ตรวจครบถ้วนและตรวจช่วงค่า แล้วเปลี่ยนสถานะเป็น Submitted",
+          "destination": "UI-miniloan-001",
+          "rules": [
+            "BR-miniloan-007@v1",
+            "BR-miniloan-004@v1"
+          ]
+        }
+      ],
+      "states": {
+        "empty": "ใบสมัครใหม่ — ทุกช่องว่างเปล่า พร้อมให้กรอก",
+        "loading": "ปุ่มบันทึกร่าง/ยื่น disabled ระหว่างบันทึก พร้อม spinner บนปุ่ม",
+        "error": "บันทึก/ยื่นไม่สำเร็จ — แสดงข้อความ error เฉพาะช่องที่ผิด ไม่ล้างข้อมูลที่กรอกไว้",
+        "unauthorized": "เปิดใบสมัครของผู้อื่นด้วย id ตรง — แสดง 'คุณไม่มีสิทธิ์เข้าถึงใบสมัครนี้' และพากลับหน้ารายการ (BR-miniloan-033@v1)",
+        "overflow": "ชื่อยาวเกิน 200 ตัวอักษร — ระบบตัดไม่ให้พิมพ์เกิน พร้อมตัวนับตัวอักษรที่เหลือ"
+      }
+    },
+    {
+      "id": "UI-miniloan-003",
+      "title": "ตารางผ่อนของฉัน",
+      "purpose": "เจ้าของบัญชีดูตารางผ่อนทั้งหมดของบัญชีตัวเองพร้อมสถานะรายงวด",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-001"
+      ],
+      "fields": [
+        {
+          "name": "งวดที่",
+          "entity": "ENT-006",
+          "attribute": "installmentNumber",
+          "required": true,
+          "validation": "จำนวนเต็ม",
+          "rules": []
+        },
+        {
+          "name": "วันครบกำหนด",
+          "entity": "ENT-006",
+          "attribute": "dueDate",
+          "required": true,
+          "validation": "วันที่",
+          "rules": []
+        },
+        {
+          "name": "เงินต้นของงวด",
+          "entity": "ENT-006",
+          "attribute": "principalPortion",
+          "required": true,
+          "validation": "จำนวนเงิน",
+          "rules": [
+            "BR-miniloan-016@v1"
+          ]
+        },
+        {
+          "name": "ดอกเบี้ยของงวด",
+          "entity": "ENT-006",
+          "attribute": "interestPortion",
+          "required": true,
+          "validation": "จำนวนเงิน",
+          "rules": [
+            "BR-miniloan-016@v1"
+          ]
+        },
+        {
+          "name": "ยอดคงเหลือหลังงวดนี้",
+          "entity": "ENT-006",
+          "attribute": "remainingBalance",
+          "required": true,
+          "validation": "จำนวนเงิน",
+          "rules": [
+            "BR-miniloan-017@v1",
+            "BR-miniloan-053@v1"
+          ]
+        },
+        {
+          "name": "สถานะงวด",
+          "entity": "ENT-006",
+          "attribute": "status",
+          "required": true,
+          "validation": "Due/Paid/Cancelled",
+          "rules": []
+        }
+      ],
+      "actions": [
+        {
+          "key": "request-payoff",
+          "name": "ขอยอดปิดบัญชีก่อนกำหนด",
+          "effect": "ไม่เปลี่ยนข้อมูล ไปหน้าขอยอดปิดบัญชี",
+          "destination": "UI-miniloan-004",
+          "rules": []
+        }
+      ],
+      "states": {
+        "empty": "ไม่เกิด — บัญชีที่มีอยู่ต้องมีตารางผ่อนเสมอตาม BR-miniloan-015@v1 ตั้งแต่เบิกจ่ายสำเร็จ",
+        "loading": "แสดง skeleton ตารางระหว่างโหลด",
+        "error": "แสดง 'ไม่สามารถโหลดตารางผ่อนได้ ลองใหม่อีกครั้ง' พร้อมปุ่มลองใหม่",
+        "unauthorized": "เปิดตารางผ่อนของบัญชีคนอื่นด้วย id ตรง — แสดง 'คุณไม่มีสิทธิ์ดูตารางผ่อนนี้' (BR-miniloan-033@v1)",
+        "overflow": "งวดมากกว่า 60 แถว — เลื่อนดูได้ในตารางเดียว ไม่แบ่งหน้า เพราะสูงสุดคือ 60 งวดตาม BR-miniloan-004@v1"
+      }
+    },
+    {
+      "id": "UI-miniloan-004",
+      "title": "ขอยอดปิดบัญชีก่อนกำหนด",
+      "purpose": "ผู้สมัครดูยอดที่ต้องจ่ายถ้าจะปิดบัญชีก่อนกำหนด ณ วันที่เลือก",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-001"
+      ],
+      "fields": [
+        {
+          "name": "วันที่ต้องการปิดบัญชี",
+          "required": true,
+          "validation": "วันที่ตั้งแต่วันนี้เป็นต้นไป"
+        },
+        {
+          "name": "เงินต้นคงเหลือ",
+          "entity": "ENT-006",
+          "attribute": "remainingBalance",
+          "required": true,
+          "validation": "จำนวนเงิน",
+          "rules": [
+            "BR-miniloan-053@v1"
+          ]
+        },
+        {
+          "name": "ดอกเบี้ยค้างจ่าย",
+          "required": true,
+          "validation": "คำนวณจาก actual/365 ณ วันที่เลือก",
+          "rules": [
+            "BR-miniloan-022@v1",
+            "CALC-miniloan-002@v1"
+          ]
+        },
+        {
+          "name": "ค่าธรรมเนียมปิดก่อนกำหนด",
+          "required": true,
+          "validation": "1% ของเงินต้นคงเหลือ",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ]
+        },
+        {
+          "name": "ยอดปิดบัญชีรวม",
+          "required": true,
+          "validation": "ผลรวมทั้งสามรายการข้างต้น",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "get-quote",
+          "name": "คำนวณยอดปิดบัญชี",
+          "effect": "ไม่เปลี่ยนข้อมูล คำนวณยอดแสดงบนจอเท่านั้น ยังไม่ปิดบัญชีจริง",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ]
+        }
+      ],
+      "states": {
+        "empty": "ยังไม่ได้เลือกวันที่ — แสดงฟอร์มเลือกวันที่ ยังไม่มีตัวเลขให้ดู",
+        "loading": "ปุ่มคำนวณ disabled พร้อม spinner ระหว่างคำนวณ",
+        "error": "คำนวณไม่สำเร็จ — แสดง 'ไม่สามารถคำนวณยอดได้ ลองใหม่อีกครั้ง'",
+        "unauthorized": "ขอยอดของบัญชีคนอื่น — แสดง 'คุณไม่มีสิทธิ์เข้าถึงบัญชีนี้' (BR-miniloan-033@v1)",
+        "overflow": "ไม่เกิด — เป็นตัวเลขเดี่ยวไม่มีรายการที่ล้นจอ"
+      }
+    },
+    {
+      "id": "UI-miniloan-005",
+      "title": "แดชบอร์ดภาพรวมสถานะ",
+      "purpose": "Loan Officer เห็นจำนวนใบสมัครและบัญชีแยกตามสถานะในหน้าเดียวเพื่อจัดลำดับงาน",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-002"
+      ],
+      "fields": [
+        {
+          "name": "จำนวนแยกตามสถานะ",
+          "entity": "ENT-001",
+          "attribute": "status",
+          "required": true,
+          "validation": "นับจำนวน LoanApplication และ LoanAccount แยกตามสถานะ",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "open-queue",
+          "name": "ไปหน้าคิวใบสมัคร",
+          "effect": "ไม่เปลี่ยนข้อมูล เปิดหน้าคิวรอมอบหมาย/พิจารณา",
+          "destination": "UI-miniloan-006",
+          "rules": []
+        }
+      ],
+      "states": {
+        "empty": "ระบบยังไม่มีข้อมูลเลย — แสดงทุกสถานะเป็น 0 ไม่แสดง error",
+        "loading": "แสดง skeleton การ์ดตัวเลขระหว่างโหลด",
+        "error": "แสดง 'ไม่สามารถโหลดแดชบอร์ดได้ ลองใหม่อีกครั้ง'",
+        "unauthorized": "ผู้ใช้ที่ไม่ใช่ Loan Officer เปิดหน้านี้ — แสดง 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้' พากลับหน้าแรกของบทบาทตัวเอง",
+        "overflow": "ไม่เกิด — เป็นตัวเลขสรุปคงที่ 5 สถานะ ไม่มีรายการที่ล้นจอ"
+      }
+    },
+    {
+      "id": "UI-miniloan-006",
+      "title": "คิวใบสมัครรอมอบหมาย/รอพิจารณา",
+      "purpose": "หัวหน้าเห็นใบที่รอมอบหมาย และเจ้าหน้าที่เห็นใบที่ถูกมอบหมายให้ตนเพื่อเลือกเปิดพิจารณา",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-002",
+        "ROLE-003"
+      ],
+      "fields": [
+        {
+          "name": "รายการใบสมัคร",
+          "entity": "ENT-001",
+          "attribute": "status",
+          "required": true,
+          "validation": "หัวหน้าเห็นใบ UnderReview ที่ยังไม่มอบหมายทั้งหมด · Loan Officer เห็นเฉพาะใบที่ถูกมอบหมายให้ตน",
+          "rules": [
+            "BR-miniloan-032@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "open-detail",
+          "name": "เปิดดูรายละเอียด",
+          "effect": "ไม่เปลี่ยนข้อมูล",
+          "destination": "UI-miniloan-007",
+          "rules": []
+        }
+      ],
+      "states": {
+        "empty": "ไม่มีใบรอมอบหมาย/รอพิจารณาในขณะนี้ — แสดง 'ไม่มีงานค้าง'",
+        "loading": "แสดง skeleton แถวรายการระหว่างโหลด",
+        "error": "แสดง 'ไม่สามารถโหลดคิวได้ ลองใหม่อีกครั้ง'",
+        "unauthorized": "ผู้ใช้ที่ไม่ใช่ Loan Officer หรือหัวหน้าเปิดหน้านี้ — แสดง 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้'",
+        "overflow": "มากกว่า 30 รายการ — แบ่งหน้า 30 รายการต่อหน้า เรียงเก่าสุดก่อน (FIFO)"
+      }
+    },
+    {
+      "id": "UI-miniloan-007",
+      "title": "รายละเอียดใบสมัคร (มอบหมาย/พิจารณา/อนุมัติ/เบิกจ่าย/ยกเลิก)",
+      "purpose": "หัวหน้ามอบหมายงาน และเจ้าหน้าที่ที่ถูกมอบหมายพิจารณาอนุมัติ/ปฏิเสธ/เบิกจ่าย/ยกเลิกใบสมัครหนึ่งใบ",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-002",
+        "ROLE-003"
+      ],
+      "fields": [
+        {
+          "name": "ข้อมูลผู้สมัคร",
+          "entity": "ENT-001",
+          "attribute": "applicantName",
+          "required": true,
+          "validation": "อ่านอย่างเดียว",
+          "rules": []
+        },
+        {
+          "name": "ผลการประเมิน",
+          "entity": "ENT-002",
+          "attribute": "creditBand",
+          "required": true,
+          "validation": "A/B/C พร้อมเหตุผลรายเกณฑ์",
+          "rules": [
+            "BR-miniloan-009@v1"
+          ]
+        },
+        {
+          "name": "วงเงินอนุมัติสูงสุด",
+          "entity": "ENT-002",
+          "attribute": "maxApprovableAmount",
+          "required": true,
+          "validation": "จำนวนเงิน อ่านอย่างเดียว",
+          "rules": [
+            "BR-miniloan-003@v1"
+          ]
+        },
+        {
+          "name": "ผู้รับผิดชอบ (มอบหมายแล้ว)",
+          "entity": "ENT-003",
+          "attribute": "assignedToLoanOfficerId",
+          "required": false,
+          "validation": "ว่างถ้ายังไม่มอบหมาย",
+          "rules": [
+            "BR-miniloan-032@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "assign",
+          "name": "มอบหมายให้เจ้าหน้าที่",
+          "effect": "สร้างระเบียนมอบหมาย ผูก Loan Officer กับใบนี้",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-032@v1"
+          ]
+        },
+        {
+          "key": "approve",
+          "name": "อนุมัติ",
+          "effect": "เปลี่ยนสถานะเป็น Approved บันทึกผู้อนุมัติและเวลา",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-011@v1",
+            "BR-miniloan-012@v1"
+          ]
+        },
+        {
+          "key": "reject",
+          "name": "ปฏิเสธ",
+          "effect": "เปลี่ยนสถานะเป็น Rejected พร้อมเหตุผล",
+          "destination": "UI-miniloan-006",
+          "rules": [
+            "BR-miniloan-013@v1"
+          ]
+        },
+        {
+          "key": "disburse",
+          "name": "สั่งเบิกจ่าย",
+          "effect": "เปลี่ยนสถานะเป็น Disbursed สร้าง LoanAccount ใหม่",
+          "destination": "UI-miniloan-006",
+          "rules": [
+            "BR-miniloan-014@v1"
+          ]
+        },
+        {
+          "key": "cancel",
+          "name": "ยกเลิกใบสมัคร",
+          "effect": "เปลี่ยนสถานะเป็น Cancelled พร้อมเหตุผล",
+          "destination": "UI-miniloan-006",
+          "rules": [
+            "BR-miniloan-031@v2",
+            "BR-miniloan-047@v1"
+          ]
+        }
+      ],
+      "states": {
+        "empty": "ไม่เกิด — เปิดหน้านี้ได้ก็ต่อเมื่อมีใบสมัครที่เลือกจากคิวแล้วเสมอ",
+        "loading": "ปุ่มดำเนินการทั้งหมด disabled ระหว่างโหลดหรือระหว่างส่งคำสั่ง",
+        "error": "คำสั่งไม่สำเร็จ (เช่น วงเงินเกิน ยังไม่ถูกมอบหมาย) — แสดงข้อความเหตุผลเฉพาะเจาะจง ไม่เปลี่ยนสถานะ",
+        "unauthorized": "Loan Officer ที่ไม่ถูกมอบหมายพยายามเปิด — แสดง 'ใบสมัครนี้ไม่ได้มอบหมายให้คุณ' ซ่อนปุ่มอนุมัติ/ปฏิเสธ/เบิกจ่าย/ยกเลิกทั้งหมด (BR-miniloan-031@v2)",
+        "overflow": "ไม่เกิด — ข้อมูลของหนึ่งใบสมัครมีจำนวนคงที่ ไม่มีรายการที่ล้นจอ"
+      }
+    },
+    {
+      "id": "UI-miniloan-008",
+      "title": "บันทึกการชำระเงิน",
+      "purpose": "Operations บันทึกการชำระที่เกิดขึ้นแล้วนอกระบบเข้าบัญชี รวมถึงบันทึกยอดปิดบัญชีก่อนกำหนด",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-004"
+      ],
+      "fields": [
+        {
+          "name": "ค้นหาบัญชี",
+          "entity": "ENT-004",
+          "attribute": "id",
+          "required": true,
+          "validation": "ค้นหาด้วยรหัสบัญชีหรือชื่อผู้กู้"
+        },
+        {
+          "name": "จำนวนเงินที่ชำระ",
+          "required": true,
+          "validation": "ตัวเลข > 0",
+          "rules": [
+            "BR-miniloan-019@v1",
+            "BR-miniloan-046@v2"
+          ]
+        },
+        {
+          "name": "ประเภทการชำระ",
+          "entity": "ENT-007",
+          "attribute": "paymentType",
+          "required": true,
+          "validation": "regular / prepayment / payoff — เลือกอัตโนมัติตามจำนวนที่กรอกเทียบยอดงวด/ยอดปิดบัญชี",
+          "rules": []
+        }
+      ],
+      "actions": [
+        {
+          "key": "record-payment",
+          "name": "บันทึกการชำระ",
+          "effect": "สร้าง Payment ปิดงวดหรือโปะเงินต้นหรือปิดบัญชีตามจำนวนที่กรอก",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-020@v1",
+            "BR-miniloan-050@v2",
+            "BR-miniloan-052@v2",
+            "BR-miniloan-021@v1"
+          ]
+        }
+      ],
+      "states": {
+        "empty": "ยังไม่ได้ค้นหาบัญชี — แสดงช่องค้นหาเปล่า",
+        "loading": "ปุ่มบันทึกการชำระ disabled ระหว่างส่งคำสั่ง",
+        "error": "บันทึกไม่สำเร็จ (เช่น ชำระไม่ครบงวด หรือส่วนเกินเกินเงินต้นคงเหลือ) — แสดงเหตุผลเฉพาะเจาะจง ไม่สร้างรายการ",
+        "unauthorized": "ผู้ใช้ที่ไม่ใช่ Operations เปิดหน้านี้ — แสดง 'คุณไม่มีสิทธิ์เข้าถึงหน้านี้' (BR-miniloan-034@v1)",
+        "overflow": "ไม่เกิด — บันทึกทีละหนึ่งรายการชำระต่อหนึ่งการกรอก"
+      }
+    },
+    {
+      "id": "UI-miniloan-009",
+      "title": "จัดการบัญชีที่ปิดแล้ว",
+      "purpose": "Operations ยื่นคำขอแก้ไขข้อมูลบัญชีที่ปิดแล้ว และ Loan Officer อนุมัติคำขอหรือตั้งค่าผู้ถือบทบาทผู้อนุมัติ",
+      "dataBearing": true,
+      "roles": [
+        "ROLE-002",
+        "ROLE-004"
+      ],
+      "fields": [
+        {
+          "name": "ผู้ถือบทบาทผู้อนุมัติปัจจุบัน",
+          "entity": "ENT-010",
+          "attribute": "currentApproverLoanOfficerId",
+          "required": false,
+          "validation": "ว่างถ้ายังไม่ตั้งค่า",
+          "rules": [
+            "BR-miniloan-039@v1",
+            "BR-miniloan-040@v1"
+          ]
+        },
+        {
+          "name": "รายการคำขอปรับปรุง",
+          "entity": "ENT-009",
+          "attribute": "status",
+          "required": true,
+          "validation": "Pending/Applied",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "key": "set-approver",
+          "name": "ตั้งค่า/เปลี่ยนผู้ถือบทบาทผู้อนุมัติ",
+          "effect": "เปลี่ยน currentApproverLoanOfficerId",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-048@v1"
+          ]
+        },
+        {
+          "key": "request-adjustment",
+          "name": "ยื่นคำขอปรับปรุง",
+          "effect": "สร้าง ClosedAccountAdjustment สถานะ Pending",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ]
+        },
+        {
+          "key": "approve-adjustment",
+          "name": "อนุมัติคำขอปรับปรุง",
+          "effect": "เปลี่ยนคำขอเป็น Applied และอัปเดตฟิลด์ของบัญชี",
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-038@v1",
+            "BR-miniloan-049@v1"
+          ]
+        }
+      ],
+      "states": {
+        "empty": "ยังไม่มีคำขอปรับปรุงค้างอยู่ — แสดง 'ไม่มีคำขอค้าง' ปุ่มยื่นคำขอ/ตั้งค่ายังกดได้",
+        "loading": "ปุ่มดำเนินการทั้งหมด disabled ระหว่างส่งคำสั่ง",
+        "error": "คำสั่งไม่สำเร็จ (เช่น ยังไม่ตั้งค่าผู้อนุมัติ หรืออนุมัติงานตัวเอง) — แสดงเหตุผลเฉพาะเจาะจง",
+        "unauthorized": "Operations พยายามตั้งค่าผู้อนุมัติ หรือผู้ใช้นอกสองบทบาทนี้เปิดหน้า — แสดง 'คุณไม่มีสิทธิ์ทำรายการนี้' (BR-miniloan-048@v1)",
+        "overflow": "คำขอปรับปรุงมากกว่า 20 รายการ — แบ่งหน้า 20 รายการต่อหน้า เรียงล่าสุดก่อน"
+      }
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/statemachines.mjs",
+  "project": "miniloan",
+  "module": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "stateMachines": [
+    {
+      "id": "STM-miniloan-001",
+      "entity": "ENT-001",
+      "title": "วงจรสถานะใบสมัครสินเชื่อ",
+      "initial": "Draft",
+      "states": [
+        {
+          "name": "Draft",
+          "label": "ร่าง",
+          "final": false
+        },
+        {
+          "name": "Submitted",
+          "label": "ยื่นแล้ว",
+          "final": false
+        },
+        {
+          "name": "UnderReview",
+          "label": "รอพิจารณา",
+          "final": false
+        },
+        {
+          "name": "Approved",
+          "label": "อนุมัติแล้ว",
+          "final": false
+        },
+        {
+          "name": "Rejected",
+          "label": "ปฏิเสธแล้ว",
+          "final": true
+        },
+        {
+          "name": "Disbursed",
+          "label": "เบิกจ่ายแล้ว",
+          "final": true
+        },
+        {
+          "name": "Cancelled",
+          "label": "ยกเลิกแล้ว",
+          "final": true
+        }
+      ],
+      "transitions": [
+        {
+          "from": "Draft",
+          "to": "Submitted",
+          "trigger": "Applicant กดยื่นเมื่อกรอกครบ",
+          "rules": [
+            "BR-miniloan-007@v1",
+            "BR-miniloan-031@v2"
+          ]
+        },
+        {
+          "from": "Draft",
+          "to": "Cancelled",
+          "trigger": "หัวหน้าเจ้าหน้าที่สินเชื่อสั่งยกเลิก (ใบยังไม่ถูกมอบหมาย)",
+          "rules": [
+            "BR-miniloan-031@v2",
+            "BR-miniloan-047@v1"
+          ]
+        },
+        {
+          "from": "Submitted",
+          "to": "UnderReview",
+          "trigger": "ผลการประเมินอัตโนมัติของ System เสร็จสิ้น ไม่มีคนกด",
+          "rules": [
+            "BR-miniloan-009@v1",
+            "BR-miniloan-031@v2"
+          ]
+        },
+        {
+          "from": "Submitted",
+          "to": "Cancelled",
+          "trigger": "หัวหน้าเจ้าหน้าที่สินเชื่อสั่งยกเลิก (ใบยังไม่ถูกมอบหมาย)",
+          "rules": [
+            "BR-miniloan-031@v2",
+            "BR-miniloan-047@v1"
+          ]
+        },
+        {
+          "from": "UnderReview",
+          "to": "Approved",
+          "trigger": "Loan Officer ที่ถูกมอบหมายกดอนุมัติ",
+          "rules": [
+            "BR-miniloan-011@v1",
+            "BR-miniloan-031@v2",
+            "BR-miniloan-032@v1"
+          ]
+        },
+        {
+          "from": "UnderReview",
+          "to": "Rejected",
+          "trigger": "Loan Officer ที่ถูกมอบหมายกดปฏิเสธพร้อมเหตุผล",
+          "rules": [
+            "BR-miniloan-013@v1",
+            "BR-miniloan-031@v2",
+            "BR-miniloan-032@v1"
+          ]
+        },
+        {
+          "from": "UnderReview",
+          "to": "Cancelled",
+          "trigger": "Loan Officer ที่ถูกมอบหมายสั่งยกเลิก",
+          "rules": [
+            "BR-miniloan-031@v2",
+            "BR-miniloan-047@v1"
+          ]
+        },
+        {
+          "from": "Approved",
+          "to": "Disbursed",
+          "trigger": "Loan Officer ที่ถูกมอบหมายสั่งเบิกจ่าย",
+          "rules": [
+            "BR-miniloan-014@v1"
+          ]
+        },
+        {
+          "from": "Approved",
+          "to": "Cancelled",
+          "trigger": "Loan Officer ที่ถูกมอบหมายสั่งยกเลิกก่อนเบิกจ่าย",
+          "rules": [
+            "BR-miniloan-010@v1",
+            "BR-miniloan-031@v2",
+            "BR-miniloan-047@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "STM-miniloan-002",
+      "entity": "ENT-004",
+      "title": "วงจรสถานะบัญชีสินเชื่อ",
+      "initial": "Active",
+      "states": [
+        {
+          "name": "Active",
+          "label": "ใช้งานอยู่",
+          "final": false
+        },
+        {
+          "name": "Closed",
+          "label": "ปิดแล้ว",
+          "final": true
+        }
+      ],
+      "transitions": [
+        {
+          "from": "Active",
+          "to": "Closed",
+          "trigger": "ชำระครบทุกงวด หรือปิดก่อนกำหนดสำเร็จ",
+          "rules": [
+            "BR-miniloan-021@v1",
+            "BR-miniloan-023@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "STM-miniloan-003",
+      "entity": "ENT-006",
+      "title": "วงจรสถานะงวดผ่อน",
+      "initial": "Due",
+      "states": [
+        {
+          "name": "Due",
+          "label": "รอชำระ",
+          "final": false
+        },
+        {
+          "name": "Paid",
+          "label": "จ่ายแล้ว",
+          "final": true
+        },
+        {
+          "name": "Cancelled",
+          "label": "ยกเลิกแล้ว",
+          "final": true
+        }
+      ],
+      "transitions": [
+        {
+          "from": "Due",
+          "to": "Paid",
+          "trigger": "Operations บันทึกการชำระตรงยอดงวด",
+          "rules": [
+            "BR-miniloan-020@v1"
+          ]
+        },
+        {
+          "from": "Due",
+          "to": "Cancelled",
+          "trigger": "บัญชีปิดก่อนกำหนดสำเร็จ งวดที่เหลือถูกยกเลิกทั้งหมด",
+          "rules": [
+            "BR-miniloan-023@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "STM-miniloan-004",
+      "entity": "ENT-009",
+      "title": "วงจรสถานะการปรับปรุงบัญชีหลังปิด",
+      "initial": "Pending",
+      "states": [
+        {
+          "name": "Pending",
+          "label": "รออนุมัติ",
+          "final": false
+        },
+        {
+          "name": "Applied",
+          "label": "มีผลแล้ว",
+          "final": true
+        }
+      ],
+      "transitions": [
+        {
+          "from": "Pending",
+          "to": "Applied",
+          "trigger": "ผู้ถือ role ผู้อนุมัติที่เป็นคนละคนกับผู้ขอแก้กดอนุมัติ (four-eyes)",
+          "rules": [
+            "BR-miniloan-038@v1",
+            "BR-miniloan-041@v1",
+            "BR-miniloan-049@v1"
+          ]
+        }
+      ]
+    }
+  ]
+}

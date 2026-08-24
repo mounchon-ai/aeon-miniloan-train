@@ -10,12 +10,12 @@ belongs_to: REQ-miniloan-003
 kind: calculation
 is_current: true
 test_design: [BVA, decision_table]
-constrained_by: CALC-miniloan-001@v1
+constrained_by: CALC-miniloan-001@v2
 proven_by: [EX-miniloan-097, EX-miniloan-098]
-golden: [GD-miniloan-001]
+golden: [GD-miniloan-001, GD-miniloan-002]
 provenance: [SRC-001]
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:670f36f785782b78d5be9e14e5f3501e6f7251aa62f450ac86693befc9d6e763
+timestamp: 2026-08-24T09:30:00+07:00
+spec_hash: sha256:a99bc896310f6e5a6bc271a0f14922f0281919b077ee7e0e5bb64b465c824400
 ---
 
 # BR-miniloan-016@v1
@@ -23,7 +23,7 @@ spec_hash: sha256:670f36f785782b78d5be9e14e5f3501e6f7251aa62f450ac86693befc9d6e7
 ## ข้อความของกฎ
 งวดผ่อนเท่ากันทุกงวด (EMI) = P × r × (1+r)^n / ((1+r)^n − 1) โดย P = เงินต้น, r = อัตราดอกเบี้ยต่อเดือน (= อัตราต่อปี / 12), n = จำนวนงวด · แต่ละงวดแยกเป็นดอกเบี้ย (ยอดคงเหลือ × r) และเงินต้น (EMI − ดอกเบี้ย)
 
-คำนวณตามสัญญา [CALC-miniloan-001@v1](../calculations/CALC-miniloan-001@v1.md)
+คำนวณตามสัญญา [CALC-miniloan-001@v2](../calculations/CALC-miniloan-001@v2.md)
 
 ## ที่มา
 
@@ -35,6 +35,7 @@ spec_hash: sha256:670f36f785782b78d5be9e14e5f3501e6f7251aa62f450ac86693befc9d6e7
 - [EX-miniloan-097](../examples/EX-miniloan-097.md) — happy: ได้ตารางผ่อน **n แถวพอดี** · **ค่างวดของทุกแถวเท่ากันทุกงวด** · ทุกแถวแยกเป็นดอกเบี้ยและเงินต้น และดอกเบี้ย + เงินต้นของแถวนั้นรวมกันได้เท่ากับค่างวด · **ตัวเลขเงินบาทจริงยังไม่ถูกยืนยันในใบนี้โดยตั้งใจ** — กฎข้อนี้เป็น `calculation` ที่ยังไม่มีสัญญาการคำนวณและยังไม่มีเลขเฉลยที่รันจริง ตัวเลขต้องมาจาก `/req:calc` แล้ว `/req:golden` ไม่ใช่จากการคำนวณด้วยมือ
 - [EX-miniloan-098](../examples/EX-miniloan-098.md) — boundary: งวดที่ 1 มี **ดอกเบี้ยสูงที่สุดและเงินต้นต่ำที่สุด**ของทั้งตาราง เพราะยอดเงินต้นคงเหลือยังไม่ลดเลย · งวดสุดท้ายกลับกันคือดอกเบี้ยต่ำสุดและเงินต้นสูงสุด · **สัดส่วนต้อง ไล่ทิศทางเดียวกันทั้งตาราง ไม่มีงวดไหนที่ดอกเบี้ยเพิ่มขึ้นจากงวดก่อนหน้า** — นี่คือรูปแบบที่พิสูจน์ว่าเป็นลดต้นลดดอกจริง ไม่ใช่ดอกเบี้ยคงที่
 - [GD-miniloan-001](../golden/GD-miniloan-001.md) — เลขเฉลย 7 แถว · ✅ mounc 2026-08-15
+- [GD-miniloan-002](../golden/GD-miniloan-002.md) — เลขเฉลย 7 แถว · ✅ mounc 2026-08-21
 
 ## ประวัติ
 

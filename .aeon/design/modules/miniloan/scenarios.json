@@ -1,0 +1,1221 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/scenarios.mjs",
+  "project": "miniloan",
+  "module": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "scenarios": [
+    {
+      "id": "SCN-miniloan-001",
+      "title": "ผู้สมัครยื่นใบสมัครสำเร็จเมื่อกรอกครบ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-007@v1"
+      ],
+      "given": [
+        "ผู้สมัครเปิดฟอร์มใบสมัครใหม่"
+      ],
+      "when": [
+        "กรอกชื่อ อายุ 35 ปี รายได้ 30,000 บาท อายุงาน 12 เดือน ขอกู้ 200,000 บาท 24 งวด แล้วกดยื่น"
+      ],
+      "expected": [
+        "สถานะเปลี่ยนจาก Draft เป็น Submitted",
+        "submittedAt ถูกบันทึกเวลา",
+        "ฟิลด์ทั้งหมดถูกล็อกแก้ไขไม่ได้อีก"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-002",
+      "title": "บันทึกร่างได้แม้กรอกไม่ครบ",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-008@v1"
+      ],
+      "given": [
+        "ผู้สมัครกรอกเฉพาะชื่อกับอายุ ยังไม่กรอกรายได้"
+      ],
+      "when": [
+        "กดบันทึกร่าง"
+      ],
+      "expected": [
+        "สร้าง LoanApplication สถานะ Draft สำเร็จ",
+        "ไม่มี error แจ้งฟิลด์ที่ขาด",
+        "กลับมาแก้ต่อได้ภายหลัง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-003",
+      "title": "ยื่นใบสมัครที่กรอกไม่ครบถูกปฏิเสธ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-007@v1"
+      ],
+      "given": [
+        "ใบสมัคร Draft ที่ไม่ได้กรอกจำนวนงวด"
+      ],
+      "when": [
+        "กดยื่น"
+      ],
+      "expected": [
+        "ระบบปฏิเสธการยื่น",
+        "ข้อความ error ระบุชื่อฟิลด์ \"จำนวนงวด\" ที่ขาด",
+        "สถานะยังคงเป็น Draft"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-004",
+      "title": "ยื่นใบสมัครด้วยจำนวนเงินกู้ต่ำกว่าเกณฑ์ถูกปฏิเสธ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-004@v1"
+      ],
+      "given": [
+        "ใบสมัครกรอกครบ แต่ requestedAmount = 5,000 บาท"
+      ],
+      "when": [
+        "กดยื่น"
+      ],
+      "expected": [
+        "ระบบแจ้ง error \"จำนวนเงินกู้ต้องอยู่ระหว่าง 10,000–1,000,000 บาท\"",
+        "สถานะยังคงเป็น Draft"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-005",
+      "title": "ขอบล่างของช่วงจำนวนเงินกู้และจำนวนงวดยื่นผ่าน",
+      "kind": "boundary",
+      "verifies": [
+        "FUN-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-004@v1"
+      ],
+      "given": [
+        "ใบสมัครกรอกครบ requestedAmount = 10,000 บาท (ขอบล่างพอดี) requestedTerm = 6 งวด (ขอบล่างพอดี)"
+      ],
+      "when": [
+        "กดยื่น"
+      ],
+      "expected": [
+        "ยื่นสำเร็จ",
+        "สถานะเปลี่ยนเป็น Submitted"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-006",
+      "title": "ประเมินอัตโนมัติได้ Band A เมื่อผ่านทุกเกณฑ์และ DTI ต่ำ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-006@v1",
+        "BR-miniloan-009@v1"
+      ],
+      "given": [
+        "ใบสมัคร Submitted: อายุ 35 รายได้ 30,000 อายุงาน 12 เดือน หนี้เดิม 2,000 ขอกู้ 100,000 งวด 24 อัตราดอกเบี้ยที่มีผล 25%/ปี"
+      ],
+      "when": [
+        "System ประมวลผลการประเมิน"
+      ],
+      "expected": [
+        "สร้าง CreditAssessment ที่มี DTI คำนวณได้ ≤ 50%",
+        "creditBand = A",
+        "maxApprovableAmount = 150,000 (5×รายได้)",
+        "สถานะใบสมัครเปลี่ยนเป็น UnderReview"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-007",
+      "title": "DTI อยู่ช่วง 50–70% ได้ Band B ส่งเจ้าหน้าที่พิจารณา",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-006@v1"
+      ],
+      "given": [
+        "ใบสมัครที่ DTI คำนวณได้ 60%"
+      ],
+      "when": [
+        "System ประมวลผลการประเมิน"
+      ],
+      "expected": [
+        "creditBand = B",
+        "สถานะเปลี่ยนเป็น UnderReview รอเจ้าหน้าที่พิจารณา ไม่อนุมัติอัตโนมัติ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-008",
+      "title": "อายุต่ำกว่าเกณฑ์ได้ Band C",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-001@v1",
+        "BR-miniloan-006@v1"
+      ],
+      "given": [
+        "ผู้สมัครอายุ 19 ปี (ต่ำกว่าขั้นต่ำ 20 ปี)"
+      ],
+      "when": [
+        "System ประมวลผลการประเมิน"
+      ],
+      "expected": [
+        "creditBand = C",
+        "เหตุผลระบุ \"อายุต่ำกว่า 20 ปี\"",
+        "ใบสมัครพร้อมถูกปฏิเสธ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-009",
+      "title": "DTI เกิน 70% ได้ Band C",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-002@v1",
+        "BR-miniloan-006@v1"
+      ],
+      "given": [
+        "ใบสมัครที่ DTI คำนวณได้ 75%"
+      ],
+      "when": [
+        "System ประมวลผลการประเมิน"
+      ],
+      "expected": [
+        "creditBand = C",
+        "เหตุผลระบุ \"DTI เกิน 70%\""
+      ]
+    },
+    {
+      "id": "SCN-miniloan-010",
+      "title": "DTI เท่ากับ 50% พอดีได้ Band A ไม่ใช่ B",
+      "kind": "boundary",
+      "verifies": [
+        "FUN-miniloan-002"
+      ],
+      "rules": [
+        "BR-miniloan-006@v1"
+      ],
+      "given": [
+        "ใบสมัครที่ DTI คำนวณได้เท่ากับ 50.00% พอดี"
+      ],
+      "when": [
+        "System ประมวลผลการประเมิน"
+      ],
+      "expected": [
+        "creditBand = A (ไม่ใช่ B)",
+        "ขอบทั้งสองแบนด์ไม่ซ้อนกัน"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-011",
+      "title": "หัวหน้ามอบหมายใบสมัครให้เจ้าหน้าที่สำเร็จ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-003"
+      ],
+      "rules": [
+        "BR-miniloan-032@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ UnderReview ยังไม่ถูกมอบหมาย"
+      ],
+      "when": [
+        "หัวหน้าเลือก Loan Officer \"LO-01\" แล้วกดมอบหมาย"
+      ],
+      "expected": [
+        "สร้างระเบียน ApplicationAssignment ผูก LO-01 กับใบสมัครนี้",
+        "เฉพาะ LO-01 เท่านั้นที่กดอนุมัติ/ปฏิเสธใบนี้ได้ต่อจากนี้"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-012",
+      "title": "เจ้าหน้าที่พยายามอนุมัติใบที่ยังไม่ถูกมอบหมายถูกปฏิเสธ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-003",
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-032@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ UnderReview ยังไม่ถูกมอบหมายให้ใครเลย"
+      ],
+      "when": [
+        "Loan Officer \"LO-02\" พยายามกดอนุมัติใบนี้โดยตรง"
+      ],
+      "expected": [
+        "API ปฏิเสธ พร้อมข้อความ \"ใบสมัครนี้ยังไม่ถูกมอบหมาย\"",
+        "สถานะยังคงเป็น UnderReview"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-013",
+      "title": "เจ้าหน้าที่ที่ถูกมอบหมายอนุมัติใบสมัครสำเร็จ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-011@v1"
+      ],
+      "given": [
+        "ใบสมัคร UnderReview มอบหมายให้ LO-01 แล้ว วงเงินที่ขอ 100,000 ≤ วงเงินอนุมัติสูงสุด"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) กดอนุมัติ"
+      ],
+      "expected": [
+        "สถานะเปลี่ยนเป็น Approved",
+        "approvedBy = LO-01",
+        "approvedAt ถูกบันทึกเวลา"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-014",
+      "title": "สั่งเบิกจ่ายสำเร็จสร้างบัญชีสินเชื่อใหม่",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-014@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Approved มอบหมายให้ LO-01"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) กดสั่งเบิกจ่าย"
+      ],
+      "expected": [
+        "สถานะเปลี่ยนเป็น Disbursed",
+        "disbursedAt ถูกบันทึกเวลา",
+        "สร้าง LoanAccount ใหม่หนึ่งบัญชีสถานะ Active"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-015",
+      "title": "วงเงินที่ขอเกินวงเงินอนุมัติสูงสุดถูกเตือนให้ปรับก่อน",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-012@v1"
+      ],
+      "given": [
+        "ใบสมัคร UnderReview มอบหมายให้ LO-01 วงเงินที่ขอ 200,000 > วงเงินอนุมัติสูงสุด 150,000"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) กดอนุมัติ"
+      ],
+      "expected": [
+        "ระบบเตือน \"วงเงินเกินที่อนุมัติได้ ต้องปรับวงเงินก่อน\"",
+        "สถานะยังคงเป็น UnderReview",
+        "ไม่มีการบันทึกอนุมัติ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-016",
+      "title": "ปฏิเสธใบสมัครพร้อมเหตุผล",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-013@v1"
+      ],
+      "given": [
+        "ใบสมัคร UnderReview มอบหมายให้ LO-01"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) กดปฏิเสธพร้อมระบุเหตุผล \"รายได้ไม่พอ\""
+      ],
+      "expected": [
+        "สถานะเปลี่ยนเป็น Rejected (สถานะสุดท้าย)",
+        "rejectionReason ถูกบันทึก"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-017",
+      "title": "เจ้าหน้าที่คนอื่นที่ไม่ถูกมอบหมายอนุมัติไม่ได้",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-031@v2"
+      ],
+      "given": [
+        "ใบสมัคร UnderReview มอบหมายให้ LO-01 แล้ว"
+      ],
+      "when": [
+        "Loan Officer \"LO-02\" (คนละคน) พยายามกดอนุมัติ"
+      ],
+      "expected": [
+        "API ปฏิเสธ",
+        "สถานะไม่เปลี่ยนแปลง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-018",
+      "title": "พยายามอนุมัติใบที่ถูกปฏิเสธแล้วถูกปฏิเสธเป็น invalid transition",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-013@v1",
+        "BR-miniloan-010@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Rejected แล้ว"
+      ],
+      "when": [
+        "มีคนพยายามกดอนุมัติ"
+      ],
+      "expected": [
+        "ระบบปฏิเสธเป็น invalid transition",
+        "ข้อความ error ระบุสถานะปัจจุบัน",
+        "สถานะยังคงเป็น Rejected"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-019",
+      "title": "สั่งเบิกจ่ายใบที่ยังไม่ Approved ถูกปฏิเสธ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-004"
+      ],
+      "rules": [
+        "BR-miniloan-014@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ UnderReview (ยังไม่ Approved)"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) พยายามกดสั่งเบิกจ่าย"
+      ],
+      "expected": [
+        "ระบบปฏิเสธ",
+        "ไม่มี LoanAccount ถูกสร้าง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-020",
+      "title": "ยกเลิกใบสมัครที่ถูกมอบหมายแล้วโดยเจ้าหน้าที่ที่รับผิดชอบ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-005"
+      ],
+      "rules": [
+        "BR-miniloan-031@v2",
+        "BR-miniloan-047@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Approved มอบหมายให้ LO-01 ยังไม่เบิกจ่าย"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) กดยกเลิกพร้อมเหตุผล \"ผู้กู้ขอถอนเรื่อง\""
+      ],
+      "expected": [
+        "สถานะเปลี่ยนเป็น Cancelled",
+        "cancellationReason ถูกบันทึก"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-021",
+      "title": "หัวหน้ายกเลิกใบที่ยังไม่ถูกมอบหมาย",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-005"
+      ],
+      "rules": [
+        "BR-miniloan-031@v2"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Submitted ยังไม่ถูกมอบหมาย"
+      ],
+      "when": [
+        "หัวหน้าเจ้าหน้าที่สินเชื่อกดยกเลิกพร้อมเหตุผล \"ข้อมูลซ้ำ\""
+      ],
+      "expected": [
+        "สถานะเปลี่ยนเป็น Cancelled"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-022",
+      "title": "เจ้าหน้าที่ทั่วไปยกเลิกใบที่ยังไม่ถูกมอบหมายไม่ได้",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-005"
+      ],
+      "rules": [
+        "BR-miniloan-031@v2"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Submitted ยังไม่ถูกมอบหมาย"
+      ],
+      "when": [
+        "Loan Officer ทั่วไป (ไม่ใช่หัวหน้า) พยายามกดยกเลิก"
+      ],
+      "expected": [
+        "API ปฏิเสธ",
+        "สถานะไม่เปลี่ยนแปลง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-023",
+      "title": "ยกเลิกใบที่เบิกจ่ายแล้วไม่ได้",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-005"
+      ],
+      "rules": [
+        "BR-miniloan-010@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Disbursed"
+      ],
+      "when": [
+        "มีคนพยายามกดยกเลิก"
+      ],
+      "expected": [
+        "ระบบปฏิเสธทุกกรณี",
+        "ข้อความแนะนำให้ไปทางปิดบัญชีแทน"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-024",
+      "title": "ยกเลิกโดยไม่ระบุเหตุผลถูกปฏิเสธ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-005"
+      ],
+      "rules": [
+        "BR-miniloan-047@v1"
+      ],
+      "given": [
+        "ใบสมัครสถานะ Approved มอบหมายให้ LO-01"
+      ],
+      "when": [
+        "Loan Officer คนที่ 1 (LO-01) กดยกเลิกโดยไม่กรอกเหตุผล"
+      ],
+      "expected": [
+        "ระบบปฏิเสธคำขอยกเลิก",
+        "สถานะยังคงเป็น Approved"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-025",
+      "title": "สร้างตารางผ่อนอัตโนมัติหลังเบิกจ่ายผลรวมเงินต้นตรงพอดี",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-006"
+      ],
+      "rules": [
+        "BR-miniloan-016@v1",
+        "BR-miniloan-017@v1"
+      ],
+      "given": [
+        "LoanAccount เพิ่งสร้าง principal = 120,000 บาท อัตรา 25%/ปี (เวอร์ชันที่มีผลก่อนวันเบิกจ่าย) จำนวนงวด 24"
+      ],
+      "when": [
+        "System สร้างตารางผ่อน"
+      ],
+      "expected": [
+        "สร้าง RepaymentSchedule เวอร์ชัน 1 isCurrent=true มี 24 งวด",
+        "ผลรวม principalPortion ทุกงวด = 120,000.00 พอดี",
+        "งวดสุดท้าย remainingBalance = 0.00"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-026",
+      "title": "เศษจากการปัดเศษถูกดูดซับที่งวดสุดท้ายให้เหลือศูนย์พอดี",
+      "kind": "boundary",
+      "verifies": [
+        "FUN-miniloan-006"
+      ],
+      "rules": [
+        "BR-miniloan-017@v1"
+      ],
+      "given": [
+        "ตารางผ่อนเดียวกับ SCN-miniloan-025 ที่มีเศษจากการปัด EMI สะสมมาตลอด 23 งวดแรก"
+      ],
+      "when": [
+        "ตรวจงวดสุดท้าย (งวดที่ 24)"
+      ],
+      "expected": [
+        "เงินต้นของงวดสุดท้ายถูกปรับให้ remainingBalance หลังงวดนี้ = 0.00 เป๊ะ ไม่มีเศษเหลือค้าง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-027",
+      "title": "ตารางผ่อนที่สร้างไปแล้วไม่ถูกกระทบเมื่อมีการประกาศอัตราใหม่ภายหลัง",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-006"
+      ],
+      "rules": [
+        "BR-miniloan-037@v1"
+      ],
+      "given": [
+        "บัญชีเบิกจ่ายและสร้างตารางผ่อนแล้วด้วยอัตรา 25%/ปี"
+      ],
+      "when": [
+        "มีการประกาศอัตราดอกเบี้ยเวอร์ชันใหม่ 30%/ปี effective 5 วันถัดจากวันเบิกจ่ายบัญชีนี้"
+      ],
+      "expected": [
+        "ตารางผ่อนของบัญชีนี้ยังคงใช้อัตรา 25%/ปี เดิมไม่เปลี่ยน — ไม่ถูกกระทบโดยเวอร์ชันที่ประกาศทีหลัง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-028",
+      "title": "เจ้าของบัญชีดูตารางผ่อนของตัวเองได้ครบ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-007"
+      ],
+      "rules": [
+        "BR-miniloan-018@v1"
+      ],
+      "given": [
+        "ผู้สมัครเป็นเจ้าของ LoanAccount \"LA-01\" ที่มีตารางผ่อนออกแล้ว"
+      ],
+      "when": [
+        "เปิดหน้าตารางผ่อนของตัวเอง"
+      ],
+      "expected": [
+        "แสดงทุกงวดพร้อมสถานะ (จ่ายแล้ว/ค้าง)",
+        "ข้อมูลตรงกับ RepaymentSchedule ฉบับที่ isCurrent=true"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-029",
+      "title": "ดูตารางผ่อนของบัญชีคนอื่นถูกปฏิเสธ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-007"
+      ],
+      "rules": [
+        "BR-miniloan-033@v1"
+      ],
+      "given": [
+        "ผู้สมัคร A พยายามเรียกดูบัญชี \"LA-02\" ที่เป็นของผู้สมัคร B"
+      ],
+      "when": [
+        "A เรียก API ด้วย id ของ LA-02 โดยตรง"
+      ],
+      "expected": [
+        "API ปฏิเสธ (403)",
+        "ไม่มีข้อมูลตารางผ่อนถูกส่งกลับ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-030",
+      "title": "บันทึกการชำระตรงยอดงวดสำเร็จ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-008"
+      ],
+      "rules": [
+        "BR-miniloan-020@v1"
+      ],
+      "given": [
+        "บัญชี Active งวดถัดไปค้างชำระยอด 5,650.00 บาท"
+      ],
+      "when": [
+        "Operations บันทึก Payment จำนวน 5,650.00 บาท"
+      ],
+      "expected": [
+        "งวดนั้นเปลี่ยนสถานะเป็น Paid",
+        "ยอดคงเหลือของบัญชีลดลงตามเงินต้นของงวดนั้น"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-031",
+      "title": "ชำระน้อยกว่ายอดงวดถูกปฏิเสธ ไม่ปิดงวด",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-008"
+      ],
+      "rules": [
+        "BR-miniloan-019@v1"
+      ],
+      "given": [
+        "งวดค้างชำระยอด 5,650.00 บาท"
+      ],
+      "when": [
+        "Operations บันทึก Payment จำนวน 5,000.00 บาท (น้อยกว่ายอดงวด)"
+      ],
+      "expected": [
+        "ระบบแจ้งว่าไม่ครบงวด",
+        "งวดนั้นสถานะยังคงเป็น Due ไม่ถูกปิด",
+        "ไม่มีการรับชำระบางส่วน"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-032",
+      "title": "ชำระเกินยอดงวดกลายเป็นการโปะเงินต้นพร้อมค่าธรรมเนียมและออกตารางผ่อนฉบับใหม่",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-008"
+      ],
+      "rules": [
+        "BR-miniloan-046@v2",
+        "BR-miniloan-050@v2"
+      ],
+      "given": [
+        "งวดค้างชำระยอด 5,650.00 บาท"
+      ],
+      "when": [
+        "Operations บันทึก Payment จำนวน 6,000.00 บาท (เกิน 350.00 บาท)"
+      ],
+      "expected": [
+        "งวดนั้นเปลี่ยนเป็น Paid",
+        "หักค่าธรรมเนียมโปะ 1% ของ 350.00 = 3.50 บาทก่อน",
+        "ส่วนที่เหลือ 346.50 บาทตัดเงินต้น",
+        "ออก RepaymentSchedule ฉบับใหม่ isCurrent=true จำนวนงวดลดลง ค่างวด (EMI) เท่าเดิม"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-033",
+      "title": "ส่วนเกินพอดีกับยอดปิดบัญชีถือเป็นการปิดก่อนกำหนดไม่ใช่การโปะ",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-008",
+        "FUN-miniloan-009"
+      ],
+      "rules": [
+        "BR-miniloan-051@v1"
+      ],
+      "given": [
+        "ยอดที่ชำระเกินเท่ากับยอดปิดบัญชีก่อนกำหนดพอดี"
+      ],
+      "when": [
+        "Operations บันทึกการชำระจำนวนนั้น"
+      ],
+      "expected": [
+        "บัญชีเปลี่ยนเป็น Closed",
+        "ค่าธรรมเนียมคิด 1% ของเงินต้นคงเหลือ (ฐานปิดก่อนกำหนด) ไม่ใช่ 1% ของส่วนเกิน"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-034",
+      "title": "ส่วนเกินหลังหักค่าธรรมเนียมมากกว่าเงินต้นคงเหลือถูกปฏิเสธทั้งรายการ",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-008"
+      ],
+      "rules": [
+        "BR-miniloan-052@v2"
+      ],
+      "given": [
+        "ส่วนที่ชำระเกินยอดงวด เมื่อหักค่าธรรมเนียมโปะ 1% แล้วยังคงมากกว่าเงินต้นคงเหลือของบัญชี"
+      ],
+      "when": [
+        "Operations บันทึกการชำระจำนวนนั้น"
+      ],
+      "expected": [
+        "ระบบปฏิเสธการบันทึกทั้งรายการ",
+        "ไม่ตัดเท่าที่เหลือแล้วทอนคืนส่วนล้น",
+        "ไม่ถือเป็นการปิดบัญชีก่อนกำหนด"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-035",
+      "title": "ผู้สมัครบันทึกการชำระเองไม่ได้",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-008"
+      ],
+      "rules": [
+        "BR-miniloan-034@v1"
+      ],
+      "given": [
+        "บัญชี Active มีงวดค้างชำระ"
+      ],
+      "when": [
+        "Applicant พยายามเรียก API บันทึกการชำระด้วยตัวเอง"
+      ],
+      "expected": [
+        "API ปฏิเสธ — ทำได้เฉพาะ Operations เท่านั้น"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-036",
+      "title": "คำนวณยอดปิดบัญชีก่อนกำหนดถูกต้องตามฐานวันจริง",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-009"
+      ],
+      "rules": [
+        "BR-miniloan-022@v1"
+      ],
+      "given": [
+        "บัญชี Active เงินต้นคงเหลือ 90,000.00 บาท อัตรา 25%/ปี งวดล่าสุดที่ชำระแล้วครบกำหนดเมื่อ 10 วันก่อนวันที่ขอปิด"
+      ],
+      "when": [
+        "Applicant ขอยอดปิดบัญชี ณ วันที่กำหนด"
+      ],
+      "expected": [
+        "ยอดปิดบัญชี = 90,000.00 + ดอกเบี้ยค้าง (90,000×25%×10/365) + ค่าธรรมเนียม 1% ของ 90,000.00",
+        "ฐานนับวันเป็น actual/365 ตรงตามที่ตัดสิน"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-037",
+      "title": "ปิดตรงวันครบกำหนดงวดที่เพิ่งชำระดอกเบี้ยค้างเป็นศูนย์",
+      "kind": "boundary",
+      "verifies": [
+        "FUN-miniloan-009"
+      ],
+      "rules": [
+        "BR-miniloan-022@v1"
+      ],
+      "given": [
+        "วันที่ขอปิดบัญชีตรงกับวันครบกำหนดงวดล่าสุดที่ชำระแล้วพอดี (0 วันผ่านไป)"
+      ],
+      "when": [
+        "ระบบคำนวณยอดปิดบัญชี"
+      ],
+      "expected": [
+        "ดอกเบี้ยค้างจ่าย = 0.00 บาท"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-038",
+      "title": "ชำระยอดปิดบัญชีครบทำให้บัญชีปิดและงวดที่เหลือถูกยกเลิก",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-009"
+      ],
+      "rules": [
+        "BR-miniloan-021@v1",
+        "BR-miniloan-023@v1"
+      ],
+      "given": [
+        "Applicant ได้รับยอดปิดบัญชีที่คำนวณแล้ว"
+      ],
+      "when": [
+        "Operations บันทึกการชำระยอดปิดบัญชีครบตามที่คำนวณ"
+      ],
+      "expected": [
+        "บัญชีเปลี่ยนเป็น Closed",
+        "งวดที่เหลือทั้งหมดในตารางผ่อนเปลี่ยนเป็น Cancelled"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-039",
+      "title": "ชำระไม่ครบยอดปิดบัญชีไม่ทำให้บัญชีปิด",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-009"
+      ],
+      "rules": [
+        "BR-miniloan-021@v1"
+      ],
+      "given": [
+        "ยอดปิดบัญชีที่คำนวณไว้คือ 91,500.00 บาท"
+      ],
+      "when": [
+        "Operations บันทึกการชำระ 91,000.00 บาท (ไม่ครบ)"
+      ],
+      "expected": [
+        "บัญชียังคงเป็น Active",
+        "ไม่ถูกเปลี่ยนเป็น Closed"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-040",
+      "title": "แก้ไขข้อมูลบัญชีที่ปิดแล้วผ่านการอนุมัติ four-eyes สำเร็จ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-010"
+      ],
+      "rules": [
+        "BR-miniloan-038@v1",
+        "BR-miniloan-041@v1",
+        "BR-miniloan-049@v1"
+      ],
+      "given": [
+        "บัญชี Closed มีการตั้งค่าผู้อนุมัติเป็น LO-02 แล้ว Operations \"OP-01\" ขอแก้ยอดชำระที่บันทึกผิด"
+      ],
+      "when": [
+        "Loan Officer คนที่ 2 (LO-02) (คนละคนกับผู้ขอแก้) อนุมัติคำขอ"
+      ],
+      "expected": [
+        "ClosedAccountAdjustment สถานะเปลี่ยนเป็น Applied",
+        "approvedBy=LO-02 approvedAt ถูกบันทึก",
+        "ค่าเดิมถูกเก็บไว้ใน oldValue ไม่ถูกทับ",
+        "ฟิลด์ของบัญชีถูกอัปเดตเป็นค่าใหม่"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-041",
+      "title": "ยังไม่ตั้งค่าผู้อนุมัติทำให้คำขอปรับปรุงถูกปฏิเสธทั้งหมด",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-010"
+      ],
+      "rules": [
+        "BR-miniloan-040@v1"
+      ],
+      "given": [
+        "ApproverRoleSetting.currentApproverLoanOfficerId ยังเป็นค่าว่าง (ไม่เคยตั้งค่า)"
+      ],
+      "when": [
+        "Operations ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว"
+      ],
+      "expected": [
+        "ระบบปฏิเสธคำขอทั้งหมดทันที พร้อมเหตุผล \"ยังไม่ได้ตั้งค่าผู้อนุมัติ\"",
+        "ไม่มีการสร้างระเบียน ClosedAccountAdjustment เลย"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-042",
+      "title": "ผู้ถือ role ผู้อนุมัติอนุมัติคำขอของตัวเองไม่ได้",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-010"
+      ],
+      "rules": [
+        "BR-miniloan-049@v1"
+      ],
+      "given": [
+        "ผู้อนุมัติที่ตั้งไว้คือ LO-02 และ LO-02 เป็นผู้ยื่นคำขอปรับปรุงเอง"
+      ],
+      "when": [
+        "Loan Officer คนที่ 2 (LO-02) พยายามอนุมัติคำขอของตัวเอง"
+      ],
+      "expected": [
+        "ระบบปฏิเสธตามหลัก four-eyes",
+        "สถานะคำขอยังคงเป็น Pending"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-043",
+      "title": "เจ้าหน้าที่ตั้งค่าผู้ถือ role ผู้อนุมัติได้",
+      "kind": "alternate",
+      "verifies": [
+        "FUN-miniloan-010"
+      ],
+      "rules": [
+        "BR-miniloan-039@v1",
+        "BR-miniloan-048@v1"
+      ],
+      "given": [
+        "ยังไม่มีการตั้งค่าผู้อนุมัติมาก่อน"
+      ],
+      "when": [
+        "Loan Officer \"LO-01\" ตั้งตัวเองเป็นผู้ถือ role ผู้อนุมัติ"
+      ],
+      "expected": [
+        "currentApproverLoanOfficerId=LO-01",
+        "setBy=LO-01 setAt ถูกบันทึก"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-044",
+      "title": "Operations ตั้งค่าผู้อนุมัติเองไม่ได้",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-010"
+      ],
+      "rules": [
+        "BR-miniloan-048@v1"
+      ],
+      "given": [
+        "ยังไม่มีการตั้งค่าผู้อนุมัติ"
+      ],
+      "when": [
+        "Operations พยายามเรียก API ตั้งค่าผู้อนุมัติ"
+      ],
+      "expected": [
+        "API ปฏิเสธ — ทำได้เฉพาะ Loan Officer เท่านั้น"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-045",
+      "title": "แดชบอร์ดแสดงจำนวนแยกตามสถานะถูกต้อง",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-011"
+      ],
+      "rules": [
+        "BR-miniloan-024@v1"
+      ],
+      "given": [
+        "ระบบมีใบสมัคร Submitted 3, UnderReview 2, Approved 1 และบัญชี Active 4, Closed 2"
+      ],
+      "when": [
+        "Loan Officer เปิดแดชบอร์ด"
+      ],
+      "expected": [
+        "ตัวเลขที่แสดงตรงเป๊ะ: Submitted=3, UnderReview=2, Approved=1, Active=4, Closed=2"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-046",
+      "title": "แดชบอร์ดไม่มีข้อมูลแสดงศูนย์ทุกสถานะไม่ error",
+      "kind": "boundary",
+      "verifies": [
+        "FUN-miniloan-011"
+      ],
+      "rules": [
+        "BR-miniloan-024@v1"
+      ],
+      "given": [
+        "ระบบยังไม่มีใบสมัครหรือบัญชีเลยสักใบ (เพิ่งติดตั้งใหม่)"
+      ],
+      "when": [
+        "Loan Officer เปิดแดชบอร์ด"
+      ],
+      "expected": [
+        "ทุกสถานะแสดงจำนวน 0",
+        "ไม่มีแถวหาย ไม่เกิด error"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-047",
+      "title": "Web เรียก API แล้วกฎธุรกิจถูกบังคับที่ API เสมอ",
+      "kind": "happy",
+      "verifies": [
+        "FUN-miniloan-012"
+      ],
+      "rules": [
+        "BR-miniloan-025@v1",
+        "BR-miniloan-027@v1"
+      ],
+      "given": [
+        "Web ต้องดำเนินการที่มีผลทางธุรกิจ พร้อม token จำลอง"
+      ],
+      "when": [
+        "Web เรียก API endpoint ที่ตรงกับความสามารถนั้น"
+      ],
+      "expected": [
+        "API ตรวจสอบ token และบังคับกฎธุรกิจเอง ไม่พึ่ง Web",
+        "ผลลัพธ์เหมือนกันไม่ว่าจะเรียกผ่าน Web หรือเรียกตรง"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-048",
+      "title": "เรียก API ด้วยข้อมูลผิดกฎธุรกิจถูกปฏิเสธพร้อม error ชัดเจน",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-012"
+      ],
+      "rules": [
+        "BR-miniloan-026@v1"
+      ],
+      "given": [
+        "Web ส่งคำขอที่มี requestedAmount ต่ำกว่าขั้นต่ำ (แม้ Web จะ validate ผ่านมาแล้วก็ตาม)"
+      ],
+      "when": [
+        "API ประมวลผลคำขอ"
+      ],
+      "expected": [
+        "API ปฏิเสธพร้อมรหัสและข้อความ error ภาษาไทยที่ระบุกฎที่ผิด",
+        "ไม่พึ่งผลการ validate ฝั่ง Web"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-049",
+      "title": "API ล่มหรือ timeout Web แสดง error โดยไม่ crash ไม่ retry เอง",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-012"
+      ],
+      "rules": [
+        "BR-miniloan-028@v1",
+        "BR-miniloan-042@v1"
+      ],
+      "given": [
+        "API ปิดให้บริการหรือ timeout"
+      ],
+      "when": [
+        "Web พยายามเรียกใช้งานใดๆ"
+      ],
+      "expected": [
+        "Web แสดงสถานะข้อผิดพลาดอย่างเหมาะสม ไม่ crash",
+        "ไม่มีคิว retry อัตโนมัติ",
+        "ไม่ค้างรอจนกว่าจะสำเร็จ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-050",
+      "title": "คำสั่งเขียนข้อมูลที่ยิงซ้ำถูกกันด้วย unique constraint",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-012"
+      ],
+      "rules": [
+        "BR-miniloan-043@v1"
+      ],
+      "given": [
+        "ผู้ใช้กดยื่นใบสมัคร (หรือคำสั่งเขียนข้อมูลอื่น) ซ้ำสองครั้งจากการดับเบิลคลิก"
+      ],
+      "when": [
+        "คำขอที่สองที่เหมือนกันทุกประการมาถึง API"
+      ],
+      "expected": [
+        "ฐานข้อมูลปฏิเสธด้วย unique constraint",
+        "ผู้ใช้เห็น error ที่ชัดเจน ไม่ใช่ได้ผลลัพธ์ของครั้งแรกเงียบๆ และไม่เกิดรายการซ้ำ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-051",
+      "title": "เรียก API ด้วย id ของบัญชีคนอื่นถูกปฏิเสธที่ชั้น API",
+      "kind": "exception",
+      "verifies": [
+        "FUN-miniloan-012"
+      ],
+      "rules": [
+        "BR-miniloan-033@v1"
+      ],
+      "given": [
+        "Applicant รู้ id ของ LoanApplication หรือ LoanAccount ของผู้อื่น"
+      ],
+      "when": [
+        "เรียก API ด้วย id นั้นโดยตรง (ข้าม UI)"
+      ],
+      "expected": [
+        "API ปฏิเสธที่ชั้น API เอง ไม่ใช่แค่ซ่อนปุ่มบนหน้าจอ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-052",
+      "title": "ทุกจุดคำนวณเงินใช้ decimal ไม่มี floating point drift",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-035@v1"
+      ],
+      "given": [
+        "ชุดข้อมูลทดสอบที่ทำให้เกิดเศษทศนิยมซ้ำ (เช่น เงินต้น 100,000.01 บาท อัตรา 25%/ปี 7 งวด)"
+      ],
+      "when": [
+        "รันการคำนวณ EMI ดอกเบี้ยรายงวด และยอดปิดบัญชีทั้งหมดผ่าน unit test"
+      ],
+      "expected": [
+        "ผลลัพธ์ทุกจุดตรงกับค่าที่คำนวณด้วย decimal แม่นยำ 100% ไม่มีความคลาดเคลื่อนจาก floating point แม้แต่จุดเดียว",
+        "ตรวจโค้ดยืนยันไม่มีการใช้ float/double ที่จุดคำนวณเงินจุดใดเลย"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-053",
+      "title": "ทุกการเปลี่ยนสถานะบันทึกผู้กระทำและเวลาไว้ครบ",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-002"
+      ],
+      "rules": [],
+      "given": [
+        "ใบสมัครและบัญชีผ่านทุกการเปลี่ยนสถานะที่เป็นไปได้อย่างน้อยหนึ่งครั้งในชุดทดสอบ (submit, assign, approve, reject, disburse, cancel, pay, close, adjust)"
+      ],
+      "when": [
+        "ตรวจสอบ audit log ของทุกการเปลี่ยนสถานะที่เกิดขึ้น"
+      ],
+      "expected": [
+        "ทุกแถวใน audit log มีผู้กระทำและเวลาไม่ว่างเลยแม้แต่แถวเดียว (100%)",
+        "ไม่มีการเปลี่ยนสถานะใดที่หาผู้กระทำหรือเวลาไม่เจอ"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-054",
+      "title": "API ปฏิเสธ request ผิดกฎธุรกิจแม้เรียกข้าม Web โดยตรง",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-003"
+      ],
+      "rules": [
+        "BR-miniloan-026@v1"
+      ],
+      "given": [
+        "ชุดทดสอบสัญญา API ที่ยิง request ผิดกฎธุรกิจตรงไปที่ API ทุก endpoint ที่มีผลทางธุรกิจ ข้าม Web ทั้งหมด"
+      ],
+      "when": [
+        "รันชุดทดสอบสัญญา API (api_contract_test)"
+      ],
+      "expected": [
+        "ทุก endpoint ปฏิเสธ request ที่ผิดกฎธุรกิจ 100% ไม่มี endpoint ใดปล่อยผ่านเพราะพึ่งว่า Web จะ validate มาก่อน"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-055",
+      "title": "ทุกกฎธุรกิจบังคับใช้ที่ชั้น API/domain ไม่มีกฎที่ Web ถืออยู่",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-004"
+      ],
+      "rules": [],
+      "given": [
+        "รายการกฎธุรกิจทั้งหมดที่ผูกกับฟังก์ชันผ่าน governedBy edge ในกราฟการออกแบบ"
+      ],
+      "when": [
+        "ทีมสถาปัตยกรรมตรวจสอบ interfaces.json ว่าแต่ละกฎประกาศชั้นบังคับใช้เป็นอะไร"
+      ],
+      "expected": [
+        "ทุกกฎ (100%) ประกาศชั้นบังคับใช้เป็น api หรือ domain อย่างน้อยหนึ่งชั้น ไม่มีกฎใดประกาศเฉพาะ ui"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-056",
+      "title": "รายการตรวจสอบ deploy ผ่านครบทุกข้อทุกครั้งที่ปล่อยเวอร์ชันใหม่",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-005"
+      ],
+      "rules": [],
+      "given": [
+        "เวอร์ชันใหม่ของ Web หรือ API พร้อม deploy"
+      ],
+      "when": [
+        "รัน deployment checklist: ตรวจ statelessness, ตรวจสัญญา OpenAPI ตรงกับ request/response จริง, ตรวจการตั้งค่า CORS, ทดสอบ deploy/รัน Web และ API แยกจากกันอิสระ"
+      ],
+      "expected": [
+        "ผ่านครบทั้ง 4 ข้อ (100%) — ไม่มีข้อใดตกแม้แต่ข้อเดียวจึงจะปล่อยเวอร์ชันได้"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-057",
+      "title": "Acceptance Criteria ทั้งหมดผ่านไม่ว่าจะเลือกภาษา/เฟรมเวิร์กใด",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-006"
+      ],
+      "rules": [],
+      "given": [
+        "ชุด acceptance test ที่ครอบคลุมทุก Acceptance Criteria ในเอกสาร requirement"
+      ],
+      "when": [
+        "รันชุดทดสอบกับ implementation ที่สร้างด้วยภาษา/เฟรมเวิร์กใดก็ได้ตามที่ทีมเลือก"
+      ],
+      "expected": [
+        "ทุก Acceptance Criteria ผ่าน 100% โดยไม่ขึ้นกับภาษาหรือเฟรมเวิร์กที่เลือกใช้จริง"
+      ]
+    }
+  ]
+}

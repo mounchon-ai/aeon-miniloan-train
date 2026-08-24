@@ -9,7 +9,7 @@ status: draft
 term_th: งวดผ่อน
 term_en: Installment
 not_to_confuse_with: [UL-miniloan-005, UL-miniloan-012]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:63b978fca3e51b6ab8c3c549bb5e48c21d318fa0102981e974942509d635bbe1
 ---
 

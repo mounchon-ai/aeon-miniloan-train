@@ -9,7 +9,7 @@ status: draft
 term_th: ข้อมูลผู้สมัคร
 term_en: ApplicantProfile
 not_to_confuse_with: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:e70870fc2c791e2931582524220e8aef0cd5d8616e74fb1d6b72751da23b5aac
 ---
 

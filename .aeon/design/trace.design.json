@@ -1,0 +1,1368 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/trace.mjs",
+  "owner": "design",
+  "project": "miniloan",
+  "edges": [
+    {
+      "from": "REQ-miniloan-001",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "governedBy",
+      "to": "BR-miniloan-004@v1"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "governedBy",
+      "to": "BR-miniloan-007@v1"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "governedBy",
+      "to": "BR-miniloan-008@v1"
+    },
+    {
+      "from": "REQ-miniloan-001",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-002"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-002"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "BR-miniloan-001@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "BR-miniloan-002@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "BR-miniloan-003@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "BR-miniloan-005@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "BR-miniloan-006@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "BR-miniloan-009@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "CALC-miniloan-004@v1"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "governedBy",
+      "to": "CALC-miniloan-005@v1"
+    },
+    {
+      "from": "REQ-miniloan-002",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-003"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-003"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "governedBy",
+      "to": "BR-miniloan-032@v1"
+    },
+    {
+      "from": "REQ-miniloan-002",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-004"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-004"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-010@v1"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-011@v1"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-012@v1"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-013@v1"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-014@v1"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-031@v2"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "governedBy",
+      "to": "BR-miniloan-032@v1"
+    },
+    {
+      "from": "REQ-miniloan-002",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-005"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-005"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "governedBy",
+      "to": "BR-miniloan-010@v1"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "governedBy",
+      "to": "BR-miniloan-031@v2"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "governedBy",
+      "to": "BR-miniloan-047@v1"
+    },
+    {
+      "from": "REQ-miniloan-003",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-006"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-006"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "governedBy",
+      "to": "BR-miniloan-015@v1"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "governedBy",
+      "to": "BR-miniloan-016@v1"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "governedBy",
+      "to": "BR-miniloan-017@v1"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "governedBy",
+      "to": "BR-miniloan-036@v1"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "governedBy",
+      "to": "BR-miniloan-037@v1"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "governedBy",
+      "to": "CALC-miniloan-001@v2"
+    },
+    {
+      "from": "REQ-miniloan-003",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "governedBy",
+      "to": "BR-miniloan-018@v1"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "governedBy",
+      "to": "BR-miniloan-033@v1"
+    },
+    {
+      "from": "REQ-miniloan-004",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-008"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-008"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-019@v1"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-020@v1"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-034@v1"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-044@v1"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-046@v2"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-050@v2"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-051@v1"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-052@v2"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "BR-miniloan-053@v1"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "governedBy",
+      "to": "CALC-miniloan-003@v1"
+    },
+    {
+      "from": "REQ-miniloan-004",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-009"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-009"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "governedBy",
+      "to": "BR-miniloan-021@v1"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "governedBy",
+      "to": "BR-miniloan-022@v1"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "governedBy",
+      "to": "BR-miniloan-023@v1"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "governedBy",
+      "to": "BR-miniloan-034@v1"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "governedBy",
+      "to": "CALC-miniloan-002@v1"
+    },
+    {
+      "from": "REQ-miniloan-004",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-010"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-010"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-038@v1"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-039@v1"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-040@v1"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-041@v1"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-045@v1"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-048@v1"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "governedBy",
+      "to": "BR-miniloan-049@v1"
+    },
+    {
+      "from": "REQ-miniloan-005",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-011"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-011"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "governedBy",
+      "to": "BR-miniloan-024@v1"
+    },
+    {
+      "from": "REQ-miniloan-006",
+      "rel": "satisfiedBy",
+      "to": "FUN-miniloan-012"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "realizedBy",
+      "to": "UC-miniloan-012"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-025@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-026@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-027@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-028@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-029@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-030@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-033@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-035@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-042@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-043@v1"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "operatesOn",
+      "to": "ENT-002"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "operatesOn",
+      "to": "ENT-003"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "operatesOn",
+      "to": "ENT-005"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "operatesOn",
+      "to": "ENT-008"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-005"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "operatesOn",
+      "to": "ENT-005"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "operatesOn",
+      "to": "ENT-009"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "operatesOn",
+      "to": "ENT-010"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "ENT-001",
+      "rel": "hasState",
+      "to": "STM-miniloan-001"
+    },
+    {
+      "from": "ENT-004",
+      "rel": "hasState",
+      "to": "STM-miniloan-002"
+    },
+    {
+      "from": "ENT-006",
+      "rel": "hasState",
+      "to": "STM-miniloan-003"
+    },
+    {
+      "from": "ENT-009",
+      "rel": "hasState",
+      "to": "STM-miniloan-004"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-002"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-003"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-004"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-005"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-006"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-008"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-009"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-010"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-011"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-012"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-012"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-013"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-014"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-015"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-016"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-017"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-018"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-019"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-020"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-021"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-022"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-023"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-024"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-025"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-026"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-027"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-028"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-029"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-030"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-031"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-032"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-033"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-033"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-034"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-035"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-036"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-037"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-038"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-039"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-040"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-041"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-042"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-043"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-044"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-045"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-046"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-047"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-048"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-049"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-050"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-051"
+    },
+    {
+      "from": "ROLE-001",
+      "rel": "actsAs",
+      "to": "STK-miniloan-001"
+    },
+    {
+      "from": "ROLE-002",
+      "rel": "actsAs",
+      "to": "STK-miniloan-002"
+    },
+    {
+      "from": "ROLE-003",
+      "rel": "actsAs",
+      "to": "STK-miniloan-003"
+    },
+    {
+      "from": "ROLE-004",
+      "rel": "actsAs",
+      "to": "STK-miniloan-004"
+    },
+    {
+      "from": "ROLE-005",
+      "rel": "actsAs",
+      "to": "STK-miniloan-005"
+    },
+    {
+      "from": "UC-miniloan-001",
+      "rel": "governedByAcl",
+      "to": "ACL-001"
+    },
+    {
+      "from": "UC-miniloan-001",
+      "rel": "governedByAcl",
+      "to": "ACL-002"
+    },
+    {
+      "from": "UC-miniloan-002",
+      "rel": "governedByAcl",
+      "to": "ACL-003"
+    },
+    {
+      "from": "UC-miniloan-003",
+      "rel": "governedByAcl",
+      "to": "ACL-004"
+    },
+    {
+      "from": "UC-miniloan-004",
+      "rel": "governedByAcl",
+      "to": "ACL-005"
+    },
+    {
+      "from": "UC-miniloan-004",
+      "rel": "governedByAcl",
+      "to": "ACL-006"
+    },
+    {
+      "from": "UC-miniloan-004",
+      "rel": "governedByAcl",
+      "to": "ACL-007"
+    },
+    {
+      "from": "UC-miniloan-005",
+      "rel": "governedByAcl",
+      "to": "ACL-008"
+    },
+    {
+      "from": "UC-miniloan-005",
+      "rel": "governedByAcl",
+      "to": "ACL-009"
+    },
+    {
+      "from": "UC-miniloan-006",
+      "rel": "governedByAcl",
+      "to": "ACL-010"
+    },
+    {
+      "from": "UC-miniloan-007",
+      "rel": "governedByAcl",
+      "to": "ACL-011"
+    },
+    {
+      "from": "UC-miniloan-008",
+      "rel": "governedByAcl",
+      "to": "ACL-012"
+    },
+    {
+      "from": "UC-miniloan-009",
+      "rel": "governedByAcl",
+      "to": "ACL-013"
+    },
+    {
+      "from": "UC-miniloan-009",
+      "rel": "governedByAcl",
+      "to": "ACL-014"
+    },
+    {
+      "from": "UC-miniloan-010",
+      "rel": "governedByAcl",
+      "to": "ACL-015"
+    },
+    {
+      "from": "UC-miniloan-010",
+      "rel": "governedByAcl",
+      "to": "ACL-016"
+    },
+    {
+      "from": "UC-miniloan-010",
+      "rel": "governedByAcl",
+      "to": "ACL-017"
+    },
+    {
+      "from": "UC-miniloan-011",
+      "rel": "governedByAcl",
+      "to": "ACL-018"
+    },
+    {
+      "from": "NFR-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-052"
+    },
+    {
+      "from": "NFR-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-053"
+    },
+    {
+      "from": "NFR-miniloan-003",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-054"
+    },
+    {
+      "from": "NFR-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-055"
+    },
+    {
+      "from": "NFR-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-056"
+    },
+    {
+      "from": "NFR-miniloan-006",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-057"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-001"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-002"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-003"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-004"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-005"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-006"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-007"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-008"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-008"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "displayedOn",
+      "to": "UI-miniloan-009"
+    },
+    {
+      "from": "UI-miniloan-001",
+      "rel": "governedByAcl",
+      "to": "ACL-019"
+    },
+    {
+      "from": "UI-miniloan-002",
+      "rel": "governedByAcl",
+      "to": "ACL-020"
+    },
+    {
+      "from": "UI-miniloan-003",
+      "rel": "governedByAcl",
+      "to": "ACL-021"
+    },
+    {
+      "from": "UI-miniloan-004",
+      "rel": "governedByAcl",
+      "to": "ACL-022"
+    },
+    {
+      "from": "UI-miniloan-005",
+      "rel": "governedByAcl",
+      "to": "ACL-023"
+    },
+    {
+      "from": "UI-miniloan-006",
+      "rel": "governedByAcl",
+      "to": "ACL-024"
+    },
+    {
+      "from": "UI-miniloan-006",
+      "rel": "governedByAcl",
+      "to": "ACL-025"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "governedByAcl",
+      "to": "ACL-026"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "governedByAcl",
+      "to": "ACL-027"
+    },
+    {
+      "from": "UI-miniloan-008",
+      "rel": "governedByAcl",
+      "to": "ACL-028"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "governedByAcl",
+      "to": "ACL-029"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "governedByAcl",
+      "to": "ACL-030"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-002"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-003"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "exposedAs",
+      "to": "API-004"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-005"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-006"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-007"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "exposedAs",
+      "to": "API-008"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "exposedAs",
+      "to": "API-009"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "exposedAs",
+      "to": "API-010"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "exposedAs",
+      "to": "API-011"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "exposedAs",
+      "to": "API-012"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-013"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-014"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-015"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-016"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-023"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "exposedAs",
+      "to": "API-017"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-018"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "exposedAs",
+      "to": "API-019"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "exposedAs",
+      "to": "API-020"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-021"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "exposedAs",
+      "to": "API-022"
+    },
+    {
+      "from": "UI-miniloan-001",
+      "rel": "calls",
+      "to": "API-018"
+    },
+    {
+      "from": "UI-miniloan-001",
+      "rel": "calls",
+      "to": "API-019"
+    },
+    {
+      "from": "UI-miniloan-002",
+      "rel": "calls",
+      "to": "API-001"
+    },
+    {
+      "from": "UI-miniloan-002",
+      "rel": "calls",
+      "to": "API-002"
+    },
+    {
+      "from": "UI-miniloan-002",
+      "rel": "calls",
+      "to": "API-003"
+    },
+    {
+      "from": "UI-miniloan-003",
+      "rel": "calls",
+      "to": "API-009"
+    },
+    {
+      "from": "UI-miniloan-004",
+      "rel": "calls",
+      "to": "API-011"
+    },
+    {
+      "from": "UI-miniloan-005",
+      "rel": "calls",
+      "to": "API-017"
+    },
+    {
+      "from": "UI-miniloan-006",
+      "rel": "calls",
+      "to": "API-020"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-021"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-004"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-005"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-006"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-007"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-008"
+    },
+    {
+      "from": "UI-miniloan-008",
+      "rel": "calls",
+      "to": "API-022"
+    },
+    {
+      "from": "UI-miniloan-008",
+      "rel": "calls",
+      "to": "API-010"
+    },
+    {
+      "from": "UI-miniloan-008",
+      "rel": "calls",
+      "to": "API-012"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-015"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-016"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-013"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-014"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-023"
+    }
+  ]
+}

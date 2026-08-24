@@ -8,9 +8,9 @@ id: UL-miniloan-016
 status: draft
 term_th: บทบาทผู้อนุมัติ
 term_en: ApproverRole
-not_to_confuse_with: [UL-miniloan-013]
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:26c5cf36d8709e15af819535f9960174faa67d8ab1a04c5e61d2203cc2116916
+not_to_confuse_with: [UL-miniloan-013, UL-miniloan-026]
+timestamp: 2026-08-24T09:30:00+07:00
+spec_hash: sha256:1ec0bf67308b141f50edd15bbd46507b29e2f770ca3c85cd4439611122dc7941
 ---
 
 # UL-miniloan-016
@@ -28,6 +28,7 @@ role ที่ระบบกำหนดให้มีสิทธิ์อน
 ## ห้ามสับสนกับ
 
 - [UL-miniloan-013](UL-miniloan-013.md)
+- [UL-miniloan-026](UL-miniloan-026.md)
 
 ## ใช้ที่ไหน
 

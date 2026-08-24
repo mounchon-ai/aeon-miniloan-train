@@ -9,7 +9,7 @@ status: draft
 actor: Loan Officer
 rules: [BR-miniloan-024]
 domain_concepts: [UL-miniloan-001, UL-miniloan-004]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:2e8cd5460ce4135aa7d2c841f217f71b394a08d4adb98b0e28b1fda0c1ae5cbf
 ---
 

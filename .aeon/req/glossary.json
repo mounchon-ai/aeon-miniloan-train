@@ -5,8 +5,10 @@
     "plugin": "req",
     "specSchemaVersion": "0.4.0",
     "module": "miniloan",
-    "specStatus": "draft",
-    "specUpdatedAt": "2026-08-15T15:18+07:00"
+    "specStatus": "validated",
+    "specApprovedBy": "mounc",
+    "specApprovedAt": "2026-08-24T02:03:23.351Z",
+    "specUpdatedAt": "2026-08-24T09:30+07:00"
   },
   "terms": [
     {
@@ -425,7 +427,8 @@
         "ผู้มีสิทธิ์อนุมัติการปรับปรุง"
       ],
       "notToConfuseWith": [
-        "UL-miniloan-013"
+        "UL-miniloan-013",
+        "UL-miniloan-026"
       ],
       "status": "draft",
       "becomesEntity": null,
@@ -436,6 +439,14 @@
             "section": "[1] QB-apr-01"
           },
           "quote": "ผู้อนุมัติการปรับปรุงบัญชีสินเชื่อที่ปิดแล้วกำหนดเป็น role ได้ ตั้งค่าในระบบภายหลังได้ ไม่ fix ตายตัวในโค้ด",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[3] QB-lang-01"
+          },
+          "quote": "บทบาทผู้อนุมัติ/ApproverRole กับ Loan Officer เป็นคนละบทบาทกัน — แยกนิยาม",
           "confidence": 1
         }
       ],
@@ -722,6 +733,42 @@
             "section": "[3] Q-miniloan-014 ท่อน 2"
           },
           "quote": "เทียบด้วยยอดส่วนเกินเต็มจำนวนกับยอดปิดบัญชี แยกได้สามทาง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "UL-miniloan-026",
+      "termTh": "เจ้าหน้าที่สินเชื่อ",
+      "termEn": "LoanOfficer",
+      "definition": "เจ้าหน้าที่ที่พิจารณา อนุมัติ/ปฏิเสธใบสมัคร และสั่งเบิกจ่าย เฉพาะใบที่ตนถูกมอบหมาย (BR-miniloan-032@v1) — คนละบทบาทกับหัวหน้าเจ้าหน้าที่สินเชื่อ (UL-miniloan-019, ผู้สั่งมอบหมายและยกเลิกใบที่ยังไม่ถูกมอบหมาย) และคนละบทบาทกับบทบาทผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว (UL-miniloan-016)",
+      "aka": [
+        "Loan Officer",
+        "เจ้าหน้าที่พิจารณา",
+        "เจ้าหน้าที่"
+      ],
+      "notToConfuseWith": [
+        "UL-miniloan-016",
+        "UL-miniloan-019"
+      ],
+      "status": "draft",
+      "becomesEntity": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "3 · ผู้ใช้งาน (Actors)"
+          },
+          "quote": "Loan Officer | เจ้าหน้าที่พิจารณา อนุมัติ/ปฏิเสธ และสั่งเบิกจ่าย",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[3] QB-lang-01"
+          },
+          "quote": "บทบาทผู้อนุมัติ/ApproverRole กับ Loan Officer เป็นคนละบทบาทกัน — แยกนิยาม",
           "confidence": 1
         }
       ],

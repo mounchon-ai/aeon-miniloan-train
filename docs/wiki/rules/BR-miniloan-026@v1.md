@@ -13,7 +13,7 @@ test_design: [EP, decision_table]
 proven_by: [EX-miniloan-125, EX-miniloan-126]
 golden: []
 provenance: [SRC-001]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:f6f766ffc414b291a09555d8a7dc231c34b833ae9dc32a8280ce7b16c38e62b1
 ---
 

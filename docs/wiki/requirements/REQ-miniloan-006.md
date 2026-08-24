@@ -9,7 +9,7 @@ status: draft
 actor: Web (client) / API
 rules: [BR-miniloan-025, BR-miniloan-026, BR-miniloan-027, BR-miniloan-028, BR-miniloan-029, BR-miniloan-030, BR-miniloan-033, BR-miniloan-035, BR-miniloan-042, BR-miniloan-043]
 domain_concepts: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:005b7f8c5e245ed2a0a95771548e6784d79a20e7148adc16c70380790a0cb759
 ---
 

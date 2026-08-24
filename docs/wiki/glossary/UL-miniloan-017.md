@@ -9,7 +9,7 @@ status: draft
 term_th: ตารางผ่อนฉบับที่ออกใหม่
 term_en: RepaymentScheduleRevision
 not_to_confuse_with: [UL-miniloan-005]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:a7302c9955c421913c94db5c02d74f95aabedd22ef5e1e5edf29502cdb77bd53
 ---
 

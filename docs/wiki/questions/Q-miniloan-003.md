@@ -7,7 +7,7 @@ tags: [miniloan, question]
 id: Q-miniloan-003
 state: answered
 raised_by: BR-miniloan-006@v1
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:4467fb9abc25fb6d0c40474b257569e9ddb4ca3a1b355d9ad3c025de2ed248a7
 ---
 

@@ -9,7 +9,7 @@ status: draft
 term_th: ค่าธรรมเนียมการโปะ
 term_en: PrepaymentFee
 not_to_confuse_with: [UL-miniloan-008]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:ac4f3bac477ea1a8ae9635c9c061713110796a2838120fb2fb154ee3ee03f322
 ---
 

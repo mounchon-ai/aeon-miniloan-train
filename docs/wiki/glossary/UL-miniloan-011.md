@@ -9,7 +9,7 @@ status: draft
 term_th: จำนวนเงินกู้ที่ขอ
 term_en: RequestedAmount
 not_to_confuse_with: [UL-miniloan-010]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:a6adfa12b3da1bd4fb88d0ba3fc3a26524893b9399903fba2cd922c2b958903b
 ---
 

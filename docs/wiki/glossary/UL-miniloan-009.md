@@ -9,7 +9,7 @@ status: draft
 term_th: จำนวนเงิน
 term_en: Money
 not_to_confuse_with: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:4e71f68259317a215f180867586677713155a27b8e9b0500e356d93be56fba3e
 ---
 

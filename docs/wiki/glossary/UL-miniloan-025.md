@@ -9,7 +9,7 @@ status: draft
 term_th: ยอดปิดบัญชี
 term_en: PayoffAmount
 not_to_confuse_with: [UL-miniloan-022, UL-miniloan-008]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-08-24T09:30:00+07:00
 spec_hash: sha256:57a9f697a1731e38dd8fb0b9cca525a4ce648c68b843dc7beaf4ca71b2061806
 ---
 

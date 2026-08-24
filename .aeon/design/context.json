@@ -1,0 +1,211 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/context.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "scope": {
+    "inScope": [
+      {
+        "key": "origination",
+        "text": "รับและประเมินใบสมัครสินเชื่อส่วนบุคคล ตั้งแต่ร่างจนยื่น — ระบบประเมินอัตโนมัติตามกฎที่กำหนดเพื่อจัด Credit Band พร้อมเหตุผล",
+        "sources": [
+          "REQ-miniloan-001"
+        ]
+      },
+      {
+        "key": "approval-disbursement",
+        "text": "เจ้าหน้าที่พิจารณาอนุมัติหรือปฏิเสธใบสมัครแบบ 1 ระดับ แล้วสั่งเบิกจ่ายเพื่อเปิดบัญชีสินเชื่อ",
+        "sources": [
+          "REQ-miniloan-002"
+        ]
+      },
+      {
+        "key": "servicing-setup",
+        "text": "สร้างบัญชีสินเชื่อและตารางผ่อนแบบลดต้นลดดอกทันทีที่เบิกจ่ายสำเร็จ ให้เจ้าของบัญชีเปิดดูตารางของตัวเองได้",
+        "sources": [
+          "REQ-miniloan-003"
+        ]
+      },
+      {
+        "key": "servicing-operation",
+        "text": "บันทึกการชำระรายงวดที่เกิดขึ้นแล้วนอกระบบเข้าบัญชีสินเชื่อ คิดยอดปิดบัญชีก่อนกำหนด และปิดบัญชีได้ทั้งแบบชำระครบทุกงวดและแบบปิดก่อนกำหนด",
+        "sources": [
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "dashboard",
+        "text": "แดชบอร์ดภาพรวมจำนวนใบสมัครและบัญชีแยกตามสถานะในหน้าเดียว สำหรับ Loan Officer จัดลำดับงาน",
+        "sources": [
+          "REQ-miniloan-005"
+        ]
+      },
+      {
+        "key": "web-api-separation",
+        "text": "แยก deploy เป็น Backend API (ถือ business logic และกฎธุรกิจทั้งหมด) กับ Web (client ที่เรียกใช้ API เท่านั้น ไม่ถือกฎเอง)",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      }
+    ],
+    "outOfScope": [
+      {
+        "key": "real-credit-bureau-ekyc-otp",
+        "text": "เชื่อมต่อ Credit Bureau / eKYC / OTP จริง — ข้อมูลภาระหนี้เดิมของผู้สมัครกรอกด้วยมือ ไม่ดึงจากแหล่งข้อมูลจริง",
+        "sources": [
+          "REQ-miniloan-001"
+        ]
+      },
+      {
+        "key": "real-payment-gateway",
+        "text": "Payment gateway จริงและการตัดบัญชีอัตโนมัติ — การชำระเงินบันทึกด้วยมือ (mock payment) โดย Operations",
+        "sources": [
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "debt-collection",
+        "text": "การติดตามหนี้ (collection) และการปรับโครงสร้างหนี้ รวมถึงสถานะค้างชำระ — งวดที่เลยกำหนดชำระไม่มีสถานะและไม่มีกฎรองรับในรอบนี้ เป็นการตัดออกโดยตั้งใจ",
+        "sources": [
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "other-loan-products",
+        "text": "บัตรเครดิต, สินเชื่อเช่าซื้อ, วงเงินหมุนเวียน — เฉพาะสินเชื่อส่วนบุคคลแบบผ่อนชำระเท่ากันทุกงวดเท่านั้น",
+        "sources": [
+          "REQ-miniloan-001"
+        ]
+      },
+      {
+        "key": "multi-currency",
+        "text": "หลายสกุลเงิน — ใช้ THB อย่างเดียวทั้งระบบ",
+        "sources": [
+          "REQ-miniloan-003"
+        ]
+      },
+      {
+        "key": "real-authentication",
+        "text": "ระบบยืนยันตัวตน (authentication) จริง — ไม่มีการพิสูจน์ตัวตนจริงในรอบนี้ ใช้ user จำลองแทน",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      }
+    ]
+  },
+  "assumptions": [
+    {
+      "key": "user-already-authenticated",
+      "text": "ผู้ใช้ล็อกอินแล้วก่อนเข้าใช้งานทุกหน้าจอ — auth จริงอยู่นอกขอบเขต (ดู real-authentication) ใช้ user จำลองและ token จำลองแทนการยืนยันตัวตนจริง",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "one-application-one-account",
+      "text": "ผู้สมัคร 1 คนมีใบสมัครได้หลายใบ แต่ใบสมัคร 1 ใบที่ Disbursed สร้าง LoanAccount ได้ 1 บัญชีเท่านั้น",
+      "sources": [
+        "REQ-miniloan-002"
+      ]
+    },
+    {
+      "key": "manual-debt-data",
+      "text": "ข้อมูลภาระหนี้เดิมของผู้สมัครกรอกด้วยมือ ไม่ได้ดึงจาก credit bureau จริง",
+      "sources": [
+        "REQ-miniloan-001"
+      ]
+    },
+    {
+      "key": "monthly-due-date",
+      "text": "วันครบกำหนดชำระของแต่ละงวดนับแบบรายเดือน อิงตามวันเบิกจ่าย",
+      "sources": [
+        "REQ-miniloan-003"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "key": "web-api-deployment-split",
+      "text": "ต้องแยก deploy เป็น 2 หน่วยอิสระ: Backend API (ถือ business logic ทั้งหมด รวมศูนย์อยู่ในชั้น domain) และ Web (client ที่เรียกใช้ API เท่านั้น) — ทั้งสองต้อง deploy และทดสอบแยกกันได้",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "no-mandated-tech-stack",
+      "text": "ไม่ผูกภาษาหรือเฟรมเวิร์กตายตัวสำหรับทั้ง Web และ API — เลือกได้อิสระ ตราบใดที่พฤติกรรมตรงตาม Acceptance Criteria",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    }
+  ],
+  "actors": [
+    {
+      "key": "applicant",
+      "text": "ผู้สมัครสินเชื่อ — กรอกและยื่นใบสมัคร ดูสถานะและตารางผ่อนของตัวเอง ขอยอดปิดบัญชี ทำ Approve/Reject/Disburse/Cancel ไม่ได้ทุกกรณี",
+      "stakeholder": "STK-miniloan-001"
+    },
+    {
+      "key": "loan-officer",
+      "text": "เจ้าหน้าที่สินเชื่อ — พิจารณา อนุมัติ/ปฏิเสธ และสั่งเบิกจ่าย เฉพาะใบสมัครที่ถูกมอบหมายให้ตน",
+      "stakeholder": "STK-miniloan-002"
+    },
+    {
+      "key": "supervisor",
+      "text": "หัวหน้าเจ้าหน้าที่สินเชื่อ — สั่งมอบหมายใบสมัครให้ Loan Officer และยกเลิกใบที่ยังไม่ถูกมอบหมาย",
+      "stakeholder": "STK-miniloan-003"
+    },
+    {
+      "key": "operations",
+      "text": "บันทึกการชำระเงินและดำเนินการปิดบัญชี",
+      "stakeholder": "STK-miniloan-004"
+    },
+    {
+      "key": "system",
+      "text": "คำนวณคะแนน/วงเงิน/ตารางผ่อน และบังคับ business rule อัตโนมัติ — ไม่มีคนกด",
+      "stakeholder": "STK-miniloan-005"
+    },
+    {
+      "key": "web",
+      "text": "Client ฝั่งที่คน (Applicant/Loan Officer/หัวหน้า/Operations) ใช้งาน — แสดงผล รับ input และเรียก API เท่านั้น ไม่ถือ business logic เอง (REQ-miniloan-006)",
+      "stakeholder": null
+    },
+    {
+      "key": "api",
+      "text": "ถือ business logic และกฎธุรกิจทั้งหมด เปิด endpoint ให้ Web เรียกใช้ทุกความสามารถ เป็นด่านสุดท้ายในการตรวจสอบ input เสมอ (REQ-miniloan-006)",
+      "stakeholder": null
+    }
+  ],
+  "externalSystems": [],
+  "glossaryTerms": [
+    "UL-miniloan-001",
+    "UL-miniloan-002",
+    "UL-miniloan-003",
+    "UL-miniloan-004",
+    "UL-miniloan-005",
+    "UL-miniloan-006",
+    "UL-miniloan-007",
+    "UL-miniloan-008",
+    "UL-miniloan-009",
+    "UL-miniloan-010",
+    "UL-miniloan-011",
+    "UL-miniloan-012",
+    "UL-miniloan-013",
+    "UL-miniloan-014",
+    "UL-miniloan-015",
+    "UL-miniloan-016",
+    "UL-miniloan-017",
+    "UL-miniloan-018",
+    "UL-miniloan-019",
+    "UL-miniloan-020",
+    "UL-miniloan-021",
+    "UL-miniloan-022",
+    "UL-miniloan-023",
+    "UL-miniloan-024",
+    "UL-miniloan-025",
+    "UL-miniloan-026"
+  ],
+  "extensions": {}
+}

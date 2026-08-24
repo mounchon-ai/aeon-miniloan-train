@@ -5,9 +5,160 @@
     "plugin": "req",
     "specSchemaVersion": "0.4.0",
     "module": "miniloan",
-    "specStatus": "draft",
-    "specUpdatedAt": "2026-08-15T15:18+07:00"
+    "specStatus": "validated",
+    "specApprovedBy": "mounc",
+    "specApprovedAt": "2026-08-24T02:03:23.351Z",
+    "specUpdatedAt": "2026-08-24T09:30+07:00"
   },
-  "stakeholders": [],
+  "stakeholders": [
+    {
+      "id": "STK-miniloan-001",
+      "name": "Applicant",
+      "kind": "external",
+      "description": "ผู้สมัครสินเชื่อ กรอกและยื่นใบสมัคร ดูสถานะและตารางผ่อนของตัวเอง ขอยอดปิดบัญชี — อนุมัติ/ปฏิเสธ/เบิกจ่าย/ยกเลิกเองไม่ได้ทุกกรณี (BR-miniloan-031@v2)",
+      "aka": [
+        "ผู้กู้",
+        "ลูกค้า"
+      ],
+      "status": "draft",
+      "becomesRole": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "3 · ผู้ใช้งาน (Actors)"
+          },
+          "quote": "Applicant | ผู้สมัครสินเชื่อ กรอกและยื่นใบสมัคร ดูสถานะ",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[1] QB-actor-01"
+          },
+          "quote": "มีแค่ที่อินพุตเอ่ยถึง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "STK-miniloan-002",
+      "name": "Loan Officer",
+      "kind": "internal",
+      "description": "เจ้าหน้าที่พิจารณา อนุมัติ/ปฏิเสธ และสั่งเบิกจ่าย เฉพาะใบที่ถูกมอบหมายให้ตน",
+      "aka": [
+        "เจ้าหน้าที่พิจารณา"
+      ],
+      "status": "draft",
+      "becomesRole": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "3 · ผู้ใช้งาน (Actors)"
+          },
+          "quote": "Loan Officer | เจ้าหน้าที่พิจารณา อนุมัติ/ปฏิเสธ และสั่งเบิกจ่าย",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[1] QB-actor-01"
+          },
+          "quote": "มีแค่ที่อินพุตเอ่ยถึง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "STK-miniloan-003",
+      "name": "หัวหน้าเจ้าหน้าที่สินเชื่อ",
+      "kind": "internal",
+      "description": "สั่งมอบหมายใบสมัครให้ Loan Officer · ยกเลิกใบที่ยังไม่ถูกมอบหมาย (Draft/Submitted) ได้เฉพาะบทบาทนี้",
+      "aka": [
+        "หัวหน้า",
+        "หัวหน้าทีมสินเชื่อ"
+      ],
+      "status": "draft",
+      "becomesRole": null,
+      "provenance": [
+        {
+          "source": "SRC-015",
+          "locator": {
+            "section": "[1] Q-miniloan-012 · A/B"
+          },
+          "quote": "ตอบ B (supervisor) : หัวหน้าเป็น actor แยก ไม่ใช่ Loan Officer",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[1] QB-actor-01"
+          },
+          "quote": "มีแค่ที่อินพุตเอ่ยถึง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "STK-miniloan-004",
+      "name": "Operations",
+      "kind": "internal",
+      "description": "บันทึกการชำระเงิน และดำเนินการปิดบัญชี",
+      "aka": [],
+      "status": "draft",
+      "becomesRole": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "3 · ผู้ใช้งาน (Actors)"
+          },
+          "quote": "Operations | บันทึกการชำระเงิน และดำเนินการปิดบัญชี",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[1] QB-actor-01"
+          },
+          "quote": "มีแค่ที่อินพุตเอ่ยถึง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "STK-miniloan-005",
+      "name": "System",
+      "kind": "system",
+      "description": "คำนวณคะแนน/วงเงิน/ตารางผ่อน และบังคับ business rule อัตโนมัติ (rule engine) — ไม่มีคนกด",
+      "aka": [],
+      "status": "draft",
+      "becomesRole": null,
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "3 · ผู้ใช้งาน (Actors)"
+          },
+          "quote": "System | คำนวณคะแนน/วงเงิน/ตารางผ่อน และบังคับ business rule อัตโนมัติ",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-022",
+          "locator": {
+            "section": "[1] QB-actor-01"
+          },
+          "quote": "มีแค่ที่อินพุตเอ่ยถึง",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    }
+  ],
   "extensions": {}
 }
