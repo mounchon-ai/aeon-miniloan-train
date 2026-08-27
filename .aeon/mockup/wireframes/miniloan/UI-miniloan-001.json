@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-001",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:7e822fbaa90bf8d08cb8eeb0c79dc008da1faa6ab93a3271c8974f995729b307",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "รายการใบสมัคร/บัญชีของฉัน",
+  "roles": [
+    "ROLE-001"
+  ],
+  "fields": [
+    {
+      "name": "รายการใบสมัคร",
+      "required": false,
+      "visibleTo": null
+    },
+    {
+      "name": "รายการบัญชีสินเชื่อ",
+      "required": false,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "ยื่นใบสมัครใหม่",
+      "destination": "UI-miniloan-002"
+    },
+    {
+      "name": "เปิดดูใบสมัคร",
+      "destination": "UI-miniloan-002"
+    },
+    {
+      "name": "ดูตารางผ่อน",
+      "destination": "UI-miniloan-003"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-007",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:222dd0ac8bb79e8a725ca9a3269cb7ff4861859044448dfd113587adbf9751ca",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "รายละเอียดใบสมัคร (มอบหมาย/พิจารณา/อนุมัติ/เบิกจ่าย/ยกเลิก)",
+  "roles": [
+    "ROLE-002",
+    "ROLE-003"
+  ],
+  "fields": [
+    {
+      "name": "ข้อมูลผู้สมัคร",
+      "required": true,
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002",
+        "ROLE-003",
+        "ROLE-004"
+      ]
+    },
+    {
+      "name": "ผลการประเมิน",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "วงเงินอนุมัติสูงสุด",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ผู้รับผิดชอบ (มอบหมายแล้ว)",
+      "required": false,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "มอบหมายให้เจ้าหน้าที่",
+      "destination": "อยู่ที่หน้าเดิม"
+    },
+    {
+      "name": "อนุมัติ",
+      "destination": "อยู่ที่หน้าเดิม"
+    },
+    {
+      "name": "ปฏิเสธ",
+      "destination": "UI-miniloan-006"
+    },
+    {
+      "name": "สั่งเบิกจ่าย",
+      "destination": "UI-miniloan-006"
+    },
+    {
+      "name": "ยกเลิกใบสมัคร",
+      "destination": "UI-miniloan-006"
+    }
+  ]
+}

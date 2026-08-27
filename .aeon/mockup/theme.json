@@ -1,0 +1,205 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/theme.mjs",
+  "project": "miniloan",
+  "source": "brief",
+  "briefFile": "C:\\Users\\MLPLUS\\AppData\\Local\\Temp\\claude\\D--Claude-Training-workshop-aeon-miniloan-train\\23fe34f6-7a78-4d14-806b-b61ac14c85f7\\scratchpad\\theme-brief.json",
+  "direction": "Design tokens synced from the existing Claude Design project 'MiniLoan Design System' (https://claude.ai/design/p/4cbaa06e-07fe-4bd3-9b97-0b8347149b91), reading tokens/colors.css, tokens/typography.css, and tokens/spacing.css directly. Every value below is copied verbatim from those files; none was invented.",
+  "overriddenTokens": [
+    "color.primary",
+    "color.primaryHover",
+    "color.primaryActive",
+    "color.surface",
+    "color.background",
+    "color.text",
+    "color.textSecondary",
+    "color.textMuted",
+    "color.danger",
+    "color.success",
+    "color.warning",
+    "color.info",
+    "color.border",
+    "color.focusRing",
+    "typography.body",
+    "typography.heading",
+    "typography.mono",
+    "typography.scaleBase",
+    "typography.googleFontsImport",
+    "spacing.unit",
+    "spacing.scale",
+    "radius.default",
+    "radius.sm",
+    "radius.lg",
+    "radius.xl",
+    "radius.full",
+    "shadow.default",
+    "shadow.sm",
+    "shadow.lg",
+    "shadow.focus"
+  ],
+  "tokens": {
+    "color": {
+      "primary": "#1570EF",
+      "surface": "#FFFFFF",
+      "text": "#101828",
+      "danger": "#F04438",
+      "primaryHover": "#175CD3",
+      "primaryActive": "#1849A9",
+      "background": "#F9FAFB",
+      "textSecondary": "#475467",
+      "textMuted": "#667085",
+      "success": "#12B76A",
+      "warning": "#F79009",
+      "info": "#1570EF",
+      "border": "#EAECF0",
+      "focusRing": "#2E90FA"
+    },
+    "typography": {
+      "body": "'IBM Plex Sans Thai',-apple-system,'Segoe UI',sans-serif",
+      "heading": "'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif",
+      "mono": "ui-monospace,'SF Mono',Menlo,Consolas,monospace",
+      "scaleBase": "16px",
+      "googleFontsImport": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+    },
+    "spacing": {
+      "unit": "4px",
+      "scale": [
+        "4px",
+        "8px",
+        "12px",
+        "16px",
+        "20px",
+        "24px",
+        "32px",
+        "40px",
+        "48px",
+        "64px",
+        "80px"
+      ]
+    },
+    "radius": {
+      "default": "10px",
+      "sm": "6px",
+      "lg": "14px",
+      "xl": "20px",
+      "full": "999px"
+    },
+    "shadow": {
+      "default": "0 1px 3px rgba(16,24,40,.10),0 1px 2px rgba(16,24,40,.06)",
+      "sm": "0 1px 2px rgba(16,24,40,.06)",
+      "lg": "0 4px 12px rgba(16,24,40,.12),0 2px 4px rgba(16,24,40,.08)",
+      "focus": "0 0 0 4px rgba(46,144,250,.25)"
+    }
+  },
+  "components": [
+    {
+      "name": "table",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "form",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "action-group",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "report-export",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "role-restricted-view",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "empty-state",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "loading-state",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "error-state",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "unauthorized-state",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    },
+    {
+      "name": "overflow-state",
+      "states": [
+        "default",
+        "hover",
+        "active",
+        "disabled",
+        "error"
+      ]
+    }
+  ],
+  "layout": {
+    "grid": "12-column",
+    "maxWidth": "token:layout.maxWidth.neutral",
+    "breakpoints": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  }
+}

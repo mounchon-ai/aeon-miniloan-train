@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-004",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:8661f67b3cc99961ee491f2e2490ef55da3aae9a6d2a4fc813da92492117763c",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "ขอยอดปิดบัญชีก่อนกำหนด",
+  "roles": [
+    "ROLE-001"
+  ],
+  "fields": [
+    {
+      "name": "วันที่ต้องการปิดบัญชี",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "เงินต้นคงเหลือ",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ดอกเบี้ยค้างจ่าย",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ค่าธรรมเนียมปิดก่อนกำหนด",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ยอดปิดบัญชีรวม",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "คำนวณยอดปิดบัญชี",
+      "destination": "อยู่ที่หน้าเดิม"
+    }
+  ]
+}

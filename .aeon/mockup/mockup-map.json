@@ -1,0 +1,323 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/html.mjs",
+  "entries": [
+    {
+      "id": "MCK-miniloan-001",
+      "screen": "UI-miniloan-001",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-001.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "overflow"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "action-group",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "overflow-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:7e822fbaa90bf8d08cb8eeb0c79dc008da1faa6ab93a3271c8974f995729b307",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-002",
+      "screen": "UI-miniloan-002",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-002.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "action-group",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "unauthorized-state",
+        "overflow-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:7d446907fac8ce911878141593f4ad76a51a7618fde58012dc9a0e72cdc373cb",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-003",
+      "screen": "UI-miniloan-003",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-003.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "loading-state",
+        "error-state",
+        "unauthorized-state",
+        "overflow-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:32849c9ba5852892c842786139350f3fdb1243c317594c18dbf1f7191dfe59af",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-004",
+      "screen": "UI-miniloan-004",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-004.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "unauthorized-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:8661f67b3cc99961ee491f2e2490ef55da3aae9a6d2a4fc813da92492117763c",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-005",
+      "screen": "UI-miniloan-005",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-005.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "unauthorized-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:29b15d94e981335d022d61865a42928a4071dded4e7902bb672b6f8b0c97ceaa",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-006",
+      "screen": "UI-miniloan-006",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-006.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "role-restricted-view",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "unauthorized-state",
+        "overflow-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:12e07720f7fabef500e6cfcd12eec92ef911a9c8ea30f36bd607d198e93f3a38",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-007",
+      "screen": "UI-miniloan-007",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-007.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "action-group",
+        "role-restricted-view",
+        "loading-state",
+        "error-state",
+        "unauthorized-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:222dd0ac8bb79e8a725ca9a3269cb7ff4861859044448dfd113587adbf9751ca",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-008",
+      "screen": "UI-miniloan-008",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-008.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "unauthorized-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:5459446fefd5025ea3397a3495262fe372b0a495cffa899926110c8a41a2663b",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    },
+    {
+      "id": "MCK-miniloan-009",
+      "screen": "UI-miniloan-009",
+      "module": "miniloan",
+      "htmlFile": "html/miniloan/UI-miniloan-009.html",
+      "designSchemaVersion": "1.0",
+      "themeSource": "brief",
+      "statesRendered": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "action-group",
+        "role-restricted-view",
+        "empty-state",
+        "loading-state",
+        "error-state",
+        "unauthorized-state",
+        "overflow-state"
+      ],
+      "tokenCategoriesUsed": [
+        "color",
+        "typography",
+        "spacing",
+        "radius",
+        "shadow"
+      ],
+      "screenHash": "sha256:01245c7c914061e59f33e472588f6f52974e68f591a8a0a2b243e56593000c2b",
+      "themeHash": "sha256:c48d7afa056a9e7e6ac4da5a6164ec7b400d5f26c195a4424baa1bd789e39bf1",
+      "stale": false,
+      "staleReason": null,
+      "staleSince": null
+    }
+  ]
+}

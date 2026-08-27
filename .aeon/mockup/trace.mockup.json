@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/trace.mjs",
+  "owner": "mockup",
+  "project": "miniloan",
+  "edges": [
+    {
+      "from": "UI-miniloan-001",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-001"
+    },
+    {
+      "from": "UI-miniloan-002",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-002"
+    },
+    {
+      "from": "UI-miniloan-003",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-003"
+    },
+    {
+      "from": "UI-miniloan-004",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-004"
+    },
+    {
+      "from": "UI-miniloan-005",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-005"
+    },
+    {
+      "from": "UI-miniloan-006",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-006"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-007"
+    },
+    {
+      "from": "UI-miniloan-008",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-008"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "mockedBy",
+      "to": "MCK-miniloan-009"
+    }
+  ]
+}

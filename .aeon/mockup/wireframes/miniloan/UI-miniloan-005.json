@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-005",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:29b15d94e981335d022d61865a42928a4071dded4e7902bb672b6f8b0c97ceaa",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "แดชบอร์ดภาพรวมสถานะ",
+  "roles": [
+    "ROLE-002"
+  ],
+  "fields": [
+    {
+      "name": "จำนวนแยกตามสถานะ",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "ไปหน้าคิวใบสมัคร",
+      "destination": "UI-miniloan-006"
+    }
+  ]
+}

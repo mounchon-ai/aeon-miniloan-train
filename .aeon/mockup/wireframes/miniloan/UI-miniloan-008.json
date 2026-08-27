@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-008",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:5459446fefd5025ea3397a3495262fe372b0a495cffa899926110c8a41a2663b",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "บันทึกการชำระเงิน",
+  "roles": [
+    "ROLE-004"
+  ],
+  "fields": [
+    {
+      "name": "ค้นหาบัญชี",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "จำนวนเงินที่ชำระ",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ประเภทการชำระ",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "บันทึกการชำระ",
+      "destination": "อยู่ที่หน้าเดิม"
+    }
+  ]
+}

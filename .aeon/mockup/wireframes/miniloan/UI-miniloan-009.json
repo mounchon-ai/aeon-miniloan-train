@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-009",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:01245c7c914061e59f33e472588f6f52974e68f591a8a0a2b243e56593000c2b",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "จัดการบัญชีที่ปิดแล้ว",
+  "roles": [
+    "ROLE-002",
+    "ROLE-004"
+  ],
+  "fields": [
+    {
+      "name": "ผู้ถือบทบาทผู้อนุมัติปัจจุบัน",
+      "required": false,
+      "visibleTo": null
+    },
+    {
+      "name": "รายการคำขอปรับปรุง",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "ตั้งค่า/เปลี่ยนผู้ถือบทบาทผู้อนุมัติ",
+      "destination": "อยู่ที่หน้าเดิม"
+    },
+    {
+      "name": "ยื่นคำขอปรับปรุง",
+      "destination": "อยู่ที่หน้าเดิม"
+    },
+    {
+      "name": "อนุมัติคำขอปรับปรุง",
+      "destination": "อยู่ที่หน้าเดิม"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-002",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:7d446907fac8ce911878141593f4ad76a51a7618fde58012dc9a0e72cdc373cb",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "กรอก/แก้ไขใบสมัครสินเชื่อ",
+  "roles": [
+    "ROLE-001"
+  ],
+  "fields": [
+    {
+      "name": "ชื่อ-นามสกุล",
+      "required": true,
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002",
+        "ROLE-003",
+        "ROLE-004"
+      ]
+    },
+    {
+      "name": "อายุ",
+      "required": true,
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ]
+    },
+    {
+      "name": "รายได้ต่อเดือน",
+      "required": true,
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ]
+    },
+    {
+      "name": "อายุงานปัจจุบัน (เดือน)",
+      "required": true,
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ]
+    },
+    {
+      "name": "ภาระหนี้เดิมต่อเดือน",
+      "required": true,
+      "visibleTo": [
+        "ROLE-001",
+        "ROLE-002"
+      ]
+    },
+    {
+      "name": "จำนวนเงินกู้ที่ขอ",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "จำนวนงวดที่ขอ",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "บันทึกร่าง",
+      "destination": "UI-miniloan-001"
+    },
+    {
+      "name": "ยื่นใบสมัคร",
+      "destination": "UI-miniloan-001"
+    }
+  ]
+}

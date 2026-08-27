@@ -31,7 +31,7 @@
     {
       "id": "theme",
       "command": "/mock:theme",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "init"
       ],
@@ -39,24 +39,26 @@
         "theme.json",
         "theme-decision-log.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-08-27T08:36:27Z"
     },
     {
       "id": "wireframe",
       "command": "/mock:wireframe",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "coverage"
       ],
       "artifacts": [
         "wireframes/<module>/<UI-id>.*"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-08-27T08:44:37Z"
     },
     {
       "id": "html",
       "command": "/mock:html",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "wireframe",
         "theme"
@@ -66,19 +68,21 @@
         "mockup-map.json",
         "trace.mockup.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-08-27T10:08:14Z"
     },
     {
       "id": "handoff",
       "command": "/mock:handoff",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "html"
       ],
       "artifacts": [
         "handoff/manifest.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-08-27T10:09:21Z"
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-006",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:12e07720f7fabef500e6cfcd12eec92ef911a9c8ea30f36bd607d198e93f3a38",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "คิวใบสมัครรอมอบหมาย/รอพิจารณา",
+  "roles": [
+    "ROLE-002",
+    "ROLE-003"
+  ],
+  "fields": [
+    {
+      "name": "รายการใบสมัคร",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "เปิดดูรายละเอียด",
+      "destination": "UI-miniloan-007"
+    }
+  ]
+}

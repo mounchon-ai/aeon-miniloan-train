@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>กรอก/แก้ไขใบสมัครสินเชื่อ</title>
+<style>
+:root {
+  --mock-color-primary: "#1570EF";
+  --mock-color-surface: "#FFFFFF";
+  --mock-color-text: "#101828";
+  --mock-color-danger: "#F04438";
+  --mock-color-primaryHover: "#175CD3";
+  --mock-color-primaryActive: "#1849A9";
+  --mock-color-background: "#F9FAFB";
+  --mock-color-textSecondary: "#475467";
+  --mock-color-textMuted: "#667085";
+  --mock-color-success: "#12B76A";
+  --mock-color-warning: "#F79009";
+  --mock-color-info: "#1570EF";
+  --mock-color-border: "#EAECF0";
+  --mock-color-focusRing: "#2E90FA";
+  --mock-typography-body: "'IBM Plex Sans Thai',-apple-system,'Segoe UI',sans-serif";
+  --mock-typography-heading: "'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif";
+  --mock-typography-mono: "ui-monospace,'SF Mono',Menlo,Consolas,monospace";
+  --mock-typography-scaleBase: "16px";
+  --mock-typography-googleFontsImport: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap";
+  --mock-spacing-unit: "4px";
+  --mock-spacing-scale: "4px,8px,12px,16px,20px,24px,32px,40px,48px,64px,80px";
+  --mock-radius-default: "10px";
+  --mock-radius-sm: "6px";
+  --mock-radius-lg: "14px";
+  --mock-radius-xl: "20px";
+  --mock-radius-full: "999px";
+  --mock-shadow-default: "0 1px 3px rgba(16,24,40,.10),0 1px 2px rgba(16,24,40,.06)";
+  --mock-shadow-sm: "0 1px 2px rgba(16,24,40,.06)";
+  --mock-shadow-lg: "0 4px 12px rgba(16,24,40,.12),0 2px 4px rgba(16,24,40,.08)";
+  --mock-shadow-focus: "0 0 0 4px rgba(46,144,250,.25)";
+}
+body { font-family: var(--mock-typography-body, inherit); color: var(--mock-color-text, inherit); background: var(--mock-color-surface, inherit); }
+.mock-field label { display: block; }
+.mock-action { border-radius: var(--mock-radius-default, 0); box-shadow: var(--mock-shadow-default, none); }
+.mock-fictional { font-style: italic; }
+</style>
+</head>
+<body>
+  <main>
+    <h1>กรอก/แก้ไขใบสมัครสินเชื่อ</h1>
+    <p class="mock-roles">บทบาทที่เข้าได้: ROLE-001</p>
+    <form class="mock-form">
+      <div class="mock-field"><label>ชื่อ-นามสกุล *</label><span class="mock-visible-to">เห็นเฉพาะ ROLE-001, ROLE-002, ROLE-003, ROLE-004</span><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+      <div class="mock-field"><label>อายุ *</label><span class="mock-visible-to">เห็นเฉพาะ ROLE-001, ROLE-002</span><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+      <div class="mock-field"><label>รายได้ต่อเดือน *</label><span class="mock-visible-to">เห็นเฉพาะ ROLE-001, ROLE-002</span><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+      <div class="mock-field"><label>อายุงานปัจจุบัน (เดือน) *</label><span class="mock-visible-to">เห็นเฉพาะ ROLE-001, ROLE-002</span><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+      <div class="mock-field"><label>ภาระหนี้เดิมต่อเดือน *</label><span class="mock-visible-to">เห็นเฉพาะ ROLE-001, ROLE-002</span><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+      <div class="mock-field"><label>จำนวนเงินกู้ที่ขอ *</label><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+      <div class="mock-field"><label>จำนวนงวดที่ขอ *</label><input type="text" value="ตัวอย่าง — ไม่ใช่ข้อมูลจริง" readonly></div>
+    </form>
+    <div class="mock-action-group">
+      <button class="mock-action" data-destination="UI-miniloan-001">บันทึกร่าง</button>
+      <button class="mock-action" data-destination="UI-miniloan-001">ยื่นใบสมัคร</button>
+    </div>
+    <section class="mock-state" data-state="empty">
+      <p class="mock-fictional">ข้อมูลตัวอย่าง (ไม่ใช่ข้อมูลจริง) — สถานะ "empty"</p>
+    </section>
+    <section class="mock-state" data-state="loading">
+      <p class="mock-fictional">ข้อมูลตัวอย่าง (ไม่ใช่ข้อมูลจริง) — สถานะ "loading"</p>
+    </section>
+    <section class="mock-state" data-state="error">
+      <p class="mock-fictional">ข้อมูลตัวอย่าง (ไม่ใช่ข้อมูลจริง) — สถานะ "error"</p>
+    </section>
+    <section class="mock-state" data-state="unauthorized">
+      <p class="mock-fictional">ข้อมูลตัวอย่าง (ไม่ใช่ข้อมูลจริง) — สถานะ "unauthorized"</p>
+    </section>
+    <section class="mock-state" data-state="overflow">
+      <p class="mock-fictional">ข้อมูลตัวอย่าง (ไม่ใช่ข้อมูลจริง) — สถานะ "overflow"</p>
+    </section>
+  </main>
+</body>
+</html>

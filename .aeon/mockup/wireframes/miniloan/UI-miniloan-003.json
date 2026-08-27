@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframe.mjs",
+  "screen": "UI-miniloan-003",
+  "module": "miniloan",
+  "designSchemaVersion": "1.0",
+  "sourceHash": "sha256:32849c9ba5852892c842786139350f3fdb1243c317594c18dbf1f7191dfe59af",
+  "stale": false,
+  "staleReason": null,
+  "staleSince": null,
+  "title": "ตารางผ่อนของฉัน",
+  "roles": [
+    "ROLE-001"
+  ],
+  "fields": [
+    {
+      "name": "งวดที่",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "วันครบกำหนด",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "เงินต้นของงวด",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ดอกเบี้ยของงวด",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "ยอดคงเหลือหลังงวดนี้",
+      "required": true,
+      "visibleTo": null
+    },
+    {
+      "name": "สถานะงวด",
+      "required": true,
+      "visibleTo": null
+    }
+  ],
+  "actions": [
+    {
+      "name": "ขอยอดปิดบัญชีก่อนกำหนด",
+      "destination": "UI-miniloan-004"
+    }
+  ]
+}
