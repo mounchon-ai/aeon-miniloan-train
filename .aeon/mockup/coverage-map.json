@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/coverage.mjs",
+  "project": "miniloan",
+  "generatedAt": "2026-08-27T08:13:43Z",
+  "screens": [
+    {
+      "screen": "UI-miniloan-001",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-002",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-003",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-004",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-006",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-007",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "module": "miniloan",
+      "level": "L0"
+    },
+    {
+      "screen": "UI-miniloan-009",
+      "module": "miniloan",
+      "level": "L0"
+    }
+  ]
+}

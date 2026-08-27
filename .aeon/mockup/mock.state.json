@@ -1,0 +1,84 @@
+{
+  "schemaVersion": "1.0",
+  "phase": "mockup",
+  "project": "miniloan",
+  "steps": [
+    {
+      "id": "init",
+      "command": "/mock:init",
+      "status": "done",
+      "requires": [],
+      "artifacts": [
+        "mock.state.json",
+        "journal.jsonl"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-08-27T08:13:26Z"
+    },
+    {
+      "id": "coverage",
+      "command": "/mock:coverage",
+      "status": "done",
+      "requires": [
+        "init"
+      ],
+      "artifacts": [
+        "coverage-map.json"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-08-27T08:13:48Z"
+    },
+    {
+      "id": "theme",
+      "command": "/mock:theme",
+      "status": "pending",
+      "requires": [
+        "init"
+      ],
+      "artifacts": [
+        "theme.json",
+        "theme-decision-log.json"
+      ],
+      "attempts": 0
+    },
+    {
+      "id": "wireframe",
+      "command": "/mock:wireframe",
+      "status": "pending",
+      "requires": [
+        "coverage"
+      ],
+      "artifacts": [
+        "wireframes/<module>/<UI-id>.*"
+      ],
+      "attempts": 0
+    },
+    {
+      "id": "html",
+      "command": "/mock:html",
+      "status": "pending",
+      "requires": [
+        "wireframe",
+        "theme"
+      ],
+      "artifacts": [
+        "html/<module>/<UI-id>.html",
+        "mockup-map.json",
+        "trace.mockup.json"
+      ],
+      "attempts": 0
+    },
+    {
+      "id": "handoff",
+      "command": "/mock:handoff",
+      "status": "pending",
+      "requires": [
+        "html"
+      ],
+      "artifacts": [
+        "handoff/manifest.json"
+      ],
+      "attempts": 0
+    }
+  ]
+}
