@@ -1,0 +1,124 @@
+{
+  "$comment": "draft for wireframes.mjs --write --from — keep the screens to make, set layout (copy suggestedLayout when a person agrees with it) and delete the rest",
+  "screens": [
+    {
+      "id": "UI-miniloan-002",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-001",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-003",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-004",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-005",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-006",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-007",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-008",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-010",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-011",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-012",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-013",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-009",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-014",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-015",
+      "layout": "rows",
+      "suggestedLayout": "rows",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-016",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    },
+    {
+      "id": "UI-miniloan-017",
+      "layout": "form",
+      "suggestedLayout": "form",
+      "ready": true,
+      "unkinded": []
+    }
+  ]
+}

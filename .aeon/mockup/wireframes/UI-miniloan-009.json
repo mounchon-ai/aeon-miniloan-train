@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-013",
+  "screen": "UI-miniloan-009",
+  "title": "ตั้งค่า role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+  "purpose": "ให้ Loan Officer กำหนดหรือเปลี่ยน role ที่มีสิทธิ์อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+  "level": "L1",
+  "layout": "form",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "ตั้งค่า role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว"
+        }
+      ]
+    },
+    {
+      "name": "setting",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "Role ผู้อนุมัติ",
+          "required": true,
+          "entity": "ENT-013",
+          "attribute": "approverRole",
+          "validation": "หนึ่งใน role ที่มีอยู่ในระบบ",
+          "rules": [
+            "BR-miniloan-039@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "save",
+          "name": "บันทึก",
+          "kind": "edit",
+          "presentation": "text",
+          "placement": "setting",
+          "container": "inline",
+          "accessibleName": "บันทึก",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-039@v1",
+            "BR-miniloan-048@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-009-ent-013-approver-role",
+      "type": "field",
+      "key": "ent-013-approver-role",
+      "name": "Role ผู้อนุมัติ"
+    },
+    {
+      "id": "ui-miniloan-009-save",
+      "type": "action",
+      "key": "save"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่เคยตั้งค่ามาก่อน — ช่องว่างเปล่า พร้อมข้อความเตือนว่าคำขอปรับปรุงทุกคำขอจะถูกปฏิเสธจนกว่าจะตั้งค่า ตาม BR-miniloan-040@v1"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — มีค่าเดียวให้ตั้ง"
+    }
+  },
+  "extensions": {}
+}

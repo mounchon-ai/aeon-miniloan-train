@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>ตั้งค่า role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว — UI-miniloan-009 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-009" data-mockup="MCK-miniloan-013" data-layout="form">
+<header><h1>ตั้งค่า role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว</h1><p>ให้ Loan Officer กำหนดหรือเปลี่ยน role ที่มีสิทธิ์อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<form data-zone="setting" data-source="design"><p><label>Role ผู้อนุมัติ <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-009-ent-013-approver-role" name="Role ผู้อนุมัติ" placeholder="หนึ่งใน role ที่มีอยู่ในระบบ"></label></p><button type="button" data-testid="ui-miniloan-009-save" data-key="save" data-kind="edit" data-presentation="text" data-placement="setting" data-container="inline">บันทึก</button></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่เคยตั้งค่ามาก่อน — ช่องว่างเปล่า พร้อมข้อความเตือนว่าคำขอปรับปรุงทุกคำขอจะถูกปฏิเสธจนกว่าจะตั้งค่า ตาม BR-miniloan-040@v1</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — มีค่าเดียวให้ตั้ง</dd></dl></section>
+<footer><small>MCK-miniloan-013 · wireframe L1 of UI-miniloan-009 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

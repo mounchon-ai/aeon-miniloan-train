@@ -1,0 +1,193 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/conventions.mjs",
+  "project": "miniloan",
+  "kinds": [
+    "view",
+    "create",
+    "edit",
+    "delete",
+    "manage",
+    "filter",
+    "command",
+    "navigate",
+    "export",
+    "other"
+  ],
+  "catalogue": [
+    {
+      "id": "UIC-001",
+      "appliesTo": {
+        "kinds": [
+          "view",
+          "edit",
+          "delete",
+          "manage",
+          "command"
+        ],
+        "screens": "every",
+        "text": "ทุกหน้าที่แสดงเป็นรายการแถว — ปุ่มประจำแถวทุกปุ่ม (ชนิด view · edit · delete · manage · command — ชนิดเป็นของ design ตั้งแต่ประตู 35)"
+      },
+      "rule": "ปุ่มประจำแถวอยู่คอลัมน์แรกของแถว เรียงลำดับตายตัว: view · edit · delete · manage · command",
+      "readsField": "actions[] of screens.json, through the kind map (specification 7.4)",
+      "prevents": "the same row actions landing in a different column on every screen, so a user re-learns each list",
+      "decides": {
+        "placement": "first-column",
+        "order": [
+          "view",
+          "edit",
+          "delete",
+          "manage",
+          "command"
+        ]
+      },
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z",
+      "supersededBy": null,
+      "origin": {
+        "kind": "template",
+        "ref": "plugins/mock/assets/conventions.seed.json",
+        "pluginVersion": "0.3.0",
+        "importedAt": "2026-09-01T15:06:39Z"
+      }
+    },
+    {
+      "id": "UIC-002",
+      "appliesTo": {
+        "kinds": [
+          "view",
+          "edit",
+          "delete",
+          "manage",
+          "command"
+        ],
+        "screens": "every",
+        "text": "ปุ่มประจำแถวทุกปุ่ม"
+      },
+      "rule": "แสดงเป็นไอคอน ไม่ใช่ปุ่มตัวหนังสือ และใช้ชื่อ action ที่ design ประกาศไว้ใน actions[].name เป็นชื่อสำหรับ screen reader",
+      "readsField": "actions[].name",
+      "prevents": "an icon with no accessible name (MV15), and a label invented by the renderer that disagrees with the declared name",
+      "decides": {
+        "presentation": "icon",
+        "accessibleName": "declared-name"
+      },
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z",
+      "supersededBy": null,
+      "boundary": "WHAT affordance appears is structure and may sit in a wireframe (an icon button, first column); HOW it looks — which glyph, which colour, how many pixels — is theme and may not (specification 7.3, the MV1 line)",
+      "origin": {
+        "kind": "template",
+        "ref": "plugins/mock/assets/conventions.seed.json",
+        "pluginVersion": "0.3.0",
+        "importedAt": "2026-09-01T15:06:39Z"
+      }
+    },
+    {
+      "id": "UIC-003",
+      "appliesTo": {
+        "kinds": [
+          "view"
+        ],
+        "screens": "every",
+        "text": "ปุ่มประจำแถวชนิด view"
+      },
+      "rule": "เปิดเป็น modal ทับรายการ ไม่พาไปหน้ารายละเอียดแยก",
+      "readsField": "actions[].destination",
+      "prevents": "losing the list position on every detail view",
+      "decides": {
+        "container": "modal"
+      },
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z",
+      "supersededBy": null,
+      "conflictsWith": "a declared destination of the form UI-/RPT- — reported, never applied silently; the kind-map row records the convention under notApplied and the route stays (MV14 · specification 7.5 item 1)",
+      "origin": {
+        "kind": "template",
+        "ref": "plugins/mock/assets/conventions.seed.json",
+        "pluginVersion": "0.3.0",
+        "importedAt": "2026-09-01T15:06:39Z"
+      }
+    }
+  ],
+  "kindMap": [],
+  "fieldMap": [
+    {
+      "screen": "UI-miniloan-005",
+      "name": "วันที่ต้องการปิดบัญชี",
+      "slug": "requested-closure-date",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "name": "ดอกเบี้ยค้างจ่ายถึงวันที่ปิด",
+      "slug": "accrued-interest",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "name": "ค่าธรรมเนียมปิดก่อนกำหนด",
+      "slug": "closure-fee",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "name": "ยอดปิดบัญชีรวม",
+      "slug": "total-closure-amount",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "name": "จำนวนยื่นแล้ว",
+      "slug": "submitted-count",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "name": "จำนวนอยู่ระหว่างพิจารณา",
+      "slug": "under-review-count",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "name": "จำนวนอนุมัติแล้ว",
+      "slug": "approved-count",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "name": "จำนวนบัญชีที่กำลังผ่อน",
+      "slug": "active-count",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "name": "จำนวนบัญชีที่ปิดแล้ว",
+      "slug": "closed-count",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-017",
+      "name": "วันที่ปิดบัญชี",
+      "slug": "closure-date",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    },
+    {
+      "screen": "UI-miniloan-017",
+      "name": "ยอดปิดบัญชีรวม",
+      "slug": "total-closure-amount",
+      "confirmedBy": "aplus191",
+      "confirmedAt": "2026-09-01T15:10:58Z"
+    }
+  ],
+  "extensions": {}
+}

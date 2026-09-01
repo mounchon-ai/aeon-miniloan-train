@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-015",
+  "screen": "UI-miniloan-015",
+  "title": "บัญชีที่ฉันดูแล",
+  "purpose": "ให้ Operations เห็นบัญชีสินเชื่อที่ตัวเองถูก assign ดูแล และเปิดไปบันทึกการชำระหรือปิดบัญชี",
+  "level": "L1",
+  "layout": "rows",
+  "visibleTo": [
+    "ROLE-004"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "บัญชีที่ฉันดูแล"
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "kind": "columns",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นตั้งต้น",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "principalAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "outstandingPrincipal",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะ",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "status",
+          "validation": "แสดงค่าตาม STM-miniloan-002",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "record-payment",
+          "name": "บันทึกการชำระ",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "list",
+          "container": "navigate",
+          "accessibleName": "บันทึกการชำระ",
+          "conventions": [],
+          "destination": "ไปที่หน้าบันทึกการชำระ",
+          "rules": []
+        },
+        {
+          "type": "action",
+          "key": "close-early",
+          "name": "ปิดบัญชีก่อนกำหนด",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "list",
+          "container": "navigate",
+          "accessibleName": "ปิดบัญชีก่อนกำหนด",
+          "conventions": [],
+          "destination": "ไปที่หน้าบันทึกการปิดบัญชีก่อนกำหนด",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-015-ent-007-principal-amount",
+      "type": "field",
+      "key": "ent-007-principal-amount",
+      "name": "เงินต้นตั้งต้น"
+    },
+    {
+      "id": "ui-miniloan-015-ent-007-outstanding-principal",
+      "type": "field",
+      "key": "ent-007-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-015-ent-007-status",
+      "type": "field",
+      "key": "ent-007-status",
+      "name": "สถานะ"
+    },
+    {
+      "id": "ui-miniloan-015-record-payment",
+      "type": "action",
+      "key": "record-payment"
+    },
+    {
+      "id": "ui-miniloan-015-close-early",
+      "type": "action",
+      "key": "close-early"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่ถูก assign ดูแลบัญชีใดเลย — แสดง \"คุณยังไม่ได้รับมอบหมายบัญชีให้ดูแล\""
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "เกิน 100 รายการ — แบ่งหน้าและเรียงตามวันครบกำหนดงวดถัดไปก่อน"
+    }
+  },
+  "extensions": {}
+}

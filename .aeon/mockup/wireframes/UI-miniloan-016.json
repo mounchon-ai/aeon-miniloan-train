@@ -1,0 +1,173 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-016",
+  "screen": "UI-miniloan-016",
+  "title": "บันทึกการชำระ",
+  "purpose": "ให้ Operations บันทึกยอดที่รับชำระเข้าบัญชีหนึ่งบัญชี ระบบจัดว่าเป็นการชำระตรงงวดหรือการโปะเงินต้นเองตามยอดที่กรอก",
+  "level": "L1",
+  "layout": "form",
+  "visibleTo": [
+    "ROLE-004"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "บันทึกการชำระ"
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "outstandingPrincipal",
+          "validation": "จำนวนเงิน อ่านจากตารางผ่อนฉบับล่าสุดตาม BR-miniloan-053@v1",
+          "rules": [
+            "BR-miniloan-053@v1"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "งวดที่ค้างชำระ",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "installmentNumber",
+          "validation": "จำนวนเต็ม",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ยอดงวดที่ต้องชำระ",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "emiAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "payment",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ยอดที่รับชำระ",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "amount",
+          "validation": "จำนวนเงิน > 0 — น้อยกว่ายอดงวดถูกปฏิเสธตาม BR-miniloan-019@v1",
+          "rules": [
+            "BR-miniloan-019@v1",
+            "BR-miniloan-046@v2",
+            "BR-miniloan-050@v2",
+            "BR-miniloan-052@v2"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "record-payment",
+          "name": "บันทึกการชำระ",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "payment",
+          "container": "inline",
+          "accessibleName": "บันทึกการชำระ",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-019@v1",
+            "BR-miniloan-020@v1",
+            "BR-miniloan-046@v2",
+            "BR-miniloan-050@v2",
+            "BR-miniloan-052@v2"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-016-ent-007-outstanding-principal",
+      "type": "field",
+      "key": "ent-007-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-016-ent-009-installment-number",
+      "type": "field",
+      "key": "ent-009-installment-number",
+      "name": "งวดที่ค้างชำระ"
+    },
+    {
+      "id": "ui-miniloan-016-ent-009-emi-amount",
+      "type": "field",
+      "key": "ent-009-emi-amount",
+      "name": "ยอดงวดที่ต้องชำระ"
+    },
+    {
+      "id": "ui-miniloan-016-ent-010-amount",
+      "type": "field",
+      "key": "ent-010-amount",
+      "name": "ยอดที่รับชำระ"
+    },
+    {
+      "id": "ui-miniloan-016-record-payment",
+      "type": "action",
+      "key": "record-payment"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าถึงจากรายการบัญชีที่ฉันดูแลเท่านั้น ซึ่งมีงวดค้างอยู่เสมอที่ทำให้เปิดหน้านี้ได้"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป ยอดที่กรอกไว้ไม่หาย"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"บัญชีนี้ไม่ได้ถูก assign ให้คุณดูแล\" แทนข้อมูล"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — บันทึกทีละหนึ่งรายการชำระ"
+    }
+  },
+  "extensions": {}
+}

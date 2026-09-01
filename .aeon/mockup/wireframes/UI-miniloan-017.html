@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>บันทึกการปิดบัญชีก่อนกำหนด — UI-miniloan-017 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-017" data-mockup="MCK-miniloan-017" data-layout="form">
+<header><h1>บันทึกการปิดบัญชีก่อนกำหนด</h1><p>ให้ Operations บันทึกการปิดบัญชีก่อนกำหนดเมื่อผู้กู้นำยอดที่ขอไว้มาชำระครบ</p><p><small>visible to: ROLE-004 (ฝ่ายปฏิบัติการ)</small></p></header>
+<form data-zone="account" data-source="design"><p><label>วันที่ปิดบัญชี <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-017-closure-date" name="วันที่ปิดบัญชี" placeholder="วันที่"></label></p><dt>เงินต้นคงเหลือ *</dt><dd data-testid="ui-miniloan-017-ent-007-outstanding-principal">จำนวนเงิน อ่านจากตารางผ่อนฉบับล่าสุดตาม BR-miniloan-053@v1 <small>(ENT-007.outstandingPrincipal)</small></dd><dt>ยอดปิดบัญชีรวม *</dt><dd data-testid="ui-miniloan-017-total-closure-amount">เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่าย + ค่าธรรมเนียม 1% ตาม BR-miniloan-022@v1</dd></form>
+<form data-zone="payment" data-source="design"><p><label>ยอดที่รับชำระจริง <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-017-ent-010-amount" name="ยอดที่รับชำระจริง" placeholder="จำนวนเงิน ต้องเท่ากับยอดปิดบัญชีรวมเต็มจำนวน"></label></p><button type="button" data-testid="ui-miniloan-017-record-closure" data-key="record-closure" data-kind="create" data-presentation="text" data-placement="payment" data-container="inline">บันทึกการปิดบัญชี</button></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty (does not occur)</dt><dd>ไม่เกิด — เข้าถึงจากรายการบัญชีที่ฉันดูแลเท่านั้น</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป ค่าที่กรอกไว้ไม่หาย</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;บัญชีนี้ไม่ได้ถูก assign ให้คุณดูแล&quot; แทนข้อมูล</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — บันทึกทีละหนึ่งการปิดบัญชี</dd></dl></section>
+<footer><small>MCK-miniloan-017 · wireframe L1 of UI-miniloan-017 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

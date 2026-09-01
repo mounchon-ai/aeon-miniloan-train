@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1.1",
+  "producedBy": "mock · scripts/theme.mjs",
+  "project": "miniloan",
+  "decisions": [
+    {
+      "question": "source",
+      "answer": "handoff",
+      "ref": ".aeon/mockup/handoff/miniloan-design-system",
+      "decidedBy": "aplus191@gmail.com",
+      "decidedAt": "2026-09-01T15:20:58Z"
+    }
+  ],
+  "extensions": {}
+}

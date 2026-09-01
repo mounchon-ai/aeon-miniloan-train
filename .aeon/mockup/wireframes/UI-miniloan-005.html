@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>ยอดปิดบัญชีก่อนกำหนด — UI-miniloan-005 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-005" data-mockup="MCK-miniloan-005" data-layout="form">
+<header><h1>ยอดปิดบัญชีก่อนกำหนด</h1><p>ให้เจ้าของบัญชีขอดูยอดปิดบัญชีก่อนกำหนด และให้ Operations เปิดดูยอดเดียวกันก่อนบันทึกการปิดบัญชีจริงที่หน้าบันทึกการปิดบัญชี</p><p><small>visible to: ROLE-001 (ผู้สมัคร / เจ้าของบัญชี), ROLE-004 (ฝ่ายปฏิบัติการ)</small></p></header>
+<form data-zone="input" data-source="design"><p><label>วันที่ต้องการปิดบัญชี <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-005-requested-closure-date" name="วันที่ต้องการปิดบัญชี" placeholder="วันที่ ค่าเริ่มต้นเป็นวันนี้ เลือกวันในอนาคตได้"></label></p><button type="button" data-testid="ui-miniloan-005-get-quote" data-key="get-quote" data-kind="view" data-presentation="text" data-placement="input" data-container="inline">ขอยอดปิดบัญชี</button></form>
+<form data-zone="quote" data-source="design"><dt>เงินต้นคงเหลือ *</dt><dd data-testid="ui-miniloan-005-ent-007-outstanding-principal">จำนวนเงิน อ่านจากตารางผ่อนฉบับล่าสุดตาม BR-miniloan-053@v1 <small>(ENT-007.outstandingPrincipal)</small></dd><dt>ดอกเบี้ยค้างจ่ายถึงวันที่ปิด *</dt><dd data-testid="ui-miniloan-005-accrued-interest">จำนวนเงิน คำนวณ ณ วันที่ระบุ ตาม BR-miniloan-022@v1</dd><dt>ค่าธรรมเนียมปิดก่อนกำหนด *</dt><dd data-testid="ui-miniloan-005-closure-fee">1% ของเงินต้นคงเหลือ ตาม BR-miniloan-022@v1</dd><dt>ยอดปิดบัญชีรวม *</dt><dd data-testid="ui-miniloan-005-total-closure-amount">ผลรวมของสามช่องข้างต้น ตาม BR-miniloan-022@v1</dd></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่กดขอยอด — แสดงเฉพาะช่องเลือกวันที่กับปุ่มขอยอด ไม่มีตัวเลข</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — ยอดปิดบัญชีเป็นตัวเลขไม่กี่รายการ</dd></dl></section>
+<footer><small>MCK-miniloan-005 · wireframe L1 of UI-miniloan-005 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

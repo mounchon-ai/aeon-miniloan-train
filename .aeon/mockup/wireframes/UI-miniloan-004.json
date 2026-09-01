@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-004",
+  "screen": "UI-miniloan-004",
+  "title": "ตารางผ่อน",
+  "purpose": "ให้เจ้าของบัญชีดูตารางผ่อนเต็มตารางของบัญชีตัวเองพร้อมสถานะรายงวด",
+  "level": "L1",
+  "layout": "rows",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "ตารางผ่อน"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "kind": "columns",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "งวดที่",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "installmentNumber",
+          "validation": "จำนวนเต็ม",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันครบกำหนด",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "dueDate",
+          "validation": "วันที่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่างวด",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "emiAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ส่วนดอกเบี้ย",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "interestPortion",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ส่วนเงินต้น",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "principalPortion",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะงวด",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "status",
+          "validation": "แสดงค่าตาม STM-miniloan-003",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "view",
+          "name": "ดูตารางผ่อน",
+          "kind": "view",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "modal",
+          "accessibleName": "ดูตารางผ่อน",
+          "conventions": [
+            "UIC-001",
+            "UIC-002",
+            "UIC-003"
+          ],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-004-ent-009-installment-number",
+      "type": "field",
+      "key": "ent-009-installment-number",
+      "name": "งวดที่"
+    },
+    {
+      "id": "ui-miniloan-004-ent-009-due-date",
+      "type": "field",
+      "key": "ent-009-due-date",
+      "name": "วันครบกำหนด"
+    },
+    {
+      "id": "ui-miniloan-004-ent-009-emi-amount",
+      "type": "field",
+      "key": "ent-009-emi-amount",
+      "name": "ค่างวด"
+    },
+    {
+      "id": "ui-miniloan-004-ent-009-interest-portion",
+      "type": "field",
+      "key": "ent-009-interest-portion",
+      "name": "ส่วนดอกเบี้ย"
+    },
+    {
+      "id": "ui-miniloan-004-ent-009-principal-portion",
+      "type": "field",
+      "key": "ent-009-principal-portion",
+      "name": "ส่วนเงินต้น"
+    },
+    {
+      "id": "ui-miniloan-004-ent-009-status",
+      "type": "field",
+      "key": "ent-009-status",
+      "name": "สถานะงวด"
+    },
+    {
+      "id": "ui-miniloan-004-view",
+      "type": "action",
+      "key": "view"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — บัญชีที่เข้าเงื่อนไขเปิดหน้านี้ได้ต้องมีตารางผ่อนอยู่แล้วเสมอ"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "บัญชีสูงสุด 60 งวดตาม BR-miniloan-004@v1 จึงไม่เกินหนึ่งหน้าจอเลื่อน ไม่ต้องแบ่งหน้า"
+    }
+  },
+  "extensions": {}
+}

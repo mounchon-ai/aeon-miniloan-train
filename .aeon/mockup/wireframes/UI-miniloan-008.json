@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-008",
+  "screen": "UI-miniloan-008",
+  "title": "แดชบอร์ด",
+  "purpose": "ให้ Loan Officer เห็นจำนวนใบสมัครและบัญชีสินเชื่อแยกตามสถานะในหน้าเดียว",
+  "level": "L1",
+  "layout": "rows",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "แดชบอร์ด"
+        }
+      ]
+    },
+    {
+      "name": "counts",
+      "kind": "columns",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "จำนวนยื่นแล้ว",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": null,
+          "validation": "จำนวนเต็ม ≥ 0",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนอยู่ระหว่างพิจารณา",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": null,
+          "validation": "จำนวนเต็ม ≥ 0",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนอนุมัติแล้ว",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": null,
+          "validation": "จำนวนเต็ม ≥ 0",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนบัญชีที่กำลังผ่อน",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": null,
+          "validation": "จำนวนเต็ม ≥ 0",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนบัญชีที่ปิดแล้ว",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": null,
+          "validation": "จำนวนเต็ม ≥ 0",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "refresh",
+          "name": "รีเฟรชแดชบอร์ด",
+          "kind": "view",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "modal",
+          "accessibleName": "รีเฟรชแดชบอร์ด",
+          "conventions": [
+            "UIC-001",
+            "UIC-002",
+            "UIC-003"
+          ],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-008-submitted-count",
+      "type": "field",
+      "key": "submitted-count",
+      "name": "จำนวนยื่นแล้ว"
+    },
+    {
+      "id": "ui-miniloan-008-under-review-count",
+      "type": "field",
+      "key": "under-review-count",
+      "name": "จำนวนอยู่ระหว่างพิจารณา"
+    },
+    {
+      "id": "ui-miniloan-008-approved-count",
+      "type": "field",
+      "key": "approved-count",
+      "name": "จำนวนอนุมัติแล้ว"
+    },
+    {
+      "id": "ui-miniloan-008-active-count",
+      "type": "field",
+      "key": "active-count",
+      "name": "จำนวนบัญชีที่กำลังผ่อน"
+    },
+    {
+      "id": "ui-miniloan-008-closed-count",
+      "type": "field",
+      "key": "closed-count",
+      "name": "จำนวนบัญชีที่ปิดแล้ว"
+    },
+    {
+      "id": "ui-miniloan-008-refresh",
+      "type": "action",
+      "key": "refresh"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ไม่มีรายการในสถานะใดสถานะหนึ่ง — ช่องของสถานะนั้นแสดง 0 ไม่ใช่ค่าว่าง"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — หน้านี้แสดงเฉพาะตัวเลขสรุป ไม่มีรายการที่ล้นจอ"
+    }
+  },
+  "extensions": {}
+}

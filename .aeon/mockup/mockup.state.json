@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/state.mjs",
+  "phase": "mockup",
+  "project": "miniloan",
+  "prompts": [],
+  "handoffs": [],
+  "steps": [
+    {
+      "id": "init",
+      "command": "/mock:init",
+      "status": "done",
+      "requires": [],
+      "artifacts": [
+        "mockup.state.json",
+        "coverage.json"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-09-01T15:05:12Z"
+    },
+    {
+      "id": "convention",
+      "command": "/mock:convention",
+      "status": "done",
+      "requires": [
+        "init"
+      ],
+      "artifacts": [
+        "conventions.json"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-09-01T15:11:11Z"
+    },
+    {
+      "id": "wireframe",
+      "command": "/mock:wireframe",
+      "status": "done",
+      "requires": [
+        "convention"
+      ],
+      "artifacts": [
+        "wireframes/<UI-id>.json",
+        "wireframes/<UI-id>.html",
+        "mockup-map.json",
+        "trace.mockup.json"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-09-01T15:36:53Z"
+    },
+    {
+      "id": "theme",
+      "command": "/mock:theme",
+      "status": "done",
+      "requires": [
+        "init"
+      ],
+      "artifacts": [
+        "theme.json",
+        "theme-decisions.json"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-09-01T15:27:40Z"
+    },
+    {
+      "id": "html",
+      "command": "/mock:html",
+      "status": "done",
+      "requires": [
+        "wireframe",
+        "theme"
+      ],
+      "artifacts": [
+        "../../mockups/<UI-id>/<state>.html"
+      ],
+      "attempts": 1,
+      "updatedAt": "2026-09-01T15:42:33Z"
+    },
+    {
+      "id": "handoff",
+      "command": "/mock:deliver",
+      "status": "pending",
+      "requires": [
+        "theme",
+        "wireframe"
+      ],
+      "artifacts": [
+        "../export/mockup-handoff.json"
+      ],
+      "attempts": 0
+    }
+  ],
+  "extensions": {}
+}

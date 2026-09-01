@@ -1,0 +1,175 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-012",
+  "screen": "UI-miniloan-013",
+  "title": "รายละเอียดคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+  "purpose": "ให้ผู้ถือ role ผู้อนุมัติตรวจค่าเดิมและค่าใหม่แล้วอนุมัติคำขอปรับปรุง",
+  "level": "L1",
+  "layout": "form",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายละเอียดคำขอปรับปรุงบัญชีที่ปิดแล้ว"
+        }
+      ]
+    },
+    {
+      "name": "request",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ฟิลด์ที่ขอแก้ไข",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "fieldChanged",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่าเดิม",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "oldValue",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่าใหม่",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "newValue",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ผู้ยื่นคำขอ",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "requestedByStaffId",
+          "validation": "ชื่อเจ้าหน้าที่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ยื่นคำขอ",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "requestedAt",
+          "validation": "วันที่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "approve",
+          "name": "อนุมัติ",
+          "kind": "edit",
+          "presentation": "text",
+          "placement": "request",
+          "container": "inline",
+          "accessibleName": "อนุมัติ",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-041@v1",
+            "BR-miniloan-049@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-013-ent-012-field-changed",
+      "type": "field",
+      "key": "ent-012-field-changed",
+      "name": "ฟิลด์ที่ขอแก้ไข"
+    },
+    {
+      "id": "ui-miniloan-013-ent-012-old-value",
+      "type": "field",
+      "key": "ent-012-old-value",
+      "name": "ค่าเดิม"
+    },
+    {
+      "id": "ui-miniloan-013-ent-012-new-value",
+      "type": "field",
+      "key": "ent-012-new-value",
+      "name": "ค่าใหม่"
+    },
+    {
+      "id": "ui-miniloan-013-ent-012-requested-by-staff-id",
+      "type": "field",
+      "key": "ent-012-requested-by-staff-id",
+      "name": "ผู้ยื่นคำขอ"
+    },
+    {
+      "id": "ui-miniloan-013-ent-012-requested-at",
+      "type": "field",
+      "key": "ent-012-requested-at",
+      "name": "วันที่ยื่นคำขอ"
+    },
+    {
+      "id": "ui-miniloan-013-approve",
+      "type": "action",
+      "key": "approve"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าถึงจากรายการคำขอที่รออนุมัติเท่านั้น"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์อนุมัติคำขอนี้\" แทนข้อมูล — ครอบคลุมทั้งกรณีไม่ถือ role ผู้อนุมัติ และกรณีเป็นผู้ยื่นคำขอเอง (four-eyes) ตาม BR-miniloan-049@v1"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — ข้อมูลคำขอหนึ่งใบมีขนาดคงที่"
+    }
+  },
+  "extensions": {}
+}

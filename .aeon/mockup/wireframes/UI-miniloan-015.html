@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>บัญชีที่ฉันดูแล — UI-miniloan-015 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-015" data-mockup="MCK-miniloan-015" data-layout="rows">
+<header><h1>บัญชีที่ฉันดูแล</h1><p>ให้ Operations เห็นบัญชีสินเชื่อที่ตัวเองถูก assign ดูแล และเปิดไปบันทึกการชำระหรือปิดบัญชี</p><p><small>visible to: ROLE-004 (ฝ่ายปฏิบัติการ)</small></p></header>
+<table data-zone="list" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>เงินต้นตั้งต้น</th><th>เงินต้นคงเหลือ</th><th>สถานะ</th><th>actions</th></tr></thead><tbody><tr><td data-testid="ui-miniloan-015-ent-007-principal-amount">ENT-007.principalAmount</td><td data-testid="ui-miniloan-015-ent-007-outstanding-principal">ENT-007.outstandingPrincipal</td><td data-testid="ui-miniloan-015-ent-007-status">ENT-007.status</td><td><button type="button" data-testid="ui-miniloan-015-record-payment" data-key="record-payment" data-kind="navigate" data-presentation="text" data-placement="list" data-container="navigate">บันทึกการชำระ</button> <button type="button" data-testid="ui-miniloan-015-close-early" data-key="close-early" data-kind="navigate" data-presentation="text" data-placement="list" data-container="navigate">ปิดบัญชีก่อนกำหนด</button></td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่ถูก assign ดูแลบัญชีใดเลย — แสดง &quot;คุณยังไม่ได้รับมอบหมายบัญชีให้ดูแล&quot;</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow</dt><dd>เกิน 100 รายการ — แบ่งหน้าและเรียงตามวันครบกำหนดงวดถัดไปก่อน</dd></dl></section>
+<footer><small>MCK-miniloan-015 · wireframe L1 of UI-miniloan-015 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>รายการบัญชีที่ปิดแล้ว — UI-miniloan-010 · mockup L2 · empty</title>
+<style>
+:root{
+  --blue-50: #EFF6FF;
+  --blue-100: #DBEAFE;
+  --blue-200: #BFDBFE;
+  --blue-300: #93C5FD;
+  --blue-400: #60A5FA;
+  --blue-500: #2E90FA;
+  --blue-600: #1570EF;
+  --blue-700: #175CD3;
+  --blue-800: #1849A9;
+  --blue-900: #194185;
+  --blue-950: #102A56;
+  --gray-25: #FCFCFD;
+  --gray-50: #F9FAFB;
+  --gray-100: #F2F4F7;
+  --gray-200: #EAECF0;
+  --gray-300: #D0D5DD;
+  --gray-400: #98A2B3;
+  --gray-500: #667085;
+  --gray-600: #475467;
+  --gray-700: #344054;
+  --gray-800: #1D2939;
+  --gray-900: #101828;
+  --success: #12B76A;
+  --success-bg: #ECFDF3;
+  --warning: #F79009;
+  --warning-bg: #FFFAEB;
+  --danger: #F04438;
+  --danger-bg: #FEF3F2;
+  --info: #1570EF;
+  --info-bg: #EFF6FF;
+  --brand-primary: #1570EF;
+  --brand-primary-hover: #175CD3;
+  --brand-primary-active: #1849A9;
+  --brand-bright: #2E90FA;
+  --brand-subtle: #EFF6FF;
+  --brand-on-primary: #FFFFFF;
+  --bg-page: #F9FAFB;
+  --bg-surface: #FFFFFF;
+  --bg-raised: #FCFCFD;
+  --border: #EAECF0;
+  --border-strong: #D0D5DD;
+  --text-primary: #101828;
+  --text-secondary: #475467;
+  --text-muted: #667085;
+  --text-link: #175CD3;
+  --focus-ring: #2E90FA;
+  --state-draft-bg: #F2F4F7;
+  --state-draft-fg: #475467;
+  --state-submitted-bg: #EFF6FF;
+  --state-submitted-fg: #175CD3;
+  --state-underreview-bg: #FFFAEB;
+  --state-underreview-fg: #B54708;
+  --state-approved-bg: #ECFDF3;
+  --state-approved-fg: #027A48;
+  --state-rejected-bg: #FEF3F2;
+  --state-rejected-fg: #B42318;
+  --state-disbursed-bg: #DBEAFE;
+  --state-disbursed-fg: #1849A9;
+  --state-active-bg: #ECFDF3;
+  --state-active-fg: #027A48;
+  --state-closed-bg: #EAECF0;
+  --state-closed-fg: #344054;
+  --credit-band-a: #12B76A;
+  --credit-band-b: #F79009;
+  --credit-band-c: #F04438;
+  --installment-paid: #12B76A;
+  --installment-upcoming: #98A2B3;
+  --installment-overdue: #F04438;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+  --shadow-sm: 0 1px 2px rgba(16,24,40,.06);
+  --shadow-card: 0 1px 3px rgba(16,24,40,.10),0 1px 2px rgba(16,24,40,.06);
+  --shadow-lg: 0 4px 12px rgba(16,24,40,.12),0 2px 4px rgba(16,24,40,.08);
+  --shadow-focus: 0 0 0 4px rgba(46,144,250,.25);
+  --font-ui: 'IBM Plex Sans Thai',-apple-system,'Segoe UI',sans-serif;
+  --font-display: 'Plus Jakarta Sans','IBM Plex Sans Thai',sans-serif;
+  --font-mono: ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 48px;
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --tracking-wordmark: -0.02em;
+  --tabular-nums: tabular-nums;
+}
+[data-theme="dark"]{
+  --brand-primary: #2E90FA;
+  --brand-primary-hover: #53B1FD;
+  --brand-primary-active: #84CAFF;
+  --brand-bright: #53B1FD;
+  --brand-subtle: #102A56;
+  --brand-on-primary: #0B1220;
+  --bg-page: #0B1220;
+  --bg-surface: #101828;
+  --bg-raised: #1D2939;
+  --border: #1D2939;
+  --border-strong: #344054;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D0D5DD;
+  --text-muted: #98A2B3;
+  --text-link: #93C5FD;
+  --focus-ring: #53B1FD;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-ui);background:var(--bg-page);color:var(--text-primary);font-size:var(--text-base);line-height:var(--leading-normal)}
+main{margin:0 auto;padding:var(--space-6)}
+h1{margin-top:0;font-size:var(--text-lg);margin-bottom:var(--space-2)}
+.muted{color:var(--text-secondary);font-size:var(--text-sm)}
+.surface{background:var(--bg-surface);border:thin solid var(--border);border-radius:var(--radius);padding:var(--space-4);box-shadow:var(--shadow-card)}
+button{font-family:inherit;cursor:pointer;border:none;font-size:var(--text-base);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-4);background:var(--brand-primary);color:var(--brand-on-primary)}
+button:hover{background:var(--brand-primary-hover)}
+button:active{background:var(--brand-primary-active)}
+button:focus-visible{outline:medium solid var(--focus-ring)}
+button[disabled]{cursor:not-allowed}
+input{font-family:inherit;width:100%;font-size:var(--text-base);border:thin solid var(--border);border-radius:var(--radius-sm);padding:var(--space-2);background:var(--bg-surface);color:var(--text-primary)}
+label{display:block;margin-bottom:var(--space-3)}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;border-bottom:thin solid var(--border);padding:var(--space-2) var(--space-3)}
+th{color:var(--text-secondary);font-size:var(--text-sm)}
+.toolbar{display:flex;gap:var(--space-2);margin-top:var(--space-4)}
+.alert{display:block;background:var(--danger-bg);color:var(--danger);border:thin solid var(--danger);border-radius:var(--radius);padding:var(--space-3);margin-bottom:var(--space-4)}
+.empty{text-align:center;padding:var(--space-6);color:var(--text-secondary)}
+.skeleton{background:var(--border);border-radius:var(--radius-sm);margin-bottom:var(--space-2)}
+.pagination{display:flex;align-items:center;gap:var(--space-2);margin-top:var(--space-4)}
+</style></head>
+<body>
+<main data-screen="UI-miniloan-010" data-mockup="MCK-miniloan-009" data-layout="rows" data-state="empty">
+<header><h1>รายการบัญชีที่ปิดแล้ว</h1><p class="muted">ให้ Loan Officer เรียกดูบัญชีสินเชื่อที่ปิดแล้วเพื่อยื่นคำขอปรับปรุงเมื่อพบข้อมูลผิด</p><p class="muted">visible to: ROLE-002</p></header>
+<section class="surface empty"><p>ยังไม่มีบัญชีที่ปิดแล้วเลย — แสดง &quot;ยังไม่มีบัญชีที่ปิดแล้ว&quot;</p></section>
+<p class="muted">⚠ ข้อมูลสมมติ — ค่าทุกค่าในหน้านี้อ่านจาก assets/sample-data/ และเป็นของสมมติทั้งหมด (MD8)</p>
+<section aria-label="state"><p class="muted">สถานะที่แสดง: empty — ยังไม่มีบัญชีที่ปิดแล้วเลย — แสดง &quot;ยังไม่มีบัญชีที่ปิดแล้ว&quot;</p></section>
+<footer class="muted"><small>MCK-miniloan-009 · mockup L2 of UI-miniloan-010 · empty · theme handoff .aeon/mockup/handoff/miniloan-design-system · generated by /mock:html — do not edit by hand (gate 23)</small></footer>
+</main>
+</body>
+</html>

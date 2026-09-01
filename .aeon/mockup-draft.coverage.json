@@ -1,0 +1,159 @@
+{
+  "$comment": "draft for coverage.mjs --write --from — set decision (build | skip | wait) and decidedBy on every screen a person has decided; \"skip\" needs a reason, \"wait\" needs blockedBy[]. label and level are echoed for the person and are NEVER written back: a level is raised by the writer that made the picture (gate 23), never by a plan. Leave decision null for a screen nobody has decided — that is MV18's warning, and a guess here is the exact thing this file exists to prevent.",
+  "screens": [
+    {
+      "screen": "UI-miniloan-002",
+      "label": "ใบสมัครและบัญชีของฉัน",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-001",
+      "label": "ยื่นใบสมัครใหม่",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-003",
+      "label": "รายละเอียดใบสมัคร",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-004",
+      "label": "ตารางผ่อน",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "label": "ยอดปิดบัญชีก่อนกำหนด",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-006",
+      "label": "งานของฉัน",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-007",
+      "label": "รายละเอียดใบสมัคร",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "label": "แดชบอร์ด",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-010",
+      "label": "บัญชีที่ปิดแล้ว",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-011",
+      "label": "รายละเอียดบัญชี",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-012",
+      "label": "คำขอปรับปรุงที่รออนุมัติ",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-013",
+      "label": "รายละเอียดคำขอ",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-009",
+      "label": "ตั้งค่าผู้อนุมัติ",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-014",
+      "label": "มอบหมายงาน",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-015",
+      "label": "บัญชีที่ฉันดูแล",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-016",
+      "label": "บันทึกการชำระ",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    },
+    {
+      "screen": "UI-miniloan-017",
+      "label": "ปิดบัญชีก่อนกำหนด",
+      "level": "L1",
+      "decision": "build",
+      "reason": null,
+      "blockedBy": null,
+      "decidedBy": "aplus191@gmail.com"
+    }
+  ],
+  "exceptions": []
+}

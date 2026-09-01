@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>รายการใบสมัครของฉัน — UI-miniloan-002 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-002" data-mockup="MCK-miniloan-001" data-layout="rows">
+<header><h1>รายการใบสมัครของฉัน</h1><p>ให้ผู้สมัครเห็นภาพรวมใบสมัครทั้งหมดของตัวเองและเปิดดูรายละเอียดแต่ละใบ</p><p><small>visible to: ROLE-001 (ผู้สมัคร / เจ้าของบัญชี)</small></p></header>
+<table data-zone="list" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>จำนวนเงินกู้ที่ขอ</th><th>สถานะ</th><th>วันที่ยื่น</th><th>actions</th></tr></thead><tbody><tr><td data-testid="ui-miniloan-002-ent-001-requested-amount">ENT-001.requestedAmount</td><td data-testid="ui-miniloan-002-ent-001-status">ENT-001.status</td><td data-testid="ui-miniloan-002-ent-001-submitted-at">ENT-001.submittedAt</td><td><button type="button" data-testid="ui-miniloan-002-new-application" data-key="new-application" data-kind="create" data-presentation="text" data-placement="list" data-container="navigate">ยื่นใบสมัครใหม่</button> <button type="button" data-testid="ui-miniloan-002-view" data-key="view" data-kind="navigate" data-presentation="text" data-placement="list" data-container="navigate">เปิดดูรายละเอียด</button></td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่เคยยื่นใบสมัครเลย — แสดง &quot;คุณยังไม่มีใบสมัคร&quot; พร้อมปุ่มยื่นใบสมัครใหม่เด่นกลางหน้า</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — ผู้สมัครหนึ่งคนมีใบสมัครได้ไม่กี่ใบตามธรรมชาติของธุรกิจ ไม่มีเคสหลายพันรายการต่อคน</dd></dl></section>
+<footer><small>MCK-miniloan-001 · wireframe L1 of UI-miniloan-002 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,195 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-005",
+  "screen": "UI-miniloan-005",
+  "title": "ยอดปิดบัญชีก่อนกำหนด",
+  "purpose": "ให้เจ้าของบัญชีขอดูยอดปิดบัญชีก่อนกำหนด และให้ Operations เปิดดูยอดเดียวกันก่อนบันทึกการปิดบัญชีจริงที่หน้าบันทึกการปิดบัญชี",
+  "level": "L1",
+  "layout": "form",
+  "visibleTo": [
+    "ROLE-001",
+    "ROLE-004"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "ยอดปิดบัญชีก่อนกำหนด"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "วันที่ต้องการปิดบัญชี",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "วันที่ ค่าเริ่มต้นเป็นวันนี้ เลือกวันในอนาคตได้",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-004"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "get-quote",
+          "name": "ขอยอดปิดบัญชี",
+          "kind": "view",
+          "presentation": "text",
+          "placement": "input",
+          "container": "inline",
+          "accessibleName": "ขอยอดปิดบัญชี",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "quote",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "outstandingPrincipal",
+          "validation": "จำนวนเงิน อ่านจากตารางผ่อนฉบับล่าสุดตาม BR-miniloan-053@v1",
+          "rules": [
+            "BR-miniloan-053@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ดอกเบี้ยค้างจ่ายถึงวันที่ปิด",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "จำนวนเงิน คำนวณ ณ วันที่ระบุ ตาม BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่าธรรมเนียมปิดก่อนกำหนด",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "1% ของเงินต้นคงเหลือ ตาม BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ยอดปิดบัญชีรวม",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "ผลรวมของสามช่องข้างต้น ตาม BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-004"
+          ],
+          "input": false
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-005-requested-closure-date",
+      "type": "field",
+      "key": "requested-closure-date",
+      "name": "วันที่ต้องการปิดบัญชี"
+    },
+    {
+      "id": "ui-miniloan-005-get-quote",
+      "type": "action",
+      "key": "get-quote"
+    },
+    {
+      "id": "ui-miniloan-005-ent-007-outstanding-principal",
+      "type": "field",
+      "key": "ent-007-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-005-accrued-interest",
+      "type": "field",
+      "key": "accrued-interest",
+      "name": "ดอกเบี้ยค้างจ่ายถึงวันที่ปิด"
+    },
+    {
+      "id": "ui-miniloan-005-closure-fee",
+      "type": "field",
+      "key": "closure-fee",
+      "name": "ค่าธรรมเนียมปิดก่อนกำหนด"
+    },
+    {
+      "id": "ui-miniloan-005-total-closure-amount",
+      "type": "field",
+      "key": "total-closure-amount",
+      "name": "ยอดปิดบัญชีรวม"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่กดขอยอด — แสดงเฉพาะช่องเลือกวันที่กับปุ่มขอยอด ไม่มีตัวเลข"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — ยอดปิดบัญชีเป็นตัวเลขไม่กี่รายการ"
+    }
+  },
+  "extensions": {}
+}

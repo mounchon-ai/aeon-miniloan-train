@@ -1,0 +1,22 @@
+{
+  "$comment": "draft for html.mjs --write --from — keep the screens to raise to L2 and delete the rest (9.1: not every screen must reach L2; one per family of identical screens is a correct plan)",
+  "screens": [
+    "UI-miniloan-002",
+    "UI-miniloan-001",
+    "UI-miniloan-003",
+    "UI-miniloan-004",
+    "UI-miniloan-005",
+    "UI-miniloan-006",
+    "UI-miniloan-007",
+    "UI-miniloan-008",
+    "UI-miniloan-010",
+    "UI-miniloan-011",
+    "UI-miniloan-012",
+    "UI-miniloan-013",
+    "UI-miniloan-009",
+    "UI-miniloan-014",
+    "UI-miniloan-015",
+    "UI-miniloan-016",
+    "UI-miniloan-017"
+  ]
+}

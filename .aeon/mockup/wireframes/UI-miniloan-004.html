@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>ตารางผ่อน — UI-miniloan-004 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-004" data-mockup="MCK-miniloan-004" data-layout="rows">
+<header><h1>ตารางผ่อน</h1><p>ให้เจ้าของบัญชีดูตารางผ่อนเต็มตารางของบัญชีตัวเองพร้อมสถานะรายงวด</p><p><small>visible to: ROLE-001 (ผู้สมัคร / เจ้าของบัญชี)</small></p></header>
+<table data-zone="table" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>actions</th><th>งวดที่</th><th>วันครบกำหนด</th><th>ค่างวด</th><th>ส่วนดอกเบี้ย</th><th>ส่วนเงินต้น</th><th>สถานะงวด</th></tr></thead><tbody><tr><td><button type="button" data-testid="ui-miniloan-004-view" data-key="view" data-kind="view" data-presentation="icon" data-placement="first-column" data-container="modal" aria-label="ดูตารางผ่อน">[icon]</button></td><td data-testid="ui-miniloan-004-ent-009-installment-number">ENT-009.installmentNumber</td><td data-testid="ui-miniloan-004-ent-009-due-date">ENT-009.dueDate</td><td data-testid="ui-miniloan-004-ent-009-emi-amount">ENT-009.emiAmount</td><td data-testid="ui-miniloan-004-ent-009-interest-portion">ENT-009.interestPortion</td><td data-testid="ui-miniloan-004-ent-009-principal-portion">ENT-009.principalPortion</td><td data-testid="ui-miniloan-004-ent-009-status">ENT-009.status</td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty (does not occur)</dt><dd>ไม่เกิด — บัญชีที่เข้าเงื่อนไขเปิดหน้านี้ได้ต้องมีตารางผ่อนอยู่แล้วเสมอ</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow</dt><dd>บัญชีสูงสุด 60 งวดตาม BR-miniloan-004@v1 จึงไม่เกินหนึ่งหน้าจอเลื่อน ไม่ต้องแบ่งหน้า</dd></dl></section>
+<footer><small>MCK-miniloan-004 · wireframe L1 of UI-miniloan-004 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

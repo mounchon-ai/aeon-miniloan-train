@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-001",
+  "screen": "UI-miniloan-002",
+  "title": "รายการใบสมัครของฉัน",
+  "purpose": "ให้ผู้สมัครเห็นภาพรวมใบสมัครทั้งหมดของตัวเองและเปิดดูรายละเอียดแต่ละใบ",
+  "level": "L1",
+  "layout": "rows",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายการใบสมัครของฉัน"
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "kind": "columns",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": "requestedAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะ",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": "status",
+          "validation": "แสดงค่าตาม STM-miniloan-001",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ยื่น",
+          "required": false,
+          "entity": "ENT-001",
+          "attribute": "submittedAt",
+          "validation": "วันที่ หรือว่างถ้ายังเป็นร่าง",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "new-application",
+          "name": "ยื่นใบสมัครใหม่",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "list",
+          "container": "navigate",
+          "accessibleName": "ยื่นใบสมัครใหม่",
+          "conventions": [],
+          "destination": "ไปที่หน้าแบบฟอร์มใบสมัครสินเชื่อ",
+          "rules": []
+        },
+        {
+          "type": "action",
+          "key": "view",
+          "name": "เปิดดูรายละเอียด",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "list",
+          "container": "navigate",
+          "accessibleName": "เปิดดูรายละเอียด",
+          "conventions": [],
+          "destination": "ไปที่หน้ารายละเอียดใบสมัคร",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-002-ent-001-requested-amount",
+      "type": "field",
+      "key": "ent-001-requested-amount",
+      "name": "จำนวนเงินกู้ที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-002-ent-001-status",
+      "type": "field",
+      "key": "ent-001-status",
+      "name": "สถานะ"
+    },
+    {
+      "id": "ui-miniloan-002-ent-001-submitted-at",
+      "type": "field",
+      "key": "ent-001-submitted-at",
+      "name": "วันที่ยื่น"
+    },
+    {
+      "id": "ui-miniloan-002-new-application",
+      "type": "action",
+      "key": "new-application"
+    },
+    {
+      "id": "ui-miniloan-002-view",
+      "type": "action",
+      "key": "view"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่เคยยื่นใบสมัครเลย — แสดง \"คุณยังไม่มีใบสมัคร\" พร้อมปุ่มยื่นใบสมัครใหม่เด่นกลางหน้า"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — ผู้สมัครหนึ่งคนมีใบสมัครได้ไม่กี่ใบตามธรรมชาติของธุรกิจ ไม่มีเคสหลายพันรายการต่อคน"
+    }
+  },
+  "extensions": {}
+}

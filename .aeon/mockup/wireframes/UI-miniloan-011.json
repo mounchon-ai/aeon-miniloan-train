@@ -1,0 +1,222 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-010",
+  "screen": "UI-miniloan-011",
+  "title": "รายละเอียดบัญชีที่ปิดแล้ว (เจ้าหน้าที่)",
+  "purpose": "ให้ Loan Officer ดูรายละเอียดบัญชีที่ปิดแล้วและยื่นคำขอปรับปรุงเมื่อพบข้อมูลผิด",
+  "level": "L1",
+  "layout": "form",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายละเอียดบัญชีที่ปิดแล้ว (เจ้าหน้าที่)"
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นตั้งต้น",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "principalAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ ณ วันปิด",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "outstandingPrincipal",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลการปิดบัญชี",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "closureReason",
+          "validation": "FullyPaid หรือ EarlySettlement",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ปิดบัญชี",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "closedAt",
+          "validation": "วันที่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "adjustment-request",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ฟิลด์ที่ต้องการแก้ไข",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "fieldChanged",
+          "validation": "ชื่อฟิลด์บนบัญชีนี้",
+          "rules": [
+            "BR-miniloan-038@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "field",
+          "name": "ค่าเดิม",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "oldValue",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "field",
+          "name": "ค่าใหม่",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "newValue",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "request-adjustment",
+          "name": "ยื่นคำขอปรับปรุง",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "adjustment-request",
+          "container": "inline",
+          "accessibleName": "ยื่นคำขอปรับปรุง",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-038@v1",
+            "BR-miniloan-041@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-011-ent-007-principal-amount",
+      "type": "field",
+      "key": "ent-007-principal-amount",
+      "name": "เงินต้นตั้งต้น"
+    },
+    {
+      "id": "ui-miniloan-011-ent-007-outstanding-principal",
+      "type": "field",
+      "key": "ent-007-outstanding-principal",
+      "name": "เงินต้นคงเหลือ ณ วันปิด"
+    },
+    {
+      "id": "ui-miniloan-011-ent-007-closure-reason",
+      "type": "field",
+      "key": "ent-007-closure-reason",
+      "name": "เหตุผลการปิดบัญชี"
+    },
+    {
+      "id": "ui-miniloan-011-ent-007-closed-at",
+      "type": "field",
+      "key": "ent-007-closed-at",
+      "name": "วันที่ปิดบัญชี"
+    },
+    {
+      "id": "ui-miniloan-011-ent-012-field-changed",
+      "type": "field",
+      "key": "ent-012-field-changed",
+      "name": "ฟิลด์ที่ต้องการแก้ไข"
+    },
+    {
+      "id": "ui-miniloan-011-ent-012-old-value",
+      "type": "field",
+      "key": "ent-012-old-value",
+      "name": "ค่าเดิม"
+    },
+    {
+      "id": "ui-miniloan-011-ent-012-new-value",
+      "type": "field",
+      "key": "ent-012-new-value",
+      "name": "ค่าใหม่"
+    },
+    {
+      "id": "ui-miniloan-011-request-adjustment",
+      "type": "action",
+      "key": "request-adjustment"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าถึงจากรายการบัญชีที่ปิดแล้วเท่านั้น"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — ข้อมูลบัญชีหนึ่งบัญชีมีขนาดคงที่"
+    }
+  },
+  "extensions": {}
+}

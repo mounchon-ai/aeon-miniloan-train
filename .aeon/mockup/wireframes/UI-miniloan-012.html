@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>คำขอปรับปรุงบัญชีที่ปิดแล้วที่รออนุมัติ — UI-miniloan-012 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-012" data-mockup="MCK-miniloan-011" data-layout="rows">
+<header><h1>คำขอปรับปรุงบัญชีที่ปิดแล้วที่รออนุมัติ</h1><p>ให้ผู้ถือ role ผู้อนุมัติเห็นคำขอปรับปรุงบัญชีที่ปิดแล้วที่ยังรออนุมัติทั้งหมด</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<table data-zone="list" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>ฟิลด์ที่ขอแก้ไข</th><th>วันที่ยื่นคำขอ</th><th>สถานะ</th><th>actions</th></tr></thead><tbody><tr><td data-testid="ui-miniloan-012-ent-012-field-changed">ENT-012.fieldChanged</td><td data-testid="ui-miniloan-012-ent-012-requested-at">ENT-012.requestedAt</td><td data-testid="ui-miniloan-012-ent-012-status">ENT-012.status</td><td><button type="button" data-testid="ui-miniloan-012-view" data-key="view" data-kind="navigate" data-presentation="text" data-placement="list" data-container="navigate">เปิดดูรายละเอียด</button></td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ไม่มีคำขอค้างอนุมัติ — แสดง &quot;ไม่มีคำขอรออนุมัติ&quot;</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow</dt><dd>เกิน 100 รายการ — แบ่งหน้าและเรียงตามวันที่ยื่นเก่าสุดก่อน</dd></dl></section>
+<footer><small>MCK-miniloan-011 · wireframe L1 of UI-miniloan-012 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

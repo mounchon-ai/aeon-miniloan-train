@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>รายละเอียดบัญชีที่ปิดแล้ว (เจ้าหน้าที่) — UI-miniloan-011 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-011" data-mockup="MCK-miniloan-010" data-layout="form">
+<header><h1>รายละเอียดบัญชีที่ปิดแล้ว (เจ้าหน้าที่)</h1><p>ให้ Loan Officer ดูรายละเอียดบัญชีที่ปิดแล้วและยื่นคำขอปรับปรุงเมื่อพบข้อมูลผิด</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<form data-zone="account" data-source="design"><dt>เงินต้นตั้งต้น *</dt><dd data-testid="ui-miniloan-011-ent-007-principal-amount">จำนวนเงิน <small>(ENT-007.principalAmount)</small></dd><dt>เงินต้นคงเหลือ ณ วันปิด *</dt><dd data-testid="ui-miniloan-011-ent-007-outstanding-principal">จำนวนเงิน <small>(ENT-007.outstandingPrincipal)</small></dd><dt>เหตุผลการปิดบัญชี *</dt><dd data-testid="ui-miniloan-011-ent-007-closure-reason">FullyPaid หรือ EarlySettlement <small>(ENT-007.closureReason)</small></dd><dt>วันที่ปิดบัญชี *</dt><dd data-testid="ui-miniloan-011-ent-007-closed-at">วันที่ <small>(ENT-007.closedAt)</small></dd></form>
+<form data-zone="adjustment-request" data-source="design"><p><label>ฟิลด์ที่ต้องการแก้ไข <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-011-ent-012-field-changed" name="ฟิลด์ที่ต้องการแก้ไข" placeholder="ชื่อฟิลด์บนบัญชีนี้"></label></p><p><label>ค่าเดิม <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-011-ent-012-old-value" name="ค่าเดิม" placeholder="ข้อความ"></label></p><p><label>ค่าใหม่ <abbr title="required">*</abbr> <input type="text" data-testid="ui-miniloan-011-ent-012-new-value" name="ค่าใหม่" placeholder="ข้อความ"></label></p><button type="button" data-testid="ui-miniloan-011-request-adjustment" data-key="request-adjustment" data-kind="create" data-presentation="text" data-placement="adjustment-request" data-container="inline">ยื่นคำขอปรับปรุง</button></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty (does not occur)</dt><dd>ไม่เกิด — เข้าถึงจากรายการบัญชีที่ปิดแล้วเท่านั้น</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — ข้อมูลบัญชีหนึ่งบัญชีมีขนาดคงที่</dd></dl></section>
+<footer><small>MCK-miniloan-010 · wireframe L1 of UI-miniloan-011 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

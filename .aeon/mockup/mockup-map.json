@@ -1,0 +1,341 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "mockups": [
+    {
+      "id": "MCK-miniloan-001",
+      "screen": "UI-miniloan-002",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-002.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-002",
+      "screen": "UI-miniloan-001",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-001.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-003",
+      "screen": "UI-miniloan-003",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-003.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-004",
+      "screen": "UI-miniloan-004",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-004.json",
+      "layout": "rows",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [
+        "UIC-001",
+        "UIC-002",
+        "UIC-003"
+      ],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-005",
+      "screen": "UI-miniloan-005",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-005.json",
+      "layout": "form",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-006",
+      "screen": "UI-miniloan-006",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-006.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-007",
+      "screen": "UI-miniloan-007",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-007.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-008",
+      "screen": "UI-miniloan-008",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-008.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [
+        "UIC-001",
+        "UIC-002",
+        "UIC-003"
+      ],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-009",
+      "screen": "UI-miniloan-010",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-010.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-010",
+      "screen": "UI-miniloan-011",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-011.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-011",
+      "screen": "UI-miniloan-012",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-012.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-012",
+      "screen": "UI-miniloan-013",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-013.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-013",
+      "screen": "UI-miniloan-009",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-009.json",
+      "layout": "form",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-014",
+      "screen": "UI-miniloan-014",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-014.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [
+        "UIC-001",
+        "UIC-002"
+      ],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-015",
+      "screen": "UI-miniloan-015",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-015.json",
+      "layout": "rows",
+      "rendersState": [
+        "empty",
+        "loading",
+        "error",
+        "unauthorized",
+        "overflow"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Table",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-016",
+      "screen": "UI-miniloan-016",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-016.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    },
+    {
+      "id": "MCK-miniloan-017",
+      "screen": "UI-miniloan-017",
+      "level": "L2",
+      "file": "wireframes/UI-miniloan-017.json",
+      "layout": "form",
+      "rendersState": [
+        "loading",
+        "error",
+        "unauthorized"
+      ],
+      "followsConvention": [],
+      "usesComponent": [
+        "Button",
+        "Input",
+        "Toast"
+      ]
+    }
+  ],
+  "extensions": {}
+}

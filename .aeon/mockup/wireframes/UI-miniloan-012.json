@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-011",
+  "screen": "UI-miniloan-012",
+  "title": "คำขอปรับปรุงบัญชีที่ปิดแล้วที่รออนุมัติ",
+  "purpose": "ให้ผู้ถือ role ผู้อนุมัติเห็นคำขอปรับปรุงบัญชีที่ปิดแล้วที่ยังรออนุมัติทั้งหมด",
+  "level": "L1",
+  "layout": "rows",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "คำขอปรับปรุงบัญชีที่ปิดแล้วที่รออนุมัติ"
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "kind": "columns",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ฟิลด์ที่ขอแก้ไข",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "fieldChanged",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ยื่นคำขอ",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "requestedAt",
+          "validation": "วันที่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะ",
+          "required": true,
+          "entity": "ENT-012",
+          "attribute": "status",
+          "validation": "แสดงค่าตาม STM-miniloan-004",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "view",
+          "name": "เปิดดูรายละเอียด",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "list",
+          "container": "navigate",
+          "accessibleName": "เปิดดูรายละเอียด",
+          "conventions": [],
+          "destination": "ไปที่หน้ารายละเอียดคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-012-ent-012-field-changed",
+      "type": "field",
+      "key": "ent-012-field-changed",
+      "name": "ฟิลด์ที่ขอแก้ไข"
+    },
+    {
+      "id": "ui-miniloan-012-ent-012-requested-at",
+      "type": "field",
+      "key": "ent-012-requested-at",
+      "name": "วันที่ยื่นคำขอ"
+    },
+    {
+      "id": "ui-miniloan-012-ent-012-status",
+      "type": "field",
+      "key": "ent-012-status",
+      "name": "สถานะ"
+    },
+    {
+      "id": "ui-miniloan-012-view",
+      "type": "action",
+      "key": "view"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ไม่มีคำขอค้างอนุมัติ — แสดง \"ไม่มีคำขอรออนุมัติ\""
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "เกิน 100 รายการ — แบ่งหน้าและเรียงตามวันที่ยื่นเก่าสุดก่อน"
+    }
+  },
+  "extensions": {}
+}

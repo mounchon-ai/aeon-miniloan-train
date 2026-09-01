@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>รายการบัญชีที่ปิดแล้ว — UI-miniloan-010 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-010" data-mockup="MCK-miniloan-009" data-layout="rows">
+<header><h1>รายการบัญชีที่ปิดแล้ว</h1><p>ให้ Loan Officer เรียกดูบัญชีสินเชื่อที่ปิดแล้วเพื่อยื่นคำขอปรับปรุงเมื่อพบข้อมูลผิด</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<table data-zone="list" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>เงินต้นตั้งต้น</th><th>เหตุผลการปิดบัญชี</th><th>วันที่ปิดบัญชี</th><th>actions</th></tr></thead><tbody><tr><td data-testid="ui-miniloan-010-ent-007-principal-amount">ENT-007.principalAmount</td><td data-testid="ui-miniloan-010-ent-007-closure-reason">ENT-007.closureReason</td><td data-testid="ui-miniloan-010-ent-007-closed-at">ENT-007.closedAt</td><td><button type="button" data-testid="ui-miniloan-010-view" data-key="view" data-kind="navigate" data-presentation="text" data-placement="list" data-container="navigate">เปิดดูรายละเอียด</button></td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่มีบัญชีที่ปิดแล้วเลย — แสดง &quot;ยังไม่มีบัญชีที่ปิดแล้ว&quot;</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์เข้าถึงหน้านี้&quot; แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า</dd><dt>overflow</dt><dd>เกิน 100 รายการ — แบ่งหน้าและเรียงตามวันที่ปิดล่าสุดก่อน</dd></dl></section>
+<footer><small>MCK-miniloan-009 · wireframe L1 of UI-miniloan-010 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

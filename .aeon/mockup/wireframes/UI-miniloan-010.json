@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-009",
+  "screen": "UI-miniloan-010",
+  "title": "รายการบัญชีที่ปิดแล้ว",
+  "purpose": "ให้ Loan Officer เรียกดูบัญชีสินเชื่อที่ปิดแล้วเพื่อยื่นคำขอปรับปรุงเมื่อพบข้อมูลผิด",
+  "level": "L1",
+  "layout": "rows",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายการบัญชีที่ปิดแล้ว"
+        }
+      ]
+    },
+    {
+      "name": "list",
+      "kind": "columns",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นตั้งต้น",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "principalAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลการปิดบัญชี",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "closureReason",
+          "validation": "FullyPaid หรือ EarlySettlement",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ปิดบัญชี",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "closedAt",
+          "validation": "วันที่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "view",
+          "name": "เปิดดูรายละเอียด",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "list",
+          "container": "navigate",
+          "accessibleName": "เปิดดูรายละเอียด",
+          "conventions": [],
+          "destination": "ไปที่หน้ารายละเอียดบัญชีที่ปิดแล้ว",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-010-ent-007-principal-amount",
+      "type": "field",
+      "key": "ent-007-principal-amount",
+      "name": "เงินต้นตั้งต้น"
+    },
+    {
+      "id": "ui-miniloan-010-ent-007-closure-reason",
+      "type": "field",
+      "key": "ent-007-closure-reason",
+      "name": "เหตุผลการปิดบัญชี"
+    },
+    {
+      "id": "ui-miniloan-010-ent-007-closed-at",
+      "type": "field",
+      "key": "ent-007-closed-at",
+      "name": "วันที่ปิดบัญชี"
+    },
+    {
+      "id": "ui-miniloan-010-view",
+      "type": "action",
+      "key": "view"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่มีบัญชีที่ปิดแล้วเลย — แสดง \"ยังไม่มีบัญชีที่ปิดแล้ว\""
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์เข้าถึงหน้านี้\" แทนข้อมูล ไม่แสดงแม้โครงหน้าที่ว่างเปล่า"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "เกิน 100 รายการ — แบ่งหน้าและเรียงตามวันที่ปิดล่าสุดก่อน"
+    }
+  },
+  "extensions": {}
+}

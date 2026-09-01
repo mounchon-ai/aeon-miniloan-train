@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>รายละเอียดคำขอปรับปรุงบัญชีที่ปิดแล้ว — UI-miniloan-013 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-013" data-mockup="MCK-miniloan-012" data-layout="form">
+<header><h1>รายละเอียดคำขอปรับปรุงบัญชีที่ปิดแล้ว</h1><p>ให้ผู้ถือ role ผู้อนุมัติตรวจค่าเดิมและค่าใหม่แล้วอนุมัติคำขอปรับปรุง</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<form data-zone="request" data-source="design"><dt>ฟิลด์ที่ขอแก้ไข *</dt><dd data-testid="ui-miniloan-013-ent-012-field-changed">ข้อความ <small>(ENT-012.fieldChanged)</small></dd><dt>ค่าเดิม *</dt><dd data-testid="ui-miniloan-013-ent-012-old-value">ข้อความ <small>(ENT-012.oldValue)</small></dd><dt>ค่าใหม่ *</dt><dd data-testid="ui-miniloan-013-ent-012-new-value">ข้อความ <small>(ENT-012.newValue)</small></dd><dt>ผู้ยื่นคำขอ *</dt><dd data-testid="ui-miniloan-013-ent-012-requested-by-staff-id">ชื่อเจ้าหน้าที่ <small>(ENT-012.requestedByStaffId)</small></dd><dt>วันที่ยื่นคำขอ *</dt><dd data-testid="ui-miniloan-013-ent-012-requested-at">วันที่ <small>(ENT-012.requestedAt)</small></dd><button type="button" data-testid="ui-miniloan-013-approve" data-key="approve" data-kind="edit" data-presentation="text" data-placement="request" data-container="inline">อนุมัติ</button></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty (does not occur)</dt><dd>ไม่เกิด — เข้าถึงจากรายการคำขอที่รออนุมัติเท่านั้น</dd><dt>loading</dt><dd>แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ</dd><dt>error</dt><dd>แสดงข้อความ &quot;เกิดข้อผิดพลาด ลองใหม่อีกครั้ง&quot; พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป</dd><dt>unauthorized</dt><dd>แสดงข้อความ &quot;คุณไม่มีสิทธิ์อนุมัติคำขอนี้&quot; แทนข้อมูล — ครอบคลุมทั้งกรณีไม่ถือ role ผู้อนุมัติ และกรณีเป็นผู้ยื่นคำขอเอง (four-eyes) ตาม BR-miniloan-049@v1</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — ข้อมูลคำขอหนึ่งใบมีขนาดคงที่</dd></dl></section>
+<footer><small>MCK-miniloan-012 · wireframe L1 of UI-miniloan-013 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,283 @@
+{
+  "schemaVersion": "1.2",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-003",
+  "screen": "UI-miniloan-003",
+  "title": "รายละเอียดใบสมัคร",
+  "purpose": "ให้ผู้สมัครดูสถานะ ผลประเมิน และเหตุผลของใบสมัครใบหนึ่งของตัวเอง",
+  "level": "L1",
+  "layout": "form",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายละเอียดใบสมัคร"
+        }
+      ]
+    },
+    {
+      "name": "application",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ชื่อผู้สมัคร",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "name",
+          "validation": "ข้อความ",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-002",
+            "ROLE-003",
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": "requestedAmount",
+          "validation": "จำนวนเงิน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะ",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": "status",
+          "validation": "แสดงค่าตาม STM-miniloan-001",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลที่ปฏิเสธ",
+          "required": false,
+          "entity": "ENT-001",
+          "attribute": "rejectionReason",
+          "validation": "ข้อความ แสดงเฉพาะสถานะ Rejected",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลที่ยกเลิก",
+          "required": false,
+          "entity": "ENT-001",
+          "attribute": "cancellationReason",
+          "validation": "ข้อความ แสดงเฉพาะสถานะ Cancelled",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "assessment",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ผลจัดกลุ่มความเสี่ยง (Band)",
+          "required": false,
+          "entity": "ENT-004",
+          "attribute": "band",
+          "validation": "A/B/C แสดงเมื่อประเมินแล้ว",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "DTI",
+          "required": false,
+          "entity": "ENT-004",
+          "attribute": "dtiPercent",
+          "validation": "เปอร์เซ็นต์ แสดงเมื่อประเมินแล้ว",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วงเงินอนุมัติสูงสุด",
+          "required": false,
+          "entity": "ENT-004",
+          "attribute": "maxApprovableAmount",
+          "validation": "จำนวนเงิน แสดงเมื่อประเมินแล้ว",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "account",
+      "kind": "form",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "สถานะบัญชีสินเชื่อ",
+          "required": false,
+          "entity": "ENT-007",
+          "attribute": "status",
+          "validation": "แสดงเฉพาะเมื่อเบิกจ่ายแล้ว ตาม STM-miniloan-002",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "view-schedule",
+          "name": "ดูตารางผ่อน",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "account",
+          "container": "navigate",
+          "accessibleName": "ดูตารางผ่อน",
+          "conventions": [],
+          "destination": "ไปที่หน้าตารางผ่อน",
+          "rules": []
+        },
+        {
+          "type": "action",
+          "key": "view-closure-quote",
+          "name": "ขอยอดปิดบัญชีก่อนกำหนด",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "account",
+          "container": "navigate",
+          "accessibleName": "ขอยอดปิดบัญชีก่อนกำหนด",
+          "conventions": [],
+          "destination": "ไปที่หน้ายอดปิดบัญชีก่อนกำหนด",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-003-ent-002-name",
+      "type": "field",
+      "key": "ent-002-name",
+      "name": "ชื่อผู้สมัคร"
+    },
+    {
+      "id": "ui-miniloan-003-ent-001-requested-amount",
+      "type": "field",
+      "key": "ent-001-requested-amount",
+      "name": "จำนวนเงินกู้ที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-003-ent-001-status",
+      "type": "field",
+      "key": "ent-001-status",
+      "name": "สถานะ"
+    },
+    {
+      "id": "ui-miniloan-003-ent-001-rejection-reason",
+      "type": "field",
+      "key": "ent-001-rejection-reason",
+      "name": "เหตุผลที่ปฏิเสธ"
+    },
+    {
+      "id": "ui-miniloan-003-ent-001-cancellation-reason",
+      "type": "field",
+      "key": "ent-001-cancellation-reason",
+      "name": "เหตุผลที่ยกเลิก"
+    },
+    {
+      "id": "ui-miniloan-003-ent-004-band",
+      "type": "field",
+      "key": "ent-004-band",
+      "name": "ผลจัดกลุ่มความเสี่ยง (Band)"
+    },
+    {
+      "id": "ui-miniloan-003-ent-004-dti-percent",
+      "type": "field",
+      "key": "ent-004-dti-percent",
+      "name": "DTI"
+    },
+    {
+      "id": "ui-miniloan-003-ent-004-max-approvable-amount",
+      "type": "field",
+      "key": "ent-004-max-approvable-amount",
+      "name": "วงเงินอนุมัติสูงสุด"
+    },
+    {
+      "id": "ui-miniloan-003-ent-007-status",
+      "type": "field",
+      "key": "ent-007-status",
+      "name": "สถานะบัญชีสินเชื่อ"
+    },
+    {
+      "id": "ui-miniloan-003-view-schedule",
+      "type": "action",
+      "key": "view-schedule"
+    },
+    {
+      "id": "ui-miniloan-003-view-closure-quote",
+      "type": "action",
+      "key": "view-closure-quote"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าถึงหน้านี้ได้จากรายการเท่านั้น จึงมีใบสมัครอยู่เสมอ"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton/spinner ทับตำแหน่งข้อมูล ปุ่มที่ยิง action ถูกปิดใช้งานชั่วคราวระหว่างรอ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"เกิดข้อผิดพลาด ลองใหม่อีกครั้ง\" พร้อมปุ่มลองใหม่ ข้อมูลเดิมที่เคยโหลดสำเร็จยังคงอยู่บนจอ ไม่หายไป"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความ \"คุณไม่มีสิทธิ์ดูใบสมัครนี้\" แทนข้อมูล — ครอบคลุมกรณีพยายามเปิดใบของคนอื่นด้วย id ตรง"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — ข้อมูลใบสมัครหนึ่งใบมีขนาดคงที่"
+    }
+  },
+  "extensions": {}
+}
