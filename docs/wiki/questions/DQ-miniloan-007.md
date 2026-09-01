@@ -8,7 +8,7 @@ id: DQ-miniloan-007
 state: open
 raised_by: BR-miniloan-037@v1
 answer_phase: screen
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:784a488fe4419ff92a2540359bf8f7c0a9581af47db71a44d6614bd6788965cd
 ---
 
@@ -22,6 +22,6 @@ spec_hash: sha256:784a488fe4419ff92a2540359bf8f7c0a9581af47db71a44d6614bd6788965
 | สถานะ | 🛑 **open** — ยังไม่มีคำตอบ |
 | ตั้งขึ้นจาก | [BR-miniloan-037@v1](../rules/BR-miniloan-037@v1.md) |
 | หมวด | temporal |
-| ตอบตอนไหน | `/screen:ask` |
+| ตอบตอนไหน | screen — `/mock:coverage` (`mock`) |
 | ติดอยู่ที่ | `screen:จอจัดการอัตราดอกเบี้ย (ยังไม่มีในผังหน้าจอ)` |
 

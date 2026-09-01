@@ -8,7 +8,7 @@ id: DQ-miniloan-008
 state: open
 raised_by: BR-miniloan-042@v1
 answer_phase: domain
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:82c2160cda9cbd91d29f60130ad4c20a0fd5104dd95796e915f87767877ce3ee
 ---
 
@@ -22,6 +22,6 @@ spec_hash: sha256:82c2160cda9cbd91d29f60130ad4c20a0fd5104dd95796e915f87767877ce3
 | สถานะ | 🛑 **open** — ยังไม่มีคำตอบ |
 | ตั้งขึ้นจาก | [BR-miniloan-042@v1](../rules/BR-miniloan-042@v1.md) |
 | หมวด | integration |
-| ตอบตอนไหน | `/domain:ask` |
+| ตอบตอนไหน | domain — `/design:datamodel` (`design`) |
 | ติดอยู่ที่ | `entity:LoanApplication / LoanAccount (ยังไม่มีขอบเขต aggregate)` |
 

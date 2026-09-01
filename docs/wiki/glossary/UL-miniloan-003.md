@@ -9,7 +9,7 @@ status: draft
 term_th: ผลการประเมินสินเชื่อ
 term_en: CreditAssessment
 not_to_confuse_with: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:2109f8c3c377cdd215aa428312a3c6f54d79a78ea2b0c8b642f1a9e962acff41
 ---
 

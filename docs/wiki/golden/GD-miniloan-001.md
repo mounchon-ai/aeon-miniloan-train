@@ -9,8 +9,8 @@ status: validated
 proves: [CALC-miniloan-001@v1, BR-miniloan-016@v1]
 verified_by: mounc
 verified_at: 2026-08-15T14:52+07:00
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:81809ccb316983ca92c3a20280f1fa970b67067b4f2822380a4775bf7e248fe3
+timestamp: 2026-09-01T17:30:00+07:00
+spec_hash: sha256:f09aaf8b98c29795e22a83273c4bbe839d15d51babe9ffec5f4b57c04b5b278d
 ---
 
 # GD-miniloan-001

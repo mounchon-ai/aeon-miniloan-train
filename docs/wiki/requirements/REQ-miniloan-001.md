@@ -9,8 +9,8 @@ status: draft
 actor: Applicant / System
 rules: [BR-miniloan-001, BR-miniloan-002, BR-miniloan-003, BR-miniloan-004, BR-miniloan-005, BR-miniloan-006, BR-miniloan-007, BR-miniloan-008, BR-miniloan-009]
 domain_concepts: [UL-miniloan-001, UL-miniloan-002, UL-miniloan-003, UL-miniloan-009, UL-miniloan-010, UL-miniloan-011, UL-miniloan-012, UL-miniloan-014, UL-miniloan-023, UL-miniloan-024]
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:486ad9b8616ea3a3dd9127b1893a9f58be338d167556b89a1c6b650004c5cbdd
+timestamp: 2026-09-01T17:30:00+07:00
+spec_hash: sha256:c13eea720574cfe19094f77bf951ca450eb12aaa6360d39874e386aec7478426
 ---
 
 # REQ-miniloan-001

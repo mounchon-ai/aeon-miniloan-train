@@ -9,7 +9,7 @@ status: draft
 kind: alternate
 proves: [BR-miniloan-012@v1]
 has_ui: true
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:b38c07555df6823722c5d0cace32e30b72a1cfa1156732ebd6e0b530ec2b4d32
 ---
 

@@ -9,7 +9,7 @@ status: draft
 term_th: การมอบหมายใบสมัคร
 term_en: ApplicationAssignment
 not_to_confuse_with: []
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:217484be6ad25e67abfc98a4fb09e9f97db87ea030df0e246cbe797ae0638a33
 ---
 

@@ -8,7 +8,7 @@ id: DQ-miniloan-010
 state: open
 raised_by: BR-miniloan-043@v1
 answer_phase: screen
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:28d3613540f64305896b99b0acc1428fc217e121fb285ca2ab12c2e8ad638949
 ---
 
@@ -22,6 +22,6 @@ spec_hash: sha256:28d3613540f64305896b99b0acc1428fc217e121fb285ca2ab12c2e8ad6389
 | สถานะ | 🛑 **open** — ยังไม่มีคำตอบ |
 | ตั้งขึ้นจาก | [BR-miniloan-043@v1](../rules/BR-miniloan-043@v1.md) |
 | หมวด | idempotency |
-| ตอบตอนไหน | `/screen:ask` |
+| ตอบตอนไหน | screen — `/mock:coverage` (`mock`) |
 | ติดอยู่ที่ | `screen:หน้าจอที่มีปุ่มบันทึก (ยังไม่มีผังหน้าจอ)` |
 

@@ -12,9 +12,9 @@ is_current: true
 test_design: [decision_table, state_transition]
 proven_by: [EX-miniloan-143, EX-miniloan-144]
 golden: []
-provenance: [SRC-006]
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:e49ca25042ed7ac7d8440c10d496dfd3cdf283dfe49a8ea4aacb8cc3ab5b8e41
+provenance: [SRC-006, SRC-020]
+timestamp: 2026-09-01T17:30:00+07:00
+spec_hash: sha256:ac01ea1ee2ac10bfaff9586756d4ecac36df1e8e5efd49402abb9fba8713c66d
 ---
 
 # BR-miniloan-043@v1
@@ -26,6 +26,9 @@ spec_hash: sha256:e49ca25042ed7ac7d8440c10d496dfd3cdf283dfe49a8ea4aacb8cc3ab5b8e
 
 > "กันการยิงซ้ำด้วยข้อจำกัดไม่ซ้ำ (unique constraint) ที่ฐานข้อมูล · ยิงซ้ำต้องถูกปฏิเสธพร้อม error ไม่ใช่คืนผลของครั้งแรกเงียบๆ และไม่ใช่ปล่อยให้เกิดรายการซ้ำแล้วให้ผู้ใช้ไปลบเอง"
 > — [SRC-006](../sources/SRC-006.md) หน้า — §[2] QB-idem-01
+
+> "ยืนยันว่าการบันทึกการชำระของ REQ-miniloan-004 เดินตาม BR-miniloan-043@v1 ทุกตัวอักษร ไม่มีข้อยกเว้น — กันด้วย unique constraint แล้วแจ้ง error ไม่ร่างกฎแยก"
+> — [SRC-020](../sources/SRC-020.md) หน้า — §[3]
 
 ## พิสูจน์โดย
 

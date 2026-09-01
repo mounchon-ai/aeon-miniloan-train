@@ -8,7 +8,7 @@ id: DQ-miniloan-009
 state: open
 raised_by: BR-miniloan-043@v1
 answer_phase: domain
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:d5df352641dab1c88e57634682a6ca6da714eb7c00118e2df6fd1a8782a9a3b6
 ---
 
@@ -22,6 +22,6 @@ key ที่ใช้กันการยิงซ้ำของแต่ล�
 | สถานะ | 🛑 **open** — ยังไม่มีคำตอบ |
 | ตั้งขึ้นจาก | [BR-miniloan-043@v1](../rules/BR-miniloan-043@v1.md) |
 | หมวด | idempotency |
-| ตอบตอนไหน | `/domain:ask` |
+| ตอบตอนไหน | domain — `/design:datamodel` (`design`) |
 | ติดอยู่ที่ | `entity:LoanApplication / Payment (ยังไม่มีฟิลด์ให้ตั้ง unique constraint)` |
 

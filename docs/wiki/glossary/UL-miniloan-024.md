@@ -9,7 +9,7 @@ status: draft
 term_th: ผู้สมัคร
 term_en: Applicant
 not_to_confuse_with: [UL-miniloan-002]
-timestamp: 2026-08-15T15:18:00+07:00
+timestamp: 2026-09-01T17:30:00+07:00
 spec_hash: sha256:7662e1308c8dc0866d55b6cbaab20162c41c34b1bf2dbd898b1099b09ef3092e
 ---
 

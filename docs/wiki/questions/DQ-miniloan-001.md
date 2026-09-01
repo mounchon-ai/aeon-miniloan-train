@@ -8,8 +8,8 @@ id: DQ-miniloan-001
 state: open
 raised_by: BR-miniloan-016@v1
 answer_phase: domain
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:25cf49b75ff0619a0ab34c471810d42cf02d7fc801abdb0f02fb75afab5659d6
+timestamp: 2026-09-01T17:30:00+07:00
+spec_hash: sha256:3ec10efada5f02e8d49dd503d035327003003787e1f31ac5837756eb81ca5b17
 ---
 
 # DQ-miniloan-001
@@ -22,6 +22,6 @@ spec_hash: sha256:25cf49b75ff0619a0ab34c471810d42cf02d7fc801abdb0f02fb75afab5659
 | สถานะ | 🛑 **open** — ยังไม่มีคำตอบ |
 | ตั้งขึ้นจาก | [BR-miniloan-016@v1](../rules/BR-miniloan-016@v1.md) |
 | หมวด | calculation |
-| ตอบตอนไหน | `/domain:ask` |
+| ตอบตอนไหน | domain — `/design:datamodel` (`design`) |
 | ติดอยู่ที่ | `entity:Money` |
 

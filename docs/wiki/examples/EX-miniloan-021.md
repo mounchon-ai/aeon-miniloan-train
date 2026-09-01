@@ -9,8 +9,8 @@ status: draft
 kind: boundary
 proves: [BR-miniloan-003@v1]
 has_ui: true
-timestamp: 2026-08-15T15:18:00+07:00
-spec_hash: sha256:c3080e622360caef9c24019662e87232f32ad69577165a30eeac1c199dbe4662
+timestamp: 2026-09-01T17:30:00+07:00
+spec_hash: sha256:651af010f18eaf0ad885f965900c50c2c6736c6eee1acacd1313953f838570ff
 ---
 
 # EX-miniloan-021
