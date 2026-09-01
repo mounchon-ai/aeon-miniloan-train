@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/sitemap.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "nodes": [
+    {
+      "screen": "UI-miniloan-002",
+      "parent": null,
+      "order": 1,
+      "label": "ใบสมัครและบัญชีของฉัน",
+      "entry": true
+    },
+    {
+      "screen": "UI-miniloan-001",
+      "parent": "UI-miniloan-002",
+      "order": 1,
+      "label": "ยื่นใบสมัครใหม่",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-003",
+      "parent": "UI-miniloan-002",
+      "order": 2,
+      "label": "รายละเอียดใบสมัคร",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-004",
+      "parent": "UI-miniloan-003",
+      "order": 1,
+      "label": "ตารางผ่อน",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "parent": "UI-miniloan-003",
+      "order": 2,
+      "label": "ยอดปิดบัญชีก่อนกำหนด",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-006",
+      "parent": null,
+      "order": 2,
+      "label": "งานของฉัน",
+      "entry": true
+    },
+    {
+      "screen": "UI-miniloan-007",
+      "parent": "UI-miniloan-006",
+      "order": 1,
+      "label": "รายละเอียดใบสมัคร",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "parent": null,
+      "order": 3,
+      "label": "แดชบอร์ด",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-010",
+      "parent": null,
+      "order": 4,
+      "label": "บัญชีที่ปิดแล้ว",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-011",
+      "parent": "UI-miniloan-010",
+      "order": 1,
+      "label": "รายละเอียดบัญชี",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-012",
+      "parent": null,
+      "order": 5,
+      "label": "คำขอปรับปรุงที่รออนุมัติ",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-013",
+      "parent": "UI-miniloan-012",
+      "order": 1,
+      "label": "รายละเอียดคำขอ",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-009",
+      "parent": null,
+      "order": 6,
+      "label": "ตั้งค่าผู้อนุมัติ",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-014",
+      "parent": null,
+      "order": 7,
+      "label": "มอบหมายงาน",
+      "entry": true
+    },
+    {
+      "screen": "UI-miniloan-015",
+      "parent": null,
+      "order": 8,
+      "label": "บัญชีที่ฉันดูแล",
+      "entry": true
+    },
+    {
+      "screen": "UI-miniloan-016",
+      "parent": "UI-miniloan-015",
+      "order": 1,
+      "label": "บันทึกการชำระ",
+      "entry": false
+    },
+    {
+      "screen": "UI-miniloan-017",
+      "parent": "UI-miniloan-015",
+      "order": 2,
+      "label": "ปิดบัญชีก่อนกำหนด",
+      "entry": false
+    }
+  ]
+}

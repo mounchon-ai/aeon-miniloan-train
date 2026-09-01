@@ -99,7 +99,7 @@
     {
       "id": "sitemap",
       "command": "/design:sitemap",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "function",
         "rbac"
@@ -108,7 +108,8 @@
         "sitemap.json",
         "modules/<module>/screens.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-01T14:08:07Z"
     },
     {
       "id": "interface",

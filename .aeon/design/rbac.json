@@ -405,6 +405,204 @@
           "Pending"
         ]
       }
+    },
+    {
+      "id": "ACL-027",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-001",
+      "action": "เปิดหน้าแบบฟอร์มใบสมัครสินเชื่อ",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-028",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-002",
+      "action": "เปิดหน้ารายการใบสมัครของฉัน",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-029",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-003",
+      "action": "เปิดหน้ารายละเอียดใบสมัคร",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-030",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-004",
+      "action": "เปิดหน้าตารางผ่อน",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-031",
+      "role": "ROLE-001",
+      "resource": "UI-miniloan-005",
+      "action": "เปิดหน้ายอดปิดบัญชีก่อนกำหนด (ขอยอด)",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-032",
+      "role": "ROLE-004",
+      "resource": "UI-miniloan-005",
+      "action": "เปิดหน้ายอดปิดบัญชีก่อนกำหนด (ก่อนบันทึกการปิดบัญชีจริง)",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-033",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-006",
+      "action": "เปิดหน้างานของฉัน",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-034",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-007",
+      "action": "เปิดหน้ารายละเอียดใบสมัคร (เจ้าหน้าที่สินเชื่อ)",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-035",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-008",
+      "action": "เปิดหน้าแดชบอร์ด",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-036",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-009",
+      "action": "เปิดหน้าตั้งค่า role ผู้อนุมัติ",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-037",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-010",
+      "action": "เปิดหน้ารายการบัญชีที่ปิดแล้ว",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-038",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-011",
+      "action": "เปิดหน้ารายละเอียดบัญชีที่ปิดแล้ว",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-039",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-012",
+      "action": "เปิดหน้าคำขอปรับปรุงที่รออนุมัติ",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-040",
+      "role": "ROLE-002",
+      "resource": "UI-miniloan-013",
+      "action": "เปิดหน้ารายละเอียดคำขอปรับปรุง",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-041",
+      "role": "ROLE-003",
+      "resource": "UI-miniloan-014",
+      "action": "เปิดหน้ามอบหมายงาน",
+      "scope": "all",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-042",
+      "role": "ROLE-004",
+      "resource": "UI-miniloan-015",
+      "action": "เปิดหน้าบัญชีที่ฉันดูแล",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-043",
+      "role": "ROLE-004",
+      "resource": "UI-miniloan-016",
+      "action": "เปิดหน้าบันทึกการชำระ",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
+    },
+    {
+      "id": "ACL-044",
+      "role": "ROLE-004",
+      "resource": "UI-miniloan-017",
+      "action": "เปิดหน้าบันทึกการปิดบัญชีก่อนกำหนด",
+      "scope": "own",
+      "enforceAt": [
+        "ui",
+        "domain"
+      ]
     }
   ],
   "fieldRules": [
