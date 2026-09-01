@@ -1,0 +1,269 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/context.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "scope": {
+    "inScope": [
+      {
+        "key": "application-intake-assessment",
+        "text": "รับใบสมัครสินเชื่อส่วนบุคคลตั้งแต่ร่างจนยื่น และประเมินอัตโนมัติด้วย rule engine ภายในเพื่อจัด Credit Band (A/B/C) พร้อมเหตุผลและวงเงินที่อนุมัติได้",
+        "sources": [
+          "REQ-miniloan-001"
+        ]
+      },
+      {
+        "key": "approval-disbursement",
+        "text": "การมอบหมายใบสมัครให้ Loan Officer โดยหัวหน้าเจ้าหน้าที่สินเชื่อ การพิจารณาอนุมัติ/ปฏิเสธ/ยกเลิกใบสมัครแบบหนึ่งระดับ และการสั่งเบิกจ่ายเพื่อเปิดบัญชีสินเชื่อ",
+        "sources": [
+          "REQ-miniloan-002"
+        ]
+      },
+      {
+        "key": "loan-account-schedule",
+        "text": "การสร้างบัญชีสินเชื่อและตารางผ่อนแบบลดต้นลดดอก (EMI) โดยใช้เวอร์ชันอัตราดอกเบี้ยที่มีผล ณ วันเบิกจ่าย และให้เจ้าของบัญชีเปิดดูตารางผ่อนของตัวเองได้",
+        "sources": [
+          "REQ-miniloan-003"
+        ]
+      },
+      {
+        "key": "payment-closure",
+        "text": "การบันทึกการชำระรายงวด การโปะเงินต้น การคิดยอดและปิดบัญชีก่อนกำหนด การปิดบัญชีเมื่อชำระครบทุกงวด และการปรับปรุงบัญชีที่ปิดแล้วผ่านกระบวนการอนุมัติแบบ four-eyes",
+        "sources": [
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "status-dashboard",
+        "text": "แดชบอร์ดของ Loan Officer แสดงจำนวนใบสมัครและบัญชีสินเชื่อแยกตามสถานะ",
+        "sources": [
+          "REQ-miniloan-005"
+        ]
+      },
+      {
+        "key": "web-api-architecture",
+        "text": "สถาปัตยกรรมแยก Web (client) กับ API โดยกฎธุรกิจทั้งหมดถูกบังคับที่ฝั่ง API เท่านั้น มีสัญญา API ที่ทดสอบได้ (OpenAPI) และใช้ token จำลองแทนระบบ auth จริง",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      }
+    ],
+    "outOfScope": [
+      {
+        "key": "real-authentication",
+        "text": "ระบบยืนยันตัวตน/สิทธิ์การเข้าใช้งานจริง (SSO, Identity Provider) — ใช้ token จำลองแทนตามที่ req ระบุไว้ อยู่นอกขอบเขตของรอบนี้",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      },
+      {
+        "key": "real-payment-gateway",
+        "text": "การเชื่อมต่อ payment gateway จริงเพื่อรับชำระเงิน — รอบนี้บันทึกรายการชำระด้วยมือโดย Operations เท่านั้น",
+        "sources": [
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "multi-currency",
+        "text": "การรองรับหลายสกุลเงิน — รอบนี้ใช้สกุลเงินบาท (THB) เพียงสกุลเดียว",
+        "sources": [
+          "REQ-miniloan-003",
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "real-sensitive-data",
+        "text": "การเก็บข้อมูลอ่อนไหวจริงของผู้สมัคร (เช่น เลขบัตรประชาชน ข้อมูลธนาคารจริง) — รอบนี้ไม่เก็บข้อมูลอ่อนไหวจริงตามที่ req ระบุไว้",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      },
+      {
+        "key": "applicant-notifications",
+        "text": "การแจ้งเตือนผู้สมัครผ่าน SMS/Email เมื่อสถานะใบสมัครเปลี่ยน — req ไม่ได้พูดถึงความสามารถนี้เลย เป็นการตัดสินใจของขั้นตอน /design:overview ที่ยืนยันกับเจ้าของโปรเจกต์ ไม่ใช่ข้อความที่มาจาก req โดยตรง"
+      }
+    ]
+  },
+  "assumptions": [
+    {
+      "key": "thai-only-ui",
+      "text": "หน้าจอผู้ใช้ (Web) ใช้ภาษาไทยเพียงภาษาเดียว ไม่ต้องรองรับหลายภาษา — ยืนยันกับเจ้าของโปรเจกต์แล้วในขั้นตอน /design:overview เอกสารต้นทางและ glossary ทั้งหมดเป็นภาษาไทยอยู่แล้ว"
+    },
+    {
+      "key": "training-project-scope",
+      "text": "โปรเจกต์นี้เป็นงานเพื่อการเรียน/ฝึกฝนในคอร์ส ไม่ใช่ระบบที่จะขึ้นใช้งานจริงกับผู้ใช้จริง — ระดับความเข้มงวดของ security และ scalability ที่ออกแบบจึงอิงตามที่ req ระบุไว้ใน NFR เท่านั้น ไม่ต้องเผื่อสำหรับ production",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "no-external-constraint",
+      "text": "ไม่มี deadline งบประมาณ หรือเทคโนโลยีที่ถูกบังคับมาจากภายนอกคอร์ส — ทีมออกแบบเลือกเทคโนโลยีได้เองภายใต้ NFR-miniloan-006 (ความเป็นอิสระจากภาษา/เฟรมเวิร์ก) ผลการเลือกบันทึกไว้ใน decisions[]",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    }
+  ],
+  "constraints": [],
+  "actors": [
+    {
+      "key": "applicant",
+      "text": "ผู้สมัครสินเชื่อ — กรอกและยื่นใบสมัคร ดูสถานะใบสมัครและบัญชีสินเชื่อที่ตัวเองเป็นเจ้าของเท่านั้น ดูตารางผ่อน และขอยอดปิดบัญชีก่อนกำหนดได้ แต่บันทึกการชำระเองและปิดบัญชีเองไม่ได้",
+      "stakeholder": null
+    },
+    {
+      "key": "loan-officer",
+      "text": "เจ้าหน้าที่สินเชื่อ — พิจารณาอนุมัติ/ปฏิเสธ/ยกเลิกใบสมัครที่ตัวเองถูกมอบหมายเท่านั้น สั่งเบิกจ่าย ดูแดชบอร์ด และเป็นผู้เดียวที่ตั้งค่า/เปลี่ยน role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+      "stakeholder": null
+    },
+    {
+      "key": "supervisor",
+      "text": "หัวหน้าเจ้าหน้าที่สินเชื่อ — สั่งมอบหมายใบสมัครให้ Loan Officer รายคน ระบบไม่กระจายงานเอง และเจ้าหน้าที่หยิบงานเองไม่ได้ (รายละเอียดเพิ่มเติม เช่น ขอบเขตข้อมูลที่หัวหน้าเห็น ยังไม่ตัดสิน — ดู DQ-miniloan-002)",
+      "stakeholder": null
+    },
+    {
+      "key": "operations",
+      "text": "ฝ่ายปฏิบัติการ — บันทึกการชำระเงินและปิดบัญชีของบัญชีสินเชื่อเฉพาะบัญชีที่ตัวเองถูก assign ดูแลเท่านั้น",
+      "stakeholder": null
+    },
+    {
+      "key": "system",
+      "text": "ระบบเอง — ประเมินใบสมัครอัตโนมัติเมื่อยื่น สร้างตารางผ่อนเมื่อเบิกจ่ายสำเร็จ และคำนวณยอดปิดบัญชีก่อนกำหนด",
+      "stakeholder": null
+    },
+    {
+      "key": "web-client",
+      "text": "Web — ส่วนหน้าที่ผู้ใช้ทุกบทบาทเข้าใช้งาน ไม่ตัดสินใจเชิงธุรกิจเอง ต้องเรียก API เสมอเมื่อต้องตัดสินใจ และต้องแสดงสถานะข้อผิดพลาดอย่างเหมาะสมโดยไม่ crash เมื่อ API ปิดให้บริการ",
+      "stakeholder": null
+    },
+    {
+      "key": "api",
+      "text": "API — บังคับกฎธุรกิจทั้งหมดของระบบ ให้บริการแบบ stateless มีสัญญา OpenAPI ที่ทดสอบได้ และเป็นด่านสุดท้ายเสมอในการตรวจสอบ input",
+      "stakeholder": null
+    }
+  ],
+  "externalSystems": [],
+  "glossaryTerms": [
+    "UL-miniloan-001",
+    "UL-miniloan-004",
+    "UL-miniloan-005",
+    "UL-miniloan-009",
+    "UL-miniloan-010",
+    "UL-miniloan-013",
+    "UL-miniloan-014",
+    "UL-miniloan-015",
+    "UL-miniloan-016",
+    "UL-miniloan-018",
+    "UL-miniloan-019",
+    "UL-miniloan-024",
+    "UL-miniloan-025"
+  ],
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "topic": "framework",
+      "question": "Frontend (Web client) ใช้เฟรมเวิร์กอะไร — Web ต้องเป็น thin client ที่ไม่ตัดสินใจเชิงธุรกิจเองตาม BR-miniloan-027@v1 และต้องแสดงสถานะข้อผิดพลาดอย่างเหมาะสมเมื่อ API ล่มตาม BR-miniloan-028@v1",
+      "options": [
+        {
+          "option": "Next.js (React)",
+          "star": true,
+          "evidence": "รองรับทั้ง SSR และ client-side rendering ระบบนิเวศไลบรารีฟอร์ม/validation UI พร้อม ทำให้แยกชั้นการตัดสินใจเชิงธุรกิจออกจาก UI ได้ชัดตาม BR-miniloan-027@v1"
+        },
+        {
+          "option": "Vue.js (Nuxt)",
+          "star": false
+        }
+      ],
+      "chosen": "Next.js (React)",
+      "rationale": "เจ้าของโปรเจกต์เลือก Next.js ตามความถนัดของทีมและระบบนิเวศที่พร้อมสำหรับการแยกชั้น UI ออกจาก business logic",
+      "decidedBy": "mounchons",
+      "decidedAt": "2026-09-01",
+      "traces": [
+        "NFR-miniloan-004"
+      ],
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "id": "DEC-002",
+      "topic": "framework",
+      "question": "Backend API ใช้ framework/runtime อะไร — ต้องรองรับ NFR-miniloan-001 (ห้าม floating point กับเงิน), NFR-miniloan-004 (domain-centric/layered) และ NFR-miniloan-005 (stateless REST + OpenAPI)",
+      "options": [
+        {
+          "option": ".NET / C# (ASP.NET Core Web API)",
+          "star": true,
+          "evidence": "มี decimal type ในตัวภาษาโดยตรง สนอง NFR-miniloan-001 โดยไม่ต้องพึ่ง library ช่วย และ Swashbuckle ออก OpenAPI ให้อัตโนมัติ สนอง NFR-miniloan-005"
+        },
+        {
+          "option": "Java / Spring Boot",
+          "star": false
+        },
+        {
+          "option": "Node.js / TypeScript (NestJS)",
+          "star": false
+        }
+      ],
+      "chosen": ".NET / C# (ASP.NET Core Web API)",
+      "rationale": "เจ้าของโปรเจกต์เลือก .NET/ASP.NET Core เพราะมี decimal type ในตัวที่ตรงกับข้อกำหนดห้ามใช้ floating point กับเงินตาม NFR-miniloan-001 และมี tooling รองรับ OpenAPI/layered architecture ครบ",
+      "decidedBy": "mounchons",
+      "decidedAt": "2026-09-01",
+      "traces": [
+        "NFR-miniloan-001",
+        "NFR-miniloan-004",
+        "NFR-miniloan-005"
+      ],
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "id": "DEC-003",
+      "topic": "database",
+      "question": "ฐานข้อมูลเลือกอะไร — ต้องเก็บจำนวนเงินแบบ exact decimal ตาม NFR-miniloan-001 และรองรับ unique constraint กันคำสั่งซ้ำตาม BR-miniloan-043@v1",
+      "options": [
+        {
+          "option": "PostgreSQL",
+          "star": true,
+          "evidence": "มีชนิดข้อมูล NUMERIC(p,s) แบบ exact decimal โดยตรง รองรับ unique constraint และ transaction ครบตามที่ BR-miniloan-043@v1 ต้องการ และเป็น open-source เหมาะกับงานฝึกในคอร์ส"
+        },
+        {
+          "option": "SQL Server",
+          "star": false
+        }
+      ],
+      "chosen": "PostgreSQL",
+      "rationale": "เจ้าของโปรเจกต์เลือก PostgreSQL เพราะมีชนิดข้อมูล NUMERIC แบบ exact decimal ตรงตาม NFR-miniloan-001 และไม่มีค่าใช้จ่ายด้าน license เหมาะกับงานฝึกในคอร์ส",
+      "decidedBy": "mounchons",
+      "decidedAt": "2026-09-01",
+      "traces": [
+        "NFR-miniloan-001"
+      ],
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "id": "DEC-004",
+      "topic": "hosting",
+      "question": "การ deploy/hosting ของโปรเจกต์นี้เป็นแบบใด — โปรเจกต์นี้เป็นงานฝึกในคอร์สเรียน ไม่ใช่ระบบที่ขึ้น production จริง",
+      "options": [
+        {
+          "option": "Local / Docker Compose",
+          "star": true,
+          "evidence": "เพียงพอสำหรับรัน Web + API + PostgreSQL บนเครื่องเดียวเพื่อการเรียน ไม่ต้องมีค่าใช้จ่าย cloud และสอดคล้องกับสมมติฐานว่าโปรเจกต์นี้เป็นงานฝึกในคอร์ส ไม่ใช่ production จริง"
+        },
+        {
+          "option": "Cloud (Azure/AWS)",
+          "star": false
+        }
+      ],
+      "chosen": "Local / Docker Compose",
+      "rationale": "โปรเจกต์นี้เป็นงานฝึกในคอร์สเรียน ไม่ต้องรองรับผู้ใช้จริงหรือ scale จริง จึงเพียงพอที่จะรันบน Docker Compose ในเครื่อง",
+      "decidedBy": "mounchons",
+      "decidedAt": "2026-09-01",
+      "approvedBy": null,
+      "approvedAt": null
+    }
+  ],
+  "extensions": {}
+}
