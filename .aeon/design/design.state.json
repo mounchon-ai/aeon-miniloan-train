@@ -128,7 +128,7 @@
     {
       "id": "export",
       "command": "/design:export",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "overview",
         "function",
@@ -142,7 +142,8 @@
       "artifacts": [
         "../export/design-document.md"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-01T14:17:32Z"
     }
   ],
   "openQuestions": []
