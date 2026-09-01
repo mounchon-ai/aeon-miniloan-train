@@ -3,9 +3,9 @@
   "producedBy": "design · scripts/screens.mjs",
   "project": "miniloan",
   "module": "miniloan",
-  "status": "draft",
-  "approvedAt": null,
-  "approvedBy": null,
+  "status": "approved",
+  "approvedAt": "2026-09-01T14:28:00Z",
+  "approvedBy": "mounchons",
   "screens": [
     {
       "id": "UI-miniloan-001",

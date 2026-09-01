@@ -28,17 +28,17 @@
 | ไฟล์ | คำสั่งที่เขียน | สถานะขั้น | สถานะเอกสาร | ผู้อนุมัติ | เมื่อ | หมายเหตุ |
 |---|---|---|---|---|---|---|
 | design.state.json | /design:init | done | — | — | — | — |
-| context.json | /design:overview | done | draft | — | — | — |
-| modules/miniloan/functions.json | /design:function | done | draft | — | — | — |
+| context.json | /design:overview | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| modules/miniloan/functions.json | /design:function | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
 | trace.design.json | /design:function | done | — | — | — | — |
-| datamodel.json | /design:datamodel | done | draft | — | — | — |
-| modules/miniloan/statemachines.json | /design:datamodel | done | draft | — | — | — |
-| modules/miniloan/scenarios.json | /design:scenario | done | draft | — | — | — |
-| rbac.json | /design:rbac | done | draft | — | — | — |
-| nfr.json | /design:nfr | done | draft | — | — | — |
-| sitemap.json | /design:sitemap | done | draft | — | — | — |
-| modules/miniloan/screens.json | /design:sitemap | done | draft | — | — | — |
-| interfaces.json | /design:interface | done | draft | — | — | — |
+| datamodel.json | /design:datamodel | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| modules/miniloan/statemachines.json | /design:datamodel | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| modules/miniloan/scenarios.json | /design:scenario | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| rbac.json | /design:rbac | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| nfr.json | /design:nfr | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| sitemap.json | /design:sitemap | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| modules/miniloan/screens.json | /design:sitemap | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
+| interfaces.json | /design:interface | done | approved | mounchons | 2026-09-01T14:28:00Z | — |
 
 > ℹ️ **ข้อจำกัดของข้อมูลชุดนี้** — "สถานะขั้น" มาจากไฟล์สถานะ ส่วน "สถานะเอกสาร" มาจากตัวไฟล์เอง — ขั้นที่ค้างจะเห็นได้ที่คอลัมน์แรกเท่านั้น เพราะเครื่องหมายค้างถูกเก็บที่ขั้น ไม่ใช่ในเนื้อหาที่อนุมัติไปแล้ว
 
