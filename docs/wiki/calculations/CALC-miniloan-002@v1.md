@@ -12,7 +12,7 @@ effective_from: 2026-09-01
 numeric_type: decimal
 rounding_mode: HALF_UP
 golden: [GD-miniloan-003]
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:6d1b82de234299b4a025ef30d72760a9c91c38c7a8569867a93d9b4f21040e1a
 ---
 

@@ -15,7 +15,7 @@ proven_by: [EX-miniloan-087, EX-miniloan-088, EX-miniloan-089]
 golden: []
 supersedes: BR-miniloan-046@v1
 provenance: [SRC-008, SRC-012, SRC-013]
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:35fe80fda0f55f4dafba573a393963bad4c867ce70f93b09e279a76cfe832aeb
 ---
 

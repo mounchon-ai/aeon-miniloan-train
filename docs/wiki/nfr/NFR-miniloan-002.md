@@ -8,7 +8,7 @@ id: NFR-miniloan-002
 kind: compliance
 belongs_to: REQ-miniloan-006
 verified_by: audit_log_review
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:ef9a52adad570d114ac0016c83cf27b48f74710092a133a774732414bfd661f1
 ---
 

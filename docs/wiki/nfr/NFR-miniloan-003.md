@@ -8,7 +8,7 @@ id: NFR-miniloan-003
 kind: security
 belongs_to: REQ-miniloan-006
 verified_by: api_contract_test
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:b1f529bcd8f06ba01f5c01042484cc6c0723640986c20a70cb34d3b687f21250
 ---
 

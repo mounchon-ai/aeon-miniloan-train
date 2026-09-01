@@ -9,7 +9,7 @@ status: draft
 term_th: รายการชำระเงิน
 term_en: Payment
 not_to_confuse_with: []
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:1070977083d0b67ad0b1cfec169c3ce58f275dc2a04f66a87188b21c11aa56bc
 ---
 

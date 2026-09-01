@@ -1,15 +1,15 @@
 ---
 type: Deferred Question
 title: หัวหน้าของ Loan Officer เห็นใบสมัครที่มอบหมายให้ลูกน้องไหม — และมีลำดับชั้นของเจ
-description: หัวหน้าของ Loan Officer เห็นใบสมัครที่มอบหมายให้ลูกน้องไหม — และมีลำดับชั้นของเจ้าหน้าที่ในระบบนี้หรือเปล่า
+description: หัวหน้าเจ้าหน้าที่สินเชื่อเห็นเฉพาะใบสมัครที่ตัวเองมอบหมายไปเท่านั้น รอบนี้มีหัวหน้าระดับเดียว ไม่มีลำดับชั้นซับซ้อน (ยืนยันกับเจ้าของโปรเจกต์แล้ว) — Staff ไม่มีฟิลด์ผู้บังคับบัญชา
 resource: ../rules/BR-miniloan-033@v1.md
 tags: [miniloan, question, data_scope]
 id: DQ-miniloan-002
-state: open
+state: answered
 raised_by: BR-miniloan-033@v1
 answer_phase: domain
-timestamp: 2026-09-01T17:30:00+07:00
-spec_hash: sha256:dc00905e67800d09c159c85876470ec84cb7ac1efa355afb47a287513b582acc
+timestamp: 2026-09-01T18:00:00+07:00
+spec_hash: sha256:80bd4ac881bd1e771b22408aac9bbf378d8e8760e9a164a802336c863cefad86
 ---
 
 # DQ-miniloan-002
@@ -19,9 +19,17 @@ spec_hash: sha256:dc00905e67800d09c159c85876470ec84cb7ac1efa355afb47a287513b582a
 
 | เรื่อง | ค่า |
 |---|---|
-| สถานะ | 🛑 **open** — ยังไม่มีคำตอบ |
+| สถานะ | ✅ answered |
 | ตั้งขึ้นจาก | [BR-miniloan-033@v1](../rules/BR-miniloan-033@v1.md) |
 | หมวด | data_scope |
 | ตอบตอนไหน | domain — `/design:datamodel` (`design`) |
 | ติดอยู่ที่ | `entity:LoanOfficer (ยังไม่มี entity หรือลำดับชั้นของ role)` |
 
+## คำตอบ
+หัวหน้าเจ้าหน้าที่สินเชื่อเห็นเฉพาะใบสมัครที่ตัวเองมอบหมายไปเท่านั้น รอบนี้มีหัวหน้าระดับเดียว ไม่มีลำดับชั้นซับซ้อน (ยืนยันกับเจ้าของโปรเจกต์แล้ว) — Staff ไม่มีฟิลด์ผู้บังคับบัญชา
+
+ตอบเมื่อ 2026-09-01T18:00:00+07:00
+
+## ผลที่ตามมา
+
+- `ENT-006`

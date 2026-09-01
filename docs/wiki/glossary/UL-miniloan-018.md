@@ -9,7 +9,7 @@ status: draft
 term_th: การโปะเงินต้น
 term_en: PartialPrepayment
 not_to_confuse_with: [UL-miniloan-008]
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:027828af7486e6347bba57ceb296a1bfc1b98951cd61830c53c1e1b792717615
 ---
 

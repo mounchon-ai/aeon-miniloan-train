@@ -9,7 +9,7 @@ status: draft
 term_th: การปรับปรุงบัญชีหลังปิด
 term_en: ClosedAccountAdjustment
 not_to_confuse_with: [UL-miniloan-008]
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:1074d678998fafc616fdce5efa0923474a9a14c75beb5e5ca5c82b81b37e11a3
 ---
 

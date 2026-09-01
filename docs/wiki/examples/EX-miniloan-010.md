@@ -9,7 +9,7 @@ status: draft
 kind: exception
 proves: [BR-miniloan-044@v1]
 has_ui: true
-timestamp: 2026-09-01T17:30:00+07:00
+timestamp: 2026-09-01T18:00:00+07:00
 spec_hash: sha256:65bc07828b12c9f906c7148caef36156926268018aba50174eb09a05be96c2ee
 ---
 

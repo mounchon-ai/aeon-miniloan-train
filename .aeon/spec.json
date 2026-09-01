@@ -5,7 +5,7 @@
     "scale": "FULL",
     "status": "validated",
     "created_at": "2026-08-14T11:21+07:00",
-    "updated_at": "2026-09-01T17:30+07:00",
+    "updated_at": "2026-09-01T18:00:00+07:00",
     "approved_by": "mounchons",
     "approved_at": "2026-09-01T08:29:00.036Z"
   },
@@ -6915,9 +6915,12 @@
       "category": "calculation",
       "blocked_until": "entity:Money",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "เก็บเป็น decimal(18,2) ปัดเศษด้วย round half up ทันทีที่คำนวณทุกจุดตาม BR-miniloan-035@v1 — 2 ตำแหน่งทศนิยม (สตางค์) เพราะสกุลเงินบาทมีหน่วยย่อยสุดคือสตางค์ และ CHG-miniloan-005 ยืนยันแล้วว่าไม่มีบัญชีภายในที่ละเอียดกว่าคอลัมน์ที่แสดง",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-007"
+      ]
     },
     {
       "id": "DQ-miniloan-002",
@@ -6926,9 +6929,12 @@
       "category": "data_scope",
       "blocked_until": "entity:LoanOfficer (ยังไม่มี entity หรือลำดับชั้นของ role)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "หัวหน้าเจ้าหน้าที่สินเชื่อเห็นเฉพาะใบสมัครที่ตัวเองมอบหมายไปเท่านั้น รอบนี้มีหัวหน้าระดับเดียว ไม่มีลำดับชั้นซับซ้อน (ยืนยันกับเจ้าของโปรเจกต์แล้ว) — Staff ไม่มีฟิลด์ผู้บังคับบัญชา",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-006"
+      ]
     },
     {
       "id": "DQ-miniloan-003",
@@ -6937,9 +6943,12 @@
       "category": "data_scope",
       "blocked_until": "entity:ApplicationAssignment (UL-miniloan-013 ยังไม่ถูกผูกกับ entity)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "เก็บประวัติการมอบหมายทุกครั้งแบบ append-only ไม่ทับของเดิม (ยืนยันกับเจ้าของโปรเจกต์แล้ว) — คนเดิมยังเห็นประวัติได้ แต่ปุ่มดำเนินการเป็นของผู้ถูกมอบหมายล่าสุดเท่านั้น",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-005"
+      ]
     },
     {
       "id": "DQ-miniloan-004",
@@ -6948,9 +6957,13 @@
       "category": "data_scope",
       "blocked_until": "entity:LoanApplication / LoanAccount (ต้องรู้ก่อนว่าฟิลด์เจ้าของและผู้รับมอบหมายอยู่ที่ไหน)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ใช้ขอบเขตเดียวกับการเปิดดูรายใบ — Loan Officer เห็นจำนวนเฉพาะใบสมัคร/บัญชีที่ตัวเองถูกมอบหมายเท่านั้น สอดคล้องกับคำตอบของ DQ-miniloan-002",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-001",
+        "ENT-007"
+      ]
     },
     {
       "id": "DQ-miniloan-005",
@@ -6959,9 +6972,12 @@
       "category": "temporal",
       "blocked_until": "entity:InterestRate (UL-miniloan-014 ยังไม่ถูกผูกกับ entity)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ห้ามแก้ไขเวอร์ชันอัตราดอกเบี้ยที่สร้างแล้วทุกกรณี ต้องสร้างเวอร์ชันใหม่เสมอเมื่อจะเปลี่ยนอัตรา — อนุมานจาก BR-miniloan-037@v1 ที่บังคับว่าบัญชีเก่าต้องเห็นอัตราเดิมเสมอแม้ master จะเปลี่ยนไปแล้ว การแก้ไขค่าในเวอร์ชันที่ถูกอ้างอิงแล้วจะทำให้บัญชีเก่าเห็นค่าที่เปลี่ยน ซึ่งขัดกับกฎนี้โดยตรง",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-011"
+      ]
     },
     {
       "id": "DQ-miniloan-006",
@@ -6970,9 +6986,12 @@
       "category": "temporal",
       "blocked_until": "entity:InterestRate",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ไม่ต้องมี soft-delete/archive แยก — ทุกเวอร์ชันเก็บถาวรและอ้างอิงได้เสมอ (kind: reference ไม่มีฟังก์ชันแก้ไขในรอบนี้) ส่วนจะแสดงเวอร์ชันเก่าในรายการปกติหรือซ่อนไว้เป็นพฤติกรรมหน้าจอ ยกให้ /design:sitemap ตัดสิน",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-011"
+      ]
     },
     {
       "id": "DQ-miniloan-007",
@@ -6992,9 +7011,14 @@
       "category": "integration",
       "blocked_until": "entity:LoanApplication / LoanAccount (ยังไม่มีขอบเขต aggregate)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ขอบเขต transaction ครอบคลุมการเปลี่ยนสถานะใบสมัครเป็น Disbursed พร้อมสร้าง LoanAccount และ RepaymentSchedule ทั้งก้อนในธุรกรรมเดียว (all-or-nothing) เพราะเป็น API call เดียวในระบบ monolithic ตาม REQ-miniloan-006 ไม่มีการแยกเป็น saga ข้ามบริการ ถ้าขั้นใดล้มเหลวต้อง rollback ทั้งหมด",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-001",
+        "ENT-007",
+        "ENT-008"
+      ]
     },
     {
       "id": "DQ-miniloan-009",
@@ -7003,9 +7027,12 @@
       "category": "idempotency",
       "blocked_until": "entity:LoanApplication / Payment (ยังไม่มีฟิลด์ให้ตั้ง unique constraint)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ใช้ requestId ที่ client ส่งมาต่อคำสั่งหนึ่งครั้ง (ไม่ใช่ natural key) เก็บไว้ใน IdempotencyRecord พร้อม unique constraint — เพราะบางคำสั่ง (เช่น อนุมัติ) ไม่มี natural key ที่แยกความพยายามซ้ำจากคำสั่งที่ตั้งใจสั่งซ้ำจริงได้",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-014"
+      ]
     },
     {
       "id": "DQ-miniloan-010",
@@ -7025,9 +7052,12 @@
       "category": "data_scope",
       "blocked_until": "entity:LoanAccount (ยังไม่มีฟิลด์ผู้รับผิดชอบที่สืบทอดจาก Loan Officer)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "บัญชีสินเชื่อสืบทอด Operations ผู้ดูแลจาก Loan Officer ที่ถูกมอบหมายในใบสมัครต้นทางโดยอัตโนมัติตอนเบิกจ่าย (ยืนยันกับเจ้าของโปรเจกต์แล้ว) และไม่อัปเดตตาม Loan Officer คนใหม่ภายหลัง เพราะใบสมัครต้นทางเป็นสถานะสุดท้าย Disbursed แล้วจึงมอบหมายใหม่ไม่ได้",
+      "answered_at": "2026-09-01T18:00:00+07:00",
+      "resulted_in": [
+        "ENT-007"
+      ]
     }
   ],
   "rollup": {
@@ -7035,7 +7065,7 @@
     "rules_with_example": 54,
     "rules_with_green_test": 0,
     "open_questions": 0,
-    "open_deferred": 11,
+    "open_deferred": 2,
     "rule_coverage": 1,
     "ready_for_next_step": true
   },
