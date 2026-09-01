@@ -3113,6 +3113,291 @@
       "from": "UI-miniloan-017",
       "rel": "governedByAcl",
       "to": "ACL-044"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-001"
+    },
+    {
+      "from": "UI-miniloan-001",
+      "rel": "calls",
+      "to": "API-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-002"
+    },
+    {
+      "from": "UI-miniloan-001",
+      "rel": "calls",
+      "to": "API-002"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-003"
+    },
+    {
+      "from": "UI-miniloan-002",
+      "rel": "calls",
+      "to": "API-003"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "exposedAs",
+      "to": "API-004"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "exposedAs",
+      "to": "API-004"
+    },
+    {
+      "from": "UI-miniloan-003",
+      "rel": "calls",
+      "to": "API-004"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-004"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "exposedAs",
+      "to": "API-005"
+    },
+    {
+      "from": "UI-miniloan-004",
+      "rel": "calls",
+      "to": "API-005"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "exposedAs",
+      "to": "API-006"
+    },
+    {
+      "from": "UI-miniloan-005",
+      "rel": "calls",
+      "to": "API-006"
+    },
+    {
+      "from": "UI-miniloan-017",
+      "rel": "calls",
+      "to": "API-006"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-007"
+    },
+    {
+      "from": "UI-miniloan-006",
+      "rel": "calls",
+      "to": "API-007"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-008"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-008"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "exposedAs",
+      "to": "API-009"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-009"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "exposedAs",
+      "to": "API-010"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-010"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "exposedAs",
+      "to": "API-011"
+    },
+    {
+      "from": "UI-miniloan-007",
+      "rel": "calls",
+      "to": "API-011"
+    },
+    {
+      "from": "FUN-miniloan-016",
+      "rel": "exposedAs",
+      "to": "API-012"
+    },
+    {
+      "from": "UI-miniloan-008",
+      "rel": "calls",
+      "to": "API-012"
+    },
+    {
+      "from": "FUN-miniloan-013",
+      "rel": "exposedAs",
+      "to": "API-013"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-013"
+    },
+    {
+      "from": "FUN-miniloan-013",
+      "rel": "exposedAs",
+      "to": "API-014"
+    },
+    {
+      "from": "UI-miniloan-009",
+      "rel": "calls",
+      "to": "API-014"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "exposedAs",
+      "to": "API-015"
+    },
+    {
+      "from": "UI-miniloan-010",
+      "rel": "calls",
+      "to": "API-015"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "exposedAs",
+      "to": "API-016"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "exposedAs",
+      "to": "API-016"
+    },
+    {
+      "from": "UI-miniloan-011",
+      "rel": "calls",
+      "to": "API-016"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "exposedAs",
+      "to": "API-017"
+    },
+    {
+      "from": "UI-miniloan-011",
+      "rel": "calls",
+      "to": "API-017"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "exposedAs",
+      "to": "API-018"
+    },
+    {
+      "from": "UI-miniloan-012",
+      "rel": "calls",
+      "to": "API-018"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "exposedAs",
+      "to": "API-019"
+    },
+    {
+      "from": "UI-miniloan-013",
+      "rel": "calls",
+      "to": "API-019"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "exposedAs",
+      "to": "API-020"
+    },
+    {
+      "from": "UI-miniloan-013",
+      "rel": "calls",
+      "to": "API-020"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "exposedAs",
+      "to": "API-021"
+    },
+    {
+      "from": "UI-miniloan-014",
+      "rel": "calls",
+      "to": "API-021"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "exposedAs",
+      "to": "API-022"
+    },
+    {
+      "from": "UI-miniloan-014",
+      "rel": "calls",
+      "to": "API-022"
+    },
+    {
+      "from": "FUN-miniloan-015",
+      "rel": "exposedAs",
+      "to": "API-023"
+    },
+    {
+      "from": "UI-miniloan-015",
+      "rel": "calls",
+      "to": "API-023"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-024"
+    },
+    {
+      "from": "UI-miniloan-016",
+      "rel": "calls",
+      "to": "API-024"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "exposedAs",
+      "to": "API-025"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "exposedAs",
+      "to": "API-025"
+    },
+    {
+      "from": "UI-miniloan-016",
+      "rel": "calls",
+      "to": "API-025"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "exposedAs",
+      "to": "API-026"
+    },
+    {
+      "from": "UI-miniloan-017",
+      "rel": "calls",
+      "to": "API-026"
     }
   ]
 }
