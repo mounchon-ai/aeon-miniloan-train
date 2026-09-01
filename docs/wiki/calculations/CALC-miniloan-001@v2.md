@@ -13,7 +13,7 @@ numeric_type: decimal
 rounding_mode: HALF_UP
 golden: [GD-miniloan-002]
 supersedes: CALC-miniloan-001@v1
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:41006086aa33b715556ee0a115e658abd1f7a75841108308e9452f25e28ce2bf
 ---
 

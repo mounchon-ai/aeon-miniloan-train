@@ -13,7 +13,7 @@ test_design: [BVA, decision_table]
 proven_by: [EX-miniloan-052, EX-miniloan-053, EX-miniloan-054]
 golden: []
 provenance: [SRC-001]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:45ea399cfbcb5d0431f332d9931a5b6310d80edddeb0810015f0069d952fb435
 ---
 

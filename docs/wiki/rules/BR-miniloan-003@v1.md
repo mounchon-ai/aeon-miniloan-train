@@ -14,7 +14,7 @@ constrained_by: CALC-miniloan-003@v1
 proven_by: [EX-miniloan-019, EX-miniloan-020, EX-miniloan-021, EX-miniloan-022]
 golden: [GD-miniloan-004]
 provenance: [SRC-001]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:d25d16813bd40dbe7a46d2cbcb7646ee434c801cf98d5e53bb8532399a584dea
 ---
 

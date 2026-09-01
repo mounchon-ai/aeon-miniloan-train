@@ -9,7 +9,7 @@ status: draft
 term_th: การยกเลิกใบสมัคร
 term_en: ApplicationCancellation
 not_to_confuse_with: [UL-miniloan-008]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:d392a3c833ab02b14e931e044c775c78e6eca955b064463b51f89e301cfa6da8
 ---
 

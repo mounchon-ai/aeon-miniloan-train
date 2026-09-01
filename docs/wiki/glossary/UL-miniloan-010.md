@@ -9,7 +9,7 @@ status: draft
 term_th: วงเงินอนุมัติสูงสุด
 term_en: MaxApprovableAmount
 not_to_confuse_with: [UL-miniloan-011]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:a61a2ed30502637647a524671a012326b4a49ec388cff939a9be031ac07f3af1
 ---
 

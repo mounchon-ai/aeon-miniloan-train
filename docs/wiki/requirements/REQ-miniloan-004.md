@@ -7,10 +7,10 @@ tags: [miniloan, requirement]
 id: REQ-miniloan-004
 status: draft
 actor: Operations (บันทึกการชำระและปิดบัญชี) / Applicant (ขอยอดปิดบัญชีและดูสถานะเท่านั้น — ปิดบัญชีเองไม่ได้)
-rules: [BR-miniloan-019, BR-miniloan-020, BR-miniloan-021, BR-miniloan-022, BR-miniloan-023, BR-miniloan-034, BR-miniloan-038, BR-miniloan-039, BR-miniloan-040, BR-miniloan-041, BR-miniloan-046, BR-miniloan-048, BR-miniloan-049, BR-miniloan-054]
+rules: [BR-miniloan-019, BR-miniloan-020, BR-miniloan-021, BR-miniloan-022, BR-miniloan-023, BR-miniloan-034, BR-miniloan-038, BR-miniloan-039, BR-miniloan-040, BR-miniloan-041, BR-miniloan-046, BR-miniloan-048, BR-miniloan-049, BR-miniloan-054, BR-miniloan-050, BR-miniloan-051, BR-miniloan-052, BR-miniloan-053]
 domain_concepts: [UL-miniloan-004, UL-miniloan-005, UL-miniloan-006, UL-miniloan-007, UL-miniloan-008, UL-miniloan-009, UL-miniloan-015, UL-miniloan-016, UL-miniloan-018, UL-miniloan-021, UL-miniloan-022, UL-miniloan-024, UL-miniloan-025]
-timestamp: 2026-09-01T18:00:00+07:00
-spec_hash: sha256:69244e95917fab800001c7545df724fc6f017f2e205239490104da34af755cf8
+timestamp: 2026-09-01T19:00:00+07:00
+spec_hash: sha256:4d62beded7cc09d025e2a3705a027dc7201791b74938d65f10c968505b266710
 ---
 
 # REQ-miniloan-004

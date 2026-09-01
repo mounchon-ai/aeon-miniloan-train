@@ -9,7 +9,7 @@ status: draft
 term_th: ยอดที่อนุมัติจริง
 term_en: ApprovedAmount
 not_to_confuse_with: [UL-miniloan-011, UL-miniloan-010, UL-miniloan-022]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:66a394d781b12e061bb752173298daa22d4160269ab773448e33ae21855d52ec
 ---
 

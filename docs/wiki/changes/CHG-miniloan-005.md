@@ -11,7 +11,7 @@ effective_from: 2026-09-01
 affects: [CALC-miniloan-001@v2]
 invalidates: [GD-miniloan-001]
 triggered_by: []
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:4b5eb97ba1dcff343a6d2de2c13187a6ba144e80f2f96c38dafd481f1913b034
 ---
 

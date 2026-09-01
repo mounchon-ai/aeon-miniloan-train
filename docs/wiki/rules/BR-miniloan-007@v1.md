@@ -13,7 +13,7 @@ test_design: [state_transition, EP]
 proven_by: [EX-miniloan-029, EX-miniloan-030, EX-miniloan-031]
 golden: []
 provenance: [SRC-001]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:499b3826a4c6c5ac412d1385ae64af347b3f5b6880cff864e41f618bc5232a00
 ---
 

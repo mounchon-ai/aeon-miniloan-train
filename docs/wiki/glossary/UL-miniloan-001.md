@@ -9,7 +9,7 @@ status: draft
 term_th: ใบสมัครสินเชื่อ
 term_en: LoanApplication
 not_to_confuse_with: [UL-miniloan-004]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:1165dbc6d29d5f27ec49464a7d8927ce2b06238dc5aada971957019974f7f888
 ---
 

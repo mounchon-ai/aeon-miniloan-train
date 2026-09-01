@@ -11,7 +11,7 @@ effective_from: 2026-08-14
 affects: [BR-miniloan-031@v2]
 invalidates: []
 triggered_by: [SRC-013, SRC-015]
-timestamp: 2026-09-01T18:00:00+07:00
+timestamp: 2026-09-01T19:00:00+07:00
 spec_hash: sha256:4df7980cc75c4ec8be989a5ea0995f37a9bce9097d220428ba88e321da460c15
 ---
 

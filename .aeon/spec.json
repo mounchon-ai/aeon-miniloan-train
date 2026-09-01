@@ -5,7 +5,7 @@
     "scale": "FULL",
     "status": "validated",
     "created_at": "2026-08-14T11:21+07:00",
-    "updated_at": "2026-09-01T18:00:00+07:00",
+    "updated_at": "2026-09-01T19:00:00+07:00",
     "approved_by": "mounchons",
     "approved_at": "2026-09-01T08:29:00.036Z"
   },
@@ -1084,7 +1084,11 @@
         "BR-miniloan-046",
         "BR-miniloan-048",
         "BR-miniloan-049",
-        "BR-miniloan-054"
+        "BR-miniloan-054",
+        "BR-miniloan-050",
+        "BR-miniloan-051",
+        "BR-miniloan-052",
+        "BR-miniloan-053"
       ],
       "provenance": [
         {
