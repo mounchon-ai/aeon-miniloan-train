@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/nfr.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "entries": [
+    {
+      "id": "NFR-miniloan-001",
+      "metric": "สัดส่วนของแบบทดสอบหน่วย (unit test) ที่ตรวจจุดคำนวณเงินทุกจุดในระบบ (EMI · ดอกเบี้ยรายงวด · เงินต้นรายงวด · ยอดปิดบัญชีก่อนกำหนด · ค่าธรรมเนียมการโปะ) ว่าใช้ชนิดข้อมูล decimal (ไม่ใช้ floating point) และปัดด้วย round half up ตาม BR-miniloan-035@v1 แล้วผ่านทั้งหมด",
+      "target": {
+        "comparator": "=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ครอบคลุมทุกจุดคำนวณเงินในโค้ดฝั่ง API รวมกรณีขอบเขต (ค่าลงท้ายด้วย .5 พอดี) ตรวจในทุก pull request ผ่าน CI ก่อน merge",
+      "measuredBy": "unit_test — ชุดทดสอบหน่วยที่ยืนยันชนิดข้อมูลของทุกฟิลด์เงิน (ผ่าน static analysis หรือ code review checklist) บวกชุดทดสอบการปัดเศษที่ขอบเขต .5 ต้องปัดขึ้นเสมอ รันเป็นส่วนหนึ่งของ CI pipeline"
+    },
+    {
+      "id": "NFR-miniloan-002",
+      "metric": "สัดส่วนของการเปลี่ยนสถานะ (state transition) ที่เกิดขึ้นจริงในระบบ ซึ่งมีบันทึก audit log ระบุผู้กระทำและเวลา เทียบกับจำนวนการเปลี่ยนสถานะทั้งหมด",
+      "target": {
+        "comparator": "=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ครอบคลุมทุก transition ของ LoanApplication (STM-miniloan-001), LoanAccount (STM-miniloan-002), Installment (STM-miniloan-003) และ ClosedAccountAdjustment (STM-miniloan-004) รวมถึงการกระทำที่ System เป็นผู้ทำเอง (เช่น ประเมินอัตโนมัติ) — เก็บ log อย่างน้อย 10 ปีตามอายุความทางแพ่งที่ตกลงไว้ในการจัดประเภทข้อมูลส่วนบุคคล",
+      "measuredBy": "audit_log_review — integration test ที่ยืนยันว่าทุก method เปลี่ยนสถานะเขียน log record (ผู้กระทำ · เวลา · สถานะเดิม · สถานะใหม่) บวกการสุ่มตรวจ transition จริงใน environment staging เทียบกับ audit log ทุกไตรมาส"
+    },
+    {
+      "id": "NFR-miniloan-003",
+      "metric": "สัดส่วนของ endpoint ฝั่ง API ที่เขียนข้อมูล (POST/PUT/PATCH) ซึ่งตรวจกฎธุรกิจครบทุกข้อของตัวเองเสมอ แม้ request จะข้าม Web มาตรงๆ",
+      "target": {
+        "comparator": "=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทดสอบโดยยิง input ทั้งที่ถูกและผิดกฎธุรกิจตรงไปที่ API โดยตรง (ไม่ผ่าน Web) — ครอบคลุมทุก endpoint ที่เขียนข้อมูลของทุก module",
+      "measuredBy": "api_contract_test — ชุดทดสอบสัญญา API ที่ยิง request ผิดกฎธุรกิจตรงไปที่ API แล้วตรวจว่าถูกปฏิเสธทุกกรณี รันเป็นส่วนหนึ่งของ CI pipeline ก่อน merge ทุกครั้ง"
+    },
+    {
+      "id": "NFR-miniloan-004",
+      "metric": "จำนวนจุดที่พบ business logic (การคำนวณหรือการตัดสินใจเชิงธุรกิจ เช่น คำนวณ EMI ซ้ำ หรือตรวจเกณฑ์อนุมัติ) ปะปนอยู่ในโค้ดฝั่ง Web จากการรีวิวสถาปัตยกรรม",
+      "target": {
+        "comparator": "=",
+        "value": 0,
+        "unit": "จุดที่พบ"
+      },
+      "condition": "ตรวจทุกครั้งที่มี pull request แตะโค้ดฝั่ง Web และอย่างน้อยหนึ่งครั้งก่อนส่งมอบแต่ละ milestone",
+      "measuredBy": "architecture_review — code review checklist เฉพาะที่ตรวจหาการคำนวณ/เงื่อนไขเชิงธุรกิจในโค้ด Web พร้อมลงชื่อผู้รีวิวและวันที่"
+    },
+    {
+      "id": "NFR-miniloan-005",
+      "metric": "จำนวนข้อที่ผ่านจากการทดสอบ deployment 4 ข้อ: (1) Web และ API deploy/ทดสอบแยกกันได้อิสระ (2) API ตอบสนองแบบ stateless ไม่เก็บ session ฝั่งเซิร์ฟเวอร์ระหว่าง request (3) มีสัญญา OpenAPI ที่ generate ได้จริงและตรงกับพฤติกรรมจริง (4) ตั้งค่า CORS อนุญาตเฉพาะ origin ของ Web ที่กำหนด",
+      "target": {
+        "comparator": "=",
+        "value": 4,
+        "unit": "ข้อที่ผ่านจากทั้งหมด 4 ข้อ"
+      },
+      "condition": "ทดสอบบน environment ที่ deploy ตาม Docker Compose จริง (แยก container ระหว่าง Web และ API ตามที่ตกลงไว้ที่ DEC-004) ก่อนส่งมอบแต่ละ milestone",
+      "measuredBy": "deployment_test — สคริปต์ deploy Web และ API แยกกันบน Docker Compose แล้วยิง request ข้าม container ตรวจ CORS header, restart API กลางคันแล้วยืนยัน request ถัดไปยังทำงานได้ (พิสูจน์ statelessness), และ validate สัญญา OpenAPI ด้วยเครื่องมือตรวจสัญญา"
+    },
+    {
+      "id": "NFR-miniloan-006",
+      "metric": "จำนวน acceptance criteria (AC-) ที่มีเงื่อนไขผ่าน/ไม่ผ่านอ้างอิงถึงเทคโนโลยี ภาษา หรือเฟรมเวิร์กเฉพาะเจาะจง แทนที่จะอ้างอิงพฤติกรรมที่สังเกตได้",
+      "target": {
+        "comparator": "=",
+        "value": 0,
+        "unit": "AC ที่ผูกเทคโนโลยี"
+      },
+      "condition": "ตรวจทุก AC ในทุก module ก่อนส่งมอบแต่ละ milestone โดยไม่นับข้อจำกัดทางเทคนิคที่ผู้ใช้เลือกเองแล้ว (Next.js/ASP.NET Core/PostgreSQL/Docker Compose ตาม DEC-001 ถึง DEC-004) ซึ่งเป็นข้อจำกัดของโครงการ ไม่ใช่เงื่อนไขผ่าน/ไม่ผ่านของ AC เอง",
+      "measuredBy": "acceptance_test — รัน automated acceptance test ของทุก AC บนสภาพแวดล้อมที่กำหนด บวก code review ยืนยันว่าข้อความ then ของ AC ไม่มีคำเฉพาะเทคโนโลยีปนอยู่ในเงื่อนไขผ่าน/ไม่ผ่าน"
+    }
+  ]
+}

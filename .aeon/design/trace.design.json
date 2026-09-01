@@ -2853,6 +2853,36 @@
       "from": "UC-miniloan-012",
       "rel": "governedByAcl",
       "to": "ACL-026"
+    },
+    {
+      "from": "NFR-miniloan-001",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-082"
+    },
+    {
+      "from": "NFR-miniloan-002",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-083"
+    },
+    {
+      "from": "NFR-miniloan-003",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-084"
+    },
+    {
+      "from": "NFR-miniloan-004",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-085"
+    },
+    {
+      "from": "NFR-miniloan-005",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-086"
+    },
+    {
+      "from": "NFR-miniloan-006",
+      "rel": "verifiedBy",
+      "to": "SCN-miniloan-087"
     }
   ]
 }

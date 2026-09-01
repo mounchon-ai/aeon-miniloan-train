@@ -86,14 +86,15 @@
     {
       "id": "nfr",
       "command": "/design:nfr",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "overview"
       ],
       "artifacts": [
         "nfr.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-01T13:57:41Z"
     },
     {
       "id": "sitemap",

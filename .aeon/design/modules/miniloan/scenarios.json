@@ -1724,6 +1724,125 @@
         "12.345 บาท ปัดเป็น 12.35 บาท (ปัดขึ้น ไม่ใช่ round half to even ที่จะปัดเป็น 12.34)",
         "12.355 บาท ปัดเป็น 12.36 บาท (ปัดขึ้นเช่นกัน)"
       ]
+    },
+    {
+      "id": "SCN-miniloan-082",
+      "title": "ทุกจุดคำนวณเงินใช้ decimal และปัดด้วย round half up ผ่าน 100%",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-001"
+      ],
+      "rules": [
+        "BR-miniloan-035@v1"
+      ],
+      "given": [
+        "ชุดทดสอบหน่วยครอบคลุมทุกจุดคำนวณเงิน: EMI, ดอกเบี้ยรายงวด, เงินต้นรายงวด, ยอดปิดบัญชีก่อนกำหนด, ค่าธรรมเนียมการโปะ — รวมกรณีขอบเขตที่ค่าลงท้ายด้วย .5 พอดี เช่น 12.345 และ 12.355"
+      ],
+      "when": [
+        "รันชุดทดสอบหน่วยทั้งหมดใน CI pipeline"
+      ],
+      "expected": [
+        "ทุกจุดคำนวณเงินใช้ชนิดข้อมูล decimal ไม่มีจุดใดใช้ floating point",
+        "12.345 ปัดเป็น 12.35 และ 12.355 ปัดเป็น 12.36 (ปัดขึ้นเสมอ ไม่ใช่ round half to even)",
+        "ชุดทดสอบผ่าน 100% — ต่ำกว่านี้ถือว่าไม่ผ่าน NFR-miniloan-001"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-083",
+      "title": "ทุกการเปลี่ยนสถานะมี audit log ระบุผู้กระทำและเวลาครบ 100%",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-002"
+      ],
+      "rules": [],
+      "given": [
+        "ระบบมีบัญชีและใบสมัครที่ผ่านทุก state transition ที่เป็นไปได้ในสภาพแวดล้อม staging อย่างน้อยหนึ่งครั้งต่อ transition (STM-miniloan-001 ถึง STM-miniloan-004)"
+      ],
+      "when": [
+        "สุ่มตรวจ audit log เทียบกับ transition ที่เกิดขึ้นจริงทั้งหมด"
+      ],
+      "expected": [
+        "ทุก transition มี log ระบุผู้กระทำ (คนหรือ System) และเวลาครบ ไม่มี transition ใดขาดหาย",
+        "แม้แต่ transition ที่ System เป็นผู้ทำเอง (เช่น ประเมินอัตโนมัติ) ก็มี log ระบุ \"System\" เป็นผู้กระทำ",
+        "สัดส่วนที่มี log ครบต้องเท่ากับ 100% พอดี — ขาดแม้หนึ่ง transition ถือว่าไม่ผ่าน NFR-miniloan-002"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-084",
+      "title": "API ปฏิเสธ input ที่ผิดกฎธุรกิจแม้ยิงตรงข้าม Web",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-003"
+      ],
+      "rules": [],
+      "given": [
+        "ทุก endpoint ที่เขียนข้อมูล (POST/PUT/PATCH) ของทุก module"
+      ],
+      "when": [
+        "ยิง request ที่ผิดกฎธุรกิจอย่างน้อยหนึ่งกรณีตรงไปที่แต่ละ endpoint โดยข้าม Web ทั้งหมด"
+      ],
+      "expected": [
+        "ทุก endpoint ปฏิเสธ request ที่ผิดกฎธุรกิจ ไม่มี endpoint ใดยอมให้ผ่านเพราะคิดว่า Web ตรวจมาแล้ว",
+        "สัดส่วนต้องเท่ากับ 100% พอดี — endpoint ที่ยอมให้ผ่านแม้เพียงหนึ่งกรณีถือว่าไม่ผ่าน NFR-miniloan-003"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-085",
+      "title": "ไม่พบ business logic ปะปนอยู่ในโค้ดฝั่ง Web",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-004"
+      ],
+      "rules": [],
+      "given": [
+        "โค้ดฝั่ง Web ทั้งหมด ณ เวลาที่รีวิว"
+      ],
+      "when": [
+        "ทำ architecture review ตาม checklist ที่ตรวจหาการคำนวณหรือเงื่อนไขเชิงธุรกิจในโค้ด Web (เช่น คำนวณ EMI ซ้ำ หรือเช็คเกณฑ์อนุมัติเอง)"
+      ],
+      "expected": [
+        "พบจุดที่ Web ตัดสินใจเชิงธุรกิจเอง 0 จุดพอดี — พบแม้หนึ่งจุดถือว่าไม่ผ่าน NFR-miniloan-004 และต้องย้ายไปไว้ที่ API"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-086",
+      "title": "Web และ API deploy/ทดสอบแยกกันได้ครบทั้ง 4 ข้อ",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-005"
+      ],
+      "rules": [],
+      "given": [
+        "environment ที่ deploy Web และ API แยก container กันตาม Docker Compose ที่กำหนด (DEC-004)"
+      ],
+      "when": [
+        "รัน deployment test ครบ 4 ข้อ: deploy แยกอิสระ, restart API กลางคันแล้วยิง request ถัดไป, validate สัญญา OpenAPI, ตรวจ CORS header จาก origin ของ Web"
+      ],
+      "expected": [
+        "Web และ API deploy และทดสอบแยกกันได้จริงโดยไม่ต้อง build ร่วมกัน",
+        "หลัง restart API กลางคัน request ถัดไปยังทำงานได้ปกติ (พิสูจน์ statelessness ไม่มี session ค้าง)",
+        "สัญญา OpenAPI ตรงกับพฤติกรรมจริงของ API",
+        "CORS อนุญาตเฉพาะ origin ของ Web ที่กำหนดเท่านั้น",
+        "ผ่านครบ 4 ข้อพอดี — ผ่านต่ำกว่า 4 ข้อถือว่าไม่ผ่าน NFR-miniloan-005"
+      ]
+    },
+    {
+      "id": "SCN-miniloan-087",
+      "title": "ไม่มี acceptance criteria ใดผูกเงื่อนไขผ่าน/ไม่ผ่านกับเทคโนโลยีเฉพาะ",
+      "kind": "boundary",
+      "verifies": [
+        "NFR-miniloan-006"
+      ],
+      "rules": [],
+      "given": [
+        "Acceptance criteria (AC-) ทั้งหมดของทุก module"
+      ],
+      "when": [
+        "ตรวจข้อความ then ของทุก AC ว่าอ้างอิงเทคโนโลยี ภาษา หรือเฟรมเวิร์กเฉพาะเจาะจงเป็นเงื่อนไขผ่าน/ไม่ผ่านหรือไม่ (ไม่นับข้อจำกัดทางเทคนิคที่ตกลงไว้แล้วที่ DEC-001 ถึง DEC-004)"
+      ],
+      "expected": [
+        "พบ AC ที่ผูกเงื่อนไขผ่าน/ไม่ผ่านกับเทคโนโลยีเฉพาะ 0 ข้อพอดี — พบแม้หนึ่งข้อถือว่าไม่ผ่าน NFR-miniloan-006"
+      ]
     }
   ]
 }
