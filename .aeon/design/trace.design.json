@@ -2173,6 +2173,116 @@
       "from": "ENT-012",
       "rel": "hasState",
       "to": "STM-miniloan-004"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "governedBy",
+      "to": "BR-miniloan-050@v2"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "governedBy",
+      "to": "BR-miniloan-051@v1"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "governedBy",
+      "to": "BR-miniloan-052@v2"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "governedBy",
+      "to": "BR-miniloan-053@v1"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "governedBy",
+      "to": "BR-miniloan-053@v1"
+    },
+    {
+      "from": "AC-miniloan-138",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-114"
+    },
+    {
+      "from": "AC-miniloan-138",
+      "rel": "governedBy",
+      "to": "BR-miniloan-051@v1"
+    },
+    {
+      "from": "AC-miniloan-139",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-115"
+    },
+    {
+      "from": "AC-miniloan-139",
+      "rel": "governedBy",
+      "to": "BR-miniloan-051@v1"
+    },
+    {
+      "from": "AC-miniloan-140",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-116"
+    },
+    {
+      "from": "AC-miniloan-140",
+      "rel": "governedBy",
+      "to": "BR-miniloan-051@v1"
+    },
+    {
+      "from": "AC-miniloan-141",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-145"
+    },
+    {
+      "from": "AC-miniloan-141",
+      "rel": "governedBy",
+      "to": "BR-miniloan-053@v1"
+    },
+    {
+      "from": "AC-miniloan-142",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-146"
+    },
+    {
+      "from": "AC-miniloan-142",
+      "rel": "governedBy",
+      "to": "BR-miniloan-053@v1"
+    },
+    {
+      "from": "AC-miniloan-143",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-147"
+    },
+    {
+      "from": "AC-miniloan-143",
+      "rel": "governedBy",
+      "to": "BR-miniloan-053@v1"
+    },
+    {
+      "from": "AC-miniloan-144",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-148"
+    },
+    {
+      "from": "AC-miniloan-144",
+      "rel": "governedBy",
+      "to": "BR-miniloan-050@v2"
+    },
+    {
+      "from": "AC-miniloan-145",
+      "rel": "copiedFrom",
+      "to": "EX-miniloan-149"
+    },
+    {
+      "from": "AC-miniloan-145",
+      "rel": "governedBy",
+      "to": "BR-miniloan-050@v2"
+    },
+    {
+      "from": "AC-miniloan-145",
+      "rel": "governedBy",
+      "to": "BR-miniloan-052@v2"
     }
   ]
 }

@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/changes.mjs",
+  "project": "miniloan",
+  "changes": [
+    {
+      "id": "CHG-miniloan-001",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-031@v2"
+      ],
+      "reason": "หัวหน้าเจ้าหน้าที่สินเชื่อถูกตัดสินแล้วว่าเป็น actor แยก ไม่ใช่ Loan Officer คนหนึ่ง (คำตอบ Q-miniloan-012) — เส้นยกเลิกใบสถานะ Draft/Submitted ที่กฎเดิมเปิดไว้ให้เฉพาะ Loan Officer ต้องเปิดกว้างขึ้น",
+      "recordedAt": "2026-09-01T19:30:00+07:00",
+      "absorbed": true,
+      "absorbedAt": "2026-09-01T19:45:00+07:00"
+    },
+    {
+      "id": "CHG-miniloan-002",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-046@v2"
+      ],
+      "reason": "ข้อความ BR-miniloan-046 ตกยุค — Q-miniloan-013 ตอบแล้วว่ากลไกค่าธรรมเนียมการโปะคือ BR-miniloan-050@v1 (หักจากส่วนเกิน) แยกออกไป ไม่ใช่สิ่งที่ยังไม่ตัดสิน ขึ้นเวอร์ชันเพื่อให้ข้อความตรงกับคำตอบที่มีอยู่แล้ว ไม่ใช่การตัดสินใหม่",
+      "recordedAt": "2026-09-01T19:30:00+07:00",
+      "absorbed": true,
+      "absorbedAt": "2026-09-01T19:45:00+07:00"
+    },
+    {
+      "id": "CHG-miniloan-003",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-050@v2"
+      ],
+      "reason": "Q-miniloan-015 ตอบแล้ว: ส่วนเกินหลังหักค่าธรรมเนียมการโปะ 1% มากกว่าเงินต้นคงเหลือ ต้องปฏิเสธการบันทึกทั้งรายการ ไม่ตัดเท่าที่เหลือแล้วทอนคืนส่วนล้น",
+      "recordedAt": "2026-09-01T19:30:00+07:00",
+      "absorbed": true,
+      "absorbedAt": "2026-09-01T19:45:00+07:00"
+    },
+    {
+      "id": "CHG-miniloan-004",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-052@v2"
+      ],
+      "reason": "Q-miniloan-015 ข้อ (2) สั่งขยายเงื่อนไขของ BR-miniloan-052 จาก \"ส่วนเกินมากกว่ายอดปิดบัญชี\" ให้ครอบ \"ส่วนเกินหลังหักค่าธรรมเนียมการโปะมากกว่าเงินต้นคงเหลือ\" ด้วย เป็นเงื่อนไข OR เดียว",
+      "recordedAt": "2026-09-01T19:30:00+07:00",
+      "absorbed": true,
+      "absorbedAt": "2026-09-01T19:45:00+07:00"
+    },
+    {
+      "id": "CHG-miniloan-005",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "CALC-miniloan-001@v2"
+      ],
+      "reason": "ความขัดกันระหว่าง CALC-miniloan-001@v1 (คำนวณเต็มความละเอียดภายใน ปัดเฉพาะตอนเขียนแถว) กับ BR-miniloan-035@v1 (ปัดทันทีทุกจุดที่เกิดขึ้น) — เจ้าของสเปกเลือกให้ CALC-miniloan-001 ปรับตาม BR-miniloan-035@v1 แทน ปัดทุกงวดตั้งแต่ตอนนี้ ไม่เก็บบัญชีภายในที่ละเอียดกว่าคอลัมน์ที่แสดงอีกต่อไป",
+      "recordedAt": "2026-09-01T19:30:00+07:00",
+      "absorbed": true,
+      "absorbedAt": "2026-09-01T19:45:00+07:00"
+    }
+  ]
+}
