@@ -9,7 +9,7 @@ status: draft
 kind: happy
 proves: [BR-miniloan-039@v1]
 has_ui: true
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:4664138ae2628bed34d00a59c3d73144890028f27458411827b910a0fa0942a6
 ---
 

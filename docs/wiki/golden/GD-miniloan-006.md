@@ -9,7 +9,7 @@ status: validated
 proves: [CALC-miniloan-005@v1, BR-miniloan-050@v2]
 verified_by: aplus191
 verified_at: 2026-09-01T21:00+07:00
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:31ffc7c4a33c1ac91f05b6dbae0f60b135592d922307a8ef5cf06ebca9479efb
 ---
 

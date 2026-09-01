@@ -9,7 +9,7 @@ status: draft
 term_th: ตารางผ่อน
 term_en: RepaymentSchedule
 not_to_confuse_with: [UL-miniloan-006]
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:59f5ca490ce06c10973bc83fca0867fe783be3934769245cf77ebf33048822ac
 ---
 

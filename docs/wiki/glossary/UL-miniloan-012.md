@@ -9,7 +9,7 @@ status: draft
 term_th: จำนวนงวด
 term_en: Term
 not_to_confuse_with: [UL-miniloan-006]
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:582711195197019a6e6cf1c630b2b46da1d73c85d5d1b7be2c4b8a02a8c44b91
 ---
 

@@ -9,7 +9,7 @@ status: draft
 term_th: บัญชีสินเชื่อ
 term_en: LoanAccount
 not_to_confuse_with: [UL-miniloan-001]
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:6d85eb06a9bb4b33bf0c8083408ea0166479b94c0defea88908329a15dc2ca7f
 ---
 

@@ -9,7 +9,7 @@ status: draft
 actor: System (สร้างตารางผ่อน) / Applicant (ดูตารางของบัญชีตัวเองอย่างเดียว)
 rules: [BR-miniloan-015, BR-miniloan-016, BR-miniloan-017, BR-miniloan-018, BR-miniloan-036, BR-miniloan-037, BR-miniloan-044, BR-miniloan-045]
 domain_concepts: [UL-miniloan-004, UL-miniloan-005, UL-miniloan-006, UL-miniloan-009, UL-miniloan-012, UL-miniloan-014, UL-miniloan-017, UL-miniloan-022, UL-miniloan-023, UL-miniloan-024]
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:0ef71f70e46d1d8b3fa86ed8cee73f715aedf507f387949cbc1b4cd8d7d110e4
 ---
 

@@ -9,7 +9,7 @@ status: draft
 actor: Loan Officer (พิจารณา อนุมัติ ปฏิเสธ เบิกจ่าย) / หัวหน้าเจ้าหน้าที่สินเชื่อ (สั่งมอบหมายใบสมัคร)
 rules: [BR-miniloan-010, BR-miniloan-011, BR-miniloan-012, BR-miniloan-013, BR-miniloan-014, BR-miniloan-031, BR-miniloan-032, BR-miniloan-047]
 domain_concepts: [UL-miniloan-001, UL-miniloan-003, UL-miniloan-004, UL-miniloan-010, UL-miniloan-011, UL-miniloan-013, UL-miniloan-019, UL-miniloan-020]
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:406490d2ec35d5920925b444343dcd5f82877ab513a03151c61f2b4b7c9d06ad
 ---
 

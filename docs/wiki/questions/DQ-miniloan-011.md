@@ -8,7 +8,7 @@ id: DQ-miniloan-011
 state: answered
 raised_by: BR-miniloan-054@v1
 answer_phase: domain
-timestamp: 2026-09-01T19:00:00+07:00
+timestamp: 2026-09-01T20:00:00+07:00
 spec_hash: sha256:ed23f1bee0bc89ccd5089d775192bf0a001491d60f3e2c1ecfa2d21e0b587553
 ---
 
