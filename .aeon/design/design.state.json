@@ -44,7 +44,7 @@
     {
       "id": "datamodel",
       "command": "/design:datamodel",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "function"
       ],
@@ -52,7 +52,8 @@
         "datamodel.json",
         "modules/<module>/statemachines.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-01T09:28:31Z"
     },
     {
       "id": "scenario",

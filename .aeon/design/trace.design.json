@@ -1933,6 +1933,246 @@
       "from": "AC-miniloan-137",
       "rel": "governedBy",
       "to": "BR-miniloan-054@v1"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "operatesOn",
+      "to": "ENT-002"
+    },
+    {
+      "from": "FUN-miniloan-001",
+      "rel": "operatesOn",
+      "to": "ENT-003"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-002",
+      "rel": "operatesOn",
+      "to": "ENT-004"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "operatesOn",
+      "to": "ENT-005"
+    },
+    {
+      "from": "FUN-miniloan-003",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-004",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-005",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-006",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-008"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-009"
+    },
+    {
+      "from": "FUN-miniloan-007",
+      "rel": "operatesOn",
+      "to": "ENT-011"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "operatesOn",
+      "to": "ENT-008"
+    },
+    {
+      "from": "FUN-miniloan-008",
+      "rel": "operatesOn",
+      "to": "ENT-009"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "operatesOn",
+      "to": "ENT-008"
+    },
+    {
+      "from": "FUN-miniloan-009",
+      "rel": "operatesOn",
+      "to": "ENT-009"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "operatesOn",
+      "to": "ENT-009"
+    },
+    {
+      "from": "FUN-miniloan-010",
+      "rel": "operatesOn",
+      "to": "ENT-010"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "operatesOn",
+      "to": "ENT-008"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "operatesOn",
+      "to": "ENT-010"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-012",
+      "rel": "operatesOn",
+      "to": "ENT-010"
+    },
+    {
+      "from": "FUN-miniloan-013",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-013",
+      "rel": "operatesOn",
+      "to": "ENT-013"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "operatesOn",
+      "to": "ENT-006"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "operatesOn",
+      "to": "ENT-012"
+    },
+    {
+      "from": "FUN-miniloan-014",
+      "rel": "operatesOn",
+      "to": "ENT-013"
+    },
+    {
+      "from": "FUN-miniloan-015",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-016",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-016",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-018",
+      "rel": "operatesOn",
+      "to": "ENT-014"
+    },
+    {
+      "from": "FUN-miniloan-019",
+      "rel": "operatesOn",
+      "to": "ENT-001"
+    },
+    {
+      "from": "FUN-miniloan-019",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "FUN-miniloan-020",
+      "rel": "operatesOn",
+      "to": "ENT-009"
+    },
+    {
+      "from": "FUN-miniloan-020",
+      "rel": "operatesOn",
+      "to": "ENT-007"
+    },
+    {
+      "from": "ENT-001",
+      "rel": "hasState",
+      "to": "STM-miniloan-001"
+    },
+    {
+      "from": "ENT-007",
+      "rel": "hasState",
+      "to": "STM-miniloan-002"
+    },
+    {
+      "from": "ENT-009",
+      "rel": "hasState",
+      "to": "STM-miniloan-003"
+    },
+    {
+      "from": "ENT-012",
+      "rel": "hasState",
+      "to": "STM-miniloan-004"
     }
   ]
 }
