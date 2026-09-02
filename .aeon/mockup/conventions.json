@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/conventions.mjs",
   "project": "miniloan",
   "kinds": [
@@ -189,5 +189,12 @@
       "confirmedAt": "2026-09-01T15:10:58Z"
     }
   ],
-  "extensions": {}
+  "extensions": {},
+  "shell": {
+    "productName": "มินิโลน",
+    "signedInAs": "สมชาย (เจ้าหน้าที่สินเชื่อ)",
+    "confirmedBy": "aplus191",
+    "confirmedAt": "2026-09-02T10:10:36Z"
+  },
+  "screenOptions": []
 }

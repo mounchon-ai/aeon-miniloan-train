@@ -41,6 +41,7 @@
       "artifacts": [
         "wireframes/<UI-id>.json",
         "wireframes/<UI-id>.html",
+        "wireframes/<UI-id>.md",
         "mockup-map.json",
         "trace.mockup.json"
       ],
@@ -78,7 +79,7 @@
     {
       "id": "handoff",
       "command": "/mock:deliver",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "theme",
         "wireframe"
@@ -86,7 +87,8 @@
       "artifacts": [
         "../export/mockup-handoff.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-02T10:13:17Z"
     }
   ],
   "extensions": {}

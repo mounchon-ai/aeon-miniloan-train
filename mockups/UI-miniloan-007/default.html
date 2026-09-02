@@ -148,8 +148,23 @@ th{color:var(--text-secondary);font-size:var(--text-sm)}
 .empty{text-align:center;padding:var(--space-6);color:var(--text-secondary)}
 .skeleton{background:var(--border);border-radius:var(--radius-sm);margin-bottom:var(--space-2)}
 .pagination{display:flex;align-items:center;gap:var(--space-2);margin-top:var(--space-4)}
+.appbar{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-6);background:var(--bg-surface);border-bottom:thin solid var(--border)}
+.wordmark{font-weight:700;font-family:var(--font-display);font-size:var(--text-lg);color:var(--text-primary);letter-spacing:var(--tracking-wordmark)}
+.wordmark .mark{display:inline-block;padding:var(--space-1) var(--space-2);margin-right:var(--space-2);border-radius:var(--radius-sm);background:var(--brand-primary);color:var(--brand-on-primary)}
+.appbar .appname{color:var(--text-muted);font-size:var(--text-sm)}
+.appbar .spacer{flex:1}
+.appnav{display:flex;flex-wrap:wrap;gap:var(--space-1);padding:0;background:var(--bg-surface);border-bottom:thin solid var(--border)}
+.appnav a{text-decoration:none;border-bottom:medium solid transparent;padding:var(--space-3) var(--space-3);color:var(--text-secondary);font-size:var(--text-sm)}
+.appnav a:hover{color:var(--text-primary)}
+.appnav a[aria-current="page"]{color:var(--brand-primary);border-bottom-color:var(--brand-primary)}
+.shell-mobile .appnav{position:sticky;bottom:0;justify-content:space-around;padding:0;border-top:medium solid transparent;border-bottom:none}
+.shell-mobile .appnav a{flex:1;text-align:center}
+.shell-mobile main{padding:var(--space-4)}
+.shell-mobile .appbar{padding:var(--space-2) var(--space-4)}
+.appfoot{text-align:center;padding:var(--space-4);color:var(--text-muted);font-size:var(--text-xs);border-top:thin solid var(--border)}
 </style></head>
-<body>
+<body class="shell-app shell-web">
+<header class="appbar"><span class="wordmark"><span class="mark" aria-hidden="true">ม</span>มินิโลน</span><span class="spacer"></span><span class="muted">สมชาย (เจ้าหน้าที่สินเชื่อ)</span></header><nav class="appnav" aria-label="เมนูหลัก"><a href="../UI-miniloan-001/default.html" data-testid="nav-ui-miniloan-001">ยื่นใบสมัครใหม่</a><a href="../UI-miniloan-002/default.html" data-testid="nav-ui-miniloan-002">ใบสมัครและบัญชีของฉัน</a><a href="../UI-miniloan-004/default.html" data-testid="nav-ui-miniloan-004">ตารางผ่อน</a><a href="../UI-miniloan-007/default.html" data-testid="nav-ui-miniloan-007" aria-current="page">รายละเอียดใบสมัคร</a><a href="../UI-miniloan-011/default.html" data-testid="nav-ui-miniloan-011">รายละเอียดบัญชี</a><a href="../UI-miniloan-013/default.html" data-testid="nav-ui-miniloan-013">รายละเอียดคำขอ</a><a href="../UI-miniloan-016/default.html" data-testid="nav-ui-miniloan-016">บันทึกการชำระ</a><a href="../UI-miniloan-003/default.html" data-testid="nav-ui-miniloan-003">รายละเอียดใบสมัคร</a><a href="../UI-miniloan-005/default.html" data-testid="nav-ui-miniloan-005">ยอดปิดบัญชีก่อนกำหนด</a><a href="../UI-miniloan-006/default.html" data-testid="nav-ui-miniloan-006">งานของฉัน</a><a href="../UI-miniloan-017/default.html" data-testid="nav-ui-miniloan-017">ปิดบัญชีก่อนกำหนด</a><a href="../UI-miniloan-008/default.html" data-testid="nav-ui-miniloan-008">แดชบอร์ด</a><a href="../UI-miniloan-010/default.html" data-testid="nav-ui-miniloan-010">บัญชีที่ปิดแล้ว</a><a href="../UI-miniloan-012/default.html" data-testid="nav-ui-miniloan-012">คำขอปรับปรุงที่รออนุมัติ</a><a href="../UI-miniloan-009/default.html" data-testid="nav-ui-miniloan-009">ตั้งค่าผู้อนุมัติ</a><a href="../UI-miniloan-014/default.html" data-testid="nav-ui-miniloan-014">มอบหมายงาน</a><a href="../UI-miniloan-015/default.html" data-testid="nav-ui-miniloan-015">บัญชีที่ฉันดูแล</a></nav>
 <main data-screen="UI-miniloan-007" data-mockup="MCK-miniloan-007" data-layout="form" data-state="default">
 <header><h1>รายละเอียดใบสมัคร (เจ้าหน้าที่สินเชื่อ)</h1><p class="muted">ให้ Loan Officer ที่ถูกมอบหมายพิจารณา อนุมัติ ปฏิเสธ ยกเลิก หรือสั่งเบิกจ่ายใบสมัคร</p><p class="muted">visible to: ROLE-002</p></header>
 <form class="surface" data-zone="applicant-info" data-source="design"><label>ชื่อผู้สมัคร <abbr title="required">*</abbr> <input data-component="Input" data-testid="ui-miniloan-007-ent-002-name" type="text" name="ชื่อผู้สมัคร" value="ค่าตัวอย่างที่ผู้ใช้พิมพ์ (สมมติ)" placeholder="ข้อความ"></label><label>อายุ <abbr title="required">*</abbr> <input data-component="Input" data-testid="ui-miniloan-007-ent-003-age" type="text" name="อายุ" value="ค่าตัวอย่างที่ผู้ใช้พิมพ์ (สมมติ)" placeholder="จำนวนเต็ม"></label><label>รายได้ต่อเดือน <abbr title="required">*</abbr> <input data-component="Input" data-testid="ui-miniloan-007-ent-003-monthly-income" type="text" name="รายได้ต่อเดือน" value="ค่าตัวอย่างที่ผู้ใช้พิมพ์ (สมมติ)" placeholder="จำนวนเงิน"></label></form>
@@ -159,5 +174,6 @@ th{color:var(--text-secondary);font-size:var(--text-sm)}
 <p class="muted">⚠ ข้อมูลสมมติ — ค่าทุกค่าในหน้านี้อ่านจาก assets/sample-data/ และเป็นของสมมติทั้งหมด (MD8)</p>
 <footer class="muted"><small>MCK-miniloan-007 · mockup L2 of UI-miniloan-007 · default · theme handoff .aeon/mockup/handoff/miniloan-design-system · generated by /mock:html — do not edit by hand (gate 23)</small></footer>
 </main>
+<footer class="appfoot">มินิโลน</footer>
 </body>
 </html>
