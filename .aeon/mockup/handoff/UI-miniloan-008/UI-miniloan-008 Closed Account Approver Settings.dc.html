@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-hover,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    @keyframes mlqspin{to{transform:rotate(360deg)}}
+    .mlq-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+    .mlq-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .mlq-row:last-child{border-bottom:none}
+    .mlq-label{font-size:13px;color:var(--text-secondary)}
+    .mlq-value{font-size:14px;color:var(--text-primary);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+    .mlq-sectiontitle{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+    .mlq-banner{padding:12px 14px;border-radius:var(--radius);font-size:13px;line-height:1.5}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-008">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Assigned queue</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Approved today</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Rejected</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Reports</div>
+    <div class="mlq-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">Settings</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Nichapa Srisuk</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">NS</div>
+    </div>
+
+    <div style="flex:1;padding:32px;max-width:640px">
+
+      <div style="margin-bottom:24px">
+        <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0 0 4px">ตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว</h1>
+        <p style="font-size:13px;color:var(--text-secondary);margin:0">กำหนด role ที่มีสิทธิ์อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว</p>
+      </div>
+
+      <sc-if value="{{isUnauthorized}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--text-primary)">ไม่มีสิทธิ์ตั้งค่านี้</div>
+          <div style="font-size:13px;color:var(--text-secondary);max-width:360px">การตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้วจำกัดสิทธิ์เฉพาะ Loan Officer เท่านั้น</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showContent}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <div>
+            <div class="mlq-sectiontitle">ผู้อนุมัติ</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div style="display:flex;flex-direction:column;gap:16px">
+
+                <sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+                  <div class="mlq-banner" style="background:var(--warning-bg);border:1px solid var(--warning);color:var(--warning)">ยังไม่เคยตั้งค่ามาก่อน คำขอปรับปรุงบัญชีจะถูกปฏิเสธทั้งหมดจนกว่าจะตั้งค่านี้ (BR-miniloan-040@v1)</div>
+                </sc-if>
+
+                <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+                  <div class="mlq-banner" style="background:var(--danger-bg);border:1px solid var(--danger);color:var(--danger)">บันทึกไม่สำเร็จ กรุณาลองใหม่</div>
+                </sc-if>
+
+                <div data-testid="ui-miniloan-008-ent-011-approver-role">
+                  <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Select" label="Role ผู้อนุมัติ" value="{{role}}" on-change="{{onRoleChange}}" options="{{roleOptions}}" disabled="{{isBusy}}" hint-size="100%,64px"></x-import>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;padding-top:4px">
+                  <div data-testid="ui-miniloan-008-save-setting">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="primary" on-click="{{onSave}}" disabled="{{isBusy}}" hint-size="auto,40px">
+                      <sc-if value="{{isBusy}}" hint-placeholder-val="{{false}}"><span style="display:inline-block;width:11px;height:11px;border:2px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:mlqspin .6s linear infinite;margin-right:7px;vertical-align:middle"></span></sc-if>{{saveLabel}}
+                    </x-import>
+                  </div>
+                </div>
+
+              </div>
+            </x-import>
+          </div>
+
+          <div>
+            <div class="mlq-sectiontitle">ประวัติการแก้ไข</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div>
+                <div class="mlq-row">
+                  <div class="mlq-label">แก้ไขล่าสุดโดย</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-008-ent-011-updated-by">{{updatedByDisplay}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">แก้ไขล่าสุดเมื่อ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-008-ent-011-updated-at">{{updatedAtDisplay}}</div>
+                </div>
+              </div>
+            </x-import>
+          </div>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 900, &quot;height&quot;: 760},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;empty&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;unauthorized&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  state = {
+    role: 'loan_officer',
+    saving: false,
+    updatedBy: 'Nichapa Srisuk',
+    updatedAt: '15 ส.ค. 2569 09:42',
+  };
+
+  save() {
+    if (this.state.saving) return;
+    this.setState({ saving: true });
+    setTimeout(() => {
+      this.setState({
+        saving: false,
+        updatedBy: 'Nichapa Srisuk',
+        updatedAt: '03 ก.ย. 2569 10:15',
+      });
+    }, 900);
+  }
+
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isUnauthorized = demoState === 'unauthorized';
+    const isEmpty = demoState === 'empty';
+    const isErrorDemo = demoState === 'error';
+    const isLoadingDemo = demoState === 'loading';
+    const showContent = !isUnauthorized;
+    const isBusy = this.state.saving || isLoadingDemo;
+    const isError = isErrorDemo && !isBusy;
+
+    const roleOptions = [
+      { value: '', label: '— เลือก role —' },
+      { value: 'loan_officer', label: 'Loan Officer' },
+      { value: 'operations', label: 'Operations Manager' },
+    ];
+
+    const role = isEmpty ? '' : this.state.role;
+    const updatedByDisplay = isEmpty ? '—' : this.state.updatedBy;
+    const updatedAtDisplay = isEmpty ? '—' : this.state.updatedAt;
+
+    return {
+      isUnauthorized, showContent, isEmpty, isError, isBusy,
+      role, roleOptions, updatedByDisplay, updatedAtDisplay,
+      saveLabel: isBusy ? 'กำลังบันทึก...' : (isError ? 'ลองใหม่' : 'บันทึกการตั้งค่า'),
+      onRoleChange: (e) => this.setState({ role: e.target.value }),
+      onSave: () => this.save(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    .mlq-skel{background:var(--gray-200);border-radius:var(--radius-sm,6px)}
+    .mlq-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .mlq-row:last-child{border-bottom:none}
+    .mlq-row-total{padding-top:16px}
+    .mlq-label{font-size:13px;color:var(--text-secondary)}
+    .mlq-value{font-size:14px;color:var(--text-primary);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+    .mlq-value-total{font-size:20px;font-weight:700;color:var(--brand-primary-strong,#175CD3)}
+  </style>
+</helmet>
+
+<div style="min-height:100vh" data-screen-label="UI-miniloan-005">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:28px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-wordmark.svg" style="height:18px">
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;font-size:14px;color:var(--text-secondary)">
+      <span>สมชาย ใจดี</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">สจ</div>
+    </div>
+  </div>
+
+  <div style="max-width:640px;margin:0 auto;padding:32px 24px 80px">
+    <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0 0 20px">ยอดปิดบัญชีก่อนกำหนดของฉัน</h1>
+
+    <sc-if value="{{isUnauthorized}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+        <div style="font-size:15px;color:var(--text-primary)">คุณไม่มีสิทธิ์ขอยอดปิดบัญชีของบัญชีนี้</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+        <div style="font-size:15px;color:var(--danger)">คำนวณยอดไม่สำเร็จ</div>
+        <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onRetry}}" hint-size="auto,40px">ลองใหม่</x-import>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showContent}}" hint-placeholder-val="{{true}}">
+      <div style="display:flex;flex-direction:column;gap:24px">
+
+        <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+          <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;flex-direction:column;gap:12px;padding:4px 0">
+              <div class="mlq-skel" style="height:18px;width:100%"></div>
+              <div class="mlq-skel" style="height:18px;width:100%"></div>
+              <div class="mlq-skel" style="height:18px;width:100%"></div>
+              <div class="mlq-skel" style="height:28px;width:100%"></div>
+              <div class="mlq-skel" style="height:14px;width:50%"></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+            <div>
+              <div class="mlq-row">
+                <div class="mlq-label">เงินต้นคงเหลือ</div>
+                <div class="mlq-value" data-testid="ui-miniloan-005-ent-006-outstanding-principal">{{outstandingPrincipal}} บาท</div>
+              </div>
+              <div class="mlq-row">
+                <div class="mlq-label">ดอกเบี้ยค้างจ่าย</div>
+                <div class="mlq-value" data-testid="ui-miniloan-005-accrued-interest">{{accruedInterest}} บาท</div>
+              </div>
+              <div class="mlq-row">
+                <div class="mlq-label">ค่าธรรมเนียมปิดก่อนกำหนด</div>
+                <div class="mlq-value" data-testid="ui-miniloan-005-early-closure-fee">{{earlyClosureFee}} บาท</div>
+              </div>
+              <div class="mlq-row mlq-row-total">
+                <div class="mlq-label">ยอดที่ต้องชำระทั้งหมด</div>
+                <div class="mlq-value mlq-value-total" data-testid="ui-miniloan-005-total-payoff-amount">{{totalPayoffAmount}} บาท</div>
+              </div>
+              <div style="padding-top:12px;text-align:right">
+                <span style="font-size:12px;color:var(--text-secondary)">คำนวณยอดเมื่อ </span>
+                <span style="font-size:12px;color:var(--text-secondary)" data-testid="ui-miniloan-005-quote-calculated-at">{{quoteCalculatedAt}}</span>
+              </div>
+            </div>
+          </sc-if>
+        </x-import>
+
+        <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+          <div style="display:flex;justify-content:flex-start" data-testid="ui-miniloan-005-back-to-schedule">
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onBackToSchedule}}" hint-size="auto,40px">กลับไปที่ตารางผ่อน</x-import>
+          </div>
+        </sc-if>
+
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 700, &quot;height&quot;: 700},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;unauthorized&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isLoading = demoState === 'loading';
+    const isError = demoState === 'error';
+    const isUnauthorized = demoState === 'unauthorized';
+    const showContent = !isLoading && !isError && !isUnauthorized;
+    const showFields = !isLoading;
+
+    const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    const outstandingPrincipal = 62480.5;
+    const accruedInterest = 318.2;
+    const earlyClosureFee = 624.81;
+    const totalPayoffAmount = outstandingPrincipal + accruedInterest + earlyClosureFee;
+
+    return {
+      isLoading, isError, isUnauthorized, showContent, showFields,
+      outstandingPrincipal: fmt(outstandingPrincipal),
+      accruedInterest: fmt(accruedInterest),
+      earlyClosureFee: fmt(earlyClosureFee),
+      totalPayoffAmount: fmt(totalPayoffAmount),
+      quoteCalculatedAt: '3 ก.ย. 2569 14:22',
+      onRetry: () => this.forceUpdate(),
+      onBackToSchedule: () => {},
+    };
+  }
+}
+
+</script>
+</body>
+</html>

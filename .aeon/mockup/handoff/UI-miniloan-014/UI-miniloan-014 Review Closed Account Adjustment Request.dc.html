@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    @keyframes mlqspin{to{transform:rotate(360deg)}}
+    .mlq-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+    .mlq-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .mlq-row:last-child{border-bottom:none}
+    .mlq-label{font-size:13px;color:var(--text-secondary)}
+    .mlq-value{font-size:14px;color:var(--text-primary);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+    .mlq-sectiontitle{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+    .mlq-iconbtn{width:36px;height:36px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-014">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Assigned queue</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Approved today</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Rejected</div>
+    <div class="mlq-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">Pending adjustments</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Reports</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Settings</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Nichapa Srisuk</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">NS</div>
+    </div>
+
+    <div style="flex:1;padding:32px;max-width:760px">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0">พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว</h1>
+        <a href="../UI-miniloan-013/default.html" style="font-size:13px">← กลับไปที่รายการคำขอปรับปรุงบัญชีที่รออนุมัติ</a>
+      </div>
+
+      <sc-if value="{{isUnauthorized}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--text-primary)">คุณไม่มีสิทธิ์พิจารณาคำขอนี้</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showContent}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <div>
+            <div class="mlq-sectiontitle">รายละเอียดคำขอปรับปรุงบัญชี</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div>
+                <div class="mlq-row">
+                  <div class="mlq-label">ชื่อฟิลด์ที่ขอแก้</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-014-ent-010-field-name">{{adj.fieldName}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">ค่าเดิม</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-014-ent-010-old-value">{{adj.oldValue}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">ค่าใหม่</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-014-ent-010-new-value">{{adj.newValue}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">ผู้ยื่นคำขอ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-014-ent-010-requested-by">{{adj.requestedBy}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">วันที่ยื่นคำขอ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-014-ent-010-requested-at">{{adj.requestedAt}}</div>
+                </div>
+              </div>
+            </x-import>
+          </div>
+
+          <div>
+            <div class="mlq-sectiontitle">การพิจารณา</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div style="display:flex;flex-direction:column;gap:16px">
+
+                <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+                  <div style="padding:12px 14px;border-radius:var(--radius);background:var(--danger-bg);border:1px solid var(--danger);font-size:13px;color:var(--danger)">ไม่สามารถอนุมัติคำขอนี้ได้ เนื่องจากคุณเป็นผู้ยื่นคำขอเอง ตามหลัก four-eyes (BR-miniloan-049@v1)</div>
+                </sc-if>
+
+                <sc-if value="{{canDecide}}" hint-placeholder-val="{{true}}">
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <button type="button" class="mlq-iconbtn" style="background:var(--danger-bg);color:var(--danger)" data-testid="ui-miniloan-014-reject-adjustment" aria-label="ปฏิเสธคำขอ" title="ปฏิเสธคำขอ" disabled="{{isBusy}}" onClick="{{onReject}}">
+                      <sc-if value="{{isLoadingReject}}" hint-placeholder-val="{{false}}"><span style="display:inline-block;width:14px;height:14px;border:2px solid rgba(180,35,24,.35);border-top-color:var(--danger);border-radius:50%;animation:mlqspin .6s linear infinite"></span></sc-if>
+                      <sc-if value="{{isLoadingReject}}" hint-placeholder-val="{{false}}"></sc-if>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                    </button>
+                    <button type="button" class="mlq-iconbtn" style="background:var(--success-bg);color:var(--success)" data-testid="ui-miniloan-014-approve-adjustment" aria-label="อนุมัติคำขอ" title="อนุมัติคำขอ" disabled="{{isBusy}}" onClick="{{onApprove}}">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4L19 7"/></svg>
+                    </button>
+                    <span style="font-size:13px;color:var(--text-secondary)">{{decisionHint}}</span>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{decided}}" hint-placeholder-val="{{false}}">
+                  <div style="font-size:13px;color:var(--text-secondary)">{{decisionLabel}}</div>
+                </sc-if>
+
+              </div>
+            </x-import>
+          </div>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 900, &quot;height&quot;: 760},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;unauthorized&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  state = { decision: null, busyAction: null };
+
+  decide(outcome) {
+    this.setState({ busyAction: outcome === 'approved' ? 'approve' : 'reject' });
+    setTimeout(() => {
+      this.setState({ decision: outcome, busyAction: null });
+    }, 900);
+  }
+
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isUnauthorized = demoState === 'unauthorized';
+    const isErrorDemo = demoState === 'error';
+    const isLoadingDemo = demoState === 'loading';
+    const showContent = !isUnauthorized;
+    const isBusy = !!this.state.busyAction || isLoadingDemo;
+    const isError = isErrorDemo && !this.state.decision;
+    const decided = !!this.state.decision;
+    const canDecide = !decided && !isError;
+
+    const adj = {
+      fieldName: 'หมายเหตุปิดบัญชี',
+      oldValue: '-',
+      newValue: 'ปิดบัญชีก่อนกำหนดตามคำขอลูกค้า',
+      requestedBy: 'Kittipong Charoen',
+      requestedAt: '01 ก.ย. 2569 14:20',
+    };
+
+    return {
+      isUnauthorized, showContent, isError, isBusy, decided, canDecide,
+      adj,
+      decisionHint: isBusy ? 'กำลังบันทึก...' : '',
+      decisionLabel: this.state.decision === 'approved' ? 'อนุมัติคำขอนี้แล้ว' : (this.state.decision === 'rejected' ? 'ปฏิเสธคำขอนี้แล้ว' : ''),
+      isLoadingReject: this.state.busyAction === 'reject' || isLoadingDemo,
+      isLoadingApprove: this.state.busyAction === 'approve',
+      onApprove: () => this.decide('approved'),
+      onReject: () => this.decide('rejected'),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

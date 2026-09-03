@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    .mlq-skel{background:var(--gray-200);border-radius:var(--radius-sm,6px)}
+    .mlq-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+    .mlq-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--border)}
+    .mlq-row:last-child{border-bottom:none}
+    .mlq-label{font-size:13px;color:var(--text-secondary)}
+    .mlq-value{font-size:14px;color:var(--text-primary);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-013">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Assigned queue</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Approved today</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Rejected</div>
+    <div class="mlq-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">Pending adjustments</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Reports</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Settings</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Nichapa Srisuk</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">NS</div>
+    </div>
+
+    <sc-if value="{{isUnauthorized}}" hint-placeholder-val="{{false}}">
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px">
+        <div style="max-width:420px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px">
+          <div style="font-size:15px;color:var(--text-primary)">คุณไม่มีสิทธิ์เข้าถึงหน้านี้</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showPage}}" hint-placeholder-val="{{true}}">
+      <div style="flex:1;padding:32px;max-width:1120px">
+        <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0 0 20px">รายการคำขอปรับปรุงบัญชีที่รออนุมัติ</h1>
+
+        <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+            <div style="font-size:15px;color:var(--danger)">โหลดรายการไม่สำเร็จ</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onRetry}}" hint-size="auto,40px">ลองใหม่</x-import>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+            <div style="font-size:15px;color:var(--text-secondary)">ไม่มีคำขอรออนุมัติ</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{showTable}}" hint-placeholder-val="{{true}}">
+          <div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" padding="{{0}}" hint-size="100%,auto">
+              <div style="padding:16px">
+                <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                  <div style="display:flex;flex-direction:column;gap:12px">
+                    <div class="mlq-skel" style="height:20px;width:100%"></div>
+                    <div class="mlq-skel" style="height:20px;width:100%"></div>
+                    <div class="mlq-skel" style="height:20px;width:100%"></div>
+                    <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  </div>
+                </sc-if>
+                <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                  <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Table" columns="{{columns}}" rows="{{rows}}" hint-size="100%,auto"></x-import>
+                </sc-if>
+              </div>
+            </x-import>
+
+            <sc-if value="{{isOverflow}}" hint-placeholder-val="{{false}}">
+              <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:16px">
+                <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" size="sm" on-click="{{onPrevPage}}" hint-size="auto,32px">Previous</x-import>
+                <span style="font-size:13px;color:var(--text-secondary)">Page {{page}} of {{totalPages}}</span>
+                <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" size="sm" on-click="{{onNextPage}}" hint-size="auto,32px">Next</x-import>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Dialog" open="{{reviewOpen}}" title="{{reviewTitle}}" on-close="{{closeReview}}" hint-size="0,0">
+    <div style="display:flex;flex-direction:column;gap:0;font-size:14px;color:var(--text-primary);min-width:360px">
+      <div class="mlq-row">
+        <div class="mlq-label">บัญชี</div>
+        <div class="mlq-value">{{reviewItem.accountId}}</div>
+      </div>
+      <div class="mlq-row">
+        <div class="mlq-label">ชื่อฟิลด์ที่ขอแก้</div>
+        <div class="mlq-value">{{reviewItem.fieldName}}</div>
+      </div>
+      <div class="mlq-row">
+        <div class="mlq-label">ค่าเดิม</div>
+        <div class="mlq-value">{{reviewItem.oldValue}}</div>
+      </div>
+      <div class="mlq-row">
+        <div class="mlq-label">ค่าใหม่</div>
+        <div class="mlq-value">{{reviewItem.newValue}}</div>
+      </div>
+      <div class="mlq-row">
+        <div class="mlq-label">ผู้ยื่นคำขอ</div>
+        <div class="mlq-value">{{reviewItem.requestedBy}}</div>
+      </div>
+      <div class="mlq-row">
+        <div class="mlq-label">วันที่ยื่นคำขอ</div>
+        <div class="mlq-value">{{reviewItem.requestedAt}}</div>
+      </div>
+      <sc-if value="{{reviewDecided}}" hint-placeholder-val="{{false}}">
+        <div style="margin-top:16px;padding:12px 14px;border-radius:var(--radius);font-size:13px;background:var(--brand-subtle);color:var(--brand-primary)">{{reviewDecisionLabel}}</div>
+      </sc-if>
+      <sc-if value="{{showDecisionButtons}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px">
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onReject}}" hint-size="auto,40px">ปฏิเสธ</x-import>
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="primary" on-click="{{onApprove}}" hint-size="auto,40px">อนุมัติ</x-import>
+        </div>
+      </sc-if>
+    </div>
+  </x-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 800},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;empty&quot;, &quot;unauthorized&quot;, &quot;overflow&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  state = { page: 1, reviewId: null, resolved: {} };
+
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isLoading = demoState === 'loading';
+    const isError = demoState === 'error';
+    const isEmpty = demoState === 'empty';
+    const isUnauthorized = demoState === 'unauthorized';
+    const isOverflow = demoState === 'overflow';
+    const showPage = !isUnauthorized;
+    const showTable = !isError && !isEmpty;
+    const showFields = !isLoading;
+
+    const allRequests = [
+      { id: 'ADJ-3301', accountId: 'LA-20455', fieldName: 'หมายเหตุปิดบัญชี', oldValue: '-', newValue: 'ปิดบัญชีก่อนกำหนดตามคำขอลูกค้า', requestedBy: 'Kittipong Charoen', requestedAt: '01 ก.ย. 2569 14:20' },
+      { id: 'ADJ-3298', accountId: 'LA-20402', fieldName: 'วันที่ปิดบัญชี', oldValue: '28 ส.ค. 2569', newValue: '27 ส.ค. 2569', requestedBy: 'Suda Wattana', requestedAt: '31 ส.ค. 2569 11:05' },
+      { id: 'ADJ-3294', accountId: 'LA-20388', fieldName: 'ยอดคงเหลือหลังปิดบัญชี', oldValue: '0.00 THB', newValue: '1,250.00 THB', requestedBy: 'Kittipong Charoen', requestedAt: '30 ส.ค. 2569 09:40' },
+      { id: 'ADJ-3289', accountId: 'LA-20371', fieldName: 'ผู้ทำรายการปิดบัญชี', oldValue: 'Suda Wattana', newValue: 'Kittipong Charoen', requestedBy: 'Nattapon Ruangroj', requestedAt: '29 ส.ค. 2569 16:12' },
+      { id: 'ADJ-3281', accountId: 'LA-20360', fieldName: 'สถานะบัญชี', oldValue: 'Closed', newValue: 'ClosedEarly', requestedBy: 'Suda Wattana', requestedAt: '28 ส.ค. 2569 10:50' },
+      { id: 'ADJ-3276', accountId: 'LA-20348', fieldName: 'หมายเหตุปิดบัญชี', oldValue: 'ชำระครบตามกำหนด', newValue: 'ปิดบัญชีก่อนกำหนด - settlement เต็มจำนวน', requestedBy: 'Nattapon Ruangroj', requestedAt: '27 ส.ค. 2569 08:15' },
+    ];
+
+    const pending = isEmpty ? [] : allRequests.filter((r) => !this.state.resolved[r.id]);
+
+    const pageSize = 4;
+    const page = isOverflow ? this.state.page : 1;
+    const totalPages = isOverflow ? Math.max(1, Math.ceil(pending.length / pageSize)) : 1;
+    const pageItems = isOverflow ? pending.slice((page - 1) * pageSize, page * pageSize) : pending.slice(0, pageSize);
+
+    const testCell = (testid, node) => React.createElement('div', { 'data-testid': testid }, node);
+
+    const openIcon = (r) => testCell('ui-miniloan-013-open-adjustment', React.createElement(
+      MiniLoanDesignSystem_4cbaa0.IconButton,
+      { label: 'เปิดพิจารณาคำขอ', onClick: () => this.setState({ reviewId: r.id }) },
+      React.createElement('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5 },
+        React.createElement('path', { d: 'M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z' }),
+        React.createElement('circle', { cx: 12, cy: 12, r: 3 }))
+    ));
+
+    const columns = [
+      { key: 'action', label: '' },
+      { key: 'fieldName', label: 'ชื่อฟิลด์ที่ขอแก้' },
+      { key: 'oldValue', label: 'ค่าเดิม' },
+      { key: 'newValue', label: 'ค่าใหม่' },
+      { key: 'requestedBy', label: 'ผู้ยื่นคำขอ' },
+      { key: 'requestedAt', label: 'วันที่ยื่นคำขอ' },
+    ];
+    const rows = pageItems.map((r) => ({
+      action: openIcon(r),
+      fieldName: testCell('ui-miniloan-013-ent-010-field-name', r.fieldName),
+      oldValue: testCell('ui-miniloan-013-ent-010-old-value', r.oldValue),
+      newValue: testCell('ui-miniloan-013-ent-010-new-value', r.newValue),
+      requestedBy: testCell('ui-miniloan-013-ent-010-requested-by', r.requestedBy),
+      requestedAt: testCell('ui-miniloan-013-ent-010-requested-at', r.requestedAt),
+    }));
+
+    const reviewItem = allRequests.find((r) => r.id === this.state.reviewId) || null;
+    const decision = reviewItem ? this.state.resolved[reviewItem.id] : null;
+
+    const decide = (outcome) => {
+      const id = this.state.reviewId;
+      this.setState((s) => ({ resolved: { ...s.resolved, [id]: outcome } }));
+    };
+
+    return {
+      isLoading, isError, isEmpty, isUnauthorized, isOverflow, showPage, showTable, showFields,
+      columns, rows,
+      page, totalPages,
+      onPrevPage: () => this.setState((s) => ({ page: Math.max(1, s.page - 1) })),
+      onNextPage: () => this.setState((s) => ({ page: Math.min(totalPages, s.page + 1) })),
+      onRetry: () => this.forceUpdate(),
+      reviewOpen: !!reviewItem,
+      reviewTitle: reviewItem ? 'พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว' : '',
+      reviewItem: reviewItem || { accountId: '', fieldName: '', oldValue: '', newValue: '', requestedBy: '', requestedAt: '' },
+      reviewDecided: !!decision,
+      reviewDecisionLabel: decision === 'approved' ? 'อนุมัติคำขอนี้แล้ว' : (decision === 'rejected' ? 'ปฏิเสธคำขอนี้แล้ว' : ''),
+      showDecisionButtons: !decision,
+      onApprove: () => decide('approved'),
+      onReject: () => decide('rejected'),
+      closeReview: () => this.setState({ reviewId: null }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

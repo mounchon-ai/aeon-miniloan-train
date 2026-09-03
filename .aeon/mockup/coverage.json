@@ -58,11 +58,11 @@
     },
     {
       "screen": "UI-miniloan-013",
-      "level": "L1"
+      "level": "L2"
     },
     {
       "screen": "UI-miniloan-014",
-      "level": "L1"
+      "level": "L2"
     }
   ],
   "exceptions": [],

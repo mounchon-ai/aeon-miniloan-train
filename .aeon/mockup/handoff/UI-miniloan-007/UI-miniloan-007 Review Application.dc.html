@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    .mlq-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+    .mlq-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .mlq-row:last-child{border-bottom:none}
+    .mlq-label{font-size:13px;color:var(--text-secondary)}
+    .mlq-value{font-size:14px;color:var(--text-primary);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+    .mlq-sectiontitle{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+    .mlq-fieldlabel{font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-007">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mlq-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">Assigned queue</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Approved today</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Rejected</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Reports</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Nichapa Srisuk</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">NS</div>
+    </div>
+
+    <div style="flex:1;padding:32px;max-width:760px">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0">พิจารณาใบสมัคร</h1>
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.StatusBadge" state="{{app.status}}" hint-size="auto,24px"></x-import>
+        </div>
+        <a href="#" onClick="{{onBack}}" style="font-size:13px">← กลับไปที่คิว</a>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);margin:0 0 24px">{{app.id}}</p>
+
+      <sc-if value="{{isUnauthorized}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--text-primary)">ไม่มีสิทธิ์ดำเนินการกับใบสมัครนี้</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showContent}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <div>
+            <div class="mlq-sectiontitle">ข้อมูลผู้สมัคร</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div>
+                <div class="mlq-row">
+                  <div class="mlq-label">ชื่อผู้สมัคร</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-001-full-name">{{app.fullName}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">อายุ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-002-age">{{app.age}} ปี</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">รายได้ต่อเดือน</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-002-monthly-income">{{app.monthlyIncome}} บาท</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">อายุงาน (เดือน)</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-002-current-employment-months">{{app.employmentMonths}} เดือน</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">ภาระหนี้เดิมต่อเดือน</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-002-existing-monthly-debt">{{app.existingDebt}} บาท</div>
+                </div>
+              </div>
+            </x-import>
+          </div>
+
+          <div>
+            <div class="mlq-sectiontitle">รายละเอียดคำขอกู้</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div>
+                <div class="mlq-row">
+                  <div class="mlq-label">จำนวนเงินกู้ที่ขอ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-002-requested-amount">{{app.requestedAmount}} บาท</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">จำนวนงวดที่ขอ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-002-requested-term-months">{{app.requestedTermMonths}} งวด</div>
+                </div>
+              </div>
+            </x-import>
+          </div>
+
+          <div>
+            <div class="mlq-sectiontitle">ผลการประเมิน</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div>
+                <div class="mlq-row">
+                  <div class="mlq-label">Credit Band</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-003-band"><span style="color:{{app.bandColor}}">{{app.band}}</span></div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">วงเงินอนุมัติสูงสุด</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-003-max-approvable-amount">{{app.maxApprovable}} บาท</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">DTI</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-007-ent-003-dti-ratio">{{app.dti}}%</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">เหตุผลผลการประเมิน</div>
+                  <div class="mlq-value" style="font-weight:400" data-testid="ui-miniloan-007-ent-003-reasons">{{app.reasons}}</div>
+                </div>
+              </div>
+            </x-import>
+          </div>
+
+          <div>
+            <div class="mlq-sectiontitle">การพิจารณา</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div style="display:flex;flex-direction:column;gap:16px">
+
+                <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+                  <div style="padding:12px 14px;border-radius:var(--radius);background:var(--danger-subtle,#FEF3F2);border:1px solid var(--danger-border,#FDA29B);font-size:13px;color:var(--danger)">{{errorMessage}}</div>
+                </sc-if>
+
+                <sc-if value="{{canDecide}}" hint-placeholder-val="{{true}}">
+                  <div>
+                    <div class="mlq-fieldlabel">เหตุผลที่ปฏิเสธ</div>
+                    <div data-testid="ui-miniloan-007-ent-002-rejection-reason">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Input" type="textarea" value="{{rejectionReason}}" on-change="{{onRejectionReasonChange}}" placeholder="ระบุเหตุผลที่ปฏิเสธใบสมัครนี้" disabled="{{isBusy}}" hint-size="100%,72px"></x-import>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="mlq-fieldlabel">เหตุผลที่ยกเลิก</div>
+                    <div data-testid="ui-miniloan-007-ent-002-cancellation-reason">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Input" type="textarea" value="{{cancellationReason}}" on-change="{{onCancellationReasonChange}}" placeholder="ระบุเหตุผลที่ยกเลิกใบสมัครนี้" disabled="{{isBusy}}" hint-size="100%,72px"></x-import>
+                    </div>
+                  </div>
+
+                  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:4px">
+                    <div data-testid="ui-miniloan-007-approve">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="primary" on-click="{{onApprove}}" disabled="{{isBusy}}" loading="{{isLoadingApprove}}" hint-size="auto,40px">อนุมัติ</x-import>
+                    </div>
+                    <div data-testid="ui-miniloan-007-reject">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onReject}}" disabled="{{isBusy}}" loading="{{isLoadingReject}}" hint-size="auto,40px">ปฏิเสธ</x-import>
+                    </div>
+                    <div data-testid="ui-miniloan-007-disburse">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="primary" on-click="{{onDisburse}}" disabled="{{isBusy}}" loading="{{isLoadingDisburse}}" hint-size="auto,40px">สั่งเบิกจ่าย</x-import>
+                    </div>
+                    <div data-testid="ui-miniloan-007-cancel" style="margin-left:auto">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="danger" on-click="{{onCancel}}" disabled="{{isBusy}}" loading="{{isLoadingCancel}}" hint-size="auto,40px">ยกเลิกใบสมัคร</x-import>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{decided}}" hint-placeholder-val="{{false}}">
+                  <div style="font-size:13px;color:var(--text-secondary)">ใบสมัครนี้ได้รับการดำเนินการแล้ว ไม่สามารถแก้ไขได้อีก</div>
+                </sc-if>
+
+              </div>
+            </x-import>
+          </div>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 900, &quot;height&quot;: 900},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;unauthorized&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  state = {
+    status: 'UnderReview',
+    rejectionReason: '',
+    cancellationReason: '',
+    busyAction: null,
+  };
+
+  decide(action, nextStatus) {
+    if (action === 'reject' && !this.state.rejectionReason.trim()) return;
+    if (action === 'cancel' && !this.state.cancellationReason.trim()) return;
+    this.setState({ busyAction: action });
+    setTimeout(() => {
+      this.setState({ status: nextStatus, busyAction: null });
+    }, 900);
+  }
+
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isUnauthorized = demoState === 'unauthorized';
+    const isError = demoState === 'error';
+    const showContent = !isUnauthorized;
+    const isBusy = !!this.state.busyAction || demoState === 'loading';
+
+    const app = {
+      id: 'LA-20481',
+      status: this.state.status,
+      fullName: 'Somchai Jaidee',
+      age: '34',
+      monthlyIncome: '38,000',
+      employmentMonths: '42',
+      existingDebt: '4,500',
+      requestedAmount: '100,000',
+      requestedTermMonths: '24',
+      band: 'A',
+      bandColor: 'var(--credit-band-a)',
+      maxApprovable: '120,000',
+      dti: '18.4',
+      reasons: 'รายได้สม่ำเสมอ ไม่มีประวัติผิดนัดชำระในช่วง 24 เดือนที่ผ่านมา',
+    };
+
+    const decided = this.state.status !== 'UnderReview';
+    const canDecide = !decided;
+
+    const errorMessages = {
+      error: 'เกินวงเงินอนุมัติสูงสุด',
+    };
+
+    return {
+      app, isUnauthorized, isError, showContent, isBusy, decided, canDecide,
+      errorMessage: errorMessages[demoState] || '',
+      rejectionReason: this.state.rejectionReason,
+      cancellationReason: this.state.cancellationReason,
+      onRejectionReasonChange: (v) => this.setState({ rejectionReason: v }),
+      onCancellationReasonChange: (v) => this.setState({ cancellationReason: v }),
+      isLoadingApprove: this.state.busyAction === 'approve' || (demoState === 'loading'),
+      isLoadingReject: this.state.busyAction === 'reject',
+      isLoadingDisburse: this.state.busyAction === 'disburse',
+      isLoadingCancel: this.state.busyAction === 'cancel',
+      onApprove: () => this.decide('approve', 'Approved'),
+      onReject: () => this.decide('reject', 'Rejected'),
+      onDisburse: () => this.decide('disburse', 'Disbursed'),
+      onCancel: () => this.decide('cancel', 'Cancelled'),
+      onBack: (e) => { e.preventDefault(); },
+    };
+  }
+}
+
+</script>
+</body>
+</html>

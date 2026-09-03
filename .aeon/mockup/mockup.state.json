@@ -7,7 +7,7 @@
     {
       "screen": "UI-miniloan-001",
       "file": ".aeon/mockup/prompts/UI-miniloan-001.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-001-ent-001-full-name",
         "ui-miniloan-001-ent-002-age",
@@ -24,7 +24,7 @@
     {
       "screen": "UI-miniloan-002",
       "file": ".aeon/mockup/prompts/UI-miniloan-002.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-002-ent-002-requested-amount",
         "ui-miniloan-002-ent-002-status",
@@ -39,7 +39,7 @@
     {
       "screen": "UI-miniloan-003",
       "file": ".aeon/mockup/prompts/UI-miniloan-003.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-003-back-to-list",
         "ui-miniloan-003-ent-002-rejection-reason",
@@ -55,7 +55,7 @@
     {
       "screen": "UI-miniloan-004",
       "file": ".aeon/mockup/prompts/UI-miniloan-004.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-004-ent-007-total-principal",
         "ui-miniloan-004-ent-008-due-date",
@@ -71,7 +71,7 @@
     {
       "screen": "UI-miniloan-005",
       "file": ".aeon/mockup/prompts/UI-miniloan-005.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-005-accrued-interest",
         "ui-miniloan-005-back-to-schedule",
@@ -84,7 +84,7 @@
     {
       "screen": "UI-miniloan-006",
       "file": ".aeon/mockup/prompts/UI-miniloan-006.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-006-ent-001-full-name",
         "ui-miniloan-006-ent-002-requested-amount",
@@ -97,7 +97,7 @@
     {
       "screen": "UI-miniloan-007",
       "file": ".aeon/mockup/prompts/UI-miniloan-007.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-007-approve",
         "ui-miniloan-007-cancel",
@@ -121,7 +121,7 @@
     {
       "screen": "UI-miniloan-008",
       "file": ".aeon/mockup/prompts/UI-miniloan-008.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-008-ent-011-approver-role",
         "ui-miniloan-008-ent-011-updated-at",
@@ -132,7 +132,7 @@
     {
       "screen": "UI-miniloan-009",
       "file": ".aeon/mockup/prompts/UI-miniloan-009.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-009-count-accounts-active",
         "ui-miniloan-009-count-accounts-closed",
@@ -145,7 +145,7 @@
     {
       "screen": "UI-miniloan-010",
       "file": ".aeon/mockup/prompts/UI-miniloan-010.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-010-assign-officer",
         "ui-miniloan-010-cancel-application",
@@ -158,7 +158,7 @@
     {
       "screen": "UI-miniloan-011",
       "file": ".aeon/mockup/prompts/UI-miniloan-011.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-011-ent-006-outstanding-principal",
         "ui-miniloan-011-ent-006-status",
@@ -169,7 +169,7 @@
     {
       "screen": "UI-miniloan-012",
       "file": ".aeon/mockup/prompts/UI-miniloan-012.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-012-ent-006-closed-at",
         "ui-miniloan-012-ent-006-disbursed-at",
@@ -194,7 +194,7 @@
     {
       "screen": "UI-miniloan-013",
       "file": ".aeon/mockup/prompts/UI-miniloan-013.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-013-ent-010-field-name",
         "ui-miniloan-013-ent-010-new-value",
@@ -207,7 +207,7 @@
     {
       "screen": "UI-miniloan-014",
       "file": ".aeon/mockup/prompts/UI-miniloan-014.md",
-      "imported": false,
+      "imported": true,
       "testids": [
         "ui-miniloan-014-approve-adjustment",
         "ui-miniloan-014-ent-010-field-name",
@@ -219,7 +219,275 @@
       ]
     }
   ],
-  "handoffs": [],
+  "handoffs": [
+    {
+      "screen": "UI-miniloan-013",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-013/UI-miniloan-013 Pending Account Adjustment Requests.dc.html",
+      "sha256": "sha256:1533b346b3de8524e1176295cfb7a9c6707524876b196e6806c8908fdbbadd82",
+      "testidsReturned": [],
+      "testidsMissing": [
+        "ui-miniloan-013-ent-010-field-name",
+        "ui-miniloan-013-ent-010-new-value",
+        "ui-miniloan-013-ent-010-old-value",
+        "ui-miniloan-013-ent-010-requested-at",
+        "ui-miniloan-013-ent-010-requested-by",
+        "ui-miniloan-013-open-adjustment"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-002",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-002/UI-miniloan-002 My Applications and Accounts.dc.html",
+      "sha256": "sha256:335a1210853ee3fca7ac6dc4446ec3f6d75d5b88e8a996cd6331627a9aa1aa9c",
+      "testidsReturned": [
+        "ui-miniloan-002-new-application"
+      ],
+      "testidsMissing": [
+        "ui-miniloan-002-ent-002-requested-amount",
+        "ui-miniloan-002-ent-002-status",
+        "ui-miniloan-002-ent-002-submitted-at",
+        "ui-miniloan-002-ent-006-outstanding-principal",
+        "ui-miniloan-002-ent-006-status",
+        "ui-miniloan-002-view-application",
+        "ui-miniloan-002-view-schedule"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-003",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-003/UI-miniloan-003 My Application Details.dc.html",
+      "sha256": "sha256:9403b9164748905442446c11884b5c8b2e017d0bbb43dfb40fa8041140641206",
+      "testidsReturned": [
+        "ui-miniloan-003-back-to-list",
+        "ui-miniloan-003-ent-002-rejection-reason",
+        "ui-miniloan-003-ent-002-requested-amount",
+        "ui-miniloan-003-ent-002-requested-term-months",
+        "ui-miniloan-003-ent-002-status",
+        "ui-miniloan-003-ent-002-submitted-at",
+        "ui-miniloan-003-ent-003-band",
+        "ui-miniloan-003-ent-003-max-approvable-amount",
+        "ui-miniloan-003-ent-003-reasons"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-004",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-004/UI-miniloan-004 My Repayment Schedule.dc.html",
+      "sha256": "sha256:6ac77f1a894641f61b8caff32c405320c8bc82db6bcce8bed06791c71bb346bc",
+      "testidsReturned": [
+        "ui-miniloan-004-ent-007-total-principal",
+        "ui-miniloan-004-request-payoff-quote"
+      ],
+      "testidsMissing": [
+        "ui-miniloan-004-ent-008-due-date",
+        "ui-miniloan-004-ent-008-emi-amount",
+        "ui-miniloan-004-ent-008-installment-number",
+        "ui-miniloan-004-ent-008-interest-portion",
+        "ui-miniloan-004-ent-008-principal-portion",
+        "ui-miniloan-004-ent-008-remaining-balance",
+        "ui-miniloan-004-ent-008-status"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-005",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-005/UI-miniloan-005 My Early Settlement Quote.dc.html",
+      "sha256": "sha256:9a58e780ab6d52c2e3a0d5c4be335acf90e93538e7759c857f4dee04b4e021e8",
+      "testidsReturned": [
+        "ui-miniloan-005-accrued-interest",
+        "ui-miniloan-005-back-to-schedule",
+        "ui-miniloan-005-early-closure-fee",
+        "ui-miniloan-005-ent-006-outstanding-principal",
+        "ui-miniloan-005-quote-calculated-at",
+        "ui-miniloan-005-total-payoff-amount"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-006",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-006/UI-miniloan-006 Assigned Application Queue.dc.html",
+      "sha256": "sha256:6775a82c789c052574b5e6fdac486e05130a5f68d936faf531f322cb091207bd",
+      "testidsReturned": [
+        "ui-miniloan-006-filter-by-status",
+        "ui-miniloan-006-queue-count"
+      ],
+      "testidsMissing": [
+        "ui-miniloan-006-ent-001-full-name",
+        "ui-miniloan-006-ent-002-requested-amount",
+        "ui-miniloan-006-ent-002-status",
+        "ui-miniloan-006-ent-003-band",
+        "ui-miniloan-006-open-application"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-007",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-007/UI-miniloan-007 Review Application.dc.html",
+      "sha256": "sha256:10347425b81e483c41f68850335daca15be92da58d3bbf47c310405c6e214826",
+      "testidsReturned": [
+        "ui-miniloan-007-approve",
+        "ui-miniloan-007-cancel",
+        "ui-miniloan-007-disburse",
+        "ui-miniloan-007-ent-001-full-name",
+        "ui-miniloan-007-ent-002-age",
+        "ui-miniloan-007-ent-002-cancellation-reason",
+        "ui-miniloan-007-ent-002-current-employment-months",
+        "ui-miniloan-007-ent-002-existing-monthly-debt",
+        "ui-miniloan-007-ent-002-monthly-income",
+        "ui-miniloan-007-ent-002-rejection-reason",
+        "ui-miniloan-007-ent-002-requested-amount",
+        "ui-miniloan-007-ent-002-requested-term-months",
+        "ui-miniloan-007-ent-003-band",
+        "ui-miniloan-007-ent-003-dti-ratio",
+        "ui-miniloan-007-ent-003-max-approvable-amount",
+        "ui-miniloan-007-ent-003-reasons",
+        "ui-miniloan-007-reject"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-008",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-008/UI-miniloan-008 Closed Account Approver Settings.dc.html",
+      "sha256": "sha256:32e48ace221f3c1ad7b6537160c7762c1b7965d5c8c2555d7a4f0d6de84d9cd9",
+      "testidsReturned": [
+        "ui-miniloan-008-ent-011-approver-role",
+        "ui-miniloan-008-ent-011-updated-at",
+        "ui-miniloan-008-ent-011-updated-by",
+        "ui-miniloan-008-save-setting"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-009",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-009/UI-miniloan-009 Status Overview Dashboard.dc.html",
+      "sha256": "sha256:91e9956d6930561aa2cc8c8c1724f0a2cc620672005900f5c00b506c69fdabc8",
+      "testidsReturned": [
+        "ui-miniloan-009-count-accounts-active",
+        "ui-miniloan-009-count-accounts-closed",
+        "ui-miniloan-009-count-applications-approved",
+        "ui-miniloan-009-count-applications-submitted",
+        "ui-miniloan-009-count-applications-under-review",
+        "ui-miniloan-009-refresh"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-010",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-010/UI-miniloan-010 Unassigned Application Queue.dc.html",
+      "sha256": "sha256:2951018576563bb89aa99d7ab3fdc720ba997a83656a6f4b08abd7e5d6ab2ec9",
+      "testidsReturned": [
+        "ui-miniloan-010-header-title"
+      ],
+      "testidsMissing": [
+        "ui-miniloan-010-assign-officer",
+        "ui-miniloan-010-cancel-application",
+        "ui-miniloan-010-ent-001-full-name",
+        "ui-miniloan-010-ent-002-requested-amount",
+        "ui-miniloan-010-ent-002-status",
+        "ui-miniloan-010-ent-003-band"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-011",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-011/UI-miniloan-011 My Managed Accounts.dc.html",
+      "sha256": "sha256:c3f104613e2f586f1e35bbf91385620d5335219695513c8c888970291bc44c0a",
+      "testidsReturned": [
+        "ui-miniloan-011-header-title"
+      ],
+      "testidsMissing": [
+        "ui-miniloan-011-ent-006-outstanding-principal",
+        "ui-miniloan-011-ent-006-status",
+        "ui-miniloan-011-next-due-installment",
+        "ui-miniloan-011-open-account"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-012",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-012/UI-miniloan-012 Loan Account Details.dc.html",
+      "sha256": "sha256:e2679d92dc872dd64e79164ccde2d6e212b6eb5ef23565a0405491a26de4b37b",
+      "testidsReturned": [
+        "ui-miniloan-012-ent-006-closed-at",
+        "ui-miniloan-012-ent-006-disbursed-at",
+        "ui-miniloan-012-ent-006-outstanding-principal",
+        "ui-miniloan-012-ent-006-principal-amount",
+        "ui-miniloan-012-ent-006-status",
+        "ui-miniloan-012-ent-006-term-months",
+        "ui-miniloan-012-ent-009-amount",
+        "ui-miniloan-012-ent-010-field-name",
+        "ui-miniloan-012-ent-010-new-value",
+        "ui-miniloan-012-ent-010-old-value",
+        "ui-miniloan-012-error-message",
+        "ui-miniloan-012-header-title",
+        "ui-miniloan-012-record-payment",
+        "ui-miniloan-012-record-payoff-payment",
+        "ui-miniloan-012-reschedule",
+        "ui-miniloan-012-submit-adjustment"
+      ],
+      "testidsMissing": [
+        "ui-miniloan-012-ent-008-due-date",
+        "ui-miniloan-012-ent-008-emi-amount",
+        "ui-miniloan-012-ent-008-installment-number",
+        "ui-miniloan-012-ent-008-status"
+      ],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-001",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-001/UI-miniloan-001 Loan Application Form.dc.html",
+      "sha256": "sha256:5ed814ddb89203922fda56fb64fc7d369f615542b758d03d6b00e140598d4a40",
+      "testidsReturned": [
+        "ui-miniloan-001-ent-001-full-name",
+        "ui-miniloan-001-ent-002-age",
+        "ui-miniloan-001-ent-002-current-employment-months",
+        "ui-miniloan-001-ent-002-existing-monthly-debt",
+        "ui-miniloan-001-ent-002-monthly-income",
+        "ui-miniloan-001-ent-002-requested-amount",
+        "ui-miniloan-001-ent-002-requested-term-months",
+        "ui-miniloan-001-estimated-max-approved-amount",
+        "ui-miniloan-001-save-draft",
+        "ui-miniloan-001-submit"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    },
+    {
+      "screen": "UI-miniloan-014",
+      "kind": "ui-mockup",
+      "ref": ".aeon/mockup/handoff/UI-miniloan-014/UI-miniloan-014 Review Closed Account Adjustment Request.dc.html",
+      "sha256": "sha256:9be988c36ed3fd091b941b05cffb367f97c7d6ebc30ada8042dd1b5f4e30e936",
+      "testidsReturned": [
+        "ui-miniloan-014-approve-adjustment",
+        "ui-miniloan-014-ent-010-field-name",
+        "ui-miniloan-014-ent-010-new-value",
+        "ui-miniloan-014-ent-010-old-value",
+        "ui-miniloan-014-ent-010-requested-at",
+        "ui-miniloan-014-ent-010-requested-by",
+        "ui-miniloan-014-reject-adjustment"
+      ],
+      "testidsMissing": [],
+      "fieldsUnknown": []
+    }
+  ],
   "steps": [
     {
       "id": "init",
@@ -280,7 +548,7 @@
     {
       "id": "html",
       "command": "/mock:html",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "wireframe",
         "theme"
@@ -288,7 +556,8 @@
       "artifacts": [
         "../../mockups/<UI-id>/<state>.html"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-03T14:20:56Z"
     },
     {
       "id": "handoff",

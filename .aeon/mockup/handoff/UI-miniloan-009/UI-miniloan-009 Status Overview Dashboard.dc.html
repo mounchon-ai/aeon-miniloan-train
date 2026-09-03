@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    .mld-skel{background:var(--gray-200);border-radius:var(--radius-sm,6px)}
+    .mld-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-009">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mld-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">Dashboard</div>
+    <div class="mld-navitem" style="color:var(--text-secondary)">Assigned queue</div>
+    <div class="mld-navitem" style="color:var(--text-secondary)">Approved today</div>
+    <div class="mld-navitem" style="color:var(--text-secondary)">Reports</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Nichapa Srisuk</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">NS</div>
+    </div>
+
+    <div style="flex:1;padding:32px;max-width:1040px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+        <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0">แดชบอร์ดภาพรวมสถานะ</h1>
+        <div data-testid="ui-miniloan-009-refresh">
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" size="sm" on-click="{{onRefresh}}" hint-size="auto,36px">Refresh</x-import>
+        </div>
+      </div>
+
+      <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--danger)">Failed to load the dashboard.</div>
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onRefresh}}" hint-size="auto,40px">Try again</x-import>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showCounts}}" hint-placeholder-val="{{true}}">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin:0 0 12px">Applications</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px">
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,110px">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div class="mld-skel" style="height:32px;width:60%;margin-bottom:8px"></div>
+                <div class="mld-skel" style="height:14px;width:80%"></div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <div data-testid="ui-miniloan-009-count-applications-submitted">
+                  <div style="font-size:32px;font-weight:700;font-family:var(--font-display);color:var(--text-primary);font-variant-numeric:tabular-nums">{{counts.submitted}}</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">Submitted</div>
+                </div>
+              </sc-if>
+            </x-import>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,110px">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div class="mld-skel" style="height:32px;width:60%;margin-bottom:8px"></div>
+                <div class="mld-skel" style="height:14px;width:80%"></div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <div data-testid="ui-miniloan-009-count-applications-under-review">
+                  <div style="font-size:32px;font-weight:700;font-family:var(--font-display);color:var(--text-primary);font-variant-numeric:tabular-nums">{{counts.underReview}}</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">Under review</div>
+                </div>
+              </sc-if>
+            </x-import>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,110px">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div class="mld-skel" style="height:32px;width:60%;margin-bottom:8px"></div>
+                <div class="mld-skel" style="height:14px;width:80%"></div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <div data-testid="ui-miniloan-009-count-applications-approved">
+                  <div style="font-size:32px;font-weight:700;font-family:var(--font-display);color:var(--text-primary);font-variant-numeric:tabular-nums">{{counts.approved}}</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">Approved</div>
+                </div>
+              </sc-if>
+            </x-import>
+          </div>
+
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em;margin:0 0 12px">Accounts</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,110px">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div class="mld-skel" style="height:32px;width:60%;margin-bottom:8px"></div>
+                <div class="mld-skel" style="height:14px;width:80%"></div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <div data-testid="ui-miniloan-009-count-accounts-active">
+                  <div style="font-size:32px;font-weight:700;font-family:var(--font-display);color:var(--text-primary);font-variant-numeric:tabular-nums">{{counts.active}}</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">Active</div>
+                </div>
+              </sc-if>
+            </x-import>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,110px">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div class="mld-skel" style="height:32px;width:60%;margin-bottom:8px"></div>
+                <div class="mld-skel" style="height:14px;width:80%"></div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <div data-testid="ui-miniloan-009-count-accounts-closed">
+                  <div style="font-size:32px;font-weight:700;font-family:var(--font-display);color:var(--text-primary);font-variant-numeric:tabular-nums">{{counts.closed}}</div>
+                  <div style="font-size:13px;color:var(--text-secondary);margin-top:4px">Closed</div>
+                </div>
+              </sc-if>
+            </x-import>
+            <div></div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 800},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;empty&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isLoading = demoState === 'loading';
+    const isError = demoState === 'error';
+    const isEmpty = demoState === 'empty';
+    const showCounts = !isError;
+    const showFields = !isLoading;
+
+    const counts = isEmpty
+      ? { submitted: 0, underReview: 0, approved: 0, active: 0, closed: 0 }
+      : { submitted: 14, underReview: 9, approved: 37, active: 152, closed: 61 };
+
+    return {
+      isLoading, isError, showCounts, showFields, counts,
+      onRefresh: () => this.forceUpdate(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

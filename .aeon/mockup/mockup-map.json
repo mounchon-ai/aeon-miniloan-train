@@ -195,7 +195,7 @@
     {
       "id": "MCK-miniloan-013",
       "screen": "UI-miniloan-013",
-      "level": "L1",
+      "level": "L2",
       "file": "wireframes/UI-miniloan-013.json",
       "layout": "rows",
       "rendersState": [
@@ -209,12 +209,26 @@
         "UIC-001",
         "UIC-002"
       ],
-      "usesComponent": []
+      "usesComponent": [
+        "Button",
+        "IconButton",
+        "Input",
+        "Table",
+        "Toast"
+      ],
+      "deliveredPages": {
+        "default": "sha256:1cbc82414e7f23d28c9534f525f56f6467843f743b63cd9b47471f334566cafc",
+        "empty": "sha256:cbfd12d44f2f6a4e9b63abfaf665f39e709f2016a91a63fc079c81b41040dd25",
+        "error": "sha256:f94648761cfe165daabe4f6ebf1d3ef4be0276e79860cbe0b4f0173119d97341",
+        "loading": "sha256:5f98b75d08ce5b461611655e4142ed49375d0bc3f0f8373150a2d5fbe3a21a73",
+        "overflow": "sha256:a7f0e48a642b212c3faa53489d9a0104c69b3414a954c2de0ca78889661291d5",
+        "unauthorized": "sha256:72499e21f6d225c8c2167b9730be401b04b67bb5a1539196b0ea8e1e5f40fd44"
+      }
     },
     {
       "id": "MCK-miniloan-014",
       "screen": "UI-miniloan-014",
-      "level": "L1",
+      "level": "L2",
       "file": "wireframes/UI-miniloan-014.json",
       "layout": "rows",
       "rendersState": [
@@ -226,7 +240,17 @@
         "UIC-001",
         "UIC-002"
       ],
-      "usesComponent": []
+      "usesComponent": [
+        "Card",
+        "IconButton",
+        "Toast"
+      ],
+      "deliveredPages": {
+        "default": "sha256:72db070eb1a67083712e8b4d010e250215400c8967987dd177493f4776d25e8b",
+        "error": "sha256:bcf3845ccfb20009f30011c113493cdf048c4af4b8a6100985f3e54ae315d77b",
+        "loading": "sha256:c67ba503dca4fe0048e1693e067347ced5e4d09af9cf4e1aae97b8d21ca4e834",
+        "unauthorized": "sha256:d7cdaeff1bdcd0f37f12a3a37460c5ccb90811bfed8b00e5bb5e4b961c2a2ccc"
+      }
     }
   ],
   "extensions": {}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    .mlq-skel{background:var(--gray-200);border-radius:var(--radius-sm,6px)}
+    .mlq-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-006">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mlq-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">Assigned queue</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Approved today</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Rejected</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">Reports</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Nichapa Srisuk</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">NS</div>
+    </div>
+
+    <div style="flex:1;padding:32px;max-width:1040px">
+      <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0 0 4px">Assigned application queue</h1>
+      <p style="font-size:14px;color:var(--text-secondary);margin:0 0 20px" data-testid="ui-miniloan-006-queue-count">{{queueCountLabel}}</p>
+
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px" data-testid="ui-miniloan-006-filter-by-status">
+        <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Select" value="{{statusFilter}}" on-change="{{onStatusFilterChange}}" options="{{statusFilterOptions}}" hint-size="220px,40px"></x-import>
+      </div>
+
+      <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--danger)">Failed to load the queue.</div>
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onRetry}}" hint-size="auto,40px">Try again</x-import>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--text-secondary)">No applications are assigned to me right now.</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showTable}}" hint-placeholder-val="{{true}}">
+        <div>
+          <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" padding="{{0}}" hint-size="100%,auto">
+            <div style="padding:16px">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div style="display:flex;flex-direction:column;gap:12px">
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Table" columns="{{columns}}" rows="{{rows}}" hint-size="100%,auto"></x-import>
+              </sc-if>
+            </div>
+          </x-import>
+
+          <sc-if value="{{isOverflow}}" hint-placeholder-val="{{false}}">
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:16px">
+              <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" size="sm" on-click="{{onPrevPage}}" hint-size="auto,32px">Previous</x-import>
+              <span style="font-size:13px;color:var(--text-secondary)">Page {{page}} of {{totalPages}}</span>
+              <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" size="sm" on-click="{{onNextPage}}" hint-size="auto,32px">Next</x-import>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Dialog" open="{{reviewOpen}}" title="{{reviewTitle}}" on-close="{{closeReview}}" hint-size="0,0">
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--text-primary)">
+      <div>Applicant: {{reviewApp.name}}</div>
+      <div>Requested amount: {{reviewApp.amount}} THB</div>
+      <div>Credit band: {{reviewApp.band}}</div>
+      <div>Status: {{reviewApp.statusLabel}}</div>
+    </div>
+  </x-import>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 800},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;empty&quot;, &quot;overflow&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  state = { page: 1, statusFilter: 'UnderReview', reviewApp: null };
+
+  renderVals() {
+    const demoState = this.props.demoState ?? 'normal';
+    const isLoading = demoState === 'loading';
+    const isError = demoState === 'error';
+    const isEmpty = demoState === 'empty';
+    const isOverflow = demoState === 'overflow';
+    const showTable = !isError && !isEmpty;
+    const showFields = !isLoading;
+
+    const bandColor = { A: 'var(--credit-band-a)', B: 'var(--credit-band-b)', C: 'var(--credit-band-c)' };
+    const statusLabels = { UnderReview: 'Under review', Submitted: 'Submitted' };
+
+    const allApplicants = [
+      { id: 'LA-20481', name: 'Somchai Jaidee', amount: '100,000', band: 'A', status: 'UnderReview' },
+      { id: 'LA-20480', name: 'Kanya Suthep', amount: '50,000', band: 'B', status: 'UnderReview' },
+      { id: 'LA-20479', name: 'Prasit Wong', amount: '250,000', band: 'C', status: 'Submitted' },
+      { id: 'LA-20478', name: 'Nattaya Chan', amount: '80,000', band: 'A', status: 'Submitted' },
+      { id: 'LA-20477', name: 'Wichai Boonmee', amount: '120,000', band: 'B', status: 'UnderReview' },
+      { id: 'LA-20476', name: 'Ratree Meesuk', amount: '60,000', band: 'A', status: 'Submitted' },
+    ];
+
+    const filtered = allApplicants.filter((a) => a.status === this.state.statusFilter);
+    const pageSize = 4;
+    const page = isOverflow ? this.state.page : 1;
+    const totalPages = isOverflow ? Math.max(1, Math.ceil(filtered.length / pageSize)) : 1;
+    const pageItems = isOverflow ? filtered.slice((page - 1) * pageSize, page * pageSize) : filtered.slice(0, pageSize);
+
+    const testCell = (testid, node) => React.createElement('div', { 'data-testid': testid }, node);
+    const openIcon = (app) => testCell('ui-miniloan-006-open-application', React.createElement(
+      MiniLoanDesignSystem_4cbaa0.IconButton,
+      { label: 'Open application for review', onClick: () => this.setState({ reviewApp: app }) },
+      React.createElement('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5 },
+        React.createElement('path', { d: 'M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z' }),
+        React.createElement('circle', { cx: 12, cy: 12, r: 3 }))
+    ));
+
+    const columns = [
+      { key: 'action', label: '' },
+      { key: 'name', label: 'Applicant' },
+      { key: 'status', label: 'Status' },
+      { key: 'band', label: 'Credit band' },
+      { key: 'amount', label: 'Requested amount', align: 'right', numeric: true },
+    ];
+    const rows = pageItems.map((a) => ({
+      action: openIcon(a),
+      name: testCell('ui-miniloan-006-ent-001-full-name', a.name),
+      status: testCell('ui-miniloan-006-ent-002-status', React.createElement(MiniLoanDesignSystem_4cbaa0.StatusBadge, { state: a.status })),
+      band: testCell('ui-miniloan-006-ent-003-band', React.createElement('span', { style: { color: bandColor[a.band], fontWeight: 700 } }, a.band)),
+      amount: testCell('ui-miniloan-006-ent-002-requested-amount', a.amount + ' THB'),
+    }));
+
+    const ra = this.state.reviewApp;
+
+    return {
+      isLoading, isError, isEmpty, isOverflow, showTable, showFields,
+      queueCountLabel: filtered.length + ' applications awaiting review',
+      statusFilter: this.state.statusFilter,
+      statusFilterOptions: [
+        { value: 'UnderReview', label: 'Under review' },
+        { value: 'Submitted', label: 'Submitted' },
+      ],
+      onStatusFilterChange: (v) => this.setState({ statusFilter: v, page: 1 }),
+      columns, rows,
+      page, totalPages,
+      onPrevPage: () => this.setState((s) => ({ page: Math.max(1, s.page - 1) })),
+      onNextPage: () => this.setState((s) => ({ page: Math.min(totalPages, s.page + 1) })),
+      onRetry: () => this.forceUpdate(),
+      reviewOpen: !!ra,
+      reviewTitle: ra ? 'Review application ' + ra.id : '',
+      reviewApp: ra ? { name: ra.name, amount: ra.amount, band: ra.band, statusLabel: statusLabels[ra.status] || ra.status } : { name: '', amount: '', band: '', statusLabel: '' },
+      closeReview: () => this.setState({ reviewApp: null }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

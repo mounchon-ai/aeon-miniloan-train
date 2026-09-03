@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/colors.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/typography.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/tokens/spacing.css">
+  <link rel="stylesheet" href="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/styles.css">
+  <script src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/_ds_bundle.js"></script>
+  <style>
+    body{margin:0;background:var(--bg-page);font-family:var(--font-ui),'IBM Plex Sans Thai',sans-serif;}
+    a{color:var(--brand-primary-strong,#175CD3);text-decoration:none}
+    a:hover{color:var(--brand-primary)}
+    .mlq-skel{background:var(--gray-200);border-radius:var(--radius-sm,6px)}
+    .mlq-navitem{padding:9px 12px;border-radius:var(--radius);font-size:14px;cursor:default}
+    .mlq-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+    .mlq-row:last-child{border-bottom:none}
+    .mlq-label{font-size:13px;color:var(--text-secondary)}
+    .mlq-value{font-size:14px;color:var(--text-primary);font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+    .mlq-scroll{max-height:420px;overflow-y:auto}
+    .mlq-sectiontitle{font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px}
+    .mlq-formgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;display:flex" data-screen-label="UI-miniloan-012">
+
+  <div style="width:220px;flex-shrink:0;background:var(--bg-surface);border-right:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:0 4px">
+      <img src="_ds/miniloan-design-system-4cbaa06e-07fe-4bd3-9b97-0b8347149b91/assets/logo/miniloan-icon.svg" style="height:24px">
+      <span style="font-weight:700;font-size:14px;font-family:var(--font-display)">MiniLoan</span>
+    </div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">บัญชีที่ฉันดูแล</div>
+    <div class="mlq-navitem" style="font-weight:600;background:var(--brand-subtle);color:var(--brand-primary)">รายละเอียดบัญชีสินเชื่อ</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">ปิดบัญชีก่อนกำหนด</div>
+    <div class="mlq-navitem" style="color:var(--text-secondary)">รายงาน</div>
+  </div>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:16px;padding:16px 32px;background:var(--bg-surface);border-bottom:1px solid var(--border);font-size:14px;color:var(--text-secondary)">
+      <span>Kittipong Charoen</span>
+      <div style="width:32px;height:32px;border-radius:999px;background:var(--brand-subtle);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">KC</div>
+    </div>
+
+    <div style="flex:1;padding:32px;max-width:1080px;width:100%;box-sizing:border-box">
+      <h1 style="font-size:22px;font-weight:700;color:var(--text-primary);margin:0 0 20px" data-testid="ui-miniloan-012-header-title">รายละเอียดบัญชีสินเชื่อ</h1>
+
+      <sc-if value="{{isUnauthorized}}" hint-placeholder-val="{{false}}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:16px;padding:64px 24px;text-align:center;border-radius:var(--radius-lg,14px);background:var(--bg-surface);border:1px solid var(--border)">
+          <div style="font-size:15px;color:var(--text-primary)">คุณไม่มีสิทธิ์ดำเนินการกับบัญชีนี้</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{showContent}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex;flex-direction:column;gap:24px">
+
+          <sc-if value="{{isError}}" hint-placeholder-val="{{false}}">
+            <div style="padding:12px 16px;border-radius:var(--radius);background:var(--danger-bg);color:var(--danger);font-size:14px" data-testid="ui-miniloan-012-error-message">{{errorMessage}}</div>
+          </sc-if>
+
+          <div>
+            <div class="mlq-sectiontitle">ข้อมูลบัญชี</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+              <div>
+                <div class="mlq-row">
+                  <div class="mlq-label">เงินต้นตั้งต้น</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-012-ent-006-principal-amount">{{account.principal}} THB</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">เงินต้นคงเหลือ</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-012-ent-006-outstanding-principal">{{account.outstanding}} THB</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">จำนวนงวดทั้งหมด</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-012-ent-006-term-months">{{account.termMonths}} งวด</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">สถานะบัญชี</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-012-ent-006-status">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.StatusBadge" state="{{account.status}}" hint-size="auto,24px"></x-import>
+                  </div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">วันที่เบิกจ่าย</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-012-ent-006-disbursed-at">{{account.disbursedAt}}</div>
+                </div>
+                <div class="mlq-row">
+                  <div class="mlq-label">วันที่ปิดบัญชี</div>
+                  <div class="mlq-value" data-testid="ui-miniloan-012-ent-006-closed-at">{{account.closedAt}}</div>
+                </div>
+                <div style="display:flex;justify-content:flex-end;padding-top:16px">
+                  <div data-testid="ui-miniloan-012-reschedule">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onReschedule}}" disabled="{{isBusy}}" hint-size="auto,40px">ออกตารางผ่อนฉบับใหม่ทับ</x-import>
+                  </div>
+                </div>
+              </div>
+            </x-import>
+          </div>
+
+          <div>
+            <div class="mlq-sectiontitle">ตารางผ่อนชำระ</div>
+            <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" padding="{{0}}" hint-size="100%,auto">
+              <sc-if value="{{isLoading}}" hint-placeholder-val="{{false}}">
+                <div style="display:flex;flex-direction:column;gap:12px;padding:16px">
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                  <div class="mlq-skel" style="height:20px;width:100%"></div>
+                </div>
+              </sc-if>
+              <sc-if value="{{showFields}}" hint-placeholder-val="{{true}}">
+                <div class="mlq-scroll">
+                  <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Table" columns="{{scheduleColumns}}" rows="{{scheduleRows}}" hint-size="100%,auto"></x-import>
+                </div>
+              </sc-if>
+            </x-import>
+          </div>
+
+          <div class="mlq-formgrid">
+
+            <div>
+              <div class="mlq-sectiontitle">บันทึกการชำระ</div>
+              <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <div data-testid="ui-miniloan-012-ent-009-amount">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Input" label="ยอดชำระ" suffix="THB" placeholder="4,720.00" value="{{paymentAmount}}" on-change="{{onPaymentAmountChange}}" hint-size="100%,64px"></x-import>
+                  </div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <div data-testid="ui-miniloan-012-record-payment">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="primary" on-click="{{onRecordPayment}}" disabled="{{isBusy}}" hint-size="auto,40px">{{recordPaymentLabel}}</x-import>
+                    </div>
+                    <div data-testid="ui-miniloan-012-record-payoff-payment">
+                      <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onRecordPayoff}}" disabled="{{isBusy}}" hint-size="auto,40px">{{recordPayoffLabel}}</x-import>
+                    </div>
+                  </div>
+                </div>
+              </x-import>
+            </div>
+
+            <div>
+              <div class="mlq-sectiontitle">ปรับปรุงบัญชีที่ปิดแล้ว</div>
+              <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Card" hint-size="100%,auto">
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <div data-testid="ui-miniloan-012-ent-010-field-name">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Input" label="ชื่อฟิลด์ที่ขอแก้" value="{{adjFieldName}}" on-change="{{onAdjFieldNameChange}}" hint-size="100%,64px"></x-import>
+                  </div>
+                  <div data-testid="ui-miniloan-012-ent-010-old-value">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Input" label="ค่าเดิม" value="{{adjOldValue}}" on-change="{{onAdjOldValueChange}}" hint-size="100%,64px"></x-import>
+                  </div>
+                  <div data-testid="ui-miniloan-012-ent-010-new-value">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Input" label="ค่าใหม่" value="{{adjNewValue}}" on-change="{{onAdjNewValueChange}}" hint-size="100%,64px"></x-import>
+                  </div>
+                  <div data-testid="ui-miniloan-012-submit-adjustment">
+                    <x-import component-from-global-scope="MiniLoanDesignSystem_4cbaa0.Button" variant="secondary" on-click="{{onSubmitAdjustment}}" disabled="{{isBusy}}" hint-size="auto,40px">{{submitAdjustmentLabel}}</x-import>
+                  </div>
+                  <sc-if value="{{hasAdjustmentStatus}}" hint-placeholder-val="{{false}}">
+                    <div style="font-size:13px;color:var(--text-secondary)">{{adjustmentStatus}}</div>
+                  </sc-if>
+                </div>
+              </x-import>
+            </div>
+
+          </div>
+
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1100, &quot;height&quot;: 900},
+  &quot;demoState&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;normal&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;normal&quot;, &quot;loading&quot;, &quot;error&quot;, &quot;unauthorized&quot;, &quot;overflow&quot;], &quot;section&quot;: &quot;Demo state&quot;}
+}">
+class Component extends DCLogic {
+  state = {
+    demoOverride: null,
+    isBusy: false,
+    paymentAmount: '',
+    adjFieldName: '',
+    adjOldValue: '',
+    adjNewValue: '',
+    accountClosed: false,
+    adjustmentStatus: '',
+    rescheduled: false,
+  };
+
+  renderVals() {
+    const demoState = this.state.demoOverride ?? this.props.demoState ?? 'normal';
+    const isLoading = demoState === 'loading';
+    const isError = demoState === 'error';
+    const isUnauthorized = demoState === 'unauthorized';
+    const showContent = !isUnauthorized;
+    const showFields = !isLoading;
+    const isBusy = this.state.isBusy;
+
+    const errorMessages = {
+      error: 'ชำระไม่ครบยอดงวด (BR-miniloan-019@v1)',
+      reschedule: 'ไม่สามารถออกตารางผ่อนทับบัญชีที่ปิดแล้วได้ (BR-miniloan-045@v1)',
+    };
+    const errorMessage = errorMessages[demoState] || errorMessages.error;
+
+    const fmt = (n) => n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const rowCount = demoState === 'overflow' ? 36 : 12;
+    const principal = 82400;
+    const termMonths = 18;
+    const annualRate = 0.14;
+    const monthlyRate = annualRate / 12;
+    const emi = Math.round(principal * monthlyRate / (1 - Math.pow(1 + monthlyRate, -termMonths)));
+    const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+    let balance = principal;
+    const start = new Date(2569 - 543, 1, 15);
+    const schedule = [];
+    for (let i = 1; i <= rowCount; i++) {
+      const interest = balance * monthlyRate;
+      const principalPortion = Math.min(emi - interest, balance);
+      const dueDate = new Date(start);
+      dueDate.setMonth(dueDate.getMonth() + i);
+      balance = Math.max(0, balance - principalPortion);
+      const status = i <= 4 ? 'Paid' : (i === 5 ? 'Overdue' : 'Due');
+      schedule.push({
+        n: i,
+        due: `15 ${months[dueDate.getMonth()]} ${dueDate.getFullYear() + 543}`,
+        emi: fmt(emi),
+        status,
+      });
+    }
+
+    const testCell = (testid, node) => React.createElement('div', { 'data-testid': testid, style: { textAlign: 'right' } }, node);
+    const scheduleColumns = [
+      { key: 'n', label: 'งวดที่' },
+      { key: 'due', label: 'วันครบกำหนด' },
+      { key: 'emi', label: 'ค่างวด (EMI)', align: 'right' },
+      { key: 'status', label: 'สถานะงวด', align: 'right' },
+    ];
+    const scheduleRows = schedule.map(r => ({
+      n: testCell('ui-miniloan-012-ent-008-installment-number', r.n),
+      due: testCell('ui-miniloan-012-ent-008-due-date', r.due),
+      emi: testCell('ui-miniloan-012-ent-008-emi-amount', r.emi),
+      status: testCell('ui-miniloan-012-ent-008-status', React.createElement(MiniLoanDesignSystem_4cbaa0.StatusBadge, { state: r.status })),
+    }));
+
+    const accountClosed = this.state.accountClosed;
+    const account = {
+      principal: fmt(principal),
+      outstanding: accountClosed ? '0.00' : fmt(balance),
+      termMonths: String(termMonths),
+      status: accountClosed ? 'Closed' : 'Active',
+      disbursedAt: '15 ก.พ. 2569',
+      closedAt: accountClosed ? '3 ก.ย. 2569' : '—',
+    };
+
+    return {
+      isLoading, isError, isUnauthorized, showContent, showFields, isBusy,
+      errorMessage,
+      account,
+      scheduleColumns, scheduleRows,
+      paymentAmount: this.state.paymentAmount,
+      onPaymentAmountChange: (e) => this.setState({ paymentAmount: e.target.value }),
+      recordPaymentLabel: isBusy ? 'กำลังบันทึก…' : 'บันทึกการชำระ',
+      recordPayoffLabel: isBusy ? 'กำลังบันทึก…' : 'บันทึกการชำระยอดปิดบัญชีก่อนกำหนด',
+      onRecordPayment: () => {
+        this.setState({ isBusy: true });
+        setTimeout(() => this.setState({ isBusy: false }), 900);
+      },
+      onRecordPayoff: () => {
+        this.setState({ isBusy: true });
+        setTimeout(() => this.setState({ isBusy: false, accountClosed: true }), 900);
+      },
+      onReschedule: () => {
+        this.setState({ isBusy: true });
+        setTimeout(() => this.setState({ isBusy: false }), 900);
+      },
+      adjFieldName: this.state.adjFieldName,
+      adjOldValue: this.state.adjOldValue,
+      adjNewValue: this.state.adjNewValue,
+      onAdjFieldNameChange: (e) => this.setState({ adjFieldName: e.target.value }),
+      onAdjOldValueChange: (e) => this.setState({ adjOldValue: e.target.value }),
+      onAdjNewValueChange: (e) => this.setState({ adjNewValue: e.target.value }),
+      submitAdjustmentLabel: isBusy ? 'กำลังส่ง…' : 'ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว',
+      hasAdjustmentStatus: !!this.state.adjustmentStatus,
+      adjustmentStatus: this.state.adjustmentStatus,
+      onSubmitAdjustment: () => {
+        this.setState({ isBusy: true });
+        setTimeout(() => this.setState({ isBusy: false, adjustmentStatus: 'คำขอปรับปรุงบัญชีอยู่ระหว่างรออนุมัติ' }), 900);
+      },
+    };
+  }
+}
+
+</script>
+</body>
+</html>
