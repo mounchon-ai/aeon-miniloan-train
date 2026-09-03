@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "module": "miniloan",
+    "schema_version": "0.2.0"
+  },
+  "stack": {
+    "apps": [
+      {
+        "name": "api",
+        "framework": ".NET (C# / ASP.NET Core)",
+        "path": "apps/api",
+        "skill": [
+          "dotnet-dev",
+          "efcore-patterns",
+          "csharp-lsp",
+          "api-design"
+        ],
+        "dockerfile": "apps/api/Dockerfile",
+        "source": "design-decision",
+        "dec_ref": "DEC-001",
+        "decided_by": null,
+        "decided_at": null
+      },
+      {
+        "name": "web",
+        "framework": "Next.js (React / TypeScript)",
+        "path": "apps/web",
+        "skill": [
+          "vercel-react-best-practices",
+          "vercel-composition-patterns",
+          "typescript-lsp"
+        ],
+        "dockerfile": "apps/web/Dockerfile",
+        "source": "asked",
+        "decided_by": "aplus191",
+        "decided_at": "2026-09-03"
+      }
+    ],
+    "tools": [
+      {
+        "name": "cache",
+        "purpose_th": "ไม่ต้องการ — ไม่มีข้อบังคับ performance ที่ต้องพึ่งแคช",
+        "required": false,
+        "source": "asked",
+        "decided_by": "aplus191",
+        "decided_at": "2026-09-03"
+      },
+      {
+        "name": "queue",
+        "purpose_th": "ไม่ต้องการ — context.json ระบุ automatic-retry-queue เป็น out-of-scope (REQ-miniloan-006)",
+        "required": false,
+        "source": "asked",
+        "decided_by": "aplus191",
+        "decided_at": "2026-09-03"
+      },
+      {
+        "name": "other",
+        "purpose_th": "ไม่มีเครื่องมือเพิ่มเติมนอกจาก .NET/PostgreSQL/Next.js",
+        "required": false,
+        "source": "asked",
+        "decided_by": "aplus191",
+        "decided_at": "2026-09-03"
+      }
+    ],
+    "server": {
+      "name": "Local Docker Compose (dev/training)",
+      "notes_th": "ไม่มี cloud target ในรอบนี้ — ใช้สำหรับ workshop/training เท่านั้น",
+      "source": "asked",
+      "decided_by": "aplus191",
+      "decided_at": "2026-09-03"
+    },
+    "database": {
+      "kind": "postgresql",
+      "name": "miniloan",
+      "version": "16",
+      "source": "design-decision",
+      "dec_ref": "DEC-002",
+      "decided_by": null,
+      "decided_at": null
+    }
+  },
+  "structure": {
+    "apps": [
+      {
+        "app_ref": "api",
+        "root": "apps/api",
+        "layout_th": "ASP.NET Core Web API project เดียว"
+      },
+      {
+        "app_ref": "web",
+        "root": "apps/web",
+        "layout_th": "Next.js app (App Router)"
+      }
+    ],
+    "scripts": {
+      "init": "scripts/dev-init.ps1",
+      "test": "scripts/dev-test.ps1",
+      "build": "scripts/dev-build.ps1"
+    },
+    "docker": {
+      "compose": "docker/docker-compose.yml",
+      "reason_th": null
+    }
+  },
+  "features": [],
+  "gaps": [],
+  "rollup": {
+    "features_total": 0,
+    "by_status": {},
+    "by_origin": {},
+    "by_app": {},
+    "gaps_open": 0,
+    "ready_for_phase5": false
+  }
+}
