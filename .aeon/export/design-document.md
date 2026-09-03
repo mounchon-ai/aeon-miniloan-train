@@ -28,17 +28,17 @@
 | ไฟล์ | คำสั่งที่เขียน | สถานะขั้น | สถานะเอกสาร | ผู้อนุมัติ | เมื่อ | หมายเหตุ |
 |---|---|---|---|---|---|---|
 | design.state.json | /design:init | done | — | — | — | — |
-| context.json | /design:overview | done | draft | — | — | — |
-| modules/miniloan/functions.json | /design:function | done | draft | — | — | — |
+| context.json | /design:overview | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| modules/miniloan/functions.json | /design:function | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
 | trace.design.json | /design:function | done | — | — | — | — |
-| datamodel.json | /design:datamodel | done | draft | — | — | — |
-| modules/miniloan/statemachines.json | /design:datamodel | done | draft | — | — | — |
-| modules/miniloan/scenarios.json | /design:scenario | done | draft | — | — | — |
-| rbac.json | /design:rbac | done | draft | — | — | — |
-| nfr.json | /design:nfr | done | draft | — | — | — |
-| sitemap.json | /design:sitemap | done | draft | — | — | — |
-| modules/miniloan/screens.json | /design:sitemap | done | draft | — | — | — |
-| interfaces.json | /design:interface | done | draft | — | — | — |
+| datamodel.json | /design:datamodel | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| modules/miniloan/statemachines.json | /design:datamodel | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| modules/miniloan/scenarios.json | /design:scenario | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| rbac.json | /design:rbac | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| nfr.json | /design:nfr | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| sitemap.json | /design:sitemap | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| modules/miniloan/screens.json | /design:sitemap | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
+| interfaces.json | /design:interface | done | approved | aplus191 | 2026-09-03T05:17:39Z | — |
 
 > ℹ️ **ข้อจำกัดของข้อมูลชุดนี้** — "สถานะขั้น" มาจากไฟล์สถานะ ส่วน "สถานะเอกสาร" มาจากตัวไฟล์เอง — ขั้นที่ค้างจะเห็นได้ที่คอลัมน์แรกเท่านั้น เพราะเครื่องหมายค้างถูกเก็บที่ขั้น ไม่ใช่ในเนื้อหาที่อนุมัติไปแล้ว
 

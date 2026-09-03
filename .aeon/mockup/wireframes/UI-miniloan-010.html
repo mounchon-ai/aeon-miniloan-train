@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>คิวใบสมัครที่ยังไม่ถูกมอบหมาย — UI-miniloan-010 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-010" data-mockup="MCK-miniloan-010" data-layout="rows">
+<header><h1>คิวใบสมัครที่ยังไม่ถูกมอบหมาย</h1><p>หัวหน้าเจ้าหน้าที่สินเชื่อมอบหมายใบสมัครให้ Loan Officer หรือยกเลิกใบสมัครที่ยังไม่ถูกมอบหมาย</p><p><small>visible to: ROLE-003 (หัวหน้าเจ้าหน้าที่สินเชื่อ)</small></p></header>
+<table data-zone="unassigned-queue" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>actions</th><th>ชื่อผู้สมัคร</th><th>สถานะ</th><th>Credit Band</th><th>จำนวนเงินกู้ที่ขอ</th></tr></thead><tbody><tr><td><button type="button" data-testid="ui-miniloan-010-assign-officer" data-key="assign-officer" data-kind="command" data-presentation="icon" data-placement="first-column" data-container="inline" aria-label="มอบหมายให้ Loan Officer">[icon]</button> <button type="button" data-testid="ui-miniloan-010-cancel-application" data-key="cancel-application" data-kind="command" data-presentation="icon" data-placement="first-column" data-container="inline" aria-label="ยกเลิกใบสมัคร">[icon]</button></td><td data-testid="ui-miniloan-010-ent-001-full-name">ENT-001.fullName</td><td data-testid="ui-miniloan-010-ent-002-status">ENT-002.status</td><td data-testid="ui-miniloan-010-ent-003-band">ENT-003.band</td><td data-testid="ui-miniloan-010-ent-002-requested-amount">ENT-002.requestedAmount</td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ไม่มีใบสมัครรอมอบหมายในขณะนี้ — แสดงข้อความ 'ไม่มีใบสมัครรอมอบหมาย'</dd><dt>loading</dt><dd>แสดง skeleton ของรายการระหว่างโหลด</dd><dt>error</dt><dd>แสดงข้อความโหลดรายการไม่สำเร็จ พร้อมปุ่มลองใหม่</dd><dt>unauthorized</dt><dd>แสดงข้อความว่าไม่มีสิทธิ์เข้าหน้านี้ เมื่อ Loan Officer ทั่วไปพยายามเข้าถึงตาม BR-miniloan-031@v2</dd><dt>overflow</dt><dd>จำนวนใบสมัครรอมอบหมายเกินหน้าจอ — ใช้การแบ่งหน้า (pagination)</dd></dl></section>
+<footer><small>MCK-miniloan-010 · wireframe L1 of UI-miniloan-010 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

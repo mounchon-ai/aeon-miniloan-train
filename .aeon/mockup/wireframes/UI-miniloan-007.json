@@ -1,0 +1,446 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-007",
+  "screen": "UI-miniloan-007",
+  "title": "พิจารณาใบสมัคร",
+  "purpose": "Loan Officer เปิดดูใบสมัครและผลประเมิน แล้วอนุมัติ ปฏิเสธ ยกเลิก หรือสั่งเบิกจ่าย",
+  "level": "L1",
+  "layout": "rows",
+  "kind": "workflow",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "พิจารณาใบสมัคร"
+        }
+      ]
+    },
+    {
+      "name": "applicant-info",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ชื่อผู้สมัคร",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": "fullName",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-002",
+            "ROLE-003",
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "อายุ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "age",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "รายได้ต่อเดือน",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "monthlyIncome",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "อายุงาน (เดือน)",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "currentEmploymentMonths",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ภาระหนี้เดิมต่อเดือน",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "existingMonthlyDebt",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-002"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "loan-request",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "requestedAmount",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนงวดที่ขอ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "requestedTermMonths",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "assessment",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "Credit Band",
+          "required": true,
+          "entity": "ENT-003",
+          "attribute": "band",
+          "validation": "ค่าที่ระบบประเมินให้ตาม BR-miniloan-006@v1",
+          "rules": [
+            "BR-miniloan-006@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วงเงินอนุมัติสูงสุด",
+          "required": true,
+          "entity": "ENT-003",
+          "attribute": "maxApprovableAmount",
+          "validation": "ค่าที่ระบบคำนวณให้ตาม BR-miniloan-003@v1",
+          "rules": [
+            "BR-miniloan-003@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "DTI",
+          "required": true,
+          "entity": "ENT-003",
+          "attribute": "dtiRatio",
+          "validation": "ค่าที่ระบบคำนวณให้ตาม BR-miniloan-002@v1",
+          "rules": [
+            "BR-miniloan-002@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลผลการประเมิน",
+          "required": true,
+          "entity": "ENT-003",
+          "attribute": "reasons",
+          "validation": "ข้อความที่ระบบสร้างให้ตาม BR-miniloan-009@v1",
+          "rules": [
+            "BR-miniloan-009@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "decision",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เหตุผลที่ปฏิเสธ",
+          "required": false,
+          "entity": "ENT-002",
+          "attribute": "rejectionReason",
+          "validation": "บังคับกรอกเมื่อกดปฏิเสธตาม BR-miniloan-013@v1",
+          "rules": [
+            "BR-miniloan-013@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลที่ยกเลิก",
+          "required": false,
+          "entity": "ENT-002",
+          "attribute": "cancellationReason",
+          "validation": "บังคับกรอกเมื่อกดยกเลิกตาม BR-miniloan-047@v1",
+          "rules": [
+            "BR-miniloan-047@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "approve",
+          "name": "อนุมัติ",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "inline",
+          "accessibleName": "อนุมัติ",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "อยู่ที่หน้าเดิม แสดงสถานะใหม่",
+          "rules": [
+            "BR-miniloan-011@v1",
+            "BR-miniloan-012@v1"
+          ]
+        },
+        {
+          "type": "action",
+          "key": "reject",
+          "name": "ปฏิเสธ",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "inline",
+          "accessibleName": "ปฏิเสธ",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "อยู่ที่หน้าเดิม แสดงสถานะใหม่",
+          "rules": [
+            "BR-miniloan-013@v1"
+          ]
+        },
+        {
+          "type": "action",
+          "key": "cancel",
+          "name": "ยกเลิกใบสมัคร",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "navigate",
+          "accessibleName": "ยกเลิกใบสมัคร",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "กลับไปที่คิวใบสมัครที่มอบหมายให้ฉัน",
+          "rules": [
+            "BR-miniloan-047@v1"
+          ]
+        },
+        {
+          "type": "action",
+          "key": "disburse",
+          "name": "สั่งเบิกจ่าย",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "inline",
+          "accessibleName": "สั่งเบิกจ่าย",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "อยู่ที่หน้าเดิม แสดงสถานะใหม่",
+          "rules": [
+            "BR-miniloan-014@v1",
+            "BR-miniloan-042@v1",
+            "BR-miniloan-043@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-007-ent-001-full-name",
+      "type": "field",
+      "key": "ent-001-full-name",
+      "name": "ชื่อผู้สมัคร"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-age",
+      "type": "field",
+      "key": "ent-002-age",
+      "name": "อายุ"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-monthly-income",
+      "type": "field",
+      "key": "ent-002-monthly-income",
+      "name": "รายได้ต่อเดือน"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-current-employment-months",
+      "type": "field",
+      "key": "ent-002-current-employment-months",
+      "name": "อายุงาน (เดือน)"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-existing-monthly-debt",
+      "type": "field",
+      "key": "ent-002-existing-monthly-debt",
+      "name": "ภาระหนี้เดิมต่อเดือน"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-requested-amount",
+      "type": "field",
+      "key": "ent-002-requested-amount",
+      "name": "จำนวนเงินกู้ที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-requested-term-months",
+      "type": "field",
+      "key": "ent-002-requested-term-months",
+      "name": "จำนวนงวดที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-007-ent-003-band",
+      "type": "field",
+      "key": "ent-003-band",
+      "name": "Credit Band"
+    },
+    {
+      "id": "ui-miniloan-007-ent-003-max-approvable-amount",
+      "type": "field",
+      "key": "ent-003-max-approvable-amount",
+      "name": "วงเงินอนุมัติสูงสุด"
+    },
+    {
+      "id": "ui-miniloan-007-ent-003-dti-ratio",
+      "type": "field",
+      "key": "ent-003-dti-ratio",
+      "name": "DTI"
+    },
+    {
+      "id": "ui-miniloan-007-ent-003-reasons",
+      "type": "field",
+      "key": "ent-003-reasons",
+      "name": "เหตุผลผลการประเมิน"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-rejection-reason",
+      "type": "field",
+      "key": "ent-002-rejection-reason",
+      "name": "เหตุผลที่ปฏิเสธ"
+    },
+    {
+      "id": "ui-miniloan-007-ent-002-cancellation-reason",
+      "type": "field",
+      "key": "ent-002-cancellation-reason",
+      "name": "เหตุผลที่ยกเลิก"
+    },
+    {
+      "id": "ui-miniloan-007-approve",
+      "type": "action",
+      "key": "approve"
+    },
+    {
+      "id": "ui-miniloan-007-reject",
+      "type": "action",
+      "key": "reject"
+    },
+    {
+      "id": "ui-miniloan-007-cancel",
+      "type": "action",
+      "key": "cancel"
+    },
+    {
+      "id": "ui-miniloan-007-disburse",
+      "type": "action",
+      "key": "disburse"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าหน้านี้ได้ต่อเมื่อมีใบสมัครที่ถูกมอบหมายอยู่แล้วเท่านั้น"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "ระหว่างกดอนุมัติ ปฏิเสธ ยกเลิก หรือเบิกจ่าย ปุ่มที่กดถูก disable และแสดง spinner ป้องกันกดซ้ำตาม BR-miniloan-043@v1"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ error ตามเหตุ เช่น เกินวงเงินอนุมัติสูงสุด (BR-miniloan-012@v1) หรือไม่ระบุเหตุผล (BR-miniloan-013@v1) โดยไม่เปลี่ยนสถานะใบสมัคร"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์ดำเนินการกับใบสมัครนี้ เมื่อพยายามเปิดใบที่มอบหมายให้ Loan Officer คนอื่นตาม BR-miniloan-032@v1"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — เนื้อหาต่อหนึ่งใบสมัครมีจำนวนคงที่"
+    }
+  },
+  "extensions": {}
+}

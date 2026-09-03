@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>บัญชีสินเชื่อที่ฉันดูแล — UI-miniloan-011 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-011" data-mockup="MCK-miniloan-011" data-layout="rows">
+<header><h1>บัญชีสินเชื่อที่ฉันดูแล</h1><p>Operations ดูรายการบัญชีสินเชื่อที่ตนถูก assign เพื่อเลือกเปิดจัดการ</p><p><small>visible to: ROLE-004 (ฝ่ายปฏิบัติการ)</small></p></header>
+<table data-zone="assigned-accounts" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>actions</th><th>สถานะบัญชี</th><th>เงินต้นคงเหลือ</th><th>งวดถัดไปที่ครบกำหนด</th></tr></thead><tbody><tr><td><button type="button" data-testid="ui-miniloan-011-open-account" data-key="open-account" data-kind="view" data-presentation="icon" data-placement="first-column" data-container="navigate" aria-label="เปิดบัญชีสินเชื่อ">[icon]</button></td><td data-testid="ui-miniloan-011-ent-006-status">ENT-006.status</td><td data-testid="ui-miniloan-011-ent-006-outstanding-principal">ENT-006.outstandingPrincipal</td><td data-testid="ui-miniloan-011-next-due-installment">งวดถัดไปที่ครบกำหนด</td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่มีบัญชีสินเชื่อที่ถูก assign ให้ฉัน — แสดงข้อความ 'ไม่มีบัญชีในความดูแล'</dd><dt>loading</dt><dd>แสดง skeleton ของรายการระหว่างโหลด</dd><dt>error</dt><dd>แสดงข้อความโหลดรายการไม่สำเร็จ พร้อมปุ่มลองใหม่</dd><dt>unauthorized (does not occur)</dt><dd>ไม่เกิด — เห็นเฉพาะบัญชีที่ตนถูก assign ตาม BR-miniloan-054@v1 จึงไม่มีกรณีเข้าหน้านี้แล้วไม่มีสิทธิ์</dd><dt>overflow</dt><dd>จำนวนบัญชีเกินหน้าจอ — ใช้การแบ่งหน้า (pagination)</dd></dl></section>
+<footer><small>MCK-miniloan-011 · wireframe L1 of UI-miniloan-011 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

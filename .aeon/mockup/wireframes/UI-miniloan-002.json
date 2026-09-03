@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-002",
+  "screen": "UI-miniloan-002",
+  "title": "รายการใบสมัครและบัญชีของฉัน",
+  "purpose": "ผู้สมัครดูภาพรวมใบสมัครและบัญชีสินเชื่อทั้งหมดของตัวเอง แล้วเลือกเปิดดูรายการที่ต้องการ",
+  "level": "L1",
+  "layout": "rows",
+  "kind": "list",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายการใบสมัครและบัญชีของฉัน"
+        }
+      ]
+    },
+    {
+      "name": "applications-list",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "สถานะใบสมัคร",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "requestedAmount",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ยื่น",
+          "required": false,
+          "entity": "ENT-002",
+          "attribute": "submittedAt",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "view-application",
+          "name": "ดูรายละเอียดใบสมัคร",
+          "kind": "view",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "navigate",
+          "accessibleName": "ดูรายละเอียดใบสมัคร",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "หน้ารายละเอียดใบสมัครของฉัน",
+          "rules": []
+        },
+        {
+          "type": "action",
+          "key": "new-application",
+          "name": "ยื่นใบสมัครใหม่",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "applications-list",
+          "container": "navigate",
+          "accessibleName": "ยื่นใบสมัครใหม่",
+          "conventions": [],
+          "destination": "หน้ากรอกและยื่นใบสมัครสินเชื่อ",
+          "rules": []
+        }
+      ]
+    },
+    {
+      "name": "accounts-list",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "สถานะบัญชี",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "outstandingPrincipal",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "view-schedule",
+          "name": "ดูตารางผ่อนชำระ",
+          "kind": "view",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "navigate",
+          "accessibleName": "ดูตารางผ่อนชำระ",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "หน้าตารางผ่อนชำระของฉัน",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-002-ent-002-status",
+      "type": "field",
+      "key": "ent-002-status",
+      "name": "สถานะใบสมัคร"
+    },
+    {
+      "id": "ui-miniloan-002-ent-002-requested-amount",
+      "type": "field",
+      "key": "ent-002-requested-amount",
+      "name": "จำนวนเงินกู้ที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-002-ent-002-submitted-at",
+      "type": "field",
+      "key": "ent-002-submitted-at",
+      "name": "วันที่ยื่น"
+    },
+    {
+      "id": "ui-miniloan-002-view-application",
+      "type": "action",
+      "key": "view-application"
+    },
+    {
+      "id": "ui-miniloan-002-new-application",
+      "type": "action",
+      "key": "new-application"
+    },
+    {
+      "id": "ui-miniloan-002-ent-006-status",
+      "type": "field",
+      "key": "ent-006-status",
+      "name": "สถานะบัญชี"
+    },
+    {
+      "id": "ui-miniloan-002-ent-006-outstanding-principal",
+      "type": "field",
+      "key": "ent-006-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-002-view-schedule",
+      "type": "action",
+      "key": "view-schedule"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่มีใบสมัครหรือบัญชีเลย — แสดงข้อความชวนยื่นใบสมัครใหม่พร้อมปุ่ม 'ยื่นใบสมัครใหม่'"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton ของรายการระหว่างโหลด"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความโหลดรายการไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": false,
+      "text": "ไม่เกิด — เห็นเฉพาะของตัวเองเสมอตาม BR-miniloan-033@v1 จึงไม่มีกรณีเข้าหน้านี้แล้วไม่มีสิทธิ์"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — จำนวนใบสมัคร/บัญชีต่อผู้สมัครหนึ่งคนมีน้อย ไม่ใช้ pagination"
+    }
+  },
+  "extensions": {}
+}

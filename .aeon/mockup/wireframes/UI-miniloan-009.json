@@ -1,0 +1,185 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-009",
+  "screen": "UI-miniloan-009",
+  "title": "แดชบอร์ดภาพรวมสถานะ",
+  "purpose": "Loan Officer ดูภาพรวมจำนวนใบสมัครและบัญชีสินเชื่อแยกตามสถานะ",
+  "level": "L1",
+  "layout": "form",
+  "kind": "dashboard",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "แดชบอร์ดภาพรวมสถานะ"
+        }
+      ]
+    },
+    {
+      "name": "summary-counts",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "จำนวนใบสมัคร Submitted",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนใบสมัคร UnderReview",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนใบสมัคร Approved",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนบัญชี Active",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "นับ Disbursed เป็น Active ครั้งเดียว ไม่นับซ้ำในช่อง Approved ตาม BR-miniloan-024@v1",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนบัญชี Closed",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล",
+          "rules": [
+            "BR-miniloan-024@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "refresh",
+          "name": "รีเฟรชข้อมูล",
+          "kind": "view",
+          "presentation": "text",
+          "placement": "summary-counts",
+          "container": "inline",
+          "accessibleName": "รีเฟรชข้อมูล",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-009-count-applications-submitted",
+      "type": "field",
+      "key": "count-applications-submitted",
+      "name": "จำนวนใบสมัคร Submitted"
+    },
+    {
+      "id": "ui-miniloan-009-count-applications-under-review",
+      "type": "field",
+      "key": "count-applications-under-review",
+      "name": "จำนวนใบสมัคร UnderReview"
+    },
+    {
+      "id": "ui-miniloan-009-count-applications-approved",
+      "type": "field",
+      "key": "count-applications-approved",
+      "name": "จำนวนใบสมัคร Approved"
+    },
+    {
+      "id": "ui-miniloan-009-count-accounts-active",
+      "type": "field",
+      "key": "count-accounts-active",
+      "name": "จำนวนบัญชี Active"
+    },
+    {
+      "id": "ui-miniloan-009-count-accounts-closed",
+      "type": "field",
+      "key": "count-accounts-closed",
+      "name": "จำนวนบัญชี Closed"
+    },
+    {
+      "id": "ui-miniloan-009-refresh",
+      "type": "action",
+      "key": "refresh"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่มีใบสมัครหรือบัญชีสินเชื่อเลยสักรายการ — ทุกยอดแสดงเป็นเลข 0 ตาม BR-miniloan-024@v1"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton ของตัวเลขระหว่างโหลด"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความโหลดแดชบอร์ดไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": false,
+      "text": "ไม่เกิด — หน้านี้เปิดให้เฉพาะ Loan Officer ที่ล็อกอินอยู่แล้วเสมอ"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — จำนวนตัวเลขสรุปคงที่ที่ 5 ค่าตาม BR-miniloan-024@v1"
+    }
+  },
+  "extensions": {}
+}

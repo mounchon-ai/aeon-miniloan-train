@@ -2,9 +2,9 @@
   "schemaVersion": "1.1",
   "producedBy": "design · scripts/sitemap.mjs",
   "project": "miniloan",
-  "status": "draft",
-  "approvedAt": null,
-  "approvedBy": null,
+  "status": "approved",
+  "approvedAt": "2026-09-03T05:17:39Z",
+  "approvedBy": "aplus191",
   "nodes": [
     {
       "screen": "UI-miniloan-002",

@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>ตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว — UI-miniloan-008 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-008" data-mockup="MCK-miniloan-008" data-layout="form">
+<header><h1>ตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว</h1><p>Loan Officer เลือกหรือเปลี่ยน role ที่ทำหน้าที่อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<form data-zone="setting-form" data-source="design"><p><label>Role ผู้อนุมัติ <input type="text" data-testid="ui-miniloan-008-ent-011-approver-role" name="Role ผู้อนุมัติ" placeholder="เลือก role ที่จะทำหน้าที่นี้ตาม BR-miniloan-039@v1"></label></p><button type="button" data-testid="ui-miniloan-008-save-setting" data-key="save-setting" data-kind="edit" data-presentation="text" data-placement="setting-form" data-container="inline">บันทึกการตั้งค่า</button></form>
+<form data-zone="setting-audit" data-source="design"><dt>แก้ไขล่าสุดโดย</dt><dd data-testid="ui-miniloan-008-ent-011-updated-by">แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่ <small>(ENT-011.updatedBy)</small></dd><dt>แก้ไขล่าสุดเมื่อ</dt><dd data-testid="ui-miniloan-008-ent-011-updated-at">แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่ <small>(ENT-011.updatedAt)</small></dd></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่เคยตั้งค่ามาก่อน — แสดงค่าว่างพร้อมข้อความเตือนว่าคำขอปรับปรุงบัญชีจะถูกปฏิเสธทั้งหมดจนกว่าจะตั้งค่าตาม BR-miniloan-040@v1</dd><dt>loading</dt><dd>แสดง spinner บนปุ่มระหว่างบันทึก</dd><dt>error</dt><dd>แสดงข้อความบันทึกไม่สำเร็จ พร้อมปุ่มลองใหม่ คงค่าที่เลือกไว้</dd><dt>unauthorized</dt><dd>แสดงข้อความว่าไม่มีสิทธิ์ตั้งค่านี้ เมื่อ Operations หรือ Applicant พยายามเข้าหน้านี้ตาม BR-miniloan-048@v1</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — มีฟิลด์เดียวคงที่</dd></dl></section>
+<footer><small>MCK-miniloan-008 · wireframe L1 of UI-miniloan-008 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

@@ -34,7 +34,7 @@
     {
       "id": "wireframe",
       "command": "/mock:wireframe",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "convention"
       ],
@@ -45,12 +45,13 @@
         "mockup-map.json",
         "trace.mockup.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-03T05:22:52Z"
     },
     {
       "id": "theme",
       "command": "/mock:theme",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "init"
       ],
@@ -58,7 +59,8 @@
         "theme.json",
         "theme-decisions.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-03T05:36:37Z"
     },
     {
       "id": "html",

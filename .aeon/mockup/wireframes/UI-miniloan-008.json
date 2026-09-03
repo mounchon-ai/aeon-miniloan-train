@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-008",
+  "screen": "UI-miniloan-008",
+  "title": "ตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+  "purpose": "Loan Officer เลือกหรือเปลี่ยน role ที่ทำหน้าที่อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+  "level": "L1",
+  "layout": "form",
+  "kind": "edit",
+  "visibleTo": [
+    "ROLE-002"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "ตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว"
+        }
+      ]
+    },
+    {
+      "name": "setting-form",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "Role ผู้อนุมัติ",
+          "required": false,
+          "entity": "ENT-011",
+          "attribute": "approverRole",
+          "validation": "เลือก role ที่จะทำหน้าที่นี้ตาม BR-miniloan-039@v1",
+          "rules": [
+            "BR-miniloan-039@v1"
+          ],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "save-setting",
+          "name": "บันทึกการตั้งค่า",
+          "kind": "edit",
+          "presentation": "text",
+          "placement": "setting-form",
+          "container": "inline",
+          "accessibleName": "บันทึกการตั้งค่า",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม",
+          "rules": [
+            "BR-miniloan-039@v1",
+            "BR-miniloan-048@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "setting-audit",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "แก้ไขล่าสุดโดย",
+          "required": false,
+          "entity": "ENT-011",
+          "attribute": "updatedBy",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "แก้ไขล่าสุดเมื่อ",
+          "required": false,
+          "entity": "ENT-011",
+          "attribute": "updatedAt",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-002"
+          ],
+          "input": false
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-008-ent-011-approver-role",
+      "type": "field",
+      "key": "ent-011-approver-role",
+      "name": "Role ผู้อนุมัติ"
+    },
+    {
+      "id": "ui-miniloan-008-save-setting",
+      "type": "action",
+      "key": "save-setting"
+    },
+    {
+      "id": "ui-miniloan-008-ent-011-updated-by",
+      "type": "field",
+      "key": "ent-011-updated-by",
+      "name": "แก้ไขล่าสุดโดย"
+    },
+    {
+      "id": "ui-miniloan-008-ent-011-updated-at",
+      "type": "field",
+      "key": "ent-011-updated-at",
+      "name": "แก้ไขล่าสุดเมื่อ"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่เคยตั้งค่ามาก่อน — แสดงค่าว่างพร้อมข้อความเตือนว่าคำขอปรับปรุงบัญชีจะถูกปฏิเสธทั้งหมดจนกว่าจะตั้งค่าตาม BR-miniloan-040@v1"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง spinner บนปุ่มระหว่างบันทึก"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความบันทึกไม่สำเร็จ พร้อมปุ่มลองใหม่ คงค่าที่เลือกไว้"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์ตั้งค่านี้ เมื่อ Operations หรือ Applicant พยายามเข้าหน้านี้ตาม BR-miniloan-048@v1"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — มีฟิลด์เดียวคงที่"
+    }
+  },
+  "extensions": {}
+}

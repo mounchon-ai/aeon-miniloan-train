@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-010",
+  "screen": "UI-miniloan-010",
+  "title": "คิวใบสมัครที่ยังไม่ถูกมอบหมาย",
+  "purpose": "หัวหน้าเจ้าหน้าที่สินเชื่อมอบหมายใบสมัครให้ Loan Officer หรือยกเลิกใบสมัครที่ยังไม่ถูกมอบหมาย",
+  "level": "L1",
+  "layout": "rows",
+  "kind": "list",
+  "visibleTo": [
+    "ROLE-003"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "คิวใบสมัครที่ยังไม่ถูกมอบหมาย"
+        }
+      ]
+    },
+    {
+      "name": "unassigned-queue",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ชื่อผู้สมัคร",
+          "required": true,
+          "entity": "ENT-001",
+          "attribute": "fullName",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001",
+            "ROLE-002",
+            "ROLE-003",
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-003"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "Credit Band",
+          "required": false,
+          "entity": "ENT-003",
+          "attribute": "band",
+          "validation": "ค่าที่ระบบประเมินให้ตาม BR-miniloan-006@v1 แสดงเฉพาะใบที่ประเมินแล้ว",
+          "rules": [
+            "BR-miniloan-006@v1"
+          ],
+          "visibleTo": [
+            "ROLE-003"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "requestedAmount",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-003"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "assign-officer",
+          "name": "มอบหมายให้ Loan Officer",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "inline",
+          "accessibleName": "มอบหมายให้ Loan Officer",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "อยู่ที่หน้าเดิม แสดงรายการที่อัปเดต",
+          "rules": [
+            "BR-miniloan-032@v1"
+          ]
+        },
+        {
+          "type": "action",
+          "key": "cancel-application",
+          "name": "ยกเลิกใบสมัคร",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "inline",
+          "accessibleName": "ยกเลิกใบสมัคร",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "อยู่ที่หน้าเดิม แสดงรายการที่อัปเดต",
+          "rules": [
+            "BR-miniloan-047@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-010-ent-001-full-name",
+      "type": "field",
+      "key": "ent-001-full-name",
+      "name": "ชื่อผู้สมัคร"
+    },
+    {
+      "id": "ui-miniloan-010-ent-002-status",
+      "type": "field",
+      "key": "ent-002-status",
+      "name": "สถานะ"
+    },
+    {
+      "id": "ui-miniloan-010-ent-003-band",
+      "type": "field",
+      "key": "ent-003-band",
+      "name": "Credit Band"
+    },
+    {
+      "id": "ui-miniloan-010-ent-002-requested-amount",
+      "type": "field",
+      "key": "ent-002-requested-amount",
+      "name": "จำนวนเงินกู้ที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-010-assign-officer",
+      "type": "action",
+      "key": "assign-officer"
+    },
+    {
+      "id": "ui-miniloan-010-cancel-application",
+      "type": "action",
+      "key": "cancel-application"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ไม่มีใบสมัครรอมอบหมายในขณะนี้ — แสดงข้อความ 'ไม่มีใบสมัครรอมอบหมาย'"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton ของรายการระหว่างโหลด"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความโหลดรายการไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์เข้าหน้านี้ เมื่อ Loan Officer ทั่วไปพยายามเข้าถึงตาม BR-miniloan-031@v2"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "จำนวนใบสมัครรอมอบหมายเกินหน้าจอ — ใช้การแบ่งหน้า (pagination)"
+    }
+  },
+  "extensions": {}
+}

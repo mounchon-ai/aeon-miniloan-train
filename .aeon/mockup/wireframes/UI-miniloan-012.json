@@ -1,0 +1,448 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-012",
+  "screen": "UI-miniloan-012",
+  "title": "รายละเอียดบัญชีสินเชื่อ",
+  "purpose": "Operations ดูรายละเอียดบัญชี บันทึกการชำระ ออกตารางผ่อนใหม่ทับ หรือยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+  "level": "L1",
+  "layout": "form",
+  "kind": "detail",
+  "visibleTo": [
+    "ROLE-004"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายละเอียดบัญชีสินเชื่อ"
+        }
+      ]
+    },
+    {
+      "name": "account-summary",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นตั้งต้น",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "principalAmount",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "outstandingPrincipal",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนงวดทั้งหมด",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "termMonths",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะบัญชี",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่เบิกจ่าย",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "disbursedAt",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ปิดบัญชี",
+          "required": false,
+          "entity": "ENT-006",
+          "attribute": "closedAt",
+          "validation": "แสดงเมื่อบัญชีสถานะ Closed เท่านั้น",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "reschedule",
+          "name": "ออกตารางผ่อนฉบับใหม่ทับ",
+          "kind": "command",
+          "presentation": "text",
+          "placement": "account-summary",
+          "container": "inline",
+          "accessibleName": "ออกตารางผ่อนฉบับใหม่ทับ",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม แสดงตารางผ่อนฉบับใหม่",
+          "rules": [
+            "BR-miniloan-044@v1",
+            "BR-miniloan-045@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "schedule-table",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "งวดที่",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "installmentNumber",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันครบกำหนด",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "dueDate",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่างวด (EMI)",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "emiAmount",
+          "validation": "ค่าที่ระบบคำนวณให้ตาม BR-miniloan-016@v1",
+          "rules": [
+            "BR-miniloan-016@v1"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะงวด",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "payment-form",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ยอดชำระ",
+          "required": true,
+          "entity": "ENT-009",
+          "attribute": "amount",
+          "validation": "ตรงยอดงวดหรือมากกว่ายอดงวดตาม BR-miniloan-019@v1 และ BR-miniloan-046@v2",
+          "rules": [
+            "BR-miniloan-019@v1",
+            "BR-miniloan-046@v2"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "record-payment",
+          "name": "บันทึกการชำระ",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "payment-form",
+          "container": "inline",
+          "accessibleName": "บันทึกการชำระ",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม แสดงยอดที่อัปเดต",
+          "rules": [
+            "BR-miniloan-019@v1",
+            "BR-miniloan-020@v1",
+            "BR-miniloan-046@v2"
+          ]
+        },
+        {
+          "type": "action",
+          "key": "record-payoff-payment",
+          "name": "บันทึกการชำระยอดปิดบัญชีก่อนกำหนด",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "payment-form",
+          "container": "inline",
+          "accessibleName": "บันทึกการชำระยอดปิดบัญชีก่อนกำหนด",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม แสดงสถานะบัญชีที่ปิดแล้ว",
+          "rules": [
+            "BR-miniloan-021@v1",
+            "BR-miniloan-023@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "adjustment-form",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ชื่อฟิลด์ที่ขอแก้",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "fieldName",
+          "validation": "บังคับกรอกเมื่อยื่นคำขอปรับปรุงบัญชีที่ปิดแล้วตาม BR-miniloan-041@v1",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": true
+        },
+        {
+          "type": "field",
+          "name": "ค่าเดิม",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "oldValue",
+          "validation": "บังคับกรอกเมื่อยื่นคำขอปรับปรุงบัญชีที่ปิดแล้วตาม BR-miniloan-041@v1",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": true
+        },
+        {
+          "type": "field",
+          "name": "ค่าใหม่",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "newValue",
+          "validation": "บังคับกรอกเมื่อยื่นคำขอปรับปรุงบัญชีที่ปิดแล้วตาม BR-miniloan-041@v1",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": true
+        },
+        {
+          "type": "action",
+          "key": "submit-adjustment",
+          "name": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+          "kind": "create",
+          "presentation": "text",
+          "placement": "adjustment-form",
+          "container": "inline",
+          "accessibleName": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+          "conventions": [],
+          "destination": "อยู่ที่หน้าเดิม แสดงสถานะคำขอที่รออนุมัติ",
+          "rules": [
+            "BR-miniloan-038@v1",
+            "BR-miniloan-041@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-012-ent-006-principal-amount",
+      "type": "field",
+      "key": "ent-006-principal-amount",
+      "name": "เงินต้นตั้งต้น"
+    },
+    {
+      "id": "ui-miniloan-012-ent-006-outstanding-principal",
+      "type": "field",
+      "key": "ent-006-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-012-ent-006-term-months",
+      "type": "field",
+      "key": "ent-006-term-months",
+      "name": "จำนวนงวดทั้งหมด"
+    },
+    {
+      "id": "ui-miniloan-012-ent-006-status",
+      "type": "field",
+      "key": "ent-006-status",
+      "name": "สถานะบัญชี"
+    },
+    {
+      "id": "ui-miniloan-012-ent-006-disbursed-at",
+      "type": "field",
+      "key": "ent-006-disbursed-at",
+      "name": "วันที่เบิกจ่าย"
+    },
+    {
+      "id": "ui-miniloan-012-ent-006-closed-at",
+      "type": "field",
+      "key": "ent-006-closed-at",
+      "name": "วันที่ปิดบัญชี"
+    },
+    {
+      "id": "ui-miniloan-012-reschedule",
+      "type": "action",
+      "key": "reschedule"
+    },
+    {
+      "id": "ui-miniloan-012-ent-008-installment-number",
+      "type": "field",
+      "key": "ent-008-installment-number",
+      "name": "งวดที่"
+    },
+    {
+      "id": "ui-miniloan-012-ent-008-due-date",
+      "type": "field",
+      "key": "ent-008-due-date",
+      "name": "วันครบกำหนด"
+    },
+    {
+      "id": "ui-miniloan-012-ent-008-emi-amount",
+      "type": "field",
+      "key": "ent-008-emi-amount",
+      "name": "ค่างวด (EMI)"
+    },
+    {
+      "id": "ui-miniloan-012-ent-008-status",
+      "type": "field",
+      "key": "ent-008-status",
+      "name": "สถานะงวด"
+    },
+    {
+      "id": "ui-miniloan-012-ent-009-amount",
+      "type": "field",
+      "key": "ent-009-amount",
+      "name": "ยอดชำระ"
+    },
+    {
+      "id": "ui-miniloan-012-record-payment",
+      "type": "action",
+      "key": "record-payment"
+    },
+    {
+      "id": "ui-miniloan-012-record-payoff-payment",
+      "type": "action",
+      "key": "record-payoff-payment"
+    },
+    {
+      "id": "ui-miniloan-012-ent-010-field-name",
+      "type": "field",
+      "key": "ent-010-field-name",
+      "name": "ชื่อฟิลด์ที่ขอแก้"
+    },
+    {
+      "id": "ui-miniloan-012-ent-010-old-value",
+      "type": "field",
+      "key": "ent-010-old-value",
+      "name": "ค่าเดิม"
+    },
+    {
+      "id": "ui-miniloan-012-ent-010-new-value",
+      "type": "field",
+      "key": "ent-010-new-value",
+      "name": "ค่าใหม่"
+    },
+    {
+      "id": "ui-miniloan-012-submit-adjustment",
+      "type": "action",
+      "key": "submit-adjustment"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าหน้านี้ได้ต่อเมื่อมีบัญชีสินเชื่ออยู่แล้วเท่านั้น"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "ระหว่างบันทึกการชำระหรือออกตารางใหม่ ปุ่มที่กดถูก disable และแสดง spinner ป้องกันกดซ้ำ"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความ error ตามเหตุ เช่น ชำระไม่ครบยอดงวด (BR-miniloan-019@v1) หรือพยายามออกตารางทับบัญชีที่ปิดแล้ว (BR-miniloan-045@v1)"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์ดำเนินการกับบัญชีนี้ เมื่อ Operations ที่ไม่ได้ถูก assign พยายามเข้าถึงตาม BR-miniloan-054@v1"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "จำนวนงวดในตารางผ่อนมากไม่มีการตัดหน้า เพราะจำนวนงวดสูงสุดมีเพดานจาก BR-miniloan-004@v1 อยู่แล้ว จึงเลื่อนดูในตารางเดียวได้เสมอ"
+    }
+  },
+  "extensions": {}
+}

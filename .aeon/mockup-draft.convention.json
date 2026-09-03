@@ -1,0 +1,58 @@
+{
+  "catalogue": [
+    { "id": "UIC-001", "confirmedBy": "aplus191" },
+    { "id": "UIC-002", "confirmedBy": "aplus191" },
+    { "id": "UIC-003", "confirmedBy": "aplus191" }
+  ],
+  "kindMap": [
+    {
+      "screen": "UI-miniloan-002",
+      "key": "view-application",
+      "notApplied": [
+        { "convention": "UIC-003", "because": "design กำหนดให้ action นี้พาไปหน้ารายละเอียดแยก (UI-miniloan-003) ไม่ใช่เปิดเป็น modal — UIC-003 จึงไม่ถูกนำมาใช้ ต้องแก้ที่ design หากจะเปลี่ยน route" }
+      ]
+    },
+    {
+      "screen": "UI-miniloan-002",
+      "key": "view-schedule",
+      "notApplied": [
+        { "convention": "UIC-003", "because": "design กำหนดให้ action นี้พาไปหน้าตารางผ่อนชำระแยก (UI-miniloan-004) ไม่ใช่เปิดเป็น modal — UIC-003 จึงไม่ถูกนำมาใช้ ต้องแก้ที่ design หากจะเปลี่ยน route" }
+      ]
+    },
+    {
+      "screen": "UI-miniloan-006",
+      "key": "open-application",
+      "notApplied": [
+        { "convention": "UIC-003", "because": "design กำหนดให้ action นี้พาไปหน้าพิจารณาใบสมัครแยก (UI-miniloan-007) ไม่ใช่เปิดเป็น modal — UIC-003 จึงไม่ถูกนำมาใช้ ต้องแก้ที่ design หากจะเปลี่ยน route" }
+      ]
+    },
+    {
+      "screen": "UI-miniloan-011",
+      "key": "open-account",
+      "notApplied": [
+        { "convention": "UIC-003", "because": "design กำหนดให้ action นี้พาไปหน้ารายละเอียดบัญชีสินเชื่อแยก (UI-miniloan-012) ไม่ใช่เปิดเป็น modal — UIC-003 จึงไม่ถูกนำมาใช้ ต้องแก้ที่ design หากจะเปลี่ยน route" }
+      ]
+    },
+    {
+      "screen": "UI-miniloan-013",
+      "key": "open-adjustment",
+      "notApplied": [
+        { "convention": "UIC-003", "because": "design กำหนดให้ action นี้พาไปหน้าพิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้วแยก (UI-miniloan-014) ไม่ใช่เปิดเป็น modal — UIC-003 จึงไม่ถูกนำมาใช้ ต้องแก้ที่ design หากจะเปลี่ยน route" }
+      ]
+    }
+  ],
+  "fieldMap": [
+    { "screen": "UI-miniloan-001", "name": "วงเงินอนุมัติสูงสุดโดยประมาณ", "slug": "estimated-max-approved-amount", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-005", "name": "ดอกเบี้ยค้างจ่าย", "slug": "accrued-interest", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-005", "name": "ค่าธรรมเนียมปิดก่อนกำหนด", "slug": "early-closure-fee", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-005", "name": "ยอดที่ต้องชำระทั้งหมด", "slug": "total-payoff-amount", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-005", "name": "วันที่คำนวณยอด", "slug": "quote-calculated-at", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-009", "name": "จำนวนใบสมัคร Submitted", "slug": "count-applications-submitted", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-009", "name": "จำนวนใบสมัคร UnderReview", "slug": "count-applications-under-review", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-009", "name": "จำนวนใบสมัคร Approved", "slug": "count-applications-approved", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-009", "name": "จำนวนบัญชี Active", "slug": "count-accounts-active", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-009", "name": "จำนวนบัญชี Closed", "slug": "count-accounts-closed", "confirmedBy": "aplus191" },
+    { "screen": "UI-miniloan-011", "name": "งวดถัดไปที่ครบกำหนด", "slug": "next-due-installment", "confirmedBy": "aplus191" }
+  ],
+  "screenOptions": []
+}

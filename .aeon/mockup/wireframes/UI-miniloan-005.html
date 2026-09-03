@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>ยอดปิดบัญชีก่อนกำหนดของฉัน — UI-miniloan-005 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-005" data-mockup="MCK-miniloan-005" data-layout="form">
+<header><h1>ยอดปิดบัญชีก่อนกำหนดของฉัน</h1><p>ผู้สมัครขอทราบยอดที่ต้องชำระเพื่อปิดบัญชีก่อนกำหนด ณ วันที่ขอ</p><p><small>visible to: ROLE-001 (ผู้สมัคร)</small></p></header>
+<form data-zone="payoff-quote" data-source="design"><dt>เงินต้นคงเหลือ *</dt><dd data-testid="ui-miniloan-005-ent-006-outstanding-principal">แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่ <small>(ENT-006.outstandingPrincipal)</small></dd><dt>ดอกเบี้ยค้างจ่าย *</dt><dd data-testid="ui-miniloan-005-accrued-interest">คำนวณถึงวันที่ขอ ฐาน actual/365 ตาม BR-miniloan-022@v1</dd><dt>ค่าธรรมเนียมปิดก่อนกำหนด *</dt><dd data-testid="ui-miniloan-005-early-closure-fee">1% ของเงินต้นคงเหลือตาม BR-miniloan-022@v1</dd><dt>ยอดที่ต้องชำระทั้งหมด *</dt><dd data-testid="ui-miniloan-005-total-payoff-amount">ผลรวมของเงินต้นคงเหลือ ดอกเบี้ยค้างจ่าย และค่าธรรมเนียมตาม BR-miniloan-022@v1</dd><dt>วันที่คำนวณยอด *</dt><dd data-testid="ui-miniloan-005-quote-calculated-at">แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่</dd><button type="button" data-testid="ui-miniloan-005-back-to-schedule" data-key="back-to-schedule" data-kind="navigate" data-presentation="text" data-placement="payoff-quote" data-container="navigate">กลับไปที่ตารางผ่อน</button></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty (does not occur)</dt><dd>ไม่เกิด — คำนวณยอดใหม่ทุกครั้งที่เข้าหน้า จึงมีค่าแสดงเสมอ</dd><dt>loading</dt><dd>แสดง spinner ระหว่างรอผลคำนวณจาก API</dd><dt>error</dt><dd>แสดงข้อความคำนวณยอดไม่สำเร็จ พร้อมปุ่มลองใหม่</dd><dt>unauthorized</dt><dd>แสดงข้อความว่าไม่มีสิทธิ์ขอยอดปิดบัญชีของบัญชีนี้ตาม BR-miniloan-033@v1</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — หน้านี้แสดงตัวเลขสรุปจำนวนน้อยรายการคงที่</dd></dl></section>
+<footer><small>MCK-miniloan-005 · wireframe L1 of UI-miniloan-005 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

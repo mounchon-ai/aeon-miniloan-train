@@ -1,0 +1,246 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-003",
+  "screen": "UI-miniloan-003",
+  "title": "รายละเอียดใบสมัครของฉัน",
+  "purpose": "ผู้สมัครดูสถานะและผลการประเมินของใบสมัครหนึ่งใบ",
+  "level": "L1",
+  "layout": "form",
+  "kind": "detail",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "รายละเอียดใบสมัครของฉัน"
+        }
+      ]
+    },
+    {
+      "name": "application-summary",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "สถานะ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนเงินกู้ที่ขอ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "requestedAmount",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "จำนวนงวดที่ขอ",
+          "required": true,
+          "entity": "ENT-002",
+          "attribute": "requestedTermMonths",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ยื่น",
+          "required": false,
+          "entity": "ENT-002",
+          "attribute": "submittedAt",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "back-to-list",
+          "name": "กลับไปที่รายการ",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "application-summary",
+          "container": "navigate",
+          "accessibleName": "กลับไปที่รายการ",
+          "conventions": [],
+          "destination": "หน้ารายการใบสมัครและบัญชีของฉัน",
+          "rules": []
+        }
+      ]
+    },
+    {
+      "name": "assessment-result",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "Credit Band",
+          "required": false,
+          "entity": "ENT-003",
+          "attribute": "band",
+          "validation": "ค่าที่ระบบประเมินให้ตาม BR-miniloan-006@v1 แสดงหลังประเมินอัตโนมัติเสร็จเท่านั้น",
+          "rules": [
+            "BR-miniloan-006@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วงเงินอนุมัติสูงสุด",
+          "required": false,
+          "entity": "ENT-003",
+          "attribute": "maxApprovableAmount",
+          "validation": "ค่าที่ระบบคำนวณให้ตาม BR-miniloan-003@v1",
+          "rules": [
+            "BR-miniloan-003@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลผลการประเมิน",
+          "required": false,
+          "entity": "ENT-003",
+          "attribute": "reasons",
+          "validation": "ข้อความที่ระบบสร้างให้ตาม BR-miniloan-009@v1",
+          "rules": [
+            "BR-miniloan-009@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เหตุผลที่ปฏิเสธ",
+          "required": false,
+          "entity": "ENT-002",
+          "attribute": "rejectionReason",
+          "validation": "แสดงเมื่อสถานะเป็น Rejected เท่านั้น",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-003-ent-002-status",
+      "type": "field",
+      "key": "ent-002-status",
+      "name": "สถานะ"
+    },
+    {
+      "id": "ui-miniloan-003-ent-002-requested-amount",
+      "type": "field",
+      "key": "ent-002-requested-amount",
+      "name": "จำนวนเงินกู้ที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-003-ent-002-requested-term-months",
+      "type": "field",
+      "key": "ent-002-requested-term-months",
+      "name": "จำนวนงวดที่ขอ"
+    },
+    {
+      "id": "ui-miniloan-003-ent-002-submitted-at",
+      "type": "field",
+      "key": "ent-002-submitted-at",
+      "name": "วันที่ยื่น"
+    },
+    {
+      "id": "ui-miniloan-003-back-to-list",
+      "type": "action",
+      "key": "back-to-list"
+    },
+    {
+      "id": "ui-miniloan-003-ent-003-band",
+      "type": "field",
+      "key": "ent-003-band",
+      "name": "Credit Band"
+    },
+    {
+      "id": "ui-miniloan-003-ent-003-max-approvable-amount",
+      "type": "field",
+      "key": "ent-003-max-approvable-amount",
+      "name": "วงเงินอนุมัติสูงสุด"
+    },
+    {
+      "id": "ui-miniloan-003-ent-003-reasons",
+      "type": "field",
+      "key": "ent-003-reasons",
+      "name": "เหตุผลผลการประเมิน"
+    },
+    {
+      "id": "ui-miniloan-003-ent-002-rejection-reason",
+      "type": "field",
+      "key": "ent-002-rejection-reason",
+      "name": "เหตุผลที่ปฏิเสธ"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าหน้านี้ได้ต่อเมื่อมีใบสมัครอยู่แล้วเท่านั้น"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton ระหว่างโหลดรายละเอียด"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความโหลดไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์ดูใบสมัครนี้ เมื่อพยายามเปิดใบสมัครของผู้อื่นตาม BR-miniloan-033@v1"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — เนื้อหาหน้าคงที่ ไม่มีรายการที่ล้น"
+    }
+  },
+  "extensions": {}
+}

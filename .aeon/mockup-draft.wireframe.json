@@ -1,0 +1,18 @@
+{
+  "screens": [
+    { "id": "UI-miniloan-001", "layout": "form" },
+    { "id": "UI-miniloan-002", "layout": "rows" },
+    { "id": "UI-miniloan-003", "layout": "form" },
+    { "id": "UI-miniloan-004", "layout": "form" },
+    { "id": "UI-miniloan-005", "layout": "form" },
+    { "id": "UI-miniloan-006", "layout": "rows" },
+    { "id": "UI-miniloan-007", "layout": "rows" },
+    { "id": "UI-miniloan-008", "layout": "form" },
+    { "id": "UI-miniloan-009", "layout": "form" },
+    { "id": "UI-miniloan-010", "layout": "rows" },
+    { "id": "UI-miniloan-011", "layout": "rows" },
+    { "id": "UI-miniloan-012", "layout": "form" },
+    { "id": "UI-miniloan-013", "layout": "rows" },
+    { "id": "UI-miniloan-014", "layout": "rows" }
+  ]
+}

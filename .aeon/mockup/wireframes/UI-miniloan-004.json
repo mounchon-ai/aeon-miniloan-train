@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-004",
+  "screen": "UI-miniloan-004",
+  "title": "ตารางผ่อนชำระของฉัน",
+  "purpose": "ผู้สมัครดูตารางผ่อนชำระทั้งตารางพร้อมสถานะรายงวด",
+  "level": "L1",
+  "layout": "form",
+  "kind": "detail",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "ตารางผ่อนชำระของฉัน"
+        }
+      ]
+    },
+    {
+      "name": "schedule-table",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "งวดที่",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "installmentNumber",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันครบกำหนด",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "dueDate",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่างวด (EMI)",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "emiAmount",
+          "validation": "ค่าที่ระบบคำนวณให้ตาม BR-miniloan-016@v1 เท่ากันทุกงวด",
+          "rules": [
+            "BR-miniloan-016@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ส่วนดอกเบี้ย",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "interestPortion",
+          "validation": "ค่าที่ระบบคำนวณให้และปัดเศษตาม BR-miniloan-035@v1",
+          "rules": [
+            "BR-miniloan-035@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ส่วนเงินต้น",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "principalPortion",
+          "validation": "ค่าที่ระบบคำนวณให้และปัดเศษตาม BR-miniloan-035@v1",
+          "rules": [
+            "BR-miniloan-035@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ยอดคงเหลือ",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "remainingBalance",
+          "validation": "งวดสุดท้ายต้องเป็น 0 พอดีตาม BR-miniloan-017@v1",
+          "rules": [
+            "BR-miniloan-017@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "สถานะงวด",
+          "required": true,
+          "entity": "ENT-008",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        }
+      ]
+    },
+    {
+      "name": "schedule-summary",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นรวมทั้งตาราง",
+          "required": true,
+          "entity": "ENT-007",
+          "attribute": "totalPrincipal",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "request-payoff-quote",
+          "name": "ขอยอดปิดบัญชีก่อนกำหนด",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "schedule-summary",
+          "container": "navigate",
+          "accessibleName": "ขอยอดปิดบัญชีก่อนกำหนด",
+          "conventions": [],
+          "destination": "หน้ายอดปิดบัญชีก่อนกำหนดของฉัน",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-004-ent-008-installment-number",
+      "type": "field",
+      "key": "ent-008-installment-number",
+      "name": "งวดที่"
+    },
+    {
+      "id": "ui-miniloan-004-ent-008-due-date",
+      "type": "field",
+      "key": "ent-008-due-date",
+      "name": "วันครบกำหนด"
+    },
+    {
+      "id": "ui-miniloan-004-ent-008-emi-amount",
+      "type": "field",
+      "key": "ent-008-emi-amount",
+      "name": "ค่างวด (EMI)"
+    },
+    {
+      "id": "ui-miniloan-004-ent-008-interest-portion",
+      "type": "field",
+      "key": "ent-008-interest-portion",
+      "name": "ส่วนดอกเบี้ย"
+    },
+    {
+      "id": "ui-miniloan-004-ent-008-principal-portion",
+      "type": "field",
+      "key": "ent-008-principal-portion",
+      "name": "ส่วนเงินต้น"
+    },
+    {
+      "id": "ui-miniloan-004-ent-008-remaining-balance",
+      "type": "field",
+      "key": "ent-008-remaining-balance",
+      "name": "ยอดคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-004-ent-008-status",
+      "type": "field",
+      "key": "ent-008-status",
+      "name": "สถานะงวด"
+    },
+    {
+      "id": "ui-miniloan-004-ent-007-total-principal",
+      "type": "field",
+      "key": "ent-007-total-principal",
+      "name": "เงินต้นรวมทั้งตาราง"
+    },
+    {
+      "id": "ui-miniloan-004-request-payoff-quote",
+      "type": "action",
+      "key": "request-payoff-quote"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าหน้านี้ได้ต่อเมื่อบัญชีมีตารางผ่อนอยู่แล้วเสมอ"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton ของตารางระหว่างโหลด"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความโหลดตารางไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์ดูตารางผ่อนของบัญชีนี้ตาม BR-miniloan-033@v1"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "จำนวนงวดมากไม่มีการตัดหน้า เพราะจำนวนงวดสูงสุดมีเพดานจาก BR-miniloan-004@v1 อยู่แล้ว จึงเลื่อนดูในตารางเดียวได้เสมอ"
+    }
+  },
+  "extensions": {}
+}

@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-011",
+  "screen": "UI-miniloan-011",
+  "title": "บัญชีสินเชื่อที่ฉันดูแล",
+  "purpose": "Operations ดูรายการบัญชีสินเชื่อที่ตนถูก assign เพื่อเลือกเปิดจัดการ",
+  "level": "L1",
+  "layout": "rows",
+  "kind": "list",
+  "visibleTo": [
+    "ROLE-004"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "บัญชีสินเชื่อที่ฉันดูแล"
+        }
+      ]
+    },
+    {
+      "name": "assigned-accounts",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "สถานะบัญชี",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "status",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "outstandingPrincipal",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "งวดถัดไปที่ครบกำหนด",
+          "required": false,
+          "entity": null,
+          "attribute": null,
+          "validation": "งวดแรกที่ยังไม่ Paid ในตารางผ่อนฉบับปัจจุบัน",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-004"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "open-account",
+          "name": "เปิดบัญชีสินเชื่อ",
+          "kind": "view",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "navigate",
+          "accessibleName": "เปิดบัญชีสินเชื่อ",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "หน้ารายละเอียดบัญชีสินเชื่อ",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-011-ent-006-status",
+      "type": "field",
+      "key": "ent-006-status",
+      "name": "สถานะบัญชี"
+    },
+    {
+      "id": "ui-miniloan-011-ent-006-outstanding-principal",
+      "type": "field",
+      "key": "ent-006-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-011-next-due-installment",
+      "type": "field",
+      "key": "next-due-installment",
+      "name": "งวดถัดไปที่ครบกำหนด"
+    },
+    {
+      "id": "ui-miniloan-011-open-account",
+      "type": "action",
+      "key": "open-account"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": true,
+      "text": "ยังไม่มีบัญชีสินเชื่อที่ถูก assign ให้ฉัน — แสดงข้อความ 'ไม่มีบัญชีในความดูแล'"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง skeleton ของรายการระหว่างโหลด"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความโหลดรายการไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": false,
+      "text": "ไม่เกิด — เห็นเฉพาะบัญชีที่ตนถูก assign ตาม BR-miniloan-054@v1 จึงไม่มีกรณีเข้าหน้านี้แล้วไม่มีสิทธิ์"
+    },
+    "overflow": {
+      "occurs": true,
+      "text": "จำนวนบัญชีเกินหน้าจอ — ใช้การแบ่งหน้า (pagination)"
+    }
+  },
+  "extensions": {}
+}

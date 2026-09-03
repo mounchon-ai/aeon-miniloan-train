@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-014",
+  "screen": "UI-miniloan-014",
+  "title": "พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+  "purpose": "ผู้ถือ role ผู้อนุมัติเปิดดูคำขอ เทียบค่าเดิมกับค่าใหม่ แล้วอนุมัติหรือปฏิเสธ",
+  "level": "L1",
+  "layout": "rows",
+  "kind": "workflow",
+  "visibleTo": [
+    "ROLE-005"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว"
+        }
+      ]
+    },
+    {
+      "name": "adjustment-detail",
+      "kind": "columns",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "ชื่อฟิลด์ที่ขอแก้",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "fieldName",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-005"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่าเดิม",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "oldValue",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-005"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่าใหม่",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "newValue",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-005"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ผู้ยื่นคำขอ",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "requestedBy",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-005"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่ยื่นคำขอ",
+          "required": true,
+          "entity": "ENT-010",
+          "attribute": "requestedAt",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-005"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "approve-adjustment",
+          "name": "อนุมัติคำขอ",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "navigate",
+          "accessibleName": "อนุมัติคำขอ",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "กลับไปที่รายการคำขอปรับปรุงบัญชีที่รออนุมัติ",
+          "rules": [
+            "BR-miniloan-041@v1",
+            "BR-miniloan-049@v1"
+          ]
+        },
+        {
+          "type": "action",
+          "key": "reject-adjustment",
+          "name": "ปฏิเสธคำขอ",
+          "kind": "command",
+          "presentation": "icon",
+          "placement": "first-column",
+          "container": "navigate",
+          "accessibleName": "ปฏิเสธคำขอ",
+          "conventions": [
+            "UIC-001",
+            "UIC-002"
+          ],
+          "destination": "กลับไปที่รายการคำขอปรับปรุงบัญชีที่รออนุมัติ",
+          "rules": [
+            "BR-miniloan-049@v1"
+          ]
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-014-ent-010-field-name",
+      "type": "field",
+      "key": "ent-010-field-name",
+      "name": "ชื่อฟิลด์ที่ขอแก้"
+    },
+    {
+      "id": "ui-miniloan-014-ent-010-old-value",
+      "type": "field",
+      "key": "ent-010-old-value",
+      "name": "ค่าเดิม"
+    },
+    {
+      "id": "ui-miniloan-014-ent-010-new-value",
+      "type": "field",
+      "key": "ent-010-new-value",
+      "name": "ค่าใหม่"
+    },
+    {
+      "id": "ui-miniloan-014-ent-010-requested-by",
+      "type": "field",
+      "key": "ent-010-requested-by",
+      "name": "ผู้ยื่นคำขอ"
+    },
+    {
+      "id": "ui-miniloan-014-ent-010-requested-at",
+      "type": "field",
+      "key": "ent-010-requested-at",
+      "name": "วันที่ยื่นคำขอ"
+    },
+    {
+      "id": "ui-miniloan-014-approve-adjustment",
+      "type": "action",
+      "key": "approve-adjustment"
+    },
+    {
+      "id": "ui-miniloan-014-reject-adjustment",
+      "type": "action",
+      "key": "reject-adjustment"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — เข้าหน้านี้ได้ต่อเมื่อมีคำขอปรับปรุงอยู่แล้วเท่านั้น"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "ระหว่างกดอนุมัติหรือปฏิเสธ ปุ่มที่กดถูก disable และแสดง spinner"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความปฏิเสธการอนุมัติ เมื่อผู้ยื่นคำขอพยายามอนุมัติของตัวเองตามหลัก four-eyes ตาม BR-miniloan-049@v1"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์พิจารณาคำขอนี้ เมื่อผู้ใช้ที่ไม่ได้ถือ role ผู้อนุมัติพยายามเข้าถึง"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — เนื้อหาต่อหนึ่งคำขอมีจำนวนคงที่"
+    }
+  },
+  "extensions": {}
+}

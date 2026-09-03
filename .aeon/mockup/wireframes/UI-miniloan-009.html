@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>แดชบอร์ดภาพรวมสถานะ — UI-miniloan-009 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-009" data-mockup="MCK-miniloan-009" data-layout="form">
+<header><h1>แดชบอร์ดภาพรวมสถานะ</h1><p>Loan Officer ดูภาพรวมจำนวนใบสมัครและบัญชีสินเชื่อแยกตามสถานะ</p><p><small>visible to: ROLE-002 (เจ้าหน้าที่สินเชื่อ)</small></p></header>
+<form data-zone="summary-counts" data-source="design"><dt>จำนวนใบสมัคร Submitted *</dt><dd data-testid="ui-miniloan-009-count-applications-submitted">ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล</dd><dt>จำนวนใบสมัคร UnderReview *</dt><dd data-testid="ui-miniloan-009-count-applications-under-review">ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล</dd><dt>จำนวนใบสมัคร Approved *</dt><dd data-testid="ui-miniloan-009-count-applications-approved">ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล</dd><dt>จำนวนบัญชี Active *</dt><dd data-testid="ui-miniloan-009-count-accounts-active">นับ Disbursed เป็น Active ครั้งเดียว ไม่นับซ้ำในช่อง Approved ตาม BR-miniloan-024@v1</dd><dt>จำนวนบัญชี Closed *</dt><dd data-testid="ui-miniloan-009-count-accounts-closed">ตัวเลขนับที่ระบบคำนวณให้ตาม BR-miniloan-024@v1 แสดง 0 เมื่อไม่มีข้อมูล</dd><button type="button" data-testid="ui-miniloan-009-refresh" data-key="refresh" data-kind="view" data-presentation="text" data-placement="summary-counts" data-container="inline">รีเฟรชข้อมูล</button></form>
+<section aria-label="states"><h2>states</h2><dl><dt>empty</dt><dd>ยังไม่มีใบสมัครหรือบัญชีสินเชื่อเลยสักรายการ — ทุกยอดแสดงเป็นเลข 0 ตาม BR-miniloan-024@v1</dd><dt>loading</dt><dd>แสดง skeleton ของตัวเลขระหว่างโหลด</dd><dt>error</dt><dd>แสดงข้อความโหลดแดชบอร์ดไม่สำเร็จ พร้อมปุ่มลองใหม่</dd><dt>unauthorized (does not occur)</dt><dd>ไม่เกิด — หน้านี้เปิดให้เฉพาะ Loan Officer ที่ล็อกอินอยู่แล้วเสมอ</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — จำนวนตัวเลขสรุปคงที่ที่ 5 ค่าตาม BR-miniloan-024@v1</dd></dl></section>
+<footer><small>MCK-miniloan-009 · wireframe L1 of UI-miniloan-009 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

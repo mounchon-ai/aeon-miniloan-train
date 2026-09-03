@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="th">
+<head><meta charset="utf-8"><title>พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว — UI-miniloan-014 · wireframe L1</title></head>
+<body>
+<main data-screen="UI-miniloan-014" data-mockup="MCK-miniloan-014" data-layout="rows">
+<header><h1>พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว</h1><p>ผู้ถือ role ผู้อนุมัติเปิดดูคำขอ เทียบค่าเดิมกับค่าใหม่ แล้วอนุมัติหรือปฏิเสธ</p><p><small>visible to: ROLE-005 (ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว)</small></p></header>
+<table data-zone="adjustment-detail" data-source="design"><caption>rows — sample row shows the bound column, not data</caption><thead><tr><th>actions</th><th>ชื่อฟิลด์ที่ขอแก้</th><th>ค่าเดิม</th><th>ค่าใหม่</th><th>ผู้ยื่นคำขอ</th><th>วันที่ยื่นคำขอ</th></tr></thead><tbody><tr><td><button type="button" data-testid="ui-miniloan-014-approve-adjustment" data-key="approve-adjustment" data-kind="command" data-presentation="icon" data-placement="first-column" data-container="navigate" aria-label="อนุมัติคำขอ">[icon]</button> <button type="button" data-testid="ui-miniloan-014-reject-adjustment" data-key="reject-adjustment" data-kind="command" data-presentation="icon" data-placement="first-column" data-container="navigate" aria-label="ปฏิเสธคำขอ">[icon]</button></td><td data-testid="ui-miniloan-014-ent-010-field-name">ENT-010.fieldName</td><td data-testid="ui-miniloan-014-ent-010-old-value">ENT-010.oldValue</td><td data-testid="ui-miniloan-014-ent-010-new-value">ENT-010.newValue</td><td data-testid="ui-miniloan-014-ent-010-requested-by">ENT-010.requestedBy</td><td data-testid="ui-miniloan-014-ent-010-requested-at">ENT-010.requestedAt</td></tr></tbody></table>
+<section aria-label="states"><h2>states</h2><dl><dt>empty (does not occur)</dt><dd>ไม่เกิด — เข้าหน้านี้ได้ต่อเมื่อมีคำขอปรับปรุงอยู่แล้วเท่านั้น</dd><dt>loading</dt><dd>ระหว่างกดอนุมัติหรือปฏิเสธ ปุ่มที่กดถูก disable และแสดง spinner</dd><dt>error</dt><dd>แสดงข้อความปฏิเสธการอนุมัติ เมื่อผู้ยื่นคำขอพยายามอนุมัติของตัวเองตามหลัก four-eyes ตาม BR-miniloan-049@v1</dd><dt>unauthorized</dt><dd>แสดงข้อความว่าไม่มีสิทธิ์พิจารณาคำขอนี้ เมื่อผู้ใช้ที่ไม่ได้ถือ role ผู้อนุมัติพยายามเข้าถึง</dd><dt>overflow (does not occur)</dt><dd>ไม่เกิด — เนื้อหาต่อหนึ่งคำขอมีจำนวนคงที่</dd></dl></section>
+<footer><small>MCK-miniloan-014 · wireframe L1 of UI-miniloan-014 · structure only, no style — a theme is applied at L2 (/mock:html)</small></footer>
+</main>
+</body>
+</html>

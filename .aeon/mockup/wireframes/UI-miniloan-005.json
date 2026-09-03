@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.4",
+  "producedBy": "mock · scripts/wireframes.mjs",
+  "project": "miniloan",
+  "id": "MCK-miniloan-005",
+  "screen": "UI-miniloan-005",
+  "title": "ยอดปิดบัญชีก่อนกำหนดของฉัน",
+  "purpose": "ผู้สมัครขอทราบยอดที่ต้องชำระเพื่อปิดบัญชีก่อนกำหนด ณ วันที่ขอ",
+  "level": "L1",
+  "layout": "form",
+  "kind": "detail",
+  "visibleTo": [
+    "ROLE-001"
+  ],
+  "zones": [
+    {
+      "name": "header",
+      "kind": "header",
+      "kindSource": "derived",
+      "source": "mock",
+      "items": [
+        {
+          "type": "title",
+          "text": "ยอดปิดบัญชีก่อนกำหนดของฉัน"
+        }
+      ]
+    },
+    {
+      "name": "payoff-quote",
+      "kind": "form",
+      "kindSource": "derived",
+      "source": "design",
+      "items": [
+        {
+          "type": "field",
+          "name": "เงินต้นคงเหลือ",
+          "required": true,
+          "entity": "ENT-006",
+          "attribute": "outstandingPrincipal",
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ดอกเบี้ยค้างจ่าย",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "คำนวณถึงวันที่ขอ ฐาน actual/365 ตาม BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ค่าธรรมเนียมปิดก่อนกำหนด",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "1% ของเงินต้นคงเหลือตาม BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "ยอดที่ต้องชำระทั้งหมด",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "ผลรวมของเงินต้นคงเหลือ ดอกเบี้ยค้างจ่าย และค่าธรรมเนียมตาม BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-022@v1"
+          ],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "field",
+          "name": "วันที่คำนวณยอด",
+          "required": true,
+          "entity": null,
+          "attribute": null,
+          "validation": "แสดงผลจากข้อมูลที่บันทึกไว้ ไม่มีการรับค่าใหม่",
+          "rules": [],
+          "visibleTo": [
+            "ROLE-001"
+          ],
+          "input": false
+        },
+        {
+          "type": "action",
+          "key": "back-to-schedule",
+          "name": "กลับไปที่ตารางผ่อน",
+          "kind": "navigate",
+          "presentation": "text",
+          "placement": "payoff-quote",
+          "container": "navigate",
+          "accessibleName": "กลับไปที่ตารางผ่อน",
+          "conventions": [],
+          "destination": "หน้าตารางผ่อนชำระของฉัน",
+          "rules": []
+        }
+      ]
+    }
+  ],
+  "controls": [
+    {
+      "id": "ui-miniloan-005-ent-006-outstanding-principal",
+      "type": "field",
+      "key": "ent-006-outstanding-principal",
+      "name": "เงินต้นคงเหลือ"
+    },
+    {
+      "id": "ui-miniloan-005-accrued-interest",
+      "type": "field",
+      "key": "accrued-interest",
+      "name": "ดอกเบี้ยค้างจ่าย"
+    },
+    {
+      "id": "ui-miniloan-005-early-closure-fee",
+      "type": "field",
+      "key": "early-closure-fee",
+      "name": "ค่าธรรมเนียมปิดก่อนกำหนด"
+    },
+    {
+      "id": "ui-miniloan-005-total-payoff-amount",
+      "type": "field",
+      "key": "total-payoff-amount",
+      "name": "ยอดที่ต้องชำระทั้งหมด"
+    },
+    {
+      "id": "ui-miniloan-005-quote-calculated-at",
+      "type": "field",
+      "key": "quote-calculated-at",
+      "name": "วันที่คำนวณยอด"
+    },
+    {
+      "id": "ui-miniloan-005-back-to-schedule",
+      "type": "action",
+      "key": "back-to-schedule"
+    }
+  ],
+  "states": {
+    "empty": {
+      "occurs": false,
+      "text": "ไม่เกิด — คำนวณยอดใหม่ทุกครั้งที่เข้าหน้า จึงมีค่าแสดงเสมอ"
+    },
+    "loading": {
+      "occurs": true,
+      "text": "แสดง spinner ระหว่างรอผลคำนวณจาก API"
+    },
+    "error": {
+      "occurs": true,
+      "text": "แสดงข้อความคำนวณยอดไม่สำเร็จ พร้อมปุ่มลองใหม่"
+    },
+    "unauthorized": {
+      "occurs": true,
+      "text": "แสดงข้อความว่าไม่มีสิทธิ์ขอยอดปิดบัญชีของบัญชีนี้ตาม BR-miniloan-033@v1"
+    },
+    "overflow": {
+      "occurs": false,
+      "text": "ไม่เกิด — หน้านี้แสดงตัวเลขสรุปจำนวนน้อยรายการคงที่"
+    }
+  },
+  "extensions": {}
+}
