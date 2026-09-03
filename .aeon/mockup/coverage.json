@@ -10,59 +10,101 @@
   "screens": [
     {
       "screen": "UI-miniloan-002",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-003",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-004",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-005",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-001",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-009",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-006",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-007",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-008",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-010",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-011",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-012",
-      "level": "L1"
+      "level": "L1",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-013",
-      "level": "L2"
+      "level": "L2",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     },
     {
       "screen": "UI-miniloan-014",
-      "level": "L2"
+      "level": "L2",
+      "decision": "build",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03T15:09:49Z"
     }
   ],
   "exceptions": [],
