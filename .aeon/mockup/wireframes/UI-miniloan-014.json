@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-014",
@@ -8,6 +8,7 @@
   "purpose": "ให้หัวหน้าเจ้าหน้าที่สินเชื่อมอบหมายใบสมัครที่รอพิจารณาให้ Loan Officer แต่ละคน",
   "level": "L1",
   "layout": "rows",
+  "kind": "manage",
   "visibleTo": [
     "ROLE-003"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "queue",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

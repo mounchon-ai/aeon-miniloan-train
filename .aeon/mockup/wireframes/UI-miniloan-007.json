@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-007",
@@ -8,6 +8,7 @@
   "purpose": "ให้ Loan Officer ที่ถูกมอบหมายพิจารณา อนุมัติ ปฏิเสธ ยกเลิก หรือสั่งเบิกจ่ายใบสมัคร",
   "level": "L1",
   "layout": "form",
+  "kind": "detail",
   "visibleTo": [
     "ROLE-002"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "applicant-info",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -78,6 +81,7 @@
     {
       "name": "application",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -159,6 +163,7 @@
     {
       "name": "assessment",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -205,6 +210,7 @@
     {
       "name": "decision",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-003",
@@ -8,6 +8,7 @@
   "purpose": "ให้ผู้สมัครดูสถานะ ผลประเมิน และเหตุผลของใบสมัครใบหนึ่งของตัวเอง",
   "level": "L1",
   "layout": "form",
+  "kind": "detail",
   "visibleTo": [
     "ROLE-001"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "application",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -101,6 +104,7 @@
     {
       "name": "assessment",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -147,6 +151,7 @@
     {
       "name": "account",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

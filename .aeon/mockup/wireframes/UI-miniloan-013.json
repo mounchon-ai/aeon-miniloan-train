@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-012",
@@ -8,6 +8,7 @@
   "purpose": "ให้ผู้ถือ role ผู้อนุมัติตรวจค่าเดิมและค่าใหม่แล้วอนุมัติคำขอปรับปรุง",
   "level": "L1",
   "layout": "form",
+  "kind": "detail",
   "visibleTo": [
     "ROLE-002"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "request",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

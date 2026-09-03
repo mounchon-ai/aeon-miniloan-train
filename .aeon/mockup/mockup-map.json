@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "mockups": [
@@ -20,7 +20,14 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:a81db08737c9016416e5e4000c0b7e4c793edd1e4641de437bd3f1438518f965",
+        "empty": "sha256:68dfceae1674371638144b84ae8f3c4177b3526c4519633efeb071ac6842f030",
+        "error": "sha256:fbf6aab76b0aa9eac9711c01c9fb71bf334a4d58f6ba45c8a5552a1ddf2efde2",
+        "loading": "sha256:89fae4c7bfb699d06bf142fda7e2057928223085408a2623700f42da90e7bf52",
+        "unauthorized": "sha256:5a49dafa7745615ba50c3b1fafa2a52468f1b60b6b59a1d542a350df71bb18f5"
+      }
     },
     {
       "id": "MCK-miniloan-002",
@@ -38,8 +45,16 @@
       "usesComponent": [
         "Button",
         "Input",
+        "StatusBadge",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:aa05b98c084dbce57e323bac70635f13d0580f4da80672efdbf504ac1b74bf76",
+        "error": "sha256:be2d612720315216c9022c012790ecd2ac8f3d798df609b04b5eb1518edaf96c",
+        "loading": "sha256:93edc59e0c6c30bf0ead01937b5a74cd1d333b238422ee43eb24e69987b46036",
+        "overflow": "sha256:2b495924001ca3c0374f904228f9e758cfc2084c7d41ee26ae55894442bb6e13",
+        "unauthorized": "sha256:99f67bb20777a7bf7ba64926c89bfce16506ec2ee1ab8d921e9b4158eb413175"
+      }
     },
     {
       "id": "MCK-miniloan-003",
@@ -57,7 +72,13 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:675df328e334f95269cd6c25095c3827a05cfae7837e2cb823c0213dcd5759f7",
+        "error": "sha256:3376dae5a84d11c38c0e9667dc8e93aa163a9e3d903075c2c9f1f16af34fc25e",
+        "loading": "sha256:80a3467dd466bf6fb0c7089965741d688b181a5e9991f0c9c6d4a76eda53fb98",
+        "unauthorized": "sha256:c009768471663292df02cf04da618677fbd921728b9413c9f4e645d5a7fcde87"
+      }
     },
     {
       "id": "MCK-miniloan-004",
@@ -80,7 +101,14 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:4e4589c74179aeac6a35c9e7cc25fc412cbabd9c5e1e6102cdc7d3ad97994342",
+        "error": "sha256:dcf153c331639139cc3fc552f6647299ea51be8d3b1f712d3bcb61a1cdf20ae8",
+        "loading": "sha256:50c038f1354759a280473ba23be06184b79629b903efbcd3fb209c207e7d0874",
+        "overflow": "sha256:991f164c0dcb5b5042636ba73df478b0000b9ffe7939a5e87fef79c3a2dfe49c",
+        "unauthorized": "sha256:fd190d8ef45ab73f12d11d033a987ecfd46e6ec69ab9005300416054fca3be08"
+      }
     },
     {
       "id": "MCK-miniloan-005",
@@ -99,7 +127,14 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:cc4ea970efbd8c3e25009d17a40414a06c50ff80e4e65be6abd708ef25a3c529",
+        "empty": "sha256:e78ac3c98c723918d1abd3da431d04110b1004044b2aa1ef4c936a8c0f498315",
+        "error": "sha256:19b8fb550d66676a9695f9c170df7d29f49b80d1c399b03bce8d2f31bef5bcb2",
+        "loading": "sha256:bb8250a1894201f033dca75c82f4a642a8a8a9a3d2b20f272c4450b76c5429fc",
+        "unauthorized": "sha256:c11b3bef77af894746b0e45589983c359c45924dcff9eaa6c49de7915f47930b"
+      }
     },
     {
       "id": "MCK-miniloan-006",
@@ -119,7 +154,15 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:06800faa3303224702cf7da0be2c57a0218e05524beda005917a7d80a68013a3",
+        "empty": "sha256:a3b18a6cf52529497d71a913e4af36d1cd26174ab916882f0cc8d878935c1ccb",
+        "error": "sha256:d610638a1d24cb0728da9e918545938d45e332c37e1430dde0a0ca827a85a825",
+        "loading": "sha256:ec4261781c30825f0b7af7c42d6e269fcc109edce491db28bad4648b158caa41",
+        "overflow": "sha256:b4ef71ba316fabc9a66ed3a11447ebfb47cc92aac24570b3cd8895658a339b30",
+        "unauthorized": "sha256:fa1a3f1faae4600ef2e054d952a34a627696d266907edea27a920a1baa6b4fbc"
+      }
     },
     {
       "id": "MCK-miniloan-007",
@@ -137,7 +180,13 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:da7b36c999db827fcb5f4b3bfea452d7ff1715a3705e9c46ddd184a3bb564f71",
+        "error": "sha256:1343ea6826de477e9c6ab252bad58ad43086f0691899ff65d8e2e6cd785bf0b9",
+        "loading": "sha256:5ac42c418ce775a58357dc46a95dc4522afc3e84f052d034cea6774ace40cf22",
+        "unauthorized": "sha256:89541c73bb0b5f378697f862e3cfd7d8f4782cc933a8e0dd15493df4a8db657b"
+      }
     },
     {
       "id": "MCK-miniloan-008",
@@ -160,7 +209,14 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:a4e1e018fab7613bc2bc2ffefe965d44be2ba5e2865d02114a3daa6ca51c3de5",
+        "empty": "sha256:66f60131af648bef2a8622842b09e0cb4cce0b3c4b1f614eec93812b03ef541d",
+        "error": "sha256:dcc79f3a0a6d12acc764c86203b8126bf16b6c2de4630fc5bb003fab8544c989",
+        "loading": "sha256:d57f9f66d31e84a948db771246338c3c1f9b926c63587adefbe5006281e88a03",
+        "unauthorized": "sha256:fe384bc5ad73822955a4d48a8ede719aa99ad566ae67f5a8c89809ecbc9d7a55"
+      }
     },
     {
       "id": "MCK-miniloan-009",
@@ -180,7 +236,15 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:c0b13936c5543be4af1b1fc36f90e020736e7d28278216ac9dbc3afab6204aaa",
+        "empty": "sha256:efbe1e213ce1c989e6ae9ca26dc06569dfebf0c7a0323bcfadb35a41fa6ab1ba",
+        "error": "sha256:8d3683d1602fb69b26a4485a4ed864cb50531e84ab1c17c59d31c9b2cc8459d9",
+        "loading": "sha256:c2d8dd39a0bd068cf391732920dc25473760bf84d5ad81abdea36a2810d6dbf4",
+        "overflow": "sha256:35655fe8b8030e635cba8157c50edd40ce26ad9a13bfb435b2fa6b12f4e5af35",
+        "unauthorized": "sha256:69fb2dd87a55bf1f9fef4d1f4af74c6d7b579cfed1c6c98a86fc6ca1df06b617"
+      }
     },
     {
       "id": "MCK-miniloan-010",
@@ -198,7 +262,13 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:24b25a30e709647460f020e9b9aa298f91cbb406dd9cf211268328ace649c515",
+        "error": "sha256:7390739ad9393cbafe5e85ef4b220f637fafbc3cf1e76e4c0c3a2aafa6cbb22f",
+        "loading": "sha256:e7c015b1cf3e369f04e93bfc1a8b8b714ef5fa661e57eae61253489178ec5cea",
+        "unauthorized": "sha256:e53e6ae0089a05c1e2755ca9c18ed32c9e9ff8186fcaee4aef45a131d49abfb5"
+      }
     },
     {
       "id": "MCK-miniloan-011",
@@ -218,7 +288,15 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:2724b688457fbf39be08bdf4d3d7a0d0beab5dd6229ec00eacc3d32a2c5b6496",
+        "empty": "sha256:1cdc7ee7c09e075ab980bbe5832969aa20918014484dde6c677c12734592ef61",
+        "error": "sha256:8fc82ff93dd08ed0e39aadb7a0607f2736b9acfca56ea5ce2c384002dd62e0d8",
+        "loading": "sha256:82b0d49bf53389407446c2a5ae8ea93961026c8cad4908db2c7cf3712a50fe76",
+        "overflow": "sha256:2973d9d7b4c8d36747017c318bfa66eec4a24c19d3df221cf578cb54181f5699",
+        "unauthorized": "sha256:b07e8887e0944a04ffbec1f835db5ecb3d3fc7e39bb14df11b6b1f0c3109991a"
+      }
     },
     {
       "id": "MCK-miniloan-012",
@@ -236,7 +314,13 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:7132806865b19e4b9b4c3d9ee3ebb815df3c8c33d310ae17bc80d1052933d474",
+        "error": "sha256:7431a5f56e08facc4fea86e0241650658f8879a6c3dc2990e1503816a3f36b89",
+        "loading": "sha256:0a99aede80940be7171ecba6064f901b906c35c5a0afd27fa72ad1111841a762",
+        "unauthorized": "sha256:63efdd1e5fb5a1ac99bf5f62110f33f60fb37481b9fe32f865d9663d103e37ac"
+      }
     },
     {
       "id": "MCK-miniloan-013",
@@ -255,7 +339,14 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:54283858e34629eec23acffd60accbd082d560a3b1f245691e9a2989af38854f",
+        "empty": "sha256:88603bac7a855cc8042724ce36e6b71b77760f09c57df2909931a4f78d5e4d5d",
+        "error": "sha256:75c19effcd0ac2cfc5c2b8cc0ca97a4f9dbf2bc10924a260939fcac4ed8a3cf1",
+        "loading": "sha256:7fcf613365a886695de6efa5e8a43eab5250dc98d5bb0755f196bfb45240ad54",
+        "unauthorized": "sha256:ab36b0baa6b5322583d8eef604e8325438eaaab026c64dc8c5778caa1bbd6168"
+      }
     },
     {
       "id": "MCK-miniloan-014",
@@ -278,7 +369,15 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:bfb95aca48bb5303d10ddbd22980f5d1e8b86c044e94c356f268d05b75d574ab",
+        "empty": "sha256:423bba6bf44ae405d51e18a51c79a3c9534c03f45ffb1093c066a2161120d3c4",
+        "error": "sha256:21c464cc59e95b9917b72c0a6ee572b861648a29df023a73e50796ff2006708c",
+        "loading": "sha256:30b139e225d7a7e8effed26771bf1f334bb6f731d0d40dfe6ad0347c3e49d01b",
+        "overflow": "sha256:c393b034286af26d3c5ef5f4b30cb056bcb53680e0018bc982303d3be7c3f565",
+        "unauthorized": "sha256:34cbc43505971c68c63843c403fa1f47a67787e037d05eba91fa8b9ef3409382"
+      }
     },
     {
       "id": "MCK-miniloan-015",
@@ -298,7 +397,15 @@
         "Button",
         "Table",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:e1793b1cfc7939bcca3e3d1b110b6e84901e8db318d719884649dd452b749607",
+        "empty": "sha256:33c1a003ed5d814fbd60665e9743fccb858e67ec4810bae5c23202e92b949ec8",
+        "error": "sha256:d33248faa0012f35b2b1fa8a714025596dd1e45576a6730cd06503a91d64465d",
+        "loading": "sha256:8a597ac91ee772a227e13646dee326026c5a442d546485004446f029c9b2d7fb",
+        "overflow": "sha256:b3d127c3126be8d62bf57265b7ee3721cca440ff6d623a9d0b0c1a4c65da3d18",
+        "unauthorized": "sha256:ee3f49f2fd8e3599ec9eec04b0bdaec1fd25991205b5179cc9b2d8a87b7ff86e"
+      }
     },
     {
       "id": "MCK-miniloan-016",
@@ -316,7 +423,13 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:5acdf5354d0f6cf899760952a453d88ccd72fb7a074719b82928bacd00099963",
+        "error": "sha256:2902d3d2306c585eccc318cc50c58d9ec97be9f0ee6e51f3cb431c4227858b8b",
+        "loading": "sha256:d1205c1248e0539677e3d49a6b6dc0a72cdb3ae5c77e913fcdb9efce7cb72af3",
+        "unauthorized": "sha256:59cfe3456528b9cd093128d420900b7c459f465a6bfb2ef48354cf14980085da"
+      }
     },
     {
       "id": "MCK-miniloan-017",
@@ -334,7 +447,13 @@
         "Button",
         "Input",
         "Toast"
-      ]
+      ],
+      "deliveredPages": {
+        "default": "sha256:bf3aaadc84589bbd436afeba9de9f477d5859bfc32aceae0623b04cd1de4af06",
+        "error": "sha256:c7bb71b968d512fbb91bd54586eff49d58ac176e970d14383b450cae02114df1",
+        "loading": "sha256:0078ff0c8303d820dc910cfe69f77e983564a5c41562af707c31f11345e6be80",
+        "unauthorized": "sha256:0b340385ddfb98b7131790d547521f7ca51f247a6fa6a74ce613b9e390369dfe"
+      }
     }
   ],
   "extensions": {}

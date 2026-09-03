@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-002",
@@ -8,6 +8,7 @@
   "purpose": "ให้ผู้สมัครกรอกและยื่นใบสมัครสินเชื่อของตัวเอง ตั้งแต่บันทึกร่างจนถึงยื่นเข้าสู่การประเมิน",
   "level": "L1",
   "layout": "form",
+  "kind": "create",
   "visibleTo": [
     "ROLE-001"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "personal-info",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -111,6 +114,7 @@
     {
       "name": "loan-request",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

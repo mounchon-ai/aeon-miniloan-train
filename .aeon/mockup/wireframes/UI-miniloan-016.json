@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-016",
@@ -8,6 +8,7 @@
   "purpose": "ให้ Operations บันทึกยอดที่รับชำระเข้าบัญชีหนึ่งบัญชี ระบบจัดว่าเป็นการชำระตรงงวดหรือการโปะเงินต้นเองตามยอดที่กรอก",
   "level": "L1",
   "layout": "form",
+  "kind": "edit",
   "visibleTo": [
     "ROLE-004"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "account",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -74,6 +77,7 @@
     {
       "name": "payment",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

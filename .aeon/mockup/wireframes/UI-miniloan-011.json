@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-010",
@@ -8,6 +8,7 @@
   "purpose": "ให้ Loan Officer ดูรายละเอียดบัญชีที่ปิดแล้วและยื่นคำขอปรับปรุงเมื่อพบข้อมูลผิด",
   "level": "L1",
   "layout": "form",
+  "kind": "detail",
   "visibleTo": [
     "ROLE-002"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "account",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {
@@ -85,6 +88,7 @@
     {
       "name": "adjustment-request",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

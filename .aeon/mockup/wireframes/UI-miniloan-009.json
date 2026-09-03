@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.2",
+  "schemaVersion": "1.4",
   "producedBy": "mock · scripts/wireframes.mjs",
   "project": "miniloan",
   "id": "MCK-miniloan-013",
@@ -8,6 +8,7 @@
   "purpose": "ให้ Loan Officer กำหนดหรือเปลี่ยน role ที่มีสิทธิ์อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว",
   "level": "L1",
   "layout": "form",
+  "kind": "edit",
   "visibleTo": [
     "ROLE-002"
   ],
@@ -15,6 +16,7 @@
     {
       "name": "header",
       "kind": "header",
+      "kindSource": "derived",
       "source": "mock",
       "items": [
         {
@@ -26,6 +28,7 @@
     {
       "name": "setting",
       "kind": "form",
+      "kindSource": "derived",
       "source": "design",
       "items": [
         {

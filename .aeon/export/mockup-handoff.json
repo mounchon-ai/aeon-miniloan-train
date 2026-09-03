@@ -195,6 +195,7 @@
           "usesComponent": [
             "Button",
             "Input",
+            "StatusBadge",
             "Toast"
           ]
         },
@@ -596,16 +597,28 @@
       "note": "an unconfirmed entry is not in this list — nobody chose it, so dev may not be told to follow it (MP10). confirmed.kindMap counts only the kinds a PERSON answered here, which since gate 35 is the leftover case: the kind of an action is declared by design in screens.json, so zero is the normal reading and says nothing about coverage"
     },
     {
+      "key": "wireframe",
+      "label": "normative",
+      "owner": "mock",
+      "what": "the L1 wireframe of every screen — the structure the L2 picture is one drawing of",
+      "means": "โครงของหน้าเป็นข้อผูกพัน — id ของ control · โซนและลำดับ · สถานะที่ต้องมี · convention ที่ยืนยันแล้ว · ตรงไหนที่ภาพ L2 พูดเกินใบนี้ ให้ถือใบนี้",
+      "ref": [
+        "../mockup/wireframes/"
+      ],
+      "files": 17,
+      "note": "the per-screen file is on each screen-map row · the ids on it are the ones dev stores and qa searches by and they never change once minted (gate 37 · 45), the zones and their order are design's arrangement (gate 47), and the states are design's list · the L2 page is ONE drawing of this file, which is why it is labelled reference: whatever a picture adds beyond this is a choice, not a fact"
+    },
+    {
       "key": "mockup-html",
       "label": "reference",
       "owner": "mock",
-      "what": "the L2 pages — structure to read, not source to paste (gate 23: they are re-rendered, never hand-edited)",
-      "means": "ใช้ดูลำดับและการจัดวาง ไม่ต้องก๊อปมาตรง ๆ",
+      "what": "the L2 pages — structure to read, not source to paste (gate 72: a model wrote them, so what binds is the wireframe row above)",
+      "means": "ใช้ดูลำดับและการจัดวาง ไม่ต้องก๊อปมาตรง ๆ · สิ่งที่ผูกพันคือแถว wireframe ไม่ใช่แถวนี้",
       "ref": [
         "../../mockups/"
       ],
       "files": 84,
-      "note": "the per-page list is on each screen-map row · these files are re-rendered from the wireframe and the theme, so a hand edit is lost (gate 23)"
+      "note": "the per-page list is on each screen-map row · a model drew these from the wireframe and the theme (gate 72), so they carry choices nobody upstream made — every fact they must obey is on the wireframe row, and that is the row labelled normative"
     },
     {
       "key": "sample-data",
