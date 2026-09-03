@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/desk.mjs",
+  "project": "miniloan",
+  "resolves": [
+    {
+      "dq": "DQ-miniloan-001",
+      "answer": "จำนวนเงินเก็บเป็น decimal(18,2) หน่วยบาท ปัดทันทีทุกจุดที่เกิดด้วย round half up ตาม BR-miniloan-035@v1 — 2 ตำแหน่งทศนิยม (สตางค์) ทุกฟิลด์ประเภท money",
+      "by": "aplus191",
+      "at": "2026-09-03T03:39:19Z",
+      "answeredByNode": "ENT-008",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-003",
+      "answer": "เก็บประวัติการมอบหมายทุกครั้งเป็นแถวใหม่ใน ApplicationAssignment ไม่ทับของเดิม — ส่วนสิทธิ์การมองเห็น/อนุมัติของใบสมัคร อ้างอิงเฉพาะ LoanApplication.assignedLoanOfficerId ปัจจุบันเท่านั้น เจ้าหน้าที่คนเดิมที่ถูกถอดออกจะไม่เห็นใบสมัครนั้นอีกผ่านเส้นทางปกติ",
+      "by": "aplus191",
+      "at": "2026-09-03T03:39:19Z",
+      "answeredByNode": "ENT-013",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-005",
+      "answer": "แก้ไขเวอร์ชันอัตราดอกเบี้ยที่ประกาศไปแล้วไม่ได้ (immutable) ต้องสร้างเวอร์ชันใหม่เสมอเมื่อจะเปลี่ยนค่า",
+      "by": "aplus191",
+      "at": "2026-09-03T03:39:19Z",
+      "answeredByNode": "ENT-005",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-006",
+      "answer": "ใช้ soft-archive ผ่านฟิลด์ isArchived — เวอร์ชันเก่าซ่อนจากรายการเลือกใช้งานปกติเมื่อมีเวอร์ชันใหม่ แต่ยังอ้างอิงได้เสมอ ห้ามลบจริง",
+      "by": "aplus191",
+      "at": "2026-09-03T03:39:19Z",
+      "answeredByNode": "ENT-005",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-009",
+      "answer": "key กันซ้ำคือคู่ (commandType, requestId) โดย requestId เป็นค่าที่ client ส่งมาต่อครั้ง (idempotency key) เก็บในตาราง IdempotencyKey พร้อม unique constraint ที่ฐานข้อมูล ครอบคลุมคำสั่งยื่นใบสมัคร อนุมัติ ปฏิเสธ ยกเลิก เบิกจ่าย และบันทึกการชำระ",
+      "by": "aplus191",
+      "at": "2026-09-03T03:39:19Z",
+      "answeredByNode": "ENT-012",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-011",
+      "answer": "assignedOperationsId บน LoanAccount เป็นค่า snapshot ที่บันทึกครั้งเดียว ณ วันเบิกจ่ายจาก Loan Officer ของใบสมัครต้นทาง และไม่อัปเดตตามภายหลัง เพราะสเปกปัจจุบันไม่มีกลไกมอบหมายใหม่หลังเบิกจ่าย หากอนาคตมีกลไกนั้นจริง ต้องกลับมาแก้จุดนี้",
+      "by": "aplus191",
+      "at": "2026-09-03T03:39:19Z",
+      "answeredByNode": "ENT-006",
+      "extensions": {}
+    }
+  ],
+  "gaps": [],
+  "extensions": {}
+}

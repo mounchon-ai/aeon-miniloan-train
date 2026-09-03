@@ -887,7 +887,73 @@
       "becomes_entity": null
     }
   ],
-  "stakeholders": [],
+  "stakeholders": [
+    {
+      "id": "STK-miniloan-001",
+      "name": "Applicant",
+      "kind": "external",
+      "description": "ผู้สมัครสินเชื่อ/ผู้กู้ — กรอกและยื่นใบสมัคร ดูสถานะและตารางผ่อนของตัวเอง และขอยอดปิดบัญชี ทำสิ่งที่ย้อนกลับไม่ได้ (อนุมัติ ปฏิเสธ เบิกจ่าย บันทึกการชำระ ปิดบัญชี) ไม่ได้",
+      "status": "draft",
+      "provenance": [
+        {
+          "source": "SRC-002",
+          "locator": { "section": "[1] QB-actor-02" },
+          "quote": "Applicant ห้ามทำสิ่งที่ย้อนกลับไม่ได้: อนุมัติ ปฏิเสธ เบิกจ่าย บันทึกการชำระ ปิดบัญชี · ทำได้แค่ กรอกและยื่นใบสมัคร ดูสถานะและตารางผ่อนของตัวเอง และขอยอดปิดบัญชี",
+          "confidence": 1
+        }
+      ],
+      "becomes_role": null
+    },
+    {
+      "id": "STK-miniloan-002",
+      "name": "Loan Officer",
+      "kind": "internal",
+      "description": "เจ้าหน้าที่สินเชื่อ — พิจารณาอนุมัติ/ปฏิเสธใบสมัครที่ถูกมอบหมายให้ตน และสั่งเบิกจ่าย",
+      "status": "draft",
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": { "section": "3 · ผู้ใช้งาน (Actors)" },
+          "quote": "**Loan Officer** | เจ้าหน้าที่พิจารณา อนุมัติ/ปฏิเสธ และสั่งเบิกจ่าย",
+          "confidence": 1
+        }
+      ],
+      "becomes_role": null
+    },
+    {
+      "id": "STK-miniloan-003",
+      "name": "Supervisor",
+      "kind": "internal",
+      "description": "หัวหน้าเจ้าหน้าที่สินเชื่อ — มอบหมายใบสมัครให้ Loan Officer และยกเลิกใบสมัครที่ยังไม่ถูกมอบหมาย เป็น actor แยกจาก Loan Officer",
+      "aka": ["หัวหน้าเจ้าหน้าที่สินเชื่อ"],
+      "status": "draft",
+      "provenance": [
+        {
+          "source": "SRC-015",
+          "locator": { "section": "[1] Q-miniloan-012 · A/B" },
+          "quote": "ตอบ B (supervisor) : หัวหน้าเป็น actor แยก ไม่ใช่ Loan Officer",
+          "confidence": 1
+        }
+      ],
+      "becomes_role": null
+    },
+    {
+      "id": "STK-miniloan-004",
+      "name": "Operations",
+      "kind": "internal",
+      "description": "ฝ่ายปฏิบัติการ — บันทึกการชำระเงินและดำเนินการปิดบัญชี รวมถึงยื่น/ปฏิบัติตามคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+      "status": "draft",
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": { "section": "3 · ผู้ใช้งาน (Actors)" },
+          "quote": "**Operations** | บันทึกการชำระเงิน และดำเนินการปิดบัญชี",
+          "confidence": 1
+        }
+      ],
+      "becomes_role": null
+    }
+  ],
   "requirements": [
     {
       "id": "REQ-miniloan-001",

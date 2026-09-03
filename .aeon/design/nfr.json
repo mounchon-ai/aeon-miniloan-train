@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/nfr.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "entries": [
+    {
+      "id": "NFR-miniloan-001",
+      "metric": "ผลต่าง (หน่วยสตางค์) ระหว่างผลรวมเงินต้นทุกงวดในตารางผ่อนกับเงินต้นตั้งต้น และยอดคงเหลืองวดสุดท้ายที่คำนวณได้ เทียบกับ 0 ตามเงื่อนไขของ BR-miniloan-017@v1",
+      "target": {
+        "comparator": "=",
+        "value": 0,
+        "unit": "satang"
+      },
+      "condition": "ทุกตารางผ่อนที่ระบบสร้างจากการเบิกจ่าย (BR-miniloan-016@v1) ไม่ว่าจำนวนเงินกู้หรือจำนวนงวดจะเป็นเท่าใด รวมถึงตารางผ่อนฉบับใหม่ที่ออกทับ (BR-miniloan-044@v1, BR-miniloan-046@v2) — คำนวณซ้ำกี่ครั้งต้องได้ผลปัดเศษเดียวกันตาม BR-miniloan-035@v1",
+      "measuredBy": "unit_test — สุ่มสร้างตารางผ่อนด้วยชุดจำนวนเงินกู้/จำนวนงวด/อัตราดอกเบี้ยที่หลากหลาย (property-based test) แล้วตรวจผลรวมเงินต้นและยอดคงเหลืองวดสุดท้ายทุกครั้งที่ CI รัน"
+    },
+    {
+      "id": "NFR-miniloan-002",
+      "metric": "สัดส่วนของการเปลี่ยนสถานะ (state transition) ในระบบที่มีบันทึกผู้กระทำและเวลาไว้ใน audit log ครบถ้วน",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทุก state transition ของ LoanApplication (STM-miniloan-001), LoanAccount (STM-miniloan-002), Installment (STM-miniloan-003) และคำขอปรับปรุงบัญชีที่ปิดแล้ว (STM-miniloan-004) ไม่ว่าจะเรียกผ่านหน้าจอหรือเรียก API โดยตรง",
+      "measuredBy": "audit_log_review — automated test ตรวจว่าทุก transition handler เขียน audit log ก่อน merge เข้าสาขาหลัก และสุ่มตรวจสอบ log เทียบกับ transition ที่เกิดขึ้นจริงทุก release"
+    },
+    {
+      "id": "NFR-miniloan-003",
+      "metric": "สัดส่วนของคำขอที่ส่งข้อมูลไม่ผ่านกฎธุรกิจไปยัง API โดยตรง (ข้ามหน้าจอ) แล้วถูก API ปฏิเสธเช่นเดียวกับเรียกผ่านหน้าจอ",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทดสอบทุก endpoint ที่มีกฎบังคับ (เช่น BR-miniloan-025@v1, BR-miniloan-026@v1, BR-miniloan-030@v1, BR-miniloan-033@v1, BR-miniloan-054@v1) ด้วยชุด negative test ที่เรียกตรงตามที่ UC-miniloan-021 ถึง UC-miniloan-025 กำหนดไว้ ทุกครั้งที่ endpoint เปลี่ยนแปลง",
+      "measuredBy": "api_contract_test — automated negative-path contract test suite รันใน CI ทุก build"
+    },
+    {
+      "id": "NFR-miniloan-004",
+      "metric": "สัดส่วนของค่าที่ Web แสดงผลซึ่งเป็นผลการตัดสินใจเชิงธุรกิจ (เช่น วงเงินอนุมัติสูงสุดตาม BR-miniloan-003@v1 ที่ UC-miniloan-028 แสดงระหว่างกรอกใบสมัคร) ที่มาจากค่าที่ API ส่งมาโดยตรง ไม่ใช่ค่าที่ Web คำนวณเอง",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทุกหน้าจอที่แสดงผลลัพธ์เชิงธุรกิจ ทดสอบทุกครั้งที่มีการแก้ไขหน้าจอนั้นก่อน merge เข้าสาขาหลัก",
+      "measuredBy": "architecture_review ร่วมกับ automated test ที่ mock ค่าตอบกลับจาก API แล้วตรวจว่าค่าที่ Web แสดงตรงกับค่าที่ API ส่งมาเป๊ะ ไม่ถูกคำนวณซ้ำฝั่ง Web"
+    },
+    {
+      "id": "NFR-miniloan-005",
+      "metric": "จำนวนครั้งที่ deploy Web และ API แยกกันสำเร็จ (deploy ฝั่งหนึ่งได้โดยไม่ต้องแก้ไขหรือ deploy อีกฝั่งพร้อมกัน) พร้อมเรียกข้าม origin ได้ถูกต้องตาม CORS ที่ตั้งไว้ จากทั้งหมดที่ทดสอบใน pipeline",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทดสอบใน CI/CD pipeline ทุกครั้งที่มีการ deploy อย่างน้อยเดือนละหนึ่งรอบตลอดช่วงพัฒนา รวมถึงตรวจสัญญา OpenAPI ตาม BR-miniloan-029@v1",
+      "measuredBy": "deployment_test — automated pipeline ที่ deploy Web และ API แยกกัน ตรวจการเรียกข้าม origin และตรวจ response ตรงกับสัญญา OpenAPI ที่ประกาศไว้"
+    },
+    {
+      "id": "NFR-miniloan-006",
+      "metric": "สัดส่วนของเกณฑ์การยอมรับ (Acceptance Criteria) ในทุก use case ที่ผ่าน acceptance test โดยไม่ผูกกับภาษา/เฟรมเวิร์กที่ทีมเลือกใช้ภายใน",
+      "target": {
+        "comparator": ">=",
+        "value": 100,
+        "unit": "percent"
+      },
+      "condition": "ทดสอบทุก use case ก่อนส่งมอบแต่ละ sprint/release ตลอดอายุโครงการ",
+      "measuredBy": "acceptance_test — automated acceptance test suite อ้างอิงจาก scenario (SCN-) ของแต่ละ use case โดยไม่ตรวจสอบเทคโนโลยีที่ใช้ภายใน"
+    }
+  ]
+}

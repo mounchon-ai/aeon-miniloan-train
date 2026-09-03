@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/changes.mjs",
+  "project": "miniloan",
+  "changes": [
+    {
+      "id": "CHG-miniloan-001",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-031@v2"
+      ],
+      "reason": "หัวหน้าเจ้าหน้าที่สินเชื่อถูกตัดสินแล้วว่าเป็น actor แยก ไม่ใช่ Loan Officer คนหนึ่ง (คำตอบ Q-miniloan-012) · ประโยคเดิมที่ว่า \"ยกเลิกได้เฉพาะ Loan Officer เท่านั้น\" จึงแคบเกินความจริง และทำให้เส้นยกเลิกใบสถานะ Draft กับ Submitted ที่ BR-miniloan-010@v1 เปิดไว้ ไม่มีใครเดินได้",
+      "recordedAt": "2026-09-03T02:50:56Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-03T02:52:36Z"
+    },
+    {
+      "id": "CHG-miniloan-002",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-046@v2"
+      ],
+      "reason": "ประโยค \"กลไกการเก็บค่าธรรมเนียมยังไม่ตัดสิน (ดู Q-miniloan-013)\" ในข้อความของ BR-miniloan-046@v1 ตกยุคตั้งแต่ Q-miniloan-013 ตอบแล้ว — เป็นการขึ้นเวอร์ชันเพื่อให้ข้อความตรงกับคำตอบที่มีอยู่แล้ว ไม่ใช่การตัดสินใจใหม่ พฤติกรรมไม่เปลี่ยน มีแต่ข้อความอ้างอิงที่ตามทัน",
+      "recordedAt": "2026-09-03T02:50:56Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-03T02:52:36Z"
+    },
+    {
+      "id": "CHG-miniloan-003",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-050@v2"
+      ],
+      "reason": "Q-miniloan-015 ถูกตอบแล้ว: กรณีที่ส่วนเกินหลังหักค่าธรรมเนียมการโปะ 1% แล้วมากกว่าเงินต้นคงเหลือ ให้ปฏิเสธการบันทึกทั้งรายการ เช่นเดียวกับ BR-miniloan-052@v1 — ประโยค \"ยังไม่ตัดสิน (ดู Q-miniloan-015)\" ที่ค้างอยู่ในข้อความของ BR-miniloan-050@v1 จึงตกยุคและถูกแทนที่ด้วยผลการตัดสิน",
+      "recordedAt": "2026-09-03T02:50:56Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-03T02:52:37Z"
+    },
+    {
+      "id": "CHG-miniloan-004",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-052@v2"
+      ],
+      "reason": "Q-miniloan-015 ข้อ (2) สั่งให้ขยายเงื่อนไขของ BR-miniloan-052@v1 จาก \"ส่วนเกินมากกว่ายอดปิดบัญชี\" ให้ครอบ \"ส่วนเกินหลังหักค่าธรรมเนียมการโปะมากกว่าเงินต้นคงเหลือ\" ด้วย เพราะ BR-miniloan-050@v2 อ้างถึงกฎข้อนี้ไปแล้วในฐานะปลายทางของการปฏิเสธ",
+      "recordedAt": "2026-09-03T02:50:56Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-03T02:52:37Z"
+    },
+    {
+      "id": "CHG-miniloan-005",
+      "origin": "req",
+      "kind": "revised",
+      "moved": [
+        "CALC-miniloan-001@v2"
+      ],
+      "reason": "ความขัดกันระหว่าง CALC-miniloan-001@v1 (คำนวณเต็มความละเอียดภายใน ปัดเฉพาะตอนเขียนแถว) กับ BR-miniloan-035@v1 (ปัดทันทีทุกจุดที่เกิดขึ้น) ถูกจับได้จาก Q-miniloan-016 — เจ้าของสเปกเลือกให้ CALC-miniloan-001 ปรับตาม BR-miniloan-035@v1 แทนที่จะแก้ BR-035 ผลคือมีคอลัมน์เดียวที่ทุกกฎอ่านค่าได้โดยไม่กำกวม · GD-miniloan-001 ถูกทำให้ใช้ไม่ได้ (ต้องรอ /req:golden CALC-miniloan-001@v2 ใหม่)",
+      "recordedAt": "2026-09-03T02:50:56Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-03T02:52:37Z"
+    }
+  ]
+}

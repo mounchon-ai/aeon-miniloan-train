@@ -1,0 +1,225 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/context.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "scope": {
+    "inScope": [
+      {
+        "key": "application-intake-assessment",
+        "text": "รับใบสมัครสินเชื่อส่วนบุคคลตั้งแต่ร่างจนยื่น พร้อมประเมินอัตโนมัติเพื่อจัด Credit Band (A/B/C) วงเงินที่อนุมัติได้ และเหตุผลที่ผ่าน/ไม่ผ่านรายเกณฑ์",
+        "sources": [
+          "REQ-miniloan-001"
+        ]
+      },
+      {
+        "key": "approval-disbursement",
+        "text": "พิจารณา อนุมัติ หรือปฏิเสธใบสมัครแบบ 1 ระดับ มอบหมายใบสมัครให้ Loan Officer โดยหัวหน้าเจ้าหน้าที่สินเชื่อ และเบิกจ่ายเพื่อเปิดบัญชีสินเชื่อ",
+        "sources": [
+          "REQ-miniloan-002"
+        ]
+      },
+      {
+        "key": "account-schedule-creation",
+        "text": "สร้างบัญชีสินเชื่อและตารางผ่อนชำระแบบลดต้นลดดอกทันทีที่เบิกจ่ายสำเร็จ พร้อมเปิดให้เจ้าของบัญชีดูตารางผ่อนของตัวเอง",
+        "sources": [
+          "REQ-miniloan-003"
+        ]
+      },
+      {
+        "key": "payment-closure",
+        "text": "บันทึกการชำระรายงวด คิดยอดปิดบัญชีก่อนกำหนด ปิดบัญชีทั้งแบบชำระครบและปิดก่อนกำหนด และจัดการคำขอปรับปรุงบัญชีที่ปิดแล้วผ่านกระบวนการอนุมัติแบบ four-eyes",
+        "sources": [
+          "REQ-miniloan-004"
+        ]
+      },
+      {
+        "key": "status-dashboard",
+        "text": "แดชบอร์ดภาพรวมจำนวนใบสมัครและบัญชีสินเชื่อแยกตามสถานะสำหรับ Loan Officer",
+        "sources": [
+          "REQ-miniloan-005"
+        ]
+      },
+      {
+        "key": "web-api-separation",
+        "text": "สถาปัตยกรรมแยก Web กับ API โดยกฎธุรกิจทั้งหมดถูกบังคับที่ฝั่ง API เท่านั้น Web เป็นเพียง client ที่เรียกใช้",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      }
+    ],
+    "outOfScope": [
+      {
+        "key": "real-authentication",
+        "text": "ระบบยืนยันตัวตน (authentication) จริง — รอบนี้ใช้ token จำลองแทนทั้งฝั่ง Web และ API",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      },
+      {
+        "key": "automatic-retry-queue",
+        "text": "คิว retry อัตโนมัติเมื่อเรียก API ไม่สำเร็จหรือ timeout — ระบบต้องล้มทันทีและแจ้งผู้ใช้ให้สั่งใหม่เอง",
+        "sources": [
+          "REQ-miniloan-006"
+        ]
+      }
+    ]
+  },
+  "assumptions": [
+    {
+      "key": "applicant-data-self-declared",
+      "text": "ข้อมูลผู้สมัคร (อายุ รายได้ อายุงาน ภาระหนี้เดิม) เป็นข้อมูลที่กรอกเอง ไม่ต้องยืนยันกับหน่วยงานภายนอก เช่น เครดิตบูโร"
+    },
+    {
+      "key": "applicant-self-service",
+      "text": "Applicant กรอกและยื่นใบสมัครด้วยตัวเอง (self-service) ไม่ใช่เจ้าหน้าที่กรอกแทนให้",
+      "sources": [
+        "REQ-miniloan-001"
+      ]
+    },
+    {
+      "key": "staff-are-internal-users",
+      "text": "Loan Officer หัวหน้าเจ้าหน้าที่สินเชื่อ และ Operations เป็นพนักงานภายในองค์กรที่ล็อกอินเข้าระบบ ไม่ใช่ผู้ใช้ภายนอก",
+      "sources": [
+        "REQ-miniloan-002",
+        "REQ-miniloan-004"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "key": "business-rules-enforced-at-api",
+      "text": "ทุกความสามารถต้องมี API endpoint รองรับ และกฎธุรกิจต้องถูกบังคับที่ฝั่ง API เสมอ โดยไม่พึ่งการ validate ของ Web เพียงอย่างเดียว",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "web-no-business-logic",
+      "text": "Web ต้องไม่ตัดสินใจเชิงธุรกิจเอง เมื่อต้องตัดสิน (เช่น อนุมัติได้ไหม วงเงินเท่าไร) ต้องเรียก API เท่านั้น ห้ามคำนวณเอง",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "money-precision-rounding",
+      "text": "ค่าเงินทุกจุดที่เกิดขึ้นในระบบต้องปัดทันทีที่เกิดด้วยวิธี round half up ห้ามใช้ floating point และห้ามเก็บค่าเต็มไว้แล้วปัดตอนแสดงผล",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "idempotent-writes",
+      "text": "ทุกคำสั่งที่เขียนข้อมูลต้องกันการยิงซ้ำด้วยข้อจำกัดไม่ซ้ำ (unique constraint) ที่ฐานข้อมูล",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    },
+    {
+      "key": "testable-api-contract",
+      "text": "API ต้องมีสัญญาที่ทดสอบได้ (เช่น OpenAPI) และ request/response จริงต้องตรงตามสัญญาที่ประกาศไว้",
+      "sources": [
+        "REQ-miniloan-006"
+      ]
+    }
+  ],
+  "actors": [
+    {
+      "key": "applicant",
+      "text": "ผู้สมัครสินเชื่อ — กรอกและยื่นใบสมัคร ดูตารางผ่อนและสถานะบัญชีของตัวเอง ขอยอดปิดบัญชีก่อนกำหนดได้แต่บันทึกชำระหรือปิดบัญชีเองไม่ได้",
+      "stakeholder": null
+    },
+    {
+      "key": "loan-officer",
+      "text": "เจ้าหน้าที่สินเชื่อ — พิจารณา อนุมัติ หรือปฏิเสธใบสมัครที่ถูกมอบหมายให้ตน และสั่งเบิกจ่าย",
+      "stakeholder": null
+    },
+    {
+      "key": "supervisor",
+      "text": "หัวหน้าเจ้าหน้าที่สินเชื่อ — สั่งมอบหมายใบสมัครให้ Loan Officer แต่ละคน และยกเลิกใบสมัครที่ยังไม่ถูกมอบหมาย",
+      "stakeholder": null
+    },
+    {
+      "key": "operations",
+      "text": "เจ้าหน้าที่ฝ่ายปฏิบัติการ — บันทึกการชำระเงินและปิดบัญชีสินเชื่อ เฉพาะบัญชีที่ตัวเองถูก assign ดูแล",
+      "stakeholder": null
+    }
+  ],
+  "externalSystems": [],
+  "glossaryTerms": [
+    "UL-miniloan-001",
+    "UL-miniloan-004",
+    "UL-miniloan-019",
+    "UL-miniloan-024"
+  ],
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "topic": "framework",
+      "question": "จะเลือก framework/runtime อะไรสำหรับพัฒนาฝั่ง API ซึ่งต้องเป็นสถาปัตยกรรมแบบ domain-centric/layered และเปิดสัญญา API ที่ทดสอบได้แบบ stateless (REST/JSON) ให้ Web เรียกใช้?",
+      "options": [
+        {
+          "option": ".NET (C# / ASP.NET Core)",
+          "star": true,
+          "evidence": "รองรับสถาปัตยกรรมแบบ domain-centric/layered โดยตรง และมี OpenAPI/Swagger ในตัว ทำให้สัญญา API ที่ทดสอบได้ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-005 กำหนดไว้ทำได้โดยไม่ต้องเพิ่มเครื่องมือภายนอก",
+          "note": ""
+        },
+        {
+          "option": "Node.js (TypeScript / NestJS)",
+          "star": false,
+          "note": "เหมาะกับทีมที่ถนัด JavaScript/TypeScript และต้องการ deploy ที่เบา"
+        },
+        {
+          "option": "Java (Spring Boot)",
+          "star": false,
+          "note": "เหมาะกับองค์กรที่มี ecosystem enterprise Java อยู่แล้ว"
+        }
+      ],
+      "chosen": ".NET (C# / ASP.NET Core)",
+      "rationale": "เลือก .NET เพราะรองรับสถาปัตยกรรมแบบ domain-centric/layered ที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 กำหนดไว้โดยตรง และมี OpenAPI ในตัวเพื่อทำสัญญา API ที่ทดสอบได้ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-005 ต้องการ",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03",
+      "traces": [
+        "NFR-miniloan-004",
+        "NFR-miniloan-005"
+      ],
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "id": "DEC-002",
+      "topic": "database",
+      "question": "จะใช้ฐานข้อมูลอะไรเก็บจำนวนเงิน โดยต้องปัดเศษสม่ำเสมอทั้งระบบและห้ามใช้ floating point?",
+      "options": [
+        {
+          "option": "PostgreSQL",
+          "star": true,
+          "evidence": "รองรับชนิดข้อมูล numeric/decimal ที่แม่นยำตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-001 ต้องการ เป็น open-source ไม่มีค่า license เหมาะกับบริบทของโครงการฝึกอบรมนี้",
+          "note": ""
+        },
+        {
+          "option": "SQL Server",
+          "star": false,
+          "note": "ชนิดข้อมูล decimal แม่นยำเช่นกัน เหมาะหากองค์กรใช้ .NET/Microsoft stack เต็มรูปแบบอยู่แล้ว"
+        },
+        {
+          "option": "MySQL",
+          "star": false,
+          "note": "ชนิดข้อมูล decimal แม่นยำเช่นกัน เป็นที่นิยมในหลายองค์กร"
+        }
+      ],
+      "chosen": "PostgreSQL",
+      "rationale": "เลือก PostgreSQL เพราะรองรับชนิดข้อมูล numeric ที่แม่นยำตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-001 กำหนด และเป็น open-source เหมาะกับบริบทของโครงการฝึกอบรมนี้",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-03",
+      "traces": [
+        "NFR-miniloan-001"
+      ],
+      "approvedBy": null,
+      "approvedAt": null
+    }
+  ],
+  "extensions": {}
+}

@@ -1,0 +1,910 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/datamodel.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "entities": [
+    {
+      "id": "ENT-001",
+      "name": "Applicant",
+      "label": "ผู้สมัคร",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-024"
+      ],
+      "attributes": [
+        {
+          "name": "fullName",
+          "type": "string",
+          "required": true,
+          "validation": "ชื่อ-นามสกุลผู้สมัคร",
+          "personalData": true,
+          "classification": "confidential",
+          "retention": "เก็บตราบเท่าที่ใบสมัคร/บัญชีที่เกิดจากใบนี้ยังมีผล บวกอีก 10 ปีหลังปิดบัญชีสุดท้าย ตามข้อกำหนดการเก็บเอกสารทางการเงิน"
+        },
+        {
+          "name": "createdAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่สมัครใช้งานระบบครั้งแรก"
+        }
+      ]
+    },
+    {
+      "id": "ENT-002",
+      "name": "LoanApplication",
+      "label": "ใบสมัครสินเชื่อ",
+      "stateful": true,
+      "glossaryTerms": [
+        "UL-miniloan-001",
+        "UL-miniloan-002",
+        "UL-miniloan-011",
+        "UL-miniloan-012",
+        "UL-miniloan-023"
+      ],
+      "invariants": [
+        "BR-miniloan-007@v1",
+        "BR-miniloan-009@v1",
+        "BR-miniloan-010@v1",
+        "BR-miniloan-011@v1",
+        "BR-miniloan-012@v1",
+        "BR-miniloan-013@v1",
+        "BR-miniloan-014@v1",
+        "BR-miniloan-031@v2",
+        "BR-miniloan-032@v1",
+        "BR-miniloan-047@v1"
+      ],
+      "attributes": [
+        {
+          "name": "applicantId",
+          "type": "reference",
+          "references": "ENT-001",
+          "required": true,
+          "validation": "ต้องอ้างถึงผู้สมัครที่มีอยู่จริง"
+        },
+        {
+          "name": "age",
+          "type": "integer",
+          "required": true,
+          "validation": "20–60 ปี ตาม BR-miniloan-001@v1",
+          "rules": [
+            "BR-miniloan-001@v1"
+          ],
+          "personalData": true,
+          "classification": "confidential",
+          "retention": "เก็บตราบเท่าที่ใบสมัคร/บัญชีที่เกิดจากใบนี้ยังมีผล บวกอีก 10 ปีหลังปิดบัญชีสุดท้าย ตามข้อกำหนดการเก็บเอกสารทางการเงิน"
+        },
+        {
+          "name": "monthlyIncome",
+          "type": "money",
+          "required": true,
+          "validation": "≥ 15,000 บาทต่อเดือน ตาม BR-miniloan-001@v1",
+          "rules": [
+            "BR-miniloan-001@v1"
+          ],
+          "personalData": true,
+          "classification": "confidential",
+          "retention": "เก็บตราบเท่าที่ใบสมัคร/บัญชีที่เกิดจากใบนี้ยังมีผล บวกอีก 10 ปีหลังปิดบัญชีสุดท้าย ตามข้อกำหนดการเก็บเอกสารทางการเงิน"
+        },
+        {
+          "name": "currentEmploymentMonths",
+          "type": "integer",
+          "required": true,
+          "validation": "≥ 4 เดือน ตาม BR-miniloan-001@v1",
+          "rules": [
+            "BR-miniloan-001@v1"
+          ]
+        },
+        {
+          "name": "existingMonthlyDebt",
+          "type": "money",
+          "required": true,
+          "validation": "ภาระหนี้เดิมต่อเดือน ใช้คำนวณ DTI ตาม BR-miniloan-002@v1",
+          "rules": [
+            "BR-miniloan-002@v1"
+          ],
+          "personalData": true,
+          "classification": "confidential",
+          "retention": "เก็บตราบเท่าที่ใบสมัคร/บัญชีที่เกิดจากใบนี้ยังมีผล บวกอีก 10 ปีหลังปิดบัญชีสุดท้าย ตามข้อกำหนดการเก็บเอกสารทางการเงิน"
+        },
+        {
+          "name": "requestedAmount",
+          "type": "money",
+          "required": true,
+          "validation": "10,000–1,000,000 บาท ตาม BR-miniloan-004@v1",
+          "rules": [
+            "BR-miniloan-004@v1"
+          ]
+        },
+        {
+          "name": "requestedTermMonths",
+          "type": "integer",
+          "required": true,
+          "validation": "6–60 งวด (รายเดือน) ตาม BR-miniloan-004@v1",
+          "rules": [
+            "BR-miniloan-004@v1"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "valuesFrom": "STM-miniloan-001",
+          "required": true,
+          "validation": "เดินตามเส้นทางที่ state machine STM-miniloan-001 กำหนดเท่านั้น",
+          "rules": [
+            "BR-miniloan-010@v1"
+          ]
+        },
+        {
+          "name": "assignedLoanOfficerId",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": false,
+          "validation": "ตั้งค่าเมื่อหัวหน้ามอบหมายแล้วเท่านั้น ตาม BR-miniloan-032@v1",
+          "rules": [
+            "BR-miniloan-032@v1"
+          ]
+        },
+        {
+          "name": "approvedAmount",
+          "type": "money",
+          "required": false,
+          "validation": "ยอดที่ Loan Officer อนุมัติจริง อาจต่ำกว่าจำนวนที่ขอ ตั้งค่าเมื่ออนุมัติ ตาม BR-miniloan-011@v1",
+          "rules": [
+            "BR-miniloan-011@v1"
+          ]
+        },
+        {
+          "name": "approvedBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": false,
+          "validation": "บันทึกผู้อนุมัติเมื่ออนุมัติ ตาม BR-miniloan-011@v1",
+          "rules": [
+            "BR-miniloan-011@v1"
+          ]
+        },
+        {
+          "name": "approvedAt",
+          "type": "datetime",
+          "required": false,
+          "validation": "บันทึกเวลาที่อนุมัติ ตาม BR-miniloan-011@v1",
+          "rules": [
+            "BR-miniloan-011@v1"
+          ]
+        },
+        {
+          "name": "rejectionReason",
+          "type": "text",
+          "required": false,
+          "validation": "บังคับกรอกเมื่อปฏิเสธ ตาม BR-miniloan-013@v1",
+          "rules": [
+            "BR-miniloan-013@v1"
+          ]
+        },
+        {
+          "name": "cancellationReason",
+          "type": "text",
+          "required": false,
+          "validation": "บังคับกรอกเมื่อยกเลิก ตาม BR-miniloan-047@v1",
+          "rules": [
+            "BR-miniloan-047@v1"
+          ]
+        },
+        {
+          "name": "cancelledBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": false,
+          "validation": "บันทึกผู้สั่งยกเลิก"
+        },
+        {
+          "name": "submittedAt",
+          "type": "datetime",
+          "required": false,
+          "validation": "บันทึกเวลาที่ยื่น"
+        }
+      ]
+    },
+    {
+      "id": "ENT-003",
+      "name": "CreditAssessment",
+      "label": "ผลการประเมินสินเชื่อ",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-003",
+        "UL-miniloan-010"
+      ],
+      "attributes": [
+        {
+          "name": "applicationId",
+          "type": "reference",
+          "references": "ENT-002",
+          "required": true,
+          "validation": "หนึ่งใบสมัครมีผลประเมินล่าสุดหนึ่งชุด"
+        },
+        {
+          "name": "band",
+          "type": "enum",
+          "values": [
+            "A",
+            "B",
+            "C"
+          ],
+          "required": true,
+          "validation": "จัดตามเกณฑ์ DTI และคุณสมบัติ ตาม BR-miniloan-006@v1",
+          "rules": [
+            "BR-miniloan-006@v1"
+          ]
+        },
+        {
+          "name": "maxApprovableAmount",
+          "type": "money",
+          "required": true,
+          "validation": "5 เท่าของรายได้ต่อเดือน ไม่เกิน 1,000,000 บาท ตาม BR-miniloan-003@v1",
+          "rules": [
+            "BR-miniloan-003@v1"
+          ]
+        },
+        {
+          "name": "dtiRatio",
+          "type": "decimal",
+          "required": true,
+          "validation": "(ภาระหนี้เดิม + งวดใหม่) / รายได้ต่อเดือน ตาม BR-miniloan-002@v1",
+          "rules": [
+            "BR-miniloan-002@v1"
+          ]
+        },
+        {
+          "name": "reasons",
+          "type": "text",
+          "required": true,
+          "validation": "เหตุผลผ่าน/ไม่ผ่านรายเกณฑ์ ตาม BR-miniloan-009@v1",
+          "rules": [
+            "BR-miniloan-009@v1"
+          ]
+        },
+        {
+          "name": "assessedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่ระบบประเมินเสร็จ"
+        }
+      ]
+    },
+    {
+      "id": "ENT-004",
+      "name": "Staff",
+      "label": "พนักงาน",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-019"
+      ],
+      "attributes": [
+        {
+          "name": "fullName",
+          "type": "string",
+          "required": true,
+          "validation": "ชื่อ-นามสกุลพนักงาน",
+          "personalData": true,
+          "classification": "internal",
+          "retention": "เก็บตลอดระยะเวลาที่เป็นพนักงาน และอีก 5 ปีหลังพ้นสภาพ ตามนโยบายเก็บข้อมูลพนักงานภายใน"
+        },
+        {
+          "name": "role",
+          "type": "enum",
+          "values": [
+            "LoanOfficer",
+            "Supervisor",
+            "Operations"
+          ],
+          "required": true,
+          "validation": "หนึ่งคนถือหนึ่ง role ในรอบนี้ — ไม่มี role ผู้ดูแลระบบเพิ่มตาม BR-miniloan-048@v1"
+        },
+        {
+          "name": "supervisorId",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": false,
+          "validation": "ผู้บังคับบัญชาโดยตรง หากมี — บันทึกไว้ให้ /design:rbac ใช้ตัดสินขอบเขตการมองเห็นของหัวหน้า (DQ-miniloan-002 ยังเปิดอยู่ที่ชั้นนโยบาย)"
+        }
+      ]
+    },
+    {
+      "id": "ENT-005",
+      "name": "InterestRateVersion",
+      "label": "เวอร์ชันอัตราดอกเบี้ย",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-014"
+      ],
+      "invariants": [
+        "BR-miniloan-037@v1"
+      ],
+      "attributes": [
+        {
+          "name": "annualRatePercent",
+          "type": "decimal",
+          "required": true,
+          "validation": "อัตราดอกเบี้ยลดต้นลดดอกต่อปี เช่น 25.00 ตาม BR-miniloan-005@v1",
+          "rules": [
+            "BR-miniloan-005@v1"
+          ]
+        },
+        {
+          "name": "effectiveFrom",
+          "type": "date",
+          "required": true,
+          "validation": "ต้องเป็นวันที่ประกาศหรือวันในอนาคตเท่านั้น ห้ามย้อนหลัง นับรวมวันนั้น (inclusive) ตาม BR-miniloan-036@v1 — แก้ไขไม่ได้หลังบันทึก ต้องสร้างเวอร์ชันใหม่เสมอ (คำตอบ DQ-miniloan-005)",
+          "rules": [
+            "BR-miniloan-036@v1"
+          ]
+        },
+        {
+          "name": "createdBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": true,
+          "validation": "ผู้ประกาศอัตรา"
+        },
+        {
+          "name": "createdAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่ประกาศ"
+        },
+        {
+          "name": "isArchived",
+          "type": "boolean",
+          "required": true,
+          "validation": "ซ่อนจากรายการเลือกใช้งานปกติเมื่อมีเวอร์ชันใหม่มาแทน แต่ยังอ้างอิงได้เสมอ ห้ามลบจริง (soft-archive, คำตอบ DQ-miniloan-006) ตาม BR-miniloan-037@v1",
+          "rules": [
+            "BR-miniloan-037@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ENT-006",
+      "name": "LoanAccount",
+      "label": "บัญชีสินเชื่อ",
+      "stateful": true,
+      "glossaryTerms": [
+        "UL-miniloan-004",
+        "UL-miniloan-022"
+      ],
+      "invariants": [
+        "BR-miniloan-021@v1",
+        "BR-miniloan-023@v1",
+        "BR-miniloan-034@v1",
+        "BR-miniloan-037@v1"
+      ],
+      "attributes": [
+        {
+          "name": "applicationId",
+          "type": "reference",
+          "references": "ENT-002",
+          "required": true,
+          "validation": "หนึ่งใบสมัครที่ Disbursed สร้างหนึ่งบัญชี ตาม UL-miniloan-004"
+        },
+        {
+          "name": "interestRateVersionId",
+          "type": "reference",
+          "references": "ENT-005",
+          "required": true,
+          "validation": "เวอร์ชันที่มีผล ณ วันเบิกจ่าย ผูกถาวร ไม่คัดลอกตัวเลขมาเก็บเอง ตาม BR-miniloan-036@v1 / BR-miniloan-037@v1",
+          "rules": [
+            "BR-miniloan-036@v1",
+            "BR-miniloan-037@v1"
+          ]
+        },
+        {
+          "name": "principalAmount",
+          "type": "money",
+          "required": true,
+          "validation": "เงินต้นตั้งต้น = ยอดที่อนุมัติจริง ณ วันเบิกจ่าย"
+        },
+        {
+          "name": "outstandingPrincipal",
+          "type": "money",
+          "required": true,
+          "validation": "เงินต้นคงเหลือ ณ เวลาหนึ่ง ลดลงทุกครั้งที่มีการชำระ ตาม BR-miniloan-020@v1 / BR-miniloan-046@v2",
+          "rules": [
+            "BR-miniloan-020@v1",
+            "BR-miniloan-046@v2"
+          ]
+        },
+        {
+          "name": "termMonths",
+          "type": "integer",
+          "required": true,
+          "validation": "จำนวนงวดตั้งต้นตาม BR-miniloan-004@v1"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "valuesFrom": "STM-miniloan-002",
+          "required": true,
+          "validation": "เดินตามเส้นทางที่ state machine STM-miniloan-002 กำหนดเท่านั้น",
+          "rules": [
+            "BR-miniloan-021@v1"
+          ]
+        },
+        {
+          "name": "assignedOperationsId",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": true,
+          "validation": "สืบทอดจาก Loan Officer ของใบสมัครที่สร้างบัญชีนี้ ณ วันเบิกจ่าย เป็นค่า snapshot ครั้งเดียว ไม่ตามการมอบหมายใหม่ของใบสมัครภายหลัง เพราะไม่มีกลไกมอบหมายใหม่หลังเบิกจ่ายในสเปกปัจจุบัน (คำตอบ DQ-miniloan-011) ตาม BR-miniloan-054@v1",
+          "rules": [
+            "BR-miniloan-054@v1"
+          ]
+        },
+        {
+          "name": "disbursedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่เบิกจ่าย"
+        },
+        {
+          "name": "closedAt",
+          "type": "datetime",
+          "required": false,
+          "validation": "เวลาที่ปิดบัญชี"
+        },
+        {
+          "name": "closeReason",
+          "type": "enum",
+          "values": [
+            "FullyPaid",
+            "EarlySettlement"
+          ],
+          "required": false,
+          "validation": "ทางที่ปิดบัญชี ตาม BR-miniloan-021@v1",
+          "rules": [
+            "BR-miniloan-021@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ENT-007",
+      "name": "RepaymentSchedule",
+      "label": "ตารางผ่อน (หนึ่งฉบับ)",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-005",
+        "UL-miniloan-017"
+      ],
+      "invariants": [
+        "BR-miniloan-015@v1",
+        "BR-miniloan-017@v1",
+        "BR-miniloan-045@v1"
+      ],
+      "attributes": [
+        {
+          "name": "loanAccountId",
+          "type": "reference",
+          "references": "ENT-006",
+          "required": true,
+          "validation": "บัญชีสินเชื่อเจ้าของตารางผ่อนนี้"
+        },
+        {
+          "name": "revisionNumber",
+          "type": "integer",
+          "required": true,
+          "validation": "เริ่มที่ 1 เพิ่มทีละ 1 ทุกครั้งที่ออกฉบับใหม่ทับ ตาม BR-miniloan-044@v1",
+          "rules": [
+            "BR-miniloan-044@v1"
+          ]
+        },
+        {
+          "name": "isCurrent",
+          "type": "boolean",
+          "required": true,
+          "validation": "มีได้เพียงฉบับเดียวต่อบัญชีที่ isCurrent=true ในแต่ละเวลา ฉบับเก่าเก็บไว้ดูย้อนหลัง ห้ามลบ ตาม BR-miniloan-044@v1 · ฉบับของบัญชีที่ Closed แล้วห้ามออกฉบับใหม่ทับอีกทุกกรณี ตาม BR-miniloan-045@v1",
+          "rules": [
+            "BR-miniloan-044@v1",
+            "BR-miniloan-045@v1"
+          ]
+        },
+        {
+          "name": "issuedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่ออกฉบับนี้"
+        },
+        {
+          "name": "totalPrincipal",
+          "type": "money",
+          "required": true,
+          "validation": "ต้องเท่ากับผลรวมเงินต้นทุกงวดในฉบับนี้พอดี ตาม BR-miniloan-017@v1",
+          "rules": [
+            "BR-miniloan-017@v1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ENT-008",
+      "name": "Installment",
+      "label": "งวดผ่อน",
+      "stateful": true,
+      "glossaryTerms": [
+        "UL-miniloan-006",
+        "UL-miniloan-009"
+      ],
+      "invariants": [
+        "BR-miniloan-020@v1"
+      ],
+      "attributes": [
+        {
+          "name": "repaymentScheduleId",
+          "type": "reference",
+          "references": "ENT-007",
+          "required": true,
+          "validation": "ตารางผ่อนฉบับที่งวดนี้อยู่"
+        },
+        {
+          "name": "installmentNumber",
+          "type": "integer",
+          "required": true,
+          "validation": "ลำดับงวด 1 ถึงจำนวนงวดของฉบับนี้"
+        },
+        {
+          "name": "dueDate",
+          "type": "date",
+          "required": true,
+          "validation": "วันครบกำหนดชำระของงวดนี้"
+        },
+        {
+          "name": "emiAmount",
+          "type": "money",
+          "required": true,
+          "validation": "เท่ากันทุกงวดตามสูตร EMI ปัดทันทีตาม BR-miniloan-016@v1 / BR-miniloan-035@v1",
+          "rules": [
+            "BR-miniloan-016@v1",
+            "BR-miniloan-035@v1"
+          ]
+        },
+        {
+          "name": "interestPortion",
+          "type": "money",
+          "required": true,
+          "validation": "ยอดคงเหลือ × อัตราดอกเบี้ยต่อเดือน ปัดทันที ตาม BR-miniloan-016@v1 / BR-miniloan-035@v1",
+          "rules": [
+            "BR-miniloan-016@v1",
+            "BR-miniloan-035@v1"
+          ]
+        },
+        {
+          "name": "principalPortion",
+          "type": "money",
+          "required": true,
+          "validation": "EMI − ดอกเบี้ยที่ปัดแล้ว ตาม BR-miniloan-016@v1 / BR-miniloan-035@v1",
+          "rules": [
+            "BR-miniloan-016@v1",
+            "BR-miniloan-035@v1"
+          ]
+        },
+        {
+          "name": "remainingBalance",
+          "type": "money",
+          "required": true,
+          "validation": "ยอดคงเหลือหลังงวดนี้ งวดสุดท้ายต้องเป็น 0 พอดี ตาม BR-miniloan-017@v1",
+          "rules": [
+            "BR-miniloan-017@v1"
+          ]
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "valuesFrom": "STM-miniloan-003",
+          "required": true,
+          "validation": "เดินตามเส้นทางที่ state machine STM-miniloan-003 กำหนดเท่านั้น ตาม BR-miniloan-020@v1",
+          "rules": [
+            "BR-miniloan-020@v1"
+          ]
+        },
+        {
+          "name": "paidAt",
+          "type": "datetime",
+          "required": false,
+          "validation": "เวลาที่ชำระงวดนี้สำเร็จ"
+        }
+      ]
+    },
+    {
+      "id": "ENT-009",
+      "name": "Payment",
+      "label": "รายการชำระเงิน",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-007",
+        "UL-miniloan-018",
+        "UL-miniloan-021"
+      ],
+      "attributes": [
+        {
+          "name": "loanAccountId",
+          "type": "reference",
+          "references": "ENT-006",
+          "required": true,
+          "validation": "บัญชีที่รับชำระ"
+        },
+        {
+          "name": "installmentId",
+          "type": "reference",
+          "references": "ENT-008",
+          "required": false,
+          "validation": "ระบุเมื่อชำระตรงยอดงวดหรือชำระเกินยอดงวดของงวดนั้น ว่างไว้เมื่อเป็นการชำระยอดปิดบัญชีก่อนกำหนด"
+        },
+        {
+          "name": "amount",
+          "type": "money",
+          "required": true,
+          "validation": "จำนวนที่รับชำระจริง"
+        },
+        {
+          "name": "paymentType",
+          "type": "enum",
+          "values": [
+            "InstallmentExact",
+            "InstallmentOverpayment",
+            "EarlySettlement"
+          ],
+          "required": true,
+          "validation": "ประเภทการชำระ กำหนดกฎที่บังคับ ตาม BR-miniloan-019@v1 / BR-miniloan-046@v2 / BR-miniloan-022@v1",
+          "rules": [
+            "BR-miniloan-019@v1",
+            "BR-miniloan-046@v2",
+            "BR-miniloan-022@v1"
+          ]
+        },
+        {
+          "name": "overpaymentAmount",
+          "type": "money",
+          "required": false,
+          "validation": "ส่วนเกินยอดงวดที่นำไปตัดเงินต้น ตาม BR-miniloan-046@v2",
+          "rules": [
+            "BR-miniloan-046@v2"
+          ]
+        },
+        {
+          "name": "prepaymentFee",
+          "type": "money",
+          "required": false,
+          "validation": "ค่าธรรมเนียมการโปะ 1% ของส่วนเกิน ตาม BR-miniloan-046@v2",
+          "rules": [
+            "BR-miniloan-046@v2"
+          ]
+        },
+        {
+          "name": "recordedBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": true,
+          "validation": "บันทึกได้เฉพาะ Operations ตาม BR-miniloan-034@v1",
+          "rules": [
+            "BR-miniloan-034@v1"
+          ]
+        },
+        {
+          "name": "recordedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่บันทึก"
+        }
+      ]
+    },
+    {
+      "id": "ENT-010",
+      "name": "ClosedAccountAdjustment",
+      "label": "คำขอปรับปรุงบัญชีที่ปิดแล้ว",
+      "stateful": true,
+      "glossaryTerms": [
+        "UL-miniloan-015"
+      ],
+      "attributes": [
+        {
+          "name": "loanAccountId",
+          "type": "reference",
+          "references": "ENT-006",
+          "required": true,
+          "validation": "บัญชีที่ขอปรับปรุง ต้องสถานะ Closed"
+        },
+        {
+          "name": "fieldName",
+          "type": "string",
+          "required": true,
+          "validation": "ชื่อฟิลด์ของบัญชีที่ขอแก้"
+        },
+        {
+          "name": "oldValue",
+          "type": "string",
+          "required": true,
+          "validation": "ค่าเดิมของบัญชี ต้องเก็บไว้ไม่ถูกทับ ตาม BR-miniloan-041@v1",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ]
+        },
+        {
+          "name": "newValue",
+          "type": "string",
+          "required": true,
+          "validation": "ค่าใหม่ที่ขอแก้ ตาม BR-miniloan-041@v1",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ]
+        },
+        {
+          "name": "requestedBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": true,
+          "validation": "ผู้ยื่นคำขอ"
+        },
+        {
+          "name": "requestedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่ยื่นคำขอ"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "valuesFrom": "STM-miniloan-004",
+          "required": true,
+          "validation": "เดินตามเส้นทางที่ state machine STM-miniloan-004 กำหนดเท่านั้น"
+        },
+        {
+          "name": "approvedBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": false,
+          "validation": "ต้องเป็นคนละคนกับ requestedBy (four-eyes) ตาม BR-miniloan-049@v1",
+          "rules": [
+            "BR-miniloan-049@v1"
+          ]
+        },
+        {
+          "name": "approvedAt",
+          "type": "datetime",
+          "required": false,
+          "validation": "เวลาที่อนุมัติหรือปฏิเสธ"
+        }
+      ]
+    },
+    {
+      "id": "ENT-011",
+      "name": "ApproverRoleSetting",
+      "label": "การตั้งค่า role ผู้อนุมัติการปรับปรุงบัญชีปิดแล้ว",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-016"
+      ],
+      "attributes": [
+        {
+          "name": "approverRole",
+          "type": "enum",
+          "values": [
+            "LoanOfficer",
+            "Supervisor",
+            "Operations"
+          ],
+          "required": false,
+          "validation": "role ที่มีสิทธิ์อนุมัติคำขอปรับปรุงบัญชีปิดแล้ว ไม่มีค่าเริ่มต้น ต้องตั้งก่อนจึงอนุมัติได้ ตาม BR-miniloan-039@v1 / BR-miniloan-040@v1",
+          "rules": [
+            "BR-miniloan-039@v1",
+            "BR-miniloan-040@v1"
+          ]
+        },
+        {
+          "name": "updatedBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": false,
+          "validation": "ต้องเป็น Loan Officer เท่านั้น ตาม BR-miniloan-048@v1",
+          "rules": [
+            "BR-miniloan-048@v1"
+          ]
+        },
+        {
+          "name": "updatedAt",
+          "type": "datetime",
+          "required": false,
+          "validation": "เวลาที่ตั้งค่าล่าสุด"
+        }
+      ]
+    },
+    {
+      "id": "ENT-012",
+      "name": "IdempotencyKey",
+      "label": "บันทึกคำสั่งที่ประมวลผลแล้ว (กันการยิงซ้ำ)",
+      "stateful": false,
+      "attributes": [
+        {
+          "name": "commandType",
+          "type": "enum",
+          "values": [
+            "SubmitApplication",
+            "ApproveApplication",
+            "RejectApplication",
+            "CancelApplication",
+            "DisburseLoan",
+            "RecordPayment"
+          ],
+          "required": true,
+          "validation": "ชนิดคำสั่งที่ต้องกันการยิงซ้ำ ตาม BR-miniloan-043@v1",
+          "rules": [
+            "BR-miniloan-043@v1"
+          ]
+        },
+        {
+          "name": "requestId",
+          "type": "string",
+          "required": true,
+          "validation": "ค่าที่ client ส่งมาต่อครั้ง (idempotency key) — คู่ (commandType, requestId) มีข้อจำกัดไม่ซ้ำที่ฐานข้อมูล (unique constraint) เป็นคำตอบของ DQ-miniloan-009 ตาม BR-miniloan-043@v1",
+          "rules": [
+            "BR-miniloan-043@v1"
+          ]
+        },
+        {
+          "name": "aggregateId",
+          "type": "string",
+          "required": true,
+          "validation": "id ของ LoanApplication / LoanAccount / Payment ที่คำสั่งนี้กระทำ"
+        },
+        {
+          "name": "processedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่ประมวลผลคำสั่งนี้สำเร็จ"
+        }
+      ]
+    },
+    {
+      "id": "ENT-013",
+      "name": "ApplicationAssignment",
+      "label": "ประวัติการมอบหมายใบสมัคร",
+      "stateful": false,
+      "glossaryTerms": [
+        "UL-miniloan-013"
+      ],
+      "attributes": [
+        {
+          "name": "applicationId",
+          "type": "reference",
+          "references": "ENT-002",
+          "required": true,
+          "validation": "ใบสมัครที่ถูกมอบหมาย"
+        },
+        {
+          "name": "loanOfficerId",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": true,
+          "validation": "Loan Officer ที่ได้รับมอบหมายในรอบนี้"
+        },
+        {
+          "name": "assignedBy",
+          "type": "reference",
+          "references": "ENT-004",
+          "required": true,
+          "validation": "ต้องเป็นหัวหน้าเจ้าหน้าที่สินเชื่อ ตาม BR-miniloan-032@v1",
+          "rules": [
+            "BR-miniloan-032@v1"
+          ]
+        },
+        {
+          "name": "assignedAt",
+          "type": "datetime",
+          "required": true,
+          "validation": "เวลาที่มอบหมาย — แถวใหม่ถูกเพิ่มทุกครั้งที่มอบหมายใหม่ ไม่ทับแถวเดิม ประวัติจึงเก็บครบ (คำตอบ DQ-miniloan-003 ครึ่งการเก็บประวัติ — ส่วนสิทธิ์มองเห็นของคนเดิมยังเป็นไปตาม assignedLoanOfficerId ปัจจุบันบน LoanApplication เท่านั้น ไม่ใช่ประวัตินี้)"
+        }
+      ]
+    }
+  ]
+}

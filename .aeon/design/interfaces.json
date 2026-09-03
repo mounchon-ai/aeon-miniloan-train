@@ -1,0 +1,567 @@
+{
+  "schemaVersion": "1.0",
+  "producedBy": "design · scripts/interfaces.mjs",
+  "project": "miniloan",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
+  "integrations": [],
+  "endpoints": [
+    {
+      "id": "API-001",
+      "name": "สร้าง/บันทึกร่างใบสมัคร",
+      "operation": "POST /applications",
+      "purpose": "ผู้สมัครบันทึกข้อมูลใบสมัครบางส่วนหรือทั้งหมดเป็นร่าง (Draft)"
+    },
+    {
+      "id": "API-002",
+      "name": "แก้ไขร่างใบสมัคร",
+      "operation": "PUT /applications/{id}",
+      "purpose": "ผู้สมัครแก้ไขใบสมัครสถานะ Draft ของตนเองต่อจากที่บันทึกไว้"
+    },
+    {
+      "id": "API-003",
+      "name": "ยื่นใบสมัคร",
+      "operation": "POST /applications/{id}/submit",
+      "purpose": "ผู้สมัครยื่นใบสมัครที่กรอกครบแล้ว ระบบล็อกการแก้ไขและเริ่มประเมินอัตโนมัติทันที"
+    },
+    {
+      "id": "API-004",
+      "name": "ดูรายละเอียดใบสมัคร",
+      "operation": "GET /applications/{id}",
+      "purpose": "ดูข้อมูลใบสมัครหนึ่งใบพร้อมผลการประเมิน (CreditAssessment) ถ้ามี"
+    },
+    {
+      "id": "API-005",
+      "name": "รายการใบสมัคร",
+      "operation": "GET /applications",
+      "purpose": "ดูรายการใบสมัครที่ผู้เรียกมีสิทธิ์เห็น — ขอบเขตจำกัดตามผู้เรียกที่ API ชั้นนี้เป็นด่านสุดท้าย"
+    },
+    {
+      "id": "API-006",
+      "name": "มอบหมายใบสมัคร",
+      "operation": "POST /applications/{id}/assign",
+      "purpose": "หัวหน้าเจ้าหน้าที่สินเชื่อมอบหมายใบสมัครให้ Loan Officer หนึ่งคน"
+    },
+    {
+      "id": "API-007",
+      "name": "อนุมัติใบสมัคร",
+      "operation": "POST /applications/{id}/approve",
+      "purpose": "Loan Officer ที่ถูกมอบหมายอนุมัติใบสมัคร"
+    },
+    {
+      "id": "API-008",
+      "name": "ปฏิเสธใบสมัคร",
+      "operation": "POST /applications/{id}/reject",
+      "purpose": "Loan Officer ที่ถูกมอบหมายปฏิเสธใบสมัครพร้อมเหตุผล"
+    },
+    {
+      "id": "API-009",
+      "name": "ยกเลิกใบสมัคร",
+      "operation": "POST /applications/{id}/cancel",
+      "purpose": "ยกเลิกใบสมัครพร้อมเหตุผล โดยผู้มีสิทธิ์ขึ้นกับสถานะและการมอบหมายปัจจุบัน"
+    },
+    {
+      "id": "API-010",
+      "name": "เบิกจ่ายเงินกู้",
+      "operation": "POST /applications/{id}/disburse",
+      "purpose": "สั่งเบิกจ่ายใบสมัครที่ Approved แล้ว สร้าง LoanAccount และตารางผ่อนงวดแรก"
+    },
+    {
+      "id": "API-011",
+      "name": "ออกตารางผ่อนใหม่ทับ",
+      "operation": "POST /loan-accounts/{id}/reschedule",
+      "purpose": "ออกตารางผ่อนฉบับใหม่ทับทั้งฉบับสำหรับบัญชีที่ยัง Active"
+    },
+    {
+      "id": "API-012",
+      "name": "ดูตารางผ่อน",
+      "operation": "GET /loan-accounts/{id}/schedule",
+      "purpose": "ดูตารางผ่อนปัจจุบันพร้อมสถานะรายงวด (ค้าง/จ่ายแล้ว/ยกเลิก)"
+    },
+    {
+      "id": "API-013",
+      "name": "รายการบัญชีสินเชื่อ",
+      "operation": "GET /loan-accounts",
+      "purpose": "ดูรายการบัญชีสินเชื่อที่ผู้เรียกมีสิทธิ์เห็น — เจ้าของบัญชีเห็นของตน, Operations เห็นเฉพาะที่ถูก assign"
+    },
+    {
+      "id": "API-014",
+      "name": "บันทึกการชำระ",
+      "operation": "POST /loan-accounts/{id}/payments",
+      "purpose": "Operations บันทึกยอดชำระของงวดที่ค้าง ไม่ว่าจะตรงยอดพอดีหรือมากกว่ายอดงวด"
+    },
+    {
+      "id": "API-015",
+      "name": "ขอยอดปิดบัญชีก่อนกำหนด",
+      "operation": "GET /loan-accounts/{id}/payoff-quote",
+      "purpose": "คำนวณและแสดงยอดที่ต้องชำระเพื่อปิดบัญชีก่อนกำหนด ณ วันที่ขอ"
+    },
+    {
+      "id": "API-016",
+      "name": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+      "operation": "POST /loan-accounts/{id}/adjustments",
+      "purpose": "Operations ยื่นคำขอแก้ไขข้อมูลบัญชีที่ Closed แล้ว ระบุค่าเดิมและค่าใหม่"
+    },
+    {
+      "id": "API-017",
+      "name": "อนุมัติคำขอปรับปรุงบัญชี",
+      "operation": "POST /adjustments/{id}/approve",
+      "purpose": "ผู้ถือ role ผู้อนุมัติอนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว ให้ค่าใหม่มีผล"
+    },
+    {
+      "id": "API-018",
+      "name": "ปฏิเสธคำขอปรับปรุงบัญชี",
+      "operation": "POST /adjustments/{id}/reject",
+      "purpose": "ผู้ถือ role ผู้อนุมัติปฏิเสธคำขอปรับปรุงบัญชีที่ปิดแล้ว ค่าเดิมคงอยู่"
+    },
+    {
+      "id": "API-019",
+      "name": "ตั้งค่า role ผู้อนุมัติการปรับปรุงบัญชีปิด",
+      "operation": "PUT /settings/closed-account-approver-role",
+      "purpose": "Loan Officer เลือกหรือเปลี่ยน role ที่ทำหน้าที่อนุมัติคำขอปรับปรุงบัญชีที่ปิดแล้ว"
+    },
+    {
+      "id": "API-020",
+      "name": "แดชบอร์ดภาพรวมสถานะ",
+      "operation": "GET /dashboard",
+      "purpose": "นับใบสมัครแยกตามสถานะและบัญชีสินเชื่อแยกตามสถานะสำหรับแสดงบนแดชบอร์ด"
+    },
+    {
+      "id": "API-021",
+      "name": "ประเมินวงเงินอนุมัติสูงสุดล่วงหน้า",
+      "operation": "POST /credit-assessments/preview",
+      "purpose": "คำนวณวงเงินอนุมัติสูงสุดจากรายได้ที่กรอกระหว่างกรอกใบสมัคร โดยยังไม่ต้องมีใบสมัครอยู่ในระบบ"
+    },
+    {
+      "id": "API-022",
+      "name": "ดูค่าที่ตั้งไว้ของ role ผู้อนุมัติการปรับปรุงบัญชีปิด",
+      "operation": "GET /settings/closed-account-approver-role",
+      "purpose": "ดึงค่า role ที่ตั้งไว้ปัจจุบันมาแสดงในหน้าตั้งค่า"
+    },
+    {
+      "id": "API-023",
+      "name": "ดูรายละเอียดบัญชีสินเชื่อ",
+      "operation": "GET /loan-accounts/{id}",
+      "purpose": "ดึงข้อมูลสรุปของบัญชีสินเชื่อหนึ่งบัญชี (เงินต้น สถานะ วันที่เบิกจ่าย/ปิด)"
+    },
+    {
+      "id": "API-024",
+      "name": "รายการคำขอปรับปรุงบัญชีที่รออนุมัติ",
+      "operation": "GET /adjustments?status=Pending",
+      "purpose": "ดึงรายการคำขอปรับปรุงบัญชีที่ปิดแล้วซึ่งรอการอนุมัติ"
+    },
+    {
+      "id": "API-025",
+      "name": "ดูรายละเอียดคำขอปรับปรุงบัญชี",
+      "operation": "GET /adjustments/{id}",
+      "purpose": "ดึงรายละเอียดคำขอปรับปรุงบัญชีหนึ่งคำขอเพื่อใช้พิจารณา"
+    }
+  ],
+  "ruleEnforcement": [
+    {
+      "rule": "BR-miniloan-001@v1",
+      "enforceAt": [
+        "domain",
+        "api"
+      ],
+      "note": "เกณฑ์อายุ/รายได้ขั้นต่ำ/อายุงานขั้นต่ำ คำนวณที่ domain, API เป็นทางเดียวที่เข้าถึง flow ประเมิน"
+    },
+    {
+      "rule": "BR-miniloan-002@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "สูตรคำนวณ DTI เป็นตรรกะคำนวณล้วน"
+    },
+    {
+      "rule": "BR-miniloan-003@v1",
+      "enforceAt": [
+        "domain",
+        "api"
+      ],
+      "note": "สูตรคำนวณวงเงินอนุมัติสูงสุด — เปิดให้เรียกผ่าน API-021 โดยตรงด้วย"
+    },
+    {
+      "rule": "BR-miniloan-004@v1",
+      "enforceAt": [
+        "ui",
+        "api",
+        "domain"
+      ],
+      "note": "ui แจ้งทันทีเพื่อประสบการณ์ผู้ใช้ แต่ api/domain เป็นด่านจริงตาม UC-miniloan-022"
+    },
+    {
+      "rule": "BR-miniloan-005@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "อัตราดอกเบี้ย 25%/ปี ใช้ในสูตรคำนวณที่ domain"
+    },
+    {
+      "rule": "BR-miniloan-006@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "การจัด Credit Band เป็นผลจากตรรกะประเมิน"
+    },
+    {
+      "rule": "BR-miniloan-007@v1",
+      "enforceAt": [
+        "ui",
+        "api",
+        "domain"
+      ],
+      "note": "ui กันพลาดตอนกรอก แต่ api/domain ปฏิเสธจริงถ้ากรอกไม่ครบ"
+    },
+    {
+      "rule": "BR-miniloan-008@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "สถานะ Draft ถูกกำหนดและบันทึกที่ domain/db"
+    },
+    {
+      "rule": "BR-miniloan-009@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "สร้างและบันทึกระเบียน CreditAssessment"
+    },
+    {
+      "rule": "BR-miniloan-010@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ห้ามถอยสถานะ/ยกเลิกใบที่เบิกจ่ายแล้ว บังคับที่ state machine guard ทั้งเรียกผ่านหน้าจอและ API ตรง"
+    },
+    {
+      "rule": "BR-miniloan-011@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "บันทึกผู้อนุมัติและเวลาไว้กับใบสมัคร"
+    },
+    {
+      "rule": "BR-miniloan-012@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ตรวจวงเงินอนุมัติสูงสุดก่อนอนุมัติจริง ไม่พึ่ง UI"
+    },
+    {
+      "rule": "BR-miniloan-013@v1",
+      "enforceAt": [
+        "ui",
+        "api",
+        "domain"
+      ],
+      "note": "ต้องระบุเหตุผลปฏิเสธ — ui บังคับกรอก, api/domain ปฏิเสธคำสั่งถ้าไม่มีเหตุผล"
+    },
+    {
+      "rule": "BR-miniloan-014@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "สร้าง LoanAccount สถานะ Active เมื่อเบิกจ่าย"
+    },
+    {
+      "rule": "BR-miniloan-015@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "กฎย่อยของการสร้างตารางผ่อน คำนวณที่ domain"
+    },
+    {
+      "rule": "BR-miniloan-016@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "สูตร EMI เท่ากันทุกงวด"
+    },
+    {
+      "rule": "BR-miniloan-017@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "ตรวจผลรวมเงินต้น/ยอดคงเหลืองวดสุดท้ายเป็น invariant ของการคำนวณที่ domain — วัดตาม NFR-miniloan-001"
+    },
+    {
+      "rule": "BR-miniloan-018@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "การแสดงตารางผ่อนพร้อมสถานะต้องผ่าน API ที่คำนวณสถานะให้ ไม่ใช่ Web คำนวณเอง"
+    },
+    {
+      "rule": "BR-miniloan-019@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "ชำระน้อยกว่ายอดงวด ไม่ปิดงวด — ตรรกะที่ domain"
+    },
+    {
+      "rule": "BR-miniloan-020@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "ชำระตรงยอดงวดเปลี่ยนงวดเป็น Paid และบันทึกยอดคงเหลือใหม่"
+    },
+    {
+      "rule": "BR-miniloan-021@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "บัญชีปิดได้เฉพาะสองทาง (ชำระครบ/ปิดก่อนกำหนดสำเร็จ) — ปฏิเสธคำสั่งปิดตรงๆ ทั้งจากหน้าจอและ API"
+    },
+    {
+      "rule": "BR-miniloan-022@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "สูตรคำนวณยอดปิดบัญชีก่อนกำหนด"
+    },
+    {
+      "rule": "BR-miniloan-023@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "ยกเลิกงวดที่เหลือเมื่อปิดบัญชีก่อนกำหนดสำเร็จ"
+    },
+    {
+      "rule": "BR-miniloan-024@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "การนับตัวเลขแดชบอร์ดไม่ให้นับซ้ำ (Disbursed นับเป็น Active ครั้งเดียว) เป็นตรรกะนับที่ domain"
+    },
+    {
+      "rule": "BR-miniloan-025@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "หัวใจของ REQ-miniloan-006 — บังคับกฎธุรกิจที่ API เสมอไม่ว่าจะเรียกทางไหน วัดตาม NFR-miniloan-003"
+    },
+    {
+      "rule": "BR-miniloan-026@v1",
+      "enforceAt": [
+        "api"
+      ],
+      "note": "API ปฏิเสธค่าที่นอกช่วงพร้อมรหัส/ข้อความ error เอง โดยไม่พึ่งการ validate ของ Web"
+    },
+    {
+      "rule": "BR-miniloan-027@v1",
+      "enforceAt": [
+        "ui"
+      ],
+      "note": "วินัยสถาปัตยกรรมของ Web เอง — Web ต้องไม่คำนวณธุรกิจเอง ไม่มีชั้นอื่นที่ 'บังคับ' พฤติกรรมนี้ในเวลารัน บังคับจริงด้วย code review/architecture review วัดตาม NFR-miniloan-004"
+    },
+    {
+      "rule": "BR-miniloan-028@v1",
+      "enforceAt": [
+        "ui"
+      ],
+      "note": "การแสดงข้อผิดพลาดอย่างเหมาะสมเมื่อ API ล่ม เป็นพฤติกรรมฝั่ง Web เท่านั้น ไม่มีชั้นอื่นเกี่ยวข้อง"
+    },
+    {
+      "rule": "BR-miniloan-029@v1",
+      "enforceAt": [
+        "api"
+      ],
+      "note": "รักษาสัญญา OpenAPI ให้ตรงทุก field เป็นความรับผิดชอบของ API เอง ตรวจด้วย contract test — วัดตาม NFR-miniloan-005"
+    },
+    {
+      "rule": "BR-miniloan-030@v1",
+      "enforceAt": [
+        "api"
+      ],
+      "note": "API ตรวจ token ก่อนให้บริการเสมอ เป็นด่านแรกของทุก endpoint"
+    },
+    {
+      "rule": "BR-miniloan-031@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "สิทธิ์ยกเลิกใบสมัครก่อนมอบหมาย เป็นของหัวหน้าเท่านั้น"
+    },
+    {
+      "rule": "BR-miniloan-031@v2",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "สิทธิ์เปลี่ยนสถานะผูกกับบทบาท/การมอบหมาย บังคับที่ state machine guard เสมอ ไม่ว่าจะเรียกทางไหน"
+    },
+    {
+      "rule": "BR-miniloan-032@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ต้องถูกมอบหมายก่อนจึงอนุมัติ/ปฏิเสธ/ยกเลิกได้"
+    },
+    {
+      "rule": "BR-miniloan-033@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ขอบเขตข้อมูล — เห็นเฉพาะของตัวเอง บังคับที่ query ชั้น API/domain เสมอ แม้เรียกด้วย id ของผู้อื่นตรงๆ"
+    },
+    {
+      "rule": "BR-miniloan-034@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "บันทึกการชำระ/ปิดบัญชีทำได้เฉพาะ Operations"
+    },
+    {
+      "rule": "BR-miniloan-035@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "ปัดเศษสม่ำเสมอทุกจุดคำนวณเงิน — วัดตาม NFR-miniloan-001"
+    },
+    {
+      "rule": "BR-miniloan-036@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "เลือกอัตราดอกเบี้ยเวอร์ชันที่มีผล ณ วันเบิกจ่าย"
+    },
+    {
+      "rule": "BR-miniloan-037@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "ผูกบัญชีกับเวอร์ชันอัตราดอกเบี้ยที่ใช้ตอนเบิกจ่ายอย่างถาวร"
+    },
+    {
+      "rule": "BR-miniloan-038@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ต้องมี role ผู้อนุมัติตั้งไว้ก่อนจึงยื่นคำขอปรับปรุงบัญชีปิดได้"
+    },
+    {
+      "rule": "BR-miniloan-039@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "ผู้อนุมัติกำหนดเป็น role ที่ตั้งค่าได้ ไม่ผูกกับ actor ในโค้ด"
+    },
+    {
+      "rule": "BR-miniloan-040@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ไม่มีผู้อนุมัติค่าเริ่มต้น — ปฏิเสธคำขอทุกกรณีถ้ายังไม่ตั้งค่า"
+    },
+    {
+      "rule": "BR-miniloan-041@v1",
+      "enforceAt": [
+        "domain",
+        "db"
+      ],
+      "note": "บันทึกเป็นรายการปรับปรุงแยก ค่าเดิมของบัญชีไม่ถูกทับจนกว่าจะอนุมัติ"
+    },
+    {
+      "rule": "BR-miniloan-042@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ไม่มี retry อัตโนมัติเบื้องหลังเมื่อ timeout ตอนเบิกจ่าย ผู้ใช้ต้องสั่งใหม่เอง"
+    },
+    {
+      "rule": "BR-miniloan-043@v1",
+      "enforceAt": [
+        "api",
+        "domain",
+        "db"
+      ],
+      "note": "ป้องกันยื่นซ้ำสองครั้งติดกัน — ใช้กลไก idempotency ที่ต้องกันซ้ำได้แม้เรียก API พร้อมกัน"
+    },
+    {
+      "rule": "BR-miniloan-044@v1",
+      "enforceAt": [
+        "api",
+        "domain",
+        "db"
+      ],
+      "note": "ออกตารางผ่อนใหม่ทับทั้งฉบับ ห้ามแก้แถวเดียวในฉบับเดิมทั้งจากหน้าจอและ API"
+    },
+    {
+      "rule": "BR-miniloan-045@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ห้ามออกตารางผ่อนใหม่ทับบัญชีที่ Closed แล้วไม่ว่ากรณีใด"
+    },
+    {
+      "rule": "BR-miniloan-046@v1",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "สูตรค่าธรรมเนียมการโปะ — เวอร์ชันเดิมก่อนแก้ไข เก็บไว้เพื่อการสอบย้อนหลัง"
+    },
+    {
+      "rule": "BR-miniloan-046@v2",
+      "enforceAt": [
+        "domain"
+      ],
+      "note": "สูตรค่าธรรมเนียมการโปะ 1% ของส่วนเกิน — เวอร์ชันปัจจุบัน"
+    },
+    {
+      "rule": "BR-miniloan-047@v1",
+      "enforceAt": [
+        "ui",
+        "api",
+        "domain"
+      ],
+      "note": "ต้องระบุเหตุผลยกเลิก — ui บังคับกรอก, api/domain ปฏิเสธคำสั่งถ้าไม่มีเหตุผล"
+    },
+    {
+      "rule": "BR-miniloan-048@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ตั้งค่า role ผู้อนุมัติได้เฉพาะ Loan Officer เท่านั้น ทั้งจากหน้าจอและ API"
+    },
+    {
+      "rule": "BR-miniloan-049@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "หลัก four-eyes — ผู้ยื่นคำขอปรับปรุงอนุมัติของตัวเองไม่ได้ บังคับที่ API เสมอ"
+    },
+    {
+      "rule": "BR-miniloan-054@v1",
+      "enforceAt": [
+        "api",
+        "domain"
+      ],
+      "note": "ขอบเขตของ Operations จำกัดเฉพาะบัญชีที่ตัวเองถูก assign แม้ถือ role เดียวกันกับคนอื่น"
+    }
+  ]
+}
