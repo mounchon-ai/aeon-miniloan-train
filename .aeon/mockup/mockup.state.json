@@ -562,7 +562,7 @@
     {
       "id": "handoff",
       "command": "/mock:deliver",
-      "status": "pending",
+      "status": "done",
       "requires": [
         "theme",
         "wireframe"
@@ -570,7 +570,8 @@
       "artifacts": [
         "../export/mockup-handoff.json"
       ],
-      "attempts": 0
+      "attempts": 1,
+      "updatedAt": "2026-09-03T15:06:22Z"
     }
   ],
   "extensions": {}
