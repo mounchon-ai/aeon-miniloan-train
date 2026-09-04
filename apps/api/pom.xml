@@ -27,6 +27,18 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!-- FE-miniloan-004: first unit to persist an entity (LoanApplication). Money columns are
+         numeric/decimal per CLAUDE.md, never floating point. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- BR-miniloan-029@v1: a testable API contract — auto-generates OpenAPI from the
          real controllers/DTOs, served at /v3/api-docs. -->
     <dependency>
@@ -38,6 +50,14 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Test-only datasource for @SpringBootTest context boots (ContractOpenApiTest etc.) —
+         Postgres itself is never required to run `mvn test`; H2's PostgreSQL mode stands in. -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
       <scope>test</scope>
     </dependency>
 

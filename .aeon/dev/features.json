@@ -477,7 +477,48 @@
           "hash": "sha256:1c68e7121f561d88987c93b04e62c87e103110e048adee5c19babf9aa1d9b47b"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 23, Failures: 0, Errors: 0, Skipped: 0 (3 in ContractOpenApiTest, 3 in AuthTokenFilterTest, 8 in LoanApplicationDraftServiceTest, 9 in MockTokenServiceTest); BUILD SUCCESS",
+            "at": "2026-09-04T09:02:08Z"
+          },
+          {
+            "cmd": "docker run --rm -v apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57677925 bytes",
+            "at": "2026-09-04T09:02:15Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-04"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java",
+          "apps/api/src/main/java/com/miniloan/service/LoanApplicationDraftService.java",
+          "apps/api/src/main/java/com/miniloan/repository/LoanApplicationRepository.java",
+          "apps/api/src/main/java/com/miniloan/domain/LoanApplication.java",
+          "apps/api/src/test/java/com/miniloan/service/LoanApplicationDraftServiceTest.java"
+        ],
+        "unit_tests": [],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-001",
+            "route": "POST /applications",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          },
+          {
+            "api_ref": "API-002",
+            "route": "PUT /applications/{id}",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-005",
@@ -2756,8 +2797,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 3,
-      "draft": 26
+      "validated": 4,
+      "draft": 25
     },
     "by_origin": {
       "new": 29
