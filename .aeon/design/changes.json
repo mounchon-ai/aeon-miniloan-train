@@ -86,6 +86,31 @@
       "recordedAt": "2026-09-04T04:40:00Z",
       "absorbed": true,
       "absorbedAt": "2026-09-04T05:09:23Z"
+    },
+    {
+      "id": "ADR-003",
+      "origin": "design",
+      "kind": "revised",
+      "moved": [
+        "UI-miniloan-001",
+        "UI-miniloan-002",
+        "UI-miniloan-003",
+        "UI-miniloan-004",
+        "UI-miniloan-005",
+        "UI-miniloan-006",
+        "UI-miniloan-007",
+        "UI-miniloan-008",
+        "UI-miniloan-009",
+        "UI-miniloan-010",
+        "UI-miniloan-011",
+        "UI-miniloan-012",
+        "UI-miniloan-013",
+        "UI-miniloan-014"
+      ],
+      "reason": "dev เปิด GAP-miniloan-001 (พบระหว่าง /dev:plan): sitemap.json ทั้ง 14 โหนดยังไม่มีฟิลด์ app เลย ทำให้ DV19 (gate 96) ตรวจไม่ผ่านว่า shell ของแอป web เอื้อมถึงทุกหน้าจอ — เจ้าของโปรเจกต์ยืนยันแล้วว่าทั้ง 14 หน้าเป็นของแอป web ทั้งหมด (apps/api ไม่มีหน้าจอของตัวเอง เป็น backend ล้วน) การเปลี่ยนนี้เป็นการเติมฟิลด์ app ที่ schema ของ sitemap.mjs รองรับอยู่แล้วแต่ไม่เคยถูกกรอก ไม่เปลี่ยนพฤติกรรม วัตถุประสงค์ หรือสิทธิ์ของหน้าจอใด ๆ",
+      "recordedAt": "2026-09-04T06:00:00Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-04T07:24:57Z"
     }
   ]
 }

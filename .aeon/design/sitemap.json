@@ -2,107 +2,121 @@
   "schemaVersion": "1.1",
   "producedBy": "design · scripts/sitemap.mjs",
   "project": "miniloan",
-  "status": "approved",
-  "approvedAt": "2026-09-03T05:17:39Z",
-  "approvedBy": "aplus191",
+  "status": "draft",
+  "approvedAt": null,
+  "approvedBy": null,
   "nodes": [
     {
       "screen": "UI-miniloan-002",
       "parent": null,
       "order": 1,
       "label": "ใบสมัครและบัญชีของฉัน",
-      "entry": true
+      "entry": true,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-003",
       "parent": "UI-miniloan-002",
       "order": 1,
       "label": "รายละเอียดใบสมัคร",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-004",
       "parent": "UI-miniloan-002",
       "order": 2,
       "label": "ตารางผ่อนชำระ",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-005",
       "parent": "UI-miniloan-004",
       "order": 1,
       "label": "ยอดปิดบัญชีก่อนกำหนด",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-001",
       "parent": null,
       "order": 2,
       "label": "ยื่นใบสมัครใหม่",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-009",
       "parent": null,
       "order": 3,
       "label": "แดชบอร์ด",
-      "entry": true
+      "entry": true,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-006",
       "parent": null,
       "order": 4,
       "label": "คิวใบสมัครของฉัน",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-007",
       "parent": "UI-miniloan-006",
       "order": 1,
       "label": "พิจารณาใบสมัคร",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-008",
       "parent": null,
       "order": 5,
       "label": "ตั้งค่าผู้อนุมัติการปรับปรุงบัญชี",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-010",
       "parent": null,
       "order": 6,
       "label": "คิวมอบหมายใบสมัคร",
-      "entry": true
+      "entry": true,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-011",
       "parent": null,
       "order": 7,
       "label": "บัญชีสินเชื่อที่ฉันดูแล",
-      "entry": true
+      "entry": true,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-012",
       "parent": "UI-miniloan-011",
       "order": 1,
       "label": "รายละเอียดบัญชีสินเชื่อ",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-013",
       "parent": null,
       "order": 8,
       "label": "คำขอปรับปรุงบัญชีรออนุมัติ",
-      "entry": false
+      "entry": false,
+      "app": "web"
     },
     {
       "screen": "UI-miniloan-014",
       "parent": "UI-miniloan-013",
       "order": 1,
       "label": "พิจารณาคำขอปรับปรุงบัญชี",
-      "entry": false
+      "entry": false,
+      "app": "web"
     }
   ]
 }
