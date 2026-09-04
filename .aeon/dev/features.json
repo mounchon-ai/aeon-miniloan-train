@@ -254,7 +254,10 @@
         "unit_tests": [],
         "ui_controls": [],
         "apis": []
-      }
+      },
+      "commits": [
+        "8717c023a258a427e77f25fce16d33a073410002"
+      ]
     },
     {
       "id": "FE-miniloan-002",
