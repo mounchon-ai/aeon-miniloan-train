@@ -1,9 +1,11 @@
 $ErrorActionPreference = "Stop"
 
-Write-Host "== dotnet test (apps/api) =="
-dotnet test apps/api
+Write-Host "== mvn test (apps/api) =="
+Push-Location apps/api
+mvn -q test
+Pop-Location
 
 Write-Host "== npm test (apps/web) =="
 Push-Location apps/web
-npm test --if-present
+npm test -- --watch=false
 Pop-Location

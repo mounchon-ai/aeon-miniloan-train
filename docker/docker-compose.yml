@@ -20,8 +20,10 @@ services:
       context: ../apps/api
       dockerfile: Dockerfile
     environment:
-      ConnectionStrings__Default: "Host=db;Port=5432;Database=miniloan;Username=miniloan;Password=miniloan_dev"
-      ASPNETCORE_URLS: "http://+:8080"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/miniloan"
+      SPRING_DATASOURCE_USERNAME: "miniloan"
+      SPRING_DATASOURCE_PASSWORD: "miniloan_dev"
+      SERVER_PORT: "8080"
     ports:
       - "5000:8080"
     depends_on:
@@ -32,10 +34,10 @@ services:
     build:
       context: ../apps/web
       dockerfile: Dockerfile
-    environment:
-      NEXT_PUBLIC_API_URL: "http://localhost:5000"
+      args:
+        API_URL: "http://localhost:5000"
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
       - api
 

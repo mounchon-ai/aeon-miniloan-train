@@ -1,19 +1,12 @@
-FROM node:20-alpine AS deps
+FROM node:20-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
-
-FROM node:20-alpine AS build
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npm run build
+ARG API_URL=http://localhost:5000
+RUN npm run build -- --configuration=production
 
-FROM node:20-alpine AS final
-WORKDIR /app
-ENV NODE_ENV=production
-COPY --from=build /app/public ./public
-COPY --from=build /app/.next/standalone ./
-COPY --from=build /app/.next/static ./.next/static
-EXPOSE 3000
-CMD ["node", "server.js"]
+FROM nginx:alpine AS final
+COPY --from=build /app/dist/miniloan-web/browser /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

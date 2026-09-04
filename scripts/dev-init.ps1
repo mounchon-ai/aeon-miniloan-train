@@ -1,7 +1,9 @@
 $ErrorActionPreference = "Stop"
 
-Write-Host "== dotnet restore (apps/api) =="
-dotnet restore apps/api
+Write-Host "== mvn dependency:resolve (apps/api) =="
+Push-Location apps/api
+mvn -q dependency:resolve
+Pop-Location
 
 Write-Host "== npm install (apps/web) =="
 Push-Location apps/web

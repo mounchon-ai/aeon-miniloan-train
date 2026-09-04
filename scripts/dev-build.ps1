@@ -1,7 +1,9 @@
 $ErrorActionPreference = "Stop"
 
-Write-Host "== dotnet build (apps/api) =="
-dotnet build apps/api -c Release
+Write-Host "== mvn package (apps/api) =="
+Push-Location apps/api
+mvn -q package -DskipTests
+Pop-Location
 
 Write-Host "== npm run build (apps/web) =="
 Push-Location apps/web

@@ -1,12 +1,12 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /src
-COPY *.csproj ./
-RUN dotnet restore
-COPY . .
-RUN dotnet publish -c Release -o /app/publish --no-restore
+COPY pom.xml ./
+RUN mvn -q dependency:go-offline
+COPY src ./src
+RUN mvn -q package -DskipTests
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM eclipse-temurin:21-jre-alpine AS final
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /src/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["dotnet", "Miniloan.Api.dll"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
