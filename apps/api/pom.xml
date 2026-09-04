@@ -27,9 +27,26 @@
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <!-- BR-miniloan-029@v1: a testable API contract — auto-generates OpenAPI from the
+         real controllers/DTOs, served at /v3/api-docs. -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.8.6</version>
+    </dependency>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Validates a real response against the declared OpenAPI schema (AC-miniloan-121/122) —
+         the mechanism that makes the contract testable by a machine, not just documentation. -->
+    <dependency>
+      <groupId>com.networknt</groupId>
+      <artifactId>json-schema-validator</artifactId>
+      <version>1.5.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

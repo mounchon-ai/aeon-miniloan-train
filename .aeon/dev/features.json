@@ -336,7 +336,6 @@
       "origin": "new",
       "files_planned": [
         "apps/api/src/main/java/com/miniloan/service/config/OpenApiConfig.java",
-        "apps/api/pom.xml",
         "apps/api/src/test/java/com/miniloan/ContractOpenApiTest.java"
       ],
       "depends_on": [],
@@ -358,7 +357,34 @@
           "hash": "sha256:bdc79b1e034d5b5e3ed2786d1b51c355dda602aaf3cdb4c74001ca9f8d3691a0"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 15, Failures: 0, Errors: 0, Skipped: 0 (3 in ContractOpenApiTest, 3 in AuthTokenFilterTest, 9 in MockTokenServiceTest); BUILD SUCCESS",
+            "at": "2026-09-04T08:33:12Z"
+          },
+          {
+            "cmd": "docker run --rm -v apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 26192930 bytes",
+            "at": "2026-09-04T08:34:20Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-04"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/service/config/OpenApiConfig.java",
+          "apps/api/src/test/java/com/miniloan/ContractOpenApiTest.java"
+        ],
+        "unit_tests": [],
+        "ui_controls": [],
+        "apis": []
+      }
     },
     {
       "id": "FE-miniloan-004",
@@ -2727,8 +2753,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 2,
-      "draft": 27
+      "validated": 3,
+      "draft": 26
     },
     "by_origin": {
       "new": 29
