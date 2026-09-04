@@ -1,0 +1,22 @@
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell__header {
+  padding: var(--space-3) var(--space-6);
+  background: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+.app-shell__product-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-lg);
+}
+
+.app-shell__content {
+  flex: 1;
+  padding: var(--space-6);
+}

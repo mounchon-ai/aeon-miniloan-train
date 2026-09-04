@@ -1,0 +1,26 @@
+/* Global styles. Design tokens come from the imported miniloan design system
+   handoff (.aeon/mockup/handoff/miniloan-design-system/tokens) — component
+   styles must reference them with var(), never redefine colors/spacing ad hoc. */
+@import './styles/tokens/colors.css';
+@import './styles/tokens/spacing.css';
+@import './styles/tokens/typography.css';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

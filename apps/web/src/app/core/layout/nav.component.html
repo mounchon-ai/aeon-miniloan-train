@@ -1,0 +1,18 @@
+<nav class="app-nav" aria-label="เมนูหลัก">
+  <ul class="app-nav__links">
+    @for (entry of entries(); track entry.screen) {
+      <li>
+        <a [routerLink]="entry.path" routerLinkActive="is-active">{{ entry.label }}</a>
+      </li>
+    }
+  </ul>
+
+  <label class="app-nav__role-switcher">
+    <span>บทบาท (ทดลอง)</span>
+    <select [value]="role().id" (change)="onRoleChange($any($event.target).value)">
+      @for (r of roles; track r.id) {
+        <option [value]="r.id">{{ r.label }}</option>
+      }
+    </select>
+  </label>
+</nav>

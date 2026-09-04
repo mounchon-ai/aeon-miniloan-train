@@ -216,7 +216,45 @@
           "hash": "sha256:3d5f5950c3a3022f43ac337c1760ce4405e021682a8189ec7621053b05aade18"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.070 seconds] - Output location: D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\web\\dist\\miniloan-web (browser/ subfolder present, matches Dockerfile COPY path)",
+            "at": "2026-09-04T08:01:59Z"
+          },
+          {
+            "cmd": "cd apps/web && npm test -- --watch=false",
+            "result": "Test Files 3 passed (3) · Tests 8 passed (8) · Duration 691ms (vitest v4.1.11)",
+            "at": "2026-09-04T08:01:52Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-04"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/core/app.component.ts",
+          "apps/web/src/app/core/app.component.html",
+          "apps/web/src/app/core/app.component.scss",
+          "apps/web/src/app/core/app.component.spec.ts",
+          "apps/web/src/app/core/app.config.ts",
+          "apps/web/src/app/core/app.routes.ts",
+          "apps/web/src/app/core/layout/nav.component.ts",
+          "apps/web/src/app/core/layout/nav.component.html",
+          "apps/web/src/app/core/layout/nav.component.scss",
+          "apps/web/src/app/core/layout/nav.component.spec.ts",
+          "apps/web/src/app/core/interceptors/mock-token.interceptor.ts",
+          "apps/web/src/app/core/interceptors/mock-token.interceptor.spec.ts",
+          "apps/web/src/app/core/services/current-role.service.ts"
+        ],
+        "unit_tests": [],
+        "ui_controls": [],
+        "apis": []
+      }
     },
     {
       "id": "FE-miniloan-002",
@@ -2654,7 +2692,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "draft": 29
+      "validated": 1,
+      "draft": 28
     },
     "by_origin": {
       "new": 29
