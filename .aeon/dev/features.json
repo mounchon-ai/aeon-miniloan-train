@@ -161,59 +161,59 @@
       "traces_up": [
         {
           "ref": "UI-miniloan-001",
-          "hash": "sha256:4a6768a1a1eb58648c7799b87d3c9ba8f51fdf93166cfa0a3d080df2517e87b5"
+          "hash": "sha256:4daf3f7b79249c4de80f72e6e22e51290592db55a6213c5a1d08fe201fe5e23d"
         },
         {
           "ref": "UI-miniloan-002",
-          "hash": "sha256:333f21d2dcbe42f90601c716646f4ef6961a8c60d5f6e0bbd5b9664cb46f840a"
+          "hash": "sha256:e82fcbc0bc81bd3b7f00ade00f48023df0cb2c71024b848f0417fc7516616293"
         },
         {
           "ref": "UI-miniloan-003",
-          "hash": "sha256:a912512b108db1a63875042d196a557997f57c4ced99d739b717a81ec8b9e967"
+          "hash": "sha256:3f713fd3f35a02a766ef755fd35f96134a6f5456cc068ff341eaa5ea2108984a"
         },
         {
           "ref": "UI-miniloan-004",
-          "hash": "sha256:d4b4ca412f677303ef7557f2b972c3d0193f3c3337923991e5e153af5f3cb844"
+          "hash": "sha256:2f13a4f9e3f03baaa7f8f3737bfcdab11096149f0cda772cf58389417d9715fb"
         },
         {
           "ref": "UI-miniloan-005",
-          "hash": "sha256:58d7b44c733b826a658c8b8920836bce6afbfdae3bfa1293b1f1771f7e713387"
+          "hash": "sha256:17093dc2b47ef05275a15dd64446622cdac5e373d7bc833d3853994caa383c6f"
         },
         {
           "ref": "UI-miniloan-006",
-          "hash": "sha256:7f0bfaecd5f987624aa28ba59e6de00ae2370bc6a3a5b56119ee4f660413ca9f"
+          "hash": "sha256:de972c8f30423dad1f0622ed389f4609df12c8c3fdf435fa3d48f2e26f591617"
         },
         {
           "ref": "UI-miniloan-007",
-          "hash": "sha256:ddaaf8e1af66b4055d8d70f08a8785c03b52f1152530f35352e9126d6bb9a5f4"
+          "hash": "sha256:336384c90d658a39331164c4a83ff898945d10677dbc80b5265b1636cbfa9c66"
         },
         {
           "ref": "UI-miniloan-008",
-          "hash": "sha256:ecd2d4fcc6697c107c034775fa7d4b41719611b23f746c95f54a42c4e1801b09"
+          "hash": "sha256:cd8cba3798219848b73f57c714d4e24ae32351234bdfc415e5b6d7a1a30da4a9"
         },
         {
           "ref": "UI-miniloan-009",
-          "hash": "sha256:855ae82941f8c64a4fdb0cdbfbc6d4dcc7c757e96f001cd121dfa89385fe279b"
+          "hash": "sha256:129f466541fe63c6446f10cf744758e02883084a5ef76690be9d3d6f188709eb"
         },
         {
           "ref": "UI-miniloan-010",
-          "hash": "sha256:59fe813637211274205df4fddcc1f1d83080b6c9a5cc0d78e98da5e911dbb276"
+          "hash": "sha256:b39736d10ffdc4a1156433375f2ecf3f0b833e122ece2e6c1bd676b47a68f06a"
         },
         {
           "ref": "UI-miniloan-011",
-          "hash": "sha256:85cec957b720e520ccdb1476f630d12315420561b80e64cc9e84b90b74c8d99b"
+          "hash": "sha256:72a9fcecb0e9904e9c46dfddb8d19ccf09df8846dd621c5275ee99a2669460c3"
         },
         {
           "ref": "UI-miniloan-012",
-          "hash": "sha256:336fe5a8b2aed4d77cdc634216c7d2ec83e810c311c456e3bca8e80463e17f09"
+          "hash": "sha256:ead7de14ebb171e73189c952a7b102e0e715512108db32bb126afa9823aab080"
         },
         {
           "ref": "UI-miniloan-013",
-          "hash": "sha256:d5d6482d5a1821646f25155ed86a8ecdabfaa1eecce4faa349e6349ef531c579"
+          "hash": "sha256:e97e0472c2a04a351c7f41646415f1eef0934cab688b2077acd7504e001fe115"
         },
         {
           "ref": "UI-miniloan-014",
-          "hash": "sha256:23b99713adc37a19e8ca98c942faeb60dd97a19eed0cd64ef23d5e0ec07f724f"
+          "hash": "sha256:3d5f5950c3a3022f43ac337c1760ce4405e021682a8189ec7621053b05aade18"
         }
       ],
       "status": "draft"
@@ -1879,15 +1879,15 @@
         },
         {
           "ref": "UI-miniloan-001",
-          "hash": "sha256:4a6768a1a1eb58648c7799b87d3c9ba8f51fdf93166cfa0a3d080df2517e87b5"
+          "hash": "sha256:4daf3f7b79249c4de80f72e6e22e51290592db55a6213c5a1d08fe201fe5e23d"
         },
         {
           "ref": "UI-miniloan-002",
-          "hash": "sha256:333f21d2dcbe42f90601c716646f4ef6961a8c60d5f6e0bbd5b9664cb46f840a"
+          "hash": "sha256:e82fcbc0bc81bd3b7f00ade00f48023df0cb2c71024b848f0417fc7516616293"
         },
         {
           "ref": "UI-miniloan-003",
-          "hash": "sha256:a912512b108db1a63875042d196a557997f57c4ced99d739b717a81ec8b9e967"
+          "hash": "sha256:3f713fd3f35a02a766ef755fd35f96134a6f5456cc068ff341eaa5ea2108984a"
         }
       ],
       "status": "draft"
@@ -1957,11 +1957,11 @@
         },
         {
           "ref": "UI-miniloan-004",
-          "hash": "sha256:d4b4ca412f677303ef7557f2b972c3d0193f3c3337923991e5e153af5f3cb844"
+          "hash": "sha256:2f13a4f9e3f03baaa7f8f3737bfcdab11096149f0cda772cf58389417d9715fb"
         },
         {
           "ref": "UI-miniloan-005",
-          "hash": "sha256:58d7b44c733b826a658c8b8920836bce6afbfdae3bfa1293b1f1771f7e713387"
+          "hash": "sha256:17093dc2b47ef05275a15dd64446622cdac5e373d7bc833d3853994caa383c6f"
         }
       ],
       "status": "draft"
@@ -2196,11 +2196,11 @@
         },
         {
           "ref": "UI-miniloan-006",
-          "hash": "sha256:7f0bfaecd5f987624aa28ba59e6de00ae2370bc6a3a5b56119ee4f660413ca9f"
+          "hash": "sha256:de972c8f30423dad1f0622ed389f4609df12c8c3fdf435fa3d48f2e26f591617"
         },
         {
           "ref": "UI-miniloan-007",
-          "hash": "sha256:ddaaf8e1af66b4055d8d70f08a8785c03b52f1152530f35352e9126d6bb9a5f4"
+          "hash": "sha256:336384c90d658a39331164c4a83ff898945d10677dbc80b5265b1636cbfa9c66"
         }
       ],
       "status": "draft"
@@ -2274,7 +2274,7 @@
         },
         {
           "ref": "UI-miniloan-010",
-          "hash": "sha256:59fe813637211274205df4fddcc1f1d83080b6c9a5cc0d78e98da5e911dbb276"
+          "hash": "sha256:b39736d10ffdc4a1156433375f2ecf3f0b833e122ece2e6c1bd676b47a68f06a"
         }
       ],
       "status": "draft"
@@ -2318,7 +2318,7 @@
         },
         {
           "ref": "UI-miniloan-008",
-          "hash": "sha256:ecd2d4fcc6697c107c034775fa7d4b41719611b23f746c95f54a42c4e1801b09"
+          "hash": "sha256:cd8cba3798219848b73f57c714d4e24ae32351234bdfc415e5b6d7a1a30da4a9"
         }
       ],
       "status": "draft"
@@ -2362,7 +2362,7 @@
         },
         {
           "ref": "UI-miniloan-009",
-          "hash": "sha256:855ae82941f8c64a4fdb0cdbfbc6d4dcc7c757e96f001cd121dfa89385fe279b"
+          "hash": "sha256:129f466541fe63c6446f10cf744758e02883084a5ef76690be9d3d6f188709eb"
         }
       ],
       "status": "draft"
@@ -2536,11 +2536,11 @@
         },
         {
           "ref": "UI-miniloan-011",
-          "hash": "sha256:85cec957b720e520ccdb1476f630d12315420561b80e64cc9e84b90b74c8d99b"
+          "hash": "sha256:72a9fcecb0e9904e9c46dfddb8d19ccf09df8846dd621c5275ee99a2669460c3"
         },
         {
           "ref": "UI-miniloan-012",
-          "hash": "sha256:336fe5a8b2aed4d77cdc634216c7d2ec83e810c311c456e3bca8e80463e17f09"
+          "hash": "sha256:ead7de14ebb171e73189c952a7b102e0e715512108db32bb126afa9823aab080"
         }
       ],
       "status": "draft"
@@ -2590,11 +2590,11 @@
         },
         {
           "ref": "UI-miniloan-013",
-          "hash": "sha256:d5d6482d5a1821646f25155ed86a8ecdabfaa1eecce4faa349e6349ef531c579"
+          "hash": "sha256:e97e0472c2a04a351c7f41646415f1eef0934cab688b2077acd7504e001fe115"
         },
         {
           "ref": "UI-miniloan-014",
-          "hash": "sha256:23b99713adc37a19e8ca98c942faeb60dd97a19eed0cd64ef23d5e0ec07f724f"
+          "hash": "sha256:3d5f5950c3a3022f43ac337c1760ce4405e021682a8189ec7621053b05aade18"
         }
       ],
       "status": "draft"
@@ -2642,10 +2642,10 @@
       "question_th": "sitemap.json ทั้ง 14 โหนดยังไม่มีฟิลด์ app (schema รองรับอยู่แล้วที่ sitemap.mjs แต่ยังไม่เคยถูกกรอก เพราะโปรเจกต์เพิ่งแยกเป็น 2 แอปวันนี้) — เจ้าของโปรเจกต์ยืนยันด้วยวาจาแล้วว่าทั้ง 14 หน้าเป็นของแอป web ทั้งหมด (api ไม่มีหน้าจอของตัวเอง) ขอให้บันทึกคำตอบนี้ลงใน sitemap.json จริงผ่าน /design:sitemap เพื่อให้ DV19 (gate 96 — shell ของแอปต้องเอื้อมถึงทุกหน้าที่ sitemap มอบให้แอปนั้น) ตรวจผ่านได้",
       "found_at": "2026-09-04",
       "found_by": "/dev:plan",
-      "status": "open",
-      "answer_th": null,
-      "answered_in": null,
-      "closed_by": null,
+      "status": "answered",
+      "answer_th": "design เติมฟิลด์ app: \"web\" ลงทั้ง 14 โหนดของ sitemap.json ผ่าน ADR-003 (revoke → เขียน → sign ใหม่) ยืนยันแล้วว่าทุกโหนดมีค่าจริงบนดิสก์ และ verify-features.mjs รายงาน DV19 ผ่าน (0 error)",
+      "answered_in": "sitemap.json",
+      "closed_by": "aplus191",
       "blocks": [
         "FE-miniloan-001"
       ]
@@ -2663,7 +2663,7 @@
       "web": 10,
       "api": 19
     },
-    "gaps_open": 1,
+    "gaps_open": 0,
     "ready_for_phase5": false
   }
 }
