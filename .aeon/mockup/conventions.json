@@ -241,5 +241,10 @@
     }
   ],
   "screenOptions": [],
-  "extensions": {}
+  "extensions": {},
+  "shell": {
+    "productName": "ระบบสินเชื่อส่วนบุคคล miniloan",
+    "confirmedBy": "aplus191",
+    "confirmedAt": "2026-09-04T02:18:32Z"
+  }
 }

@@ -155,9 +155,19 @@ button{font-family:inherit;cursor:pointer}
 .unauthorized{text-align:center;padding:var(--space-6);color:var(--text-primary)}
 .skeleton{background:var(--border);border-radius:var(--radius-sm);margin-bottom:var(--space-2);height:var(--space-5)}
 .marker{color:var(--text-secondary);font-size:var(--text-xs);margin-top:var(--space-6)}
+.appbar{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-6);background:var(--bg-surface);border-bottom:thin solid var(--border)}
+.wordmark{font-weight:700;font-size:var(--text-lg);color:var(--text-primary)}
+.wordmark .mark{display:inline-block;padding:var(--space-1) var(--space-2);margin-right:var(--space-2);border-radius:var(--radius-sm);background:var(--brand-primary);color:var(--brand-on-primary)}
+.appbar .spacer{flex:1}
+.appnav{display:flex;flex-wrap:wrap;gap:var(--space-1);padding:0;background:var(--bg-surface);border-bottom:thin solid var(--border)}
+.appnav a{text-decoration:none;border-bottom:medium solid transparent;padding:var(--space-3) var(--space-3);color:var(--text-secondary);font-size:var(--text-sm)}
+.appnav a:hover{color:var(--text-primary)}
+.appnav a[aria-current="page"]{color:var(--brand-primary);border-bottom-color:var(--brand-primary)}
+.appfoot{text-align:center;padding:var(--space-4);border-top:thin solid var(--border)}
 </style>
 </head>
-<body>
+<body class="shell-app">
+<header class="appbar"><span class="wordmark"><span class="mark" aria-hidden="true">ร</span>ระบบสินเชื่อส่วนบุคคล miniloan</span><span class="spacer"></span></header>
 <main data-screen="UI-miniloan-014" data-mockup="MCK-miniloan-014" data-state="loading">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-6)">
     <h1 style="margin:0">พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว</h1>
@@ -196,5 +206,6 @@ button{font-family:inherit;cursor:pointer}
   </div>
   <p class="marker">⚠ ข้อมูลสมมติ</p>
 </main>
+<nav class="appnav" aria-label="เมนูหลัก"><a href="../UI-miniloan-002/default.html" data-testid="nav-ui-miniloan-002">ใบสมัครและบัญชีของฉัน</a><a href="../UI-miniloan-003/default.html" data-testid="nav-ui-miniloan-003">รายละเอียดใบสมัคร</a><a href="../UI-miniloan-005/default.html" data-testid="nav-ui-miniloan-005">ยอดปิดบัญชีก่อนกำหนด</a><a href="../UI-miniloan-007/default.html" data-testid="nav-ui-miniloan-007">พิจารณาใบสมัคร</a><a href="../UI-miniloan-012/default.html" data-testid="nav-ui-miniloan-012">รายละเอียดบัญชีสินเชื่อ</a><a href="../UI-miniloan-014/default.html" data-testid="nav-ui-miniloan-014" aria-current="page">พิจารณาคำขอปรับปรุงบัญชี</a><a href="../UI-miniloan-001/default.html" data-testid="nav-ui-miniloan-001">ยื่นใบสมัครใหม่</a><a href="../UI-miniloan-004/default.html" data-testid="nav-ui-miniloan-004">ตารางผ่อนชำระ</a><a href="../UI-miniloan-009/default.html" data-testid="nav-ui-miniloan-009">แดชบอร์ด</a><a href="../UI-miniloan-006/default.html" data-testid="nav-ui-miniloan-006">คิวใบสมัครของฉัน</a><a href="../UI-miniloan-008/default.html" data-testid="nav-ui-miniloan-008">ตั้งค่าผู้อนุมัติการปรับปรุงบัญชี</a><a href="../UI-miniloan-010/default.html" data-testid="nav-ui-miniloan-010">คิวมอบหมายใบสมัคร</a><a href="../UI-miniloan-011/default.html" data-testid="nav-ui-miniloan-011">บัญชีสินเชื่อที่ฉันดูแล</a><a href="../UI-miniloan-013/default.html" data-testid="nav-ui-miniloan-013">คำขอปรับปรุงบัญชีรออนุมัติ</a></nav><footer class="appfoot">ระบบสินเชื่อส่วนบุคคล miniloan</footer>
 </body>
 </html>

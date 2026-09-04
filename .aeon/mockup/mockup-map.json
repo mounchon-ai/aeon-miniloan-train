@@ -180,7 +180,7 @@
     {
       "id": "MCK-miniloan-012",
       "screen": "UI-miniloan-012",
-      "level": "L1",
+      "level": "L2",
       "file": "wireframes/UI-miniloan-012.json",
       "layout": "form",
       "rendersState": [
@@ -190,7 +190,21 @@
         "overflow"
       ],
       "followsConvention": [],
-      "usesComponent": []
+      "usesComponent": [
+        "Button",
+        "Card",
+        "Input",
+        "StatusBadge",
+        "Table",
+        "Toast"
+      ],
+      "deliveredPages": {
+        "default": "sha256:4f8e8d72f7a37d7cb90756f57e797b6c28047c1fdab8ab5d1dfd865e23491ae5",
+        "error": "sha256:f23a2e29aab85a80de1251a767c0ed2688ee4190b157d377ec33852b3caf1f6c",
+        "loading": "sha256:1ec566f46686d0a33278d72d445a4b3f6cbe488d9e8f6faaf489492e83c2585e",
+        "overflow": "sha256:49c414338f5054edc502ddb08375a8a4f66bfa24c6f3991a739a8c8aa76a07a0",
+        "unauthorized": "sha256:cb7a737825767b9655017a8cf46b95292121ac2e16073743c1498678a6276c21"
+      }
     },
     {
       "id": "MCK-miniloan-013",
@@ -217,12 +231,12 @@
         "Toast"
       ],
       "deliveredPages": {
-        "default": "sha256:1cbc82414e7f23d28c9534f525f56f6467843f743b63cd9b47471f334566cafc",
-        "empty": "sha256:cbfd12d44f2f6a4e9b63abfaf665f39e709f2016a91a63fc079c81b41040dd25",
-        "error": "sha256:f94648761cfe165daabe4f6ebf1d3ef4be0276e79860cbe0b4f0173119d97341",
-        "loading": "sha256:5f98b75d08ce5b461611655e4142ed49375d0bc3f0f8373150a2d5fbe3a21a73",
-        "overflow": "sha256:a7f0e48a642b212c3faa53489d9a0104c69b3414a954c2de0ca78889661291d5",
-        "unauthorized": "sha256:72499e21f6d225c8c2167b9730be401b04b67bb5a1539196b0ea8e1e5f40fd44"
+        "default": "sha256:ca6816d551dfaf4d364c247c8ce6b2ce4af6360ab4bac71a431722cfe162fe45",
+        "empty": "sha256:5d819cffdd7d2e46d82cdb439efb36a4c04272ef98ea139126d99890305ea959",
+        "error": "sha256:c0f235390831083b47e615f19a81e177f0cefcdda743507f80ecc78f8e147b91",
+        "loading": "sha256:ada7ec02fdd2fa9836a09e0375277eae37c81b6c4b1d171bc995a0ffee856991",
+        "overflow": "sha256:347015c7f5ba40f58fe5360e783bbe59a5be171dfe28ca12ea8c25375b58a116",
+        "unauthorized": "sha256:f302926914bf25467dd9faf5b1385adb6d52962e1de95ab74bf7d7a2d9768daa"
       }
     },
     {
@@ -246,10 +260,10 @@
         "Toast"
       ],
       "deliveredPages": {
-        "default": "sha256:72db070eb1a67083712e8b4d010e250215400c8967987dd177493f4776d25e8b",
-        "error": "sha256:bcf3845ccfb20009f30011c113493cdf048c4af4b8a6100985f3e54ae315d77b",
-        "loading": "sha256:c67ba503dca4fe0048e1693e067347ced5e4d09af9cf4e1aae97b8d21ca4e834",
-        "unauthorized": "sha256:d7cdaeff1bdcd0f37f12a3a37460c5ccb90811bfed8b00e5bb5e4b961c2a2ccc"
+        "default": "sha256:f07c41577a87f3a9a33b3acc68dcd7a0d42268a6ec155d56f1ef41b29e8aaad3",
+        "error": "sha256:46f100d68ff7371a57abb17a99f712651ecd384b39a5679fd5640e1812454f0d",
+        "loading": "sha256:2bc18f5abe3979e84274c0196c2e2b58ce710bb415dc19638b81610ea874c5a4",
+        "unauthorized": "sha256:756785ef7cadd7d0184bbf882ce3c8a1d062072b5dec5a30f29885c3a89ef68f"
       }
     }
   ],

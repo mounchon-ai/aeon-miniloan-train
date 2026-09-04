@@ -250,11 +250,30 @@
         {
           "screen": "UI-miniloan-012",
           "mockup": "MCK-miniloan-012",
-          "level": "L1",
+          "level": "L2",
           "wireframe": "../mockup/wireframes/UI-miniloan-012.json",
-          "statesWithPicture": [],
-          "pages": [],
-          "usesComponent": []
+          "statesWithPicture": [
+            "default",
+            "error",
+            "loading",
+            "overflow",
+            "unauthorized"
+          ],
+          "pages": [
+            "../../mockups/UI-miniloan-012/default.html",
+            "../../mockups/UI-miniloan-012/error.html",
+            "../../mockups/UI-miniloan-012/loading.html",
+            "../../mockups/UI-miniloan-012/overflow.html",
+            "../../mockups/UI-miniloan-012/unauthorized.html"
+          ],
+          "usesComponent": [
+            "Button",
+            "Card",
+            "Input",
+            "StatusBadge",
+            "Table",
+            "Toast"
+          ]
         },
         {
           "screen": "UI-miniloan-013",
@@ -353,7 +372,7 @@
       "ref": [
         "../../mockups/"
       ],
-      "files": 10,
+      "files": 15,
       "note": "the per-page list is on each screen-map row · a model drew these from the wireframe and the theme (gate 72), so they carry choices nobody upstream made — every fact they must obey is on the wireframe row, and that is the row labelled normative"
     },
     {

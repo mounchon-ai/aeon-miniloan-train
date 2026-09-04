@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>UI-miniloan-013 · รายการคำขอปรับปรุงบัญชีที่รออนุมัติ · loading</title>
+<title>UI-miniloan-012 · รายละเอียดบัญชีสินเชื่อ · unauthorized</title>
 <style>
 :root{
   --blue-50: #EFF6FF;
@@ -137,7 +137,16 @@ body{margin:0;font-family:var(--font-ui);background:var(--bg-page);color:var(--t
 main{margin:0 auto;padding:var(--space-6)}
 h1{margin-top:0;font-size:var(--text-lg);margin-bottom:var(--space-2)}
 .muted{color:var(--text-secondary);font-size:var(--text-sm)}
-.surface{background:var(--bg-surface);border:thin solid var(--border);border-radius:var(--radius);padding:var(--space-4);box-shadow:var(--shadow-card)}
+.surface{background:var(--bg-surface);border:thin solid var(--border);border-radius:var(--radius);padding:var(--space-4);box-shadow:var(--shadow-card);margin-bottom:var(--space-6)}
+.surface:last-of-type{margin-bottom:0}
+.section-title{font-size:var(--text-base);font-weight:700;color:var(--text-primary);margin-bottom:var(--space-3)}
+.detail-row{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-4);padding:var(--space-3) 0;border-bottom:thin solid var(--border)}
+.detail-row:last-child{border-bottom:none}
+.detail-label{font-size:var(--text-sm);color:var(--text-secondary)}
+.detail-value{font-size:var(--text-sm);color:var(--text-primary);font-weight:600;text-align:right}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;border-bottom:thin solid var(--border);padding:var(--space-2) var(--space-3)}
+th{color:var(--text-secondary);font-size:var(--text-sm)}
 button{font-family:inherit;cursor:pointer;border:none;font-size:var(--text-base);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-4);background:var(--brand-primary);color:var(--brand-on-primary)}
 button:hover{background:var(--brand-primary-hover)}
 button:active{background:var(--brand-primary-active)}
@@ -145,21 +154,15 @@ button:focus-visible{outline:medium solid var(--focus-ring)}
 button[disabled]{cursor:not-allowed;background:var(--border);color:var(--text-secondary)}
 input{font-family:inherit;width:100%;font-size:var(--text-base);border:thin solid var(--border);border-radius:var(--radius-sm);padding:var(--space-2);background:var(--bg-surface);color:var(--text-primary)}
 input:focus-visible{outline:medium solid var(--focus-ring)}
-table{border-collapse:collapse;width:100%}
-th,td{text-align:left;border-bottom:thin solid var(--border);padding:var(--space-2) var(--space-3)}
-th{color:var(--text-secondary);font-size:var(--text-sm)}
-.list-toolbar{display:flex;gap:var(--space-2);margin-bottom:var(--space-4)}
-.list-toolbar input{flex:1}
-.icon-btn{display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--text-secondary);padding:var(--space-2);border-radius:var(--radius-sm);text-decoration:none}
-.icon-btn:hover{background:var(--brand-subtle);color:var(--brand-primary)}
-.alert{display:block;background:var(--danger-bg);color:var(--danger);border:thin solid var(--danger);border-radius:var(--radius);padding:var(--space-3);margin-bottom:var(--space-4)}
-.alert button{margin-top:var(--space-3)}
-.empty{text-align:center;padding:var(--space-6);color:var(--text-secondary)}
+.form-row{margin-bottom:var(--space-3)}
+.form-row label{display:block;margin-bottom:var(--space-1);font-size:var(--text-sm);color:var(--text-secondary)}
+.pill{display:inline-block;padding:0 var(--space-3);border-radius:var(--radius-full);font-size:var(--text-sm)}
+.pill[data-state-cell="Active"]{background:var(--state-active-bg);color:var(--state-active-fg)}
+.pill[data-state-cell="Closed"]{background:var(--state-closed-bg);color:var(--state-closed-fg)}
+.alert{display:block;background:var(--danger-bg);color:var(--danger);border:thin solid var(--danger);border-radius:var(--radius);padding:var(--space-3);margin-bottom:var(--space-4);font-size:var(--text-sm)}
 .unauthorized{text-align:center;padding:var(--space-6);color:var(--text-primary)}
-.skeleton{background:var(--border);border-radius:var(--radius-sm);margin-bottom:var(--space-2);height:var(--space-5)}
-.pagination{display:flex;align-items:center;gap:var(--space-2);margin-top:var(--space-4)}
+.decision-hint{font-size:var(--text-sm);color:var(--text-secondary)}
 .marker{color:var(--text-secondary);font-size:var(--text-xs);margin-top:var(--space-6)}
-.long-cell{max-width:var(--space-20);white-space:normal;overflow-wrap:break-word}
 .appbar{display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-6);background:var(--bg-surface);border-bottom:thin solid var(--border)}
 .wordmark{font-weight:700;font-size:var(--text-lg);color:var(--text-primary)}
 .wordmark .mark{display:inline-block;padding:var(--space-1) var(--space-2);margin-right:var(--space-2);border-radius:var(--radius-sm);background:var(--brand-primary);color:var(--brand-on-primary)}
@@ -173,18 +176,12 @@ th{color:var(--text-secondary);font-size:var(--text-sm)}
 </head>
 <body class="shell-app">
 <header class="appbar"><span class="wordmark"><span class="mark" aria-hidden="true">ร</span>ระบบสินเชื่อส่วนบุคคล miniloan</span><span class="spacer"></span></header>
-<main data-screen="UI-miniloan-013" data-mockup="MCK-miniloan-013" data-state="loading">
-  <h1>รายการคำขอปรับปรุงบัญชีที่รออนุมัติ</h1>
-
-  <div class="surface">
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
-    <div class="skeleton"></div>
+<main data-screen="UI-miniloan-012" data-mockup="MCK-miniloan-012" data-state="unauthorized">
+  <div class="unauthorized">
+    <p>คุณไม่มีสิทธิ์ดำเนินการกับบัญชีนี้</p>
   </div>
-
   <p class="marker">⚠ ข้อมูลสมมติ</p>
 </main>
-<nav class="appnav" aria-label="เมนูหลัก"><a href="../UI-miniloan-002/default.html" data-testid="nav-ui-miniloan-002">ใบสมัครและบัญชีของฉัน</a><a href="../UI-miniloan-003/default.html" data-testid="nav-ui-miniloan-003">รายละเอียดใบสมัคร</a><a href="../UI-miniloan-005/default.html" data-testid="nav-ui-miniloan-005">ยอดปิดบัญชีก่อนกำหนด</a><a href="../UI-miniloan-007/default.html" data-testid="nav-ui-miniloan-007">พิจารณาใบสมัคร</a><a href="../UI-miniloan-012/default.html" data-testid="nav-ui-miniloan-012">รายละเอียดบัญชีสินเชื่อ</a><a href="../UI-miniloan-014/default.html" data-testid="nav-ui-miniloan-014">พิจารณาคำขอปรับปรุงบัญชี</a><a href="../UI-miniloan-001/default.html" data-testid="nav-ui-miniloan-001">ยื่นใบสมัครใหม่</a><a href="../UI-miniloan-004/default.html" data-testid="nav-ui-miniloan-004">ตารางผ่อนชำระ</a><a href="../UI-miniloan-009/default.html" data-testid="nav-ui-miniloan-009">แดชบอร์ด</a><a href="../UI-miniloan-006/default.html" data-testid="nav-ui-miniloan-006">คิวใบสมัครของฉัน</a><a href="../UI-miniloan-008/default.html" data-testid="nav-ui-miniloan-008">ตั้งค่าผู้อนุมัติการปรับปรุงบัญชี</a><a href="../UI-miniloan-010/default.html" data-testid="nav-ui-miniloan-010">คิวมอบหมายใบสมัคร</a><a href="../UI-miniloan-011/default.html" data-testid="nav-ui-miniloan-011">บัญชีสินเชื่อที่ฉันดูแล</a><a href="../UI-miniloan-013/default.html" data-testid="nav-ui-miniloan-013" aria-current="page">คำขอปรับปรุงบัญชีรออนุมัติ</a></nav><footer class="appfoot">ระบบสินเชื่อส่วนบุคคล miniloan</footer>
+<nav class="appnav" aria-label="เมนูหลัก"><a href="../UI-miniloan-002/default.html" data-testid="nav-ui-miniloan-002">ใบสมัครและบัญชีของฉัน</a><a href="../UI-miniloan-003/default.html" data-testid="nav-ui-miniloan-003">รายละเอียดใบสมัคร</a><a href="../UI-miniloan-005/default.html" data-testid="nav-ui-miniloan-005">ยอดปิดบัญชีก่อนกำหนด</a><a href="../UI-miniloan-007/default.html" data-testid="nav-ui-miniloan-007">พิจารณาใบสมัคร</a><a href="../UI-miniloan-012/default.html" data-testid="nav-ui-miniloan-012" aria-current="page">รายละเอียดบัญชีสินเชื่อ</a><a href="../UI-miniloan-014/default.html" data-testid="nav-ui-miniloan-014">พิจารณาคำขอปรับปรุงบัญชี</a><a href="../UI-miniloan-001/default.html" data-testid="nav-ui-miniloan-001">ยื่นใบสมัครใหม่</a><a href="../UI-miniloan-004/default.html" data-testid="nav-ui-miniloan-004">ตารางผ่อนชำระ</a><a href="../UI-miniloan-009/default.html" data-testid="nav-ui-miniloan-009">แดชบอร์ด</a><a href="../UI-miniloan-006/default.html" data-testid="nav-ui-miniloan-006">คิวใบสมัครของฉัน</a><a href="../UI-miniloan-008/default.html" data-testid="nav-ui-miniloan-008">ตั้งค่าผู้อนุมัติการปรับปรุงบัญชี</a><a href="../UI-miniloan-010/default.html" data-testid="nav-ui-miniloan-010">คิวมอบหมายใบสมัคร</a><a href="../UI-miniloan-011/default.html" data-testid="nav-ui-miniloan-011">บัญชีสินเชื่อที่ฉันดูแล</a><a href="../UI-miniloan-013/default.html" data-testid="nav-ui-miniloan-013">คำขอปรับปรุงบัญชีรออนุมัติ</a></nav><footer class="appfoot">ระบบสินเชื่อส่วนบุคคล miniloan</footer>
 </body>
 </html>
