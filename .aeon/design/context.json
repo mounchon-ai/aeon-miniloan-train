@@ -3,7 +3,7 @@
   "producedBy": "design · scripts/context.mjs",
   "project": "miniloan",
   "status": "approved",
-  "approvedAt": "2026-09-03T05:17:39Z",
+  "approvedAt": "2026-09-04T05:14:23Z",
   "approvedBy": "aplus191",
   "scope": {
     "inScope": [
@@ -162,9 +162,9 @@
       "options": [
         {
           "option": ".NET (C# / ASP.NET Core)",
-          "star": true,
+          "star": false,
           "evidence": "รองรับสถาปัตยกรรมแบบ domain-centric/layered โดยตรง และมี OpenAPI/Swagger ในตัว ทำให้สัญญา API ที่ทดสอบได้ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-005 กำหนดไว้ทำได้โดยไม่ต้องเพิ่มเครื่องมือภายนอก",
-          "note": ""
+          "note": "ตัวเลือกเดิมของโปรเจกต์ — เปลี่ยนออกตามคำขอของเจ้าของโปรเจกต์ใน ADR-001"
         },
         {
           "option": "Node.js (TypeScript / NestJS)",
@@ -173,14 +173,15 @@
         },
         {
           "option": "Java (Spring Boot)",
-          "star": false,
-          "note": "เหมาะกับองค์กรที่มี ecosystem enterprise Java อยู่แล้ว"
+          "star": true,
+          "evidence": "รองรับสถาปัตยกรรมแบบ domain-centric/layered ผ่านการแบ่งชั้น Controller/Service/Repository/Domain ตามธรรมเนียมของ Spring ตรงตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 กำหนดไว้ และมี springdoc-openapi สร้างสัญญา API ที่ทดสอบได้ (OpenAPI/Swagger) ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-005 ต้องการ โดยไม่ต้องเพิ่มเครื่องมือภายนอก",
+          "note": ""
         }
       ],
-      "chosen": ".NET (C# / ASP.NET Core)",
-      "rationale": "เลือก .NET เพราะรองรับสถาปัตยกรรมแบบ domain-centric/layered ที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 กำหนดไว้โดยตรง และมี OpenAPI ในตัวเพื่อทำสัญญา API ที่ทดสอบได้ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-005 ต้องการ",
+      "chosen": "Java (Spring Boot)",
+      "rationale": "เปลี่ยนจาก .NET เป็น Java (Spring Boot) ตามคำขอของเจ้าของโปรเจกต์ (บันทึกไว้ที่ ADR-001) — Spring Boot ยังตอบโจทย์ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 (สถาปัตยกรรมแบบ domain-centric/layered) และ NFR-miniloan-005 (สัญญา API ที่ทดสอบได้แบบ stateless REST/JSON พร้อม OpenAPI) ได้เหมือนที่ .NET เคยตอบ ไม่มี requirement ใหม่จาก req ต้นทาง เป็นการตัดสินใจสถาปัตยกรรมของทีมเองล้วน ๆ",
       "decidedBy": "aplus191",
-      "decidedAt": "2026-09-03",
+      "decidedAt": "2026-09-04",
       "traces": [
         "NFR-miniloan-004",
         "NFR-miniloan-005"
@@ -216,6 +217,41 @@
       "decidedAt": "2026-09-03",
       "traces": [
         "NFR-miniloan-001"
+      ],
+      "approvedBy": null,
+      "approvedAt": null
+    },
+    {
+      "id": "DEC-003",
+      "topic": "framework",
+      "question": "จะเลือก framework อะไรสำหรับพัฒนาฝั่ง Web (client) ซึ่งต้องเป็นเพียง client ที่เรียก API เท่านั้น ไม่ตัดสินใจเชิงธุรกิจเอง และเรียกสัญญา API แบบ REST/JSON ที่ฝั่ง API ประกาศไว้?",
+      "options": [
+        {
+          "option": "Next.js (React/TypeScript)",
+          "star": false,
+          "evidence": "รองรับการเป็น client ที่เรียก API เท่านั้นตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 กำหนดไว้ และมี TypeScript ให้ type safety เมื่อเรียก REST API",
+          "note": "ตัวเลือกเดิมของโปรเจกต์ — เปลี่ยนออกตามคำขอของเจ้าของโปรเจกต์ใน ADR-002"
+        },
+        {
+          "option": "Angular",
+          "star": true,
+          "evidence": "แบ่งเป็นโมดูล/คอมโพเนนต์/เซอร์วิสในตัว ไม่ต้องเพิ่มเครื่องมือภายนอกเพื่อคุมโครงสร้าง มี HttpClient สำหรับเรียก REST API และ Reactive Forms สำหรับตรวจสอบ input ฝั่ง Web ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-003 ต้องการ (โดย API ยังเป็นด่านสุดท้ายเสมอ) และไม่ตัดสินใจเชิงธุรกิจเองเพราะเรียก API ทุกครั้งตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 กำหนด",
+          "note": ""
+        },
+        {
+          "option": "Vue.js (Nuxt)",
+          "star": false,
+          "note": "เหมาะกับทีมที่ต้องการ syntax ที่เรียบง่ายกว่า แต่ไม่ใช่ตัวเลือกที่เจ้าของโปรเจกต์ร้องขอในรอบนี้"
+        }
+      ],
+      "chosen": "Angular",
+      "rationale": "เปลี่ยนจาก Next.js (React/TypeScript) เป็น Angular ตามคำขอของเจ้าของโปรเจกต์ผ่าน /dev:stack (บันทึกไว้ที่ ADR-002) — ตัวเลขที่ต้องผ่านคือ NFR-miniloan-006 กำหนดว่า requirement ไม่ผูกภาษา/เฟรมเวิร์กฝั่ง Web ทีมจึงเลือกได้อิสระ ตราบใดที่ Web ยังคงเป็นเพียง client ที่เรียก API เท่านั้นตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-004 กำหนด และตรวจสอบ input ฝั่ง Web ได้ตามที่ตัวเลขที่ต้องผ่านคือ NFR-miniloan-003 ต้องการ ไม่มี requirement ใหม่จาก req ต้นทาง เป็นการตัดสินใจสถาปัตยกรรมของทีมเองล้วน ๆ เช่นเดียวกับ ADR-001",
+      "decidedBy": "aplus191",
+      "decidedAt": "2026-09-04",
+      "traces": [
+        "NFR-miniloan-006",
+        "NFR-miniloan-004",
+        "NFR-miniloan-003"
       ],
       "approvedBy": null,
       "approvedAt": null

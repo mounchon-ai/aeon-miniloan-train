@@ -62,6 +62,30 @@
       "recordedAt": "2026-09-03T02:50:56Z",
       "absorbed": true,
       "absorbedAt": "2026-09-03T02:52:37Z"
+    },
+    {
+      "id": "ADR-001",
+      "origin": "design",
+      "kind": "revised",
+      "moved": [
+        "DEC-001"
+      ],
+      "reason": "เจ้าของโปรเจกต์ (aplus191) ตัดสินใจเปลี่ยนตัวเลือกที่เลือกไว้ใน DEC-001 จาก \".NET (C# / ASP.NET Core)\" เป็น \"Java (Spring Boot)\" ซึ่งเป็นหนึ่งในตัวเลือกที่เคยพิจารณาไว้แล้วใน DEC-001.options[] (เดิม star:false) ไม่มี requirement ใหม่จาก req ต้นทาง — เป็นการตัดสินใจสถาปัตยกรรมของทีมเองล้วน ๆ ยืนยันแล้วว่า Spring Boot ยังตอบโจทย์ NFR-miniloan-004 (สถาปัตยกรรมแบบ domain-centric/layered — ทำได้ผ่านการแบ่งชั้น Controller/Service/Repository/Domain ตามธรรมเนียมของ Spring) และ NFR-miniloan-005 (สัญญา API ที่ทดสอบได้แบบ stateless REST/JSON พร้อม OpenAPI — springdoc-openapi ให้ความสามารถเทียบเท่า Swagger ของ .NET) เหมือนที่ .NET เคยตอบ",
+      "recordedAt": "2026-09-04T00:00:00Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-04T04:31:22Z"
+    },
+    {
+      "id": "ADR-002",
+      "origin": "design",
+      "kind": "added",
+      "moved": [
+        "DEC-003"
+      ],
+      "reason": "เจ้าของโปรเจกต์ (aplus191) ขอเปลี่ยน framework ฝั่ง Web จาก Next.js (React/TypeScript) เป็น Angular ผ่านคำสั่ง /dev:stack เมื่อ 2026-09-04 — ก่อนหน้านี้ apps/web ไม่เคยมีใบตัดสินใจ (decision card) ของตัวเองใน context.json เลย มีแต่สถาปัตยกรรมแยก Web/API ที่ล็อกไว้ใน REQ-miniloan-006 (constraint web-no-business-logic) ซึ่งไม่ผูกกับ framework ตัวใดตัวหนึ่ง จึงเป็นการเพิ่มใบตัดสินใจใหม่ (DEC-003) ไม่ใช่การแก้ใบเดิม ไม่มี requirement ใหม่จาก req ต้นทาง เป็นการตัดสินใจสถาปัตยกรรมของทีมเองล้วน ๆ เช่นเดียวกับ ADR-001",
+      "recordedAt": "2026-09-04T04:40:00Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-04T05:09:23Z"
     }
   ]
 }
