@@ -6,6 +6,7 @@
     "req@aeon": true,
     "design@aeon": true,
     "mock@aeon": true,
-    "dev@aeon": true
+    "dev@aeon": true,
+    "dotnet11@dotnet-agent-skills": true
   }
 }

@@ -1,65 +1,60 @@
 {
-  "module": "miniloan",
   "apps": [
     {
       "name": "api",
       "framework": ".NET (C# / ASP.NET Core)",
       "path": "apps/api",
-      "skill": ["dotnet-dev", "efcore-patterns", "csharp-lsp", "api-design"],
+      "skill": [
+        "dotnet",
+        "dotnet-data",
+        "dotnet-aspnetcore",
+        "dotnet-test"
+      ],
       "dockerfile": "apps/api/Dockerfile",
-      "source": "design-decision",
+      "source": "asked",
       "dec_ref": "DEC-001"
     },
     {
       "name": "web",
       "framework": "Next.js (React / TypeScript)",
       "path": "apps/web",
-      "skill": ["vercel-react-best-practices", "vercel-composition-patterns", "typescript-lsp"],
+      "skill": [
+        "vercel-react-best-practices",
+        "vercel-composition-patterns",
+        "typescript-lsp",
+        "frontend-design"
+      ],
       "dockerfile": "apps/web/Dockerfile",
       "source": "asked"
     }
   ],
-  "server": {
-    "name": "Local Docker Compose (dev/training)",
-    "notes_th": "ไม่มี cloud target ในรอบนี้ — ใช้สำหรับ workshop/training เท่านั้น",
-    "source": "asked"
-  },
-  "database": {
-    "kind": "postgresql",
-    "name": "miniloan",
-    "version": "16",
-    "source": "design-decision",
-    "dec_ref": "DEC-002"
-  },
   "tools": [
     {
-      "name": "cache",
-      "purpose_th": "ไม่ต้องการ — ไม่มีข้อบังคับ performance ที่ต้องพึ่งแคช",
-      "required": false,
-      "source": "asked"
-    },
-    {
-      "name": "queue",
-      "purpose_th": "ไม่ต้องการ — context.json ระบุ automatic-retry-queue เป็น out-of-scope (REQ-miniloan-006)",
-      "required": false,
+      "name": "tailwindcss",
+      "purpose_th": "Tailwind CSS v4 เป็นชั้นสไตล์ของ apps/web — utility ทุกตัวถูก map ผ่าน @theme inline ไปที่ token ของ design system ที่ .aeon/mockup/theme.json ประกาศไว้ (var(--brand-primary) ฯลฯ) ห้ามใช้ palette ของ Tailwind เอง เพราะ mockup ใต้ mockups/ อ้าง token ชุดเดียวกันและทั้งสองต้องไม่แยกจากกัน · token ถูก generate ลง apps/web/app/theme.tokens.css ด้วย scripts/sync-theme-tokens.mjs แล้ว commit ไว้ เพราะ docker compose build apps/web ด้วย context: ../apps/web ทำให้ .aeon/ อยู่นอก build context",
+      "required": true,
       "source": "asked"
     },
     {
       "name": "other",
-      "purpose_th": "ไม่มีเครื่องมือเพิ่มเติมนอกจาก .NET/PostgreSQL/Next.js",
+      "purpose_th": "นอกจาก Tailwind CSS v4 (2026-09-04) แล้ว ไม่มีเครื่องมืออื่นนอกจาก .NET 8/PostgreSQL/Next.js · skill ของ apps/api มาจาก marketplace dotnet-agent-skills (dotnet · dotnet-data · dotnet-aspnetcore · dotnet-test) และ Roslyn LSP มากับ plugin dotnet จึงไม่ประกาศ csharp-lsp แยก · ไม่ประกาศ dotnet11 เพราะโปรเจกต์เป็น .NET 8 ตาม apps/api/Dockerfile และ skill นั้น guard ตัวเองไว้ที่ net11.0 ขึ้นไป",
       "required": false,
       "source": "asked"
     }
   ],
   "structure": {
     "apps": [
-      { "app_ref": "api", "root": "apps/api", "layout_th": "ASP.NET Core Web API project เดียว" },
-      { "app_ref": "web", "root": "apps/web", "layout_th": "Next.js app (App Router)" }
+      {
+        "app_ref": "api",
+        "root": "apps/api",
+        "layout_th": "ASP.NET Core Web API project เดียว (.NET 8) · Miniloan.Api สำหรับโค้ด และ Miniloan.Api.Tests สำหรับ unit test ซึ่ง dotnet test apps/api เอื้อมถึง"
+      },
+      {
+        "app_ref": "web",
+        "root": "apps/web",
+        "layout_th": "Next.js app (App Router) · Tailwind CSS v4 ผูก token ผ่าน @theme inline ใน app/globals.css · app/theme.tokens.css เป็นไฟล์ที่ generate จาก .aeon/mockup/theme.json ห้ามแก้มือ · component ของ design system (Button, Card, Input, Table, StatusBadge …) เขียนใหม่ใน components/ โดยยึด props ตาม .d.ts ของ handoff"
+      }
     ],
-    "docker": {
-      "compose": "docker/docker-compose.yml",
-      "reason_th": null
-    },
     "scripts": {
       "init": "scripts/dev-init.ps1",
       "test": "scripts/dev-test.ps1",

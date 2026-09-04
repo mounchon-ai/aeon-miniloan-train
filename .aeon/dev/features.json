@@ -10,16 +10,16 @@
         "framework": ".NET (C# / ASP.NET Core)",
         "path": "apps/api",
         "skill": [
-          "dotnet-dev",
-          "efcore-patterns",
-          "csharp-lsp",
-          "api-design"
+          "dotnet",
+          "dotnet-data",
+          "dotnet-aspnetcore",
+          "dotnet-test"
         ],
         "dockerfile": "apps/api/Dockerfile",
-        "source": "design-decision",
+        "source": "asked",
         "dec_ref": "DEC-001",
-        "decided_by": null,
-        "decided_at": null
+        "decided_by": "mounc",
+        "decided_at": "2026-09-04"
       },
       {
         "name": "web",
@@ -28,12 +28,13 @@
         "skill": [
           "vercel-react-best-practices",
           "vercel-composition-patterns",
-          "typescript-lsp"
+          "typescript-lsp",
+          "frontend-design"
         ],
         "dockerfile": "apps/web/Dockerfile",
         "source": "asked",
-        "decided_by": "aplus191",
-        "decided_at": "2026-09-03"
+        "decided_by": "mounc",
+        "decided_at": "2026-09-04"
       }
     ],
     "tools": [
@@ -55,11 +56,19 @@
       },
       {
         "name": "other",
-        "purpose_th": "ไม่มีเครื่องมือเพิ่มเติมนอกจาก .NET/PostgreSQL/Next.js",
+        "purpose_th": "นอกจาก Tailwind CSS v4 (2026-09-04) แล้ว ไม่มีเครื่องมืออื่นนอกจาก .NET 8/PostgreSQL/Next.js · skill ของ apps/api มาจาก marketplace dotnet-agent-skills (dotnet · dotnet-data · dotnet-aspnetcore · dotnet-test) และ Roslyn LSP มากับ plugin dotnet จึงไม่ประกาศ csharp-lsp แยก · ไม่ประกาศ dotnet11 เพราะโปรเจกต์เป็น .NET 8 ตาม apps/api/Dockerfile และ skill นั้น guard ตัวเองไว้ที่ net11.0 ขึ้นไป",
         "required": false,
         "source": "asked",
-        "decided_by": "aplus191",
-        "decided_at": "2026-09-03"
+        "decided_by": "mounc",
+        "decided_at": "2026-09-04"
+      },
+      {
+        "name": "tailwindcss",
+        "purpose_th": "Tailwind CSS v4 เป็นชั้นสไตล์ของ apps/web — utility ทุกตัวถูก map ผ่าน @theme inline ไปที่ token ของ design system ที่ .aeon/mockup/theme.json ประกาศไว้ (var(--brand-primary) ฯลฯ) ห้ามใช้ palette ของ Tailwind เอง เพราะ mockup ใต้ mockups/ อ้าง token ชุดเดียวกันและทั้งสองต้องไม่แยกจากกัน · token ถูก generate ลง apps/web/app/theme.tokens.css ด้วย scripts/sync-theme-tokens.mjs แล้ว commit ไว้ เพราะ docker compose build apps/web ด้วย context: ../apps/web ทำให้ .aeon/ อยู่นอก build context",
+        "required": true,
+        "source": "asked",
+        "decided_by": "mounc",
+        "decided_at": "2026-09-04"
       }
     ],
     "server": {
@@ -84,12 +93,12 @@
       {
         "app_ref": "api",
         "root": "apps/api",
-        "layout_th": "ASP.NET Core Web API project เดียว"
+        "layout_th": "ASP.NET Core Web API project เดียว (.NET 8) · Miniloan.Api สำหรับโค้ด และ Miniloan.Api.Tests สำหรับ unit test ซึ่ง dotnet test apps/api เอื้อมถึง"
       },
       {
         "app_ref": "web",
         "root": "apps/web",
-        "layout_th": "Next.js app (App Router)"
+        "layout_th": "Next.js app (App Router) · Tailwind CSS v4 ผูก token ผ่าน @theme inline ใน app/globals.css · app/theme.tokens.css เป็นไฟล์ที่ generate จาก .aeon/mockup/theme.json ห้ามแก้มือ · component ของ design system (Button, Card, Input, Table, StatusBadge …) เขียนใหม่ใน components/ โดยยึด props ตาม .d.ts ของ handoff"
       }
     ],
     "scripts": {
@@ -102,14 +111,2818 @@
       "reason_th": null
     }
   },
-  "features": [],
-  "gaps": [],
+  "features": [
+    {
+      "id": "FE-miniloan-001",
+      "title_th": "บันทึกและแก้ไขร่างใบสมัคร พร้อมตรวจช่วงจำนวนเงินกู้และจำนวนงวด",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/LoanApplication.cs",
+        "apps/api/Miniloan.Api/Domain/Applications/DraftRules.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationDraftEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/DraftRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-025",
+        "FE-miniloan-027"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-023",
+        "AC-miniloan-024",
+        "AC-miniloan-025",
+        "AC-miniloan-026",
+        "AC-miniloan-032",
+        "AC-miniloan-033"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-001",
+          "hash": "sha256:022b6941cdf0b1ac5984dfc3e3876ee8e895f27e9fbf09b38d4d45f63339a03d"
+        },
+        {
+          "ref": "AC-miniloan-023",
+          "hash": "sha256:cc94e33b79b61091bd85c1e327e80fd334ace9d8c2c829b772ec077a7ddebd1f"
+        },
+        {
+          "ref": "AC-miniloan-024",
+          "hash": "sha256:32b2fcebcc2edc6a15be92212dbfadbcfb2c820f5524ee3fb7699c1c3f4c2250"
+        },
+        {
+          "ref": "AC-miniloan-025",
+          "hash": "sha256:69d3c7bf13014da940672ca722401d9414f09e64a2c7fa57b3add69b38178ab7"
+        },
+        {
+          "ref": "AC-miniloan-026",
+          "hash": "sha256:8c17183bd722366259c05f6007f95023e292bcb39c0aee502d62378f2e7d066a"
+        },
+        {
+          "ref": "AC-miniloan-032",
+          "hash": "sha256:eaae6100b306df62eef4692cf257db436b84f5156ed4f1da9c9456e084e515a5"
+        },
+        {
+          "ref": "AC-miniloan-033",
+          "hash": "sha256:19e513b1189ecc08d28f16054e2332ece3403ebb050c5bc28040802105d0e878"
+        },
+        {
+          "ref": "ENT-001",
+          "hash": "sha256:413f3e33a1bd020558b1bcee0a5f2e36204827e5b142c5aeec89449a1813d1a1"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "API-001",
+          "hash": "sha256:5b11840b5f8c56e892728cead778d6c9d42ab594ea6de0947178ba8cd8c308d9"
+        },
+        {
+          "ref": "API-002",
+          "hash": "sha256:1c68e7121f561d88987c93b04e62c87e103110e048adee5c19babf9aa1d9b47b"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-002",
+      "title_th": "ยื่นใบสมัครและกันการยื่นซ้ำด้วยข้อจำกัดไม่ซ้ำที่ฐานข้อมูล",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/SubmitApplication.cs",
+        "apps/api/Miniloan.Api/Domain/Idempotency/IdempotencyKey.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationSubmitEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/SubmitApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-001"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-029",
+        "AC-miniloan-030",
+        "AC-miniloan-031",
+        "AC-miniloan-045",
+        "AC-miniloan-061",
+        "AC-miniloan-133",
+        "AC-miniloan-134"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-002",
+          "hash": "sha256:9778bb05054e5de3f6f39cfcd507aaefb19c7374a24a353b24195f15c6b79aea"
+        },
+        {
+          "ref": "AC-miniloan-029",
+          "hash": "sha256:a6733bd5351238de36d82955b66235f18259d2f8768ac4cc4bd02643e77e50f8"
+        },
+        {
+          "ref": "AC-miniloan-030",
+          "hash": "sha256:f9bc142341a688f18d9d39202987d7a10ace1188a5ae9aea9f60289dfb9dc953"
+        },
+        {
+          "ref": "AC-miniloan-031",
+          "hash": "sha256:351d06c72ae80c030e58fd1a433826dd98b555e7ac06361224e5a9f20f46b17b"
+        },
+        {
+          "ref": "AC-miniloan-045",
+          "hash": "sha256:1460724e7916f5b344934533abbb5108ba89132526ff0a0da798f9e00b1f4cb9"
+        },
+        {
+          "ref": "AC-miniloan-061",
+          "hash": "sha256:b6aeedcda8331907933ce0e93b51d5e1eef3fe0b1cc349cb645625c6db0782ec"
+        },
+        {
+          "ref": "AC-miniloan-133",
+          "hash": "sha256:ef9fc340fb94d3b34149fa6b30c44c121de8cf0a6b49b2803e0a93644c147c7c"
+        },
+        {
+          "ref": "AC-miniloan-134",
+          "hash": "sha256:c83e9c56699d7c99bede5be514b2b9df3b177089df9cfefcf8b675ca82aa1c3c"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-012",
+          "hash": "sha256:ae5125718e3e8efd44634645f4688128092dfc5b60b2e50209f6919e9a768bb8"
+        },
+        {
+          "ref": "API-003",
+          "hash": "sha256:e177fa11520b708028bc82fa640f2716761beb9679f1ff8d60a4e726de4a7579"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-003",
+      "title_th": "ประเมินสินเชื่ออัตโนมัติเมื่อยื่น — เกณฑ์คุณสมบัติ วงเงินสูงสุด DTI และ Credit Band",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Assessment/CreditAssessment.cs",
+        "apps/api/Miniloan.Api/Domain/Assessment/EligibilityRules.cs",
+        "apps/api/Miniloan.Api/Domain/Assessment/MaxAmountCalculator.cs",
+        "apps/api/Miniloan.Api/Domain/Assessment/DtiCalculator.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationDetailEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Assessment/CreditAssessmentTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-002"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-015",
+        "AC-miniloan-016",
+        "AC-miniloan-017",
+        "AC-miniloan-018",
+        "AC-miniloan-019",
+        "AC-miniloan-020",
+        "AC-miniloan-021",
+        "AC-miniloan-022",
+        "AC-miniloan-027",
+        "AC-miniloan-028",
+        "AC-miniloan-034",
+        "AC-miniloan-035",
+        "AC-miniloan-036",
+        "AC-miniloan-037",
+        "AC-miniloan-038",
+        "AC-miniloan-039",
+        "AC-miniloan-040",
+        "AC-miniloan-041",
+        "AC-miniloan-042",
+        "AC-miniloan-043",
+        "AC-miniloan-044",
+        "AC-miniloan-045",
+        "AC-miniloan-063"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-003",
+          "hash": "sha256:81ae40a0a884a061cc8e1c789e015e0a0b2c484e5a2042312e603ee28b9400f7"
+        },
+        {
+          "ref": "AC-miniloan-015",
+          "hash": "sha256:9b69a19ed515cefd284f01b05d6abf98bbb4a74e145eda310bc96e8d4615c84f"
+        },
+        {
+          "ref": "AC-miniloan-016",
+          "hash": "sha256:0e6e8cff3a54387fcbaa955537dad237040df27791bef72531d2dd7981b905e0"
+        },
+        {
+          "ref": "AC-miniloan-017",
+          "hash": "sha256:b62d59cafffc608b4f5b1015956fe43318c8572292b836b2b115076280fda6df"
+        },
+        {
+          "ref": "AC-miniloan-018",
+          "hash": "sha256:a4814cd5d7193928dc1daccd49abd15d95ee132303a6da037e92bfb93225f7c2"
+        },
+        {
+          "ref": "AC-miniloan-019",
+          "hash": "sha256:f3173b14402b69c86ef9541e7c74c0adc9275decf9db6656ac342f762475f20f"
+        },
+        {
+          "ref": "AC-miniloan-020",
+          "hash": "sha256:96d551091b9a324e2c23315e276d8d21648230d1c3e008e609762cfa7b38df44"
+        },
+        {
+          "ref": "AC-miniloan-021",
+          "hash": "sha256:19cd23ea7ccce3d7f9c637bc549f6557ae19d8ea15c598126cd023930b6b6f9c"
+        },
+        {
+          "ref": "AC-miniloan-022",
+          "hash": "sha256:16a2e3068b4dd2c5e96949a3c0c214d270647b98e11f75041c4eae2b46e5735b"
+        },
+        {
+          "ref": "AC-miniloan-027",
+          "hash": "sha256:d1ad099c23bae8ebe80ccca2e03398224748553f02d8f8ea8558fa330dc0d0e1"
+        },
+        {
+          "ref": "AC-miniloan-028",
+          "hash": "sha256:77c1638a42b57cdf6a0b811cb1306cae5a50e18e24b8e9ded06c5816f9272a1a"
+        },
+        {
+          "ref": "AC-miniloan-034",
+          "hash": "sha256:b4db506a3247d30643c7dfe628da9155baaca21f8db7948ecb4741d6e58a15ab"
+        },
+        {
+          "ref": "AC-miniloan-035",
+          "hash": "sha256:fc71c744bf03ec1642f3a92443ae8bfd58a67b7f1fe63089aa8f8bcaadb4a977"
+        },
+        {
+          "ref": "AC-miniloan-036",
+          "hash": "sha256:74554b0bd261906d6bfc656939a3a9d76fd8df7274df9a624b9010bc5a476270"
+        },
+        {
+          "ref": "AC-miniloan-037",
+          "hash": "sha256:aeff97298623a087eced413018f30765bf7a0e8e21d38612274029db9aa1c79e"
+        },
+        {
+          "ref": "AC-miniloan-038",
+          "hash": "sha256:1aeb3add7273887ce44056d7c95f7b3990b266fd7da9dd7b9ba7e5e22e79e080"
+        },
+        {
+          "ref": "AC-miniloan-039",
+          "hash": "sha256:072231efab6eb2c0a878ca43d71200e8a7cab8183c42b5b81bec128cc462847b"
+        },
+        {
+          "ref": "AC-miniloan-040",
+          "hash": "sha256:3b0ef497cce00398637957c6857f06b60dc5d96f74512d39631ee3ac6f197d88"
+        },
+        {
+          "ref": "AC-miniloan-041",
+          "hash": "sha256:90bdf28a0188e7e83c96a1c795a1a2e37a801040a87cca60ff18a710557c3f47"
+        },
+        {
+          "ref": "AC-miniloan-042",
+          "hash": "sha256:214072f4eef9e5c386e4c9eefc9a0a1a8f516ab01cc141d4afed8d1bec15c0b5"
+        },
+        {
+          "ref": "AC-miniloan-043",
+          "hash": "sha256:025de48b7568a785ee959d90727785f546232307d0114bfbcdbbb4c3a4a4a8cd"
+        },
+        {
+          "ref": "AC-miniloan-044",
+          "hash": "sha256:329d313a6e4e98c832286fcdc36e2ae201c6ad4fe6e43a715dd8886efa4a0f7d"
+        },
+        {
+          "ref": "AC-miniloan-045",
+          "hash": "sha256:1460724e7916f5b344934533abbb5108ba89132526ff0a0da798f9e00b1f4cb9"
+        },
+        {
+          "ref": "AC-miniloan-063",
+          "hash": "sha256:1ac350e1142b4317ad51714a01ed39671e0639069cdbb5a9ac376db0cd35a209"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-003",
+          "hash": "sha256:0a428eebc1285e9d951ad1b9c70c8e2ae6fed3b24e71a438fb4e803bcd57fb6f"
+        },
+        {
+          "ref": "API-003",
+          "hash": "sha256:e177fa11520b708028bc82fa640f2716761beb9679f1ff8d60a4e726de4a7579"
+        },
+        {
+          "ref": "API-004",
+          "hash": "sha256:0290bb2f51c3a070c7c8c4b27bdf7daff261c687c345d1a349c87502a85e97f8"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-004",
+      "title_th": "มอบหมายใบสมัครให้เจ้าหน้าที่สินเชื่อ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/ApplicationAssignment.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationAssignEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/ApplicationAssignmentTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-003"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-064",
+        "AC-miniloan-065",
+        "AC-miniloan-066"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-004",
+          "hash": "sha256:be8687a54ea9220782128b0ac11380a964c2a9f5dd6902fdd1cc17c48ff60fc4"
+        },
+        {
+          "ref": "AC-miniloan-064",
+          "hash": "sha256:5211a93db59f0a4e1ad4bac88807089a0cc0e74b5b3d799ee1588e6833ce7fa0"
+        },
+        {
+          "ref": "AC-miniloan-065",
+          "hash": "sha256:a347c0453571e41d19ec700d8b743674921987e17d9d22a686a36e970ce6d799"
+        },
+        {
+          "ref": "AC-miniloan-066",
+          "hash": "sha256:efd69b2b899d4d3e9beda4dddb2256fb45aa476734db38d72415e4daa44cef4c"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "ENT-013",
+          "hash": "sha256:15448e19fee431f4d264e5fb6b88f76c3f510f1a6bbff9720ca0f4ee837fd461"
+        },
+        {
+          "ref": "API-006",
+          "hash": "sha256:ad96a79713cc815b24fd7c008a6f06406f0b7d103109b90fa3f5ae1e7f303538"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-005",
+      "title_th": "อนุมัติใบสมัคร พร้อมกันวงเงินเกินและสิทธิ์ผู้พิจารณาที่ถูกมอบหมาย",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/ApproveApplication.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationApproveEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/ApproveApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-004"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-045",
+        "AC-miniloan-046",
+        "AC-miniloan-049",
+        "AC-miniloan-050",
+        "AC-miniloan-051",
+        "AC-miniloan-052",
+        "AC-miniloan-053",
+        "AC-miniloan-054",
+        "AC-miniloan-062"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-005",
+          "hash": "sha256:1ffcc47337adc6d6977fac93a8335a88a0ca362951c4801470a98a53e7982090"
+        },
+        {
+          "ref": "AC-miniloan-045",
+          "hash": "sha256:1460724e7916f5b344934533abbb5108ba89132526ff0a0da798f9e00b1f4cb9"
+        },
+        {
+          "ref": "AC-miniloan-046",
+          "hash": "sha256:2c8fcf5a201b12a97b94759777d228567cd187f2227166e7f1a13f494ebd0f53"
+        },
+        {
+          "ref": "AC-miniloan-049",
+          "hash": "sha256:6aaecd33dd39f7c4e64f468a4d404f0ad3fd69e6a0d910c3ce177f90edd35d4b"
+        },
+        {
+          "ref": "AC-miniloan-050",
+          "hash": "sha256:c02ca0e0a73bdf328ed739fa05a10bd6b2c295c187e35b68f82e139d1a3f9785"
+        },
+        {
+          "ref": "AC-miniloan-051",
+          "hash": "sha256:30adbd684d69b930fef0a425d3568cc0c4c3fcbfea632117eccf74938dc187c7"
+        },
+        {
+          "ref": "AC-miniloan-052",
+          "hash": "sha256:6bf9f93d51e8c00ba4f2eb2a9266152e213fc8959689e78ccae16c9d2e860f98"
+        },
+        {
+          "ref": "AC-miniloan-053",
+          "hash": "sha256:2e087ffc423602c0a06853216bbc27920d9a7595bd9358477d88e9b82a72a8e2"
+        },
+        {
+          "ref": "AC-miniloan-054",
+          "hash": "sha256:62c0ccbc33474b65c285f2c86b3ab5c75248879d664e7a20ace42819003af6f6"
+        },
+        {
+          "ref": "AC-miniloan-062",
+          "hash": "sha256:bb240ebc038c02ec195eb0299a98ad4412fcaca802b529e8a24713ce7a490e45"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "API-004",
+          "hash": "sha256:0290bb2f51c3a070c7c8c4b27bdf7daff261c687c345d1a349c87502a85e97f8"
+        },
+        {
+          "ref": "API-007",
+          "hash": "sha256:a3fee741a54ea2534e4d7d44f7aef3f3b0bb89eb0695a50c7b75d8efece43a71"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-006",
+      "title_th": "ปฏิเสธใบสมัครพร้อมเหตุผลบังคับ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/RejectApplication.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationRejectEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/RejectApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-004"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-055",
+        "AC-miniloan-056",
+        "AC-miniloan-057"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-006",
+          "hash": "sha256:5a344008423ddd1663614b3cdcb9e61690a802f38ebcbb3ad63ec5ff37c24265"
+        },
+        {
+          "ref": "AC-miniloan-055",
+          "hash": "sha256:4950e95c94a27f16e65daceab1b6be426b55f252ac464c1d1caf1e90eab1cede"
+        },
+        {
+          "ref": "AC-miniloan-056",
+          "hash": "sha256:d5dd8d9ced0e5f2050a499f40e10bda0547e5418e59c929de91dd672dd4b27bd"
+        },
+        {
+          "ref": "AC-miniloan-057",
+          "hash": "sha256:e1130428c74b241475398bb9c31d57d7603765d229487e72bf51177b86f21de0"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "API-008",
+          "hash": "sha256:5be25caaef1cefa24a64333e438b65c8273dbf5b08c7cfd564db4af6b162fbaa"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-007",
+      "title_th": "ยกเลิกใบสมัครโดยเจ้าหน้าที่ที่รับผิดชอบ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/CancelApplication.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationCancelEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/CancelApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-004"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-047",
+        "AC-miniloan-048",
+        "AC-miniloan-067",
+        "AC-miniloan-068"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-007",
+          "hash": "sha256:1614e5ed71b8d27c115794c61c3957ffb9886c004adc0555b7f02c8188b39b83"
+        },
+        {
+          "ref": "AC-miniloan-047",
+          "hash": "sha256:9421aab5b3bd496508c207665ae493fa3bbd8e529a1b3950e4959a99fe9bb3ec"
+        },
+        {
+          "ref": "AC-miniloan-048",
+          "hash": "sha256:57b2802a8c829054b88728171e596ce2ef56b8135e321f2a4da7d57813412660"
+        },
+        {
+          "ref": "AC-miniloan-067",
+          "hash": "sha256:131c096254af36e817098fedc0c4f0e2ea95ecbb5c0b692808f0cf5bce23fa3d"
+        },
+        {
+          "ref": "AC-miniloan-068",
+          "hash": "sha256:062dd5c58f02bdb09f8cdc61859ba104ee8a616c2ab2f153ea94880df818615c"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "API-009",
+          "hash": "sha256:fcde8631308472cdbe6d90666dc8e05eef78a172b87fc6e164d972edea5ce3d2"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-008",
+      "title_th": "ยกเลิกใบสมัครโดยหัวหน้าเจ้าหน้าที่สินเชื่อ (ใบที่ยังไม่ถูกมอบหมาย)",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/SupervisorCancelRules.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/SupervisorCancelRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-007"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-067",
+        "AC-miniloan-068",
+        "AC-miniloan-090",
+        "AC-miniloan-091",
+        "AC-miniloan-092"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-008",
+          "hash": "sha256:4be937da11d5cd527d56e2cbed0d8f5774ecc113b7f570d8a2118307f25bb829"
+        },
+        {
+          "ref": "AC-miniloan-067",
+          "hash": "sha256:131c096254af36e817098fedc0c4f0e2ea95ecbb5c0b692808f0cf5bce23fa3d"
+        },
+        {
+          "ref": "AC-miniloan-068",
+          "hash": "sha256:062dd5c58f02bdb09f8cdc61859ba104ee8a616c2ab2f153ea94880df818615c"
+        },
+        {
+          "ref": "AC-miniloan-090",
+          "hash": "sha256:7f1b5d968cfd5d7a269d9f11dadc6807a9e6e0f106c3e82591bba02c25b06696"
+        },
+        {
+          "ref": "AC-miniloan-091",
+          "hash": "sha256:68a4f975fd25b814e4913ffeea3660153690dda292b05c8d059a1c47c554db00"
+        },
+        {
+          "ref": "AC-miniloan-092",
+          "hash": "sha256:66c78df246d640dc1db9a8163642fbe98a1b4abf11f51457c26d2a6ccaf03c11"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "API-009",
+          "hash": "sha256:fcde8631308472cdbe6d90666dc8e05eef78a172b87fc6e164d972edea5ce3d2"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-009",
+      "title_th": "เบิกจ่ายเงินกู้ สร้างบัญชีและตารางผ่อน EMI พร้อมผูกเวอร์ชันอัตราดอกเบี้ยและปัดครึ่งขึ้น",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/LoanAccount.cs",
+        "apps/api/Miniloan.Api/Domain/Accounts/RepaymentSchedule.cs",
+        "apps/api/Miniloan.Api/Domain/Accounts/EmiCalculator.cs",
+        "apps/api/Miniloan.Api/Domain/Money/RoundHalfUp.cs",
+        "apps/api/Miniloan.Api/Domain/Rates/InterestRateVersion.cs",
+        "apps/api/Miniloan.Api/Endpoints/DisbursementEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/EmiCalculatorTests.cs",
+        "apps/api/Miniloan.Api.Tests/Money/RoundHalfUpTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-005"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-001",
+        "AC-miniloan-002",
+        "AC-miniloan-003",
+        "AC-miniloan-045",
+        "AC-miniloan-058",
+        "AC-miniloan-059",
+        "AC-miniloan-060",
+        "AC-miniloan-093",
+        "AC-miniloan-094",
+        "AC-miniloan-095",
+        "AC-miniloan-096",
+        "AC-miniloan-097",
+        "AC-miniloan-100",
+        "AC-miniloan-101",
+        "AC-miniloan-102",
+        "AC-miniloan-103",
+        "AC-miniloan-104",
+        "AC-miniloan-105",
+        "AC-miniloan-106",
+        "AC-miniloan-129",
+        "AC-miniloan-130",
+        "AC-miniloan-131",
+        "AC-miniloan-132"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-009",
+          "hash": "sha256:cce832c643d7a75f7e6f193c29771178fa5929a58a0423bcf29339462416b481"
+        },
+        {
+          "ref": "AC-miniloan-001",
+          "hash": "sha256:778580aec42c434ffe49a6fce67f4c73099d7979a47bae481eb2845ca6cf514d"
+        },
+        {
+          "ref": "AC-miniloan-002",
+          "hash": "sha256:e29b0828e33fb2753849c547d01522e7fe1b98559739f47efea9d1176bd45c02"
+        },
+        {
+          "ref": "AC-miniloan-003",
+          "hash": "sha256:135118b1c297db5684aee33950594584b220dd4f83f2fe2ff892a54fdbdf3481"
+        },
+        {
+          "ref": "AC-miniloan-045",
+          "hash": "sha256:1460724e7916f5b344934533abbb5108ba89132526ff0a0da798f9e00b1f4cb9"
+        },
+        {
+          "ref": "AC-miniloan-058",
+          "hash": "sha256:1313466189c7b3496d7c40d0e99b2b211ffc583b3528a7b6ebbb0ce0b6b83138"
+        },
+        {
+          "ref": "AC-miniloan-059",
+          "hash": "sha256:3035babce4393cda465c17080097e198863d8e9ff42f5ca6ed2921ae8b6226cb"
+        },
+        {
+          "ref": "AC-miniloan-060",
+          "hash": "sha256:551e0593f0d5b06df64a9b28d0aff71b1f0f7576d1338d5b0a63caee7d2db1f5"
+        },
+        {
+          "ref": "AC-miniloan-093",
+          "hash": "sha256:f6ac9f1c875a309df6e7de1f0cca7342abe9737075c039d88156c9506f6b4520"
+        },
+        {
+          "ref": "AC-miniloan-094",
+          "hash": "sha256:d36169c992285db75d3ab844b6e3046e230318851a1843796e47c87520cda77e"
+        },
+        {
+          "ref": "AC-miniloan-095",
+          "hash": "sha256:0be5674d4f9a45b69a2c2cf11331c602834c64a17a8551ed9a302576269740aa"
+        },
+        {
+          "ref": "AC-miniloan-096",
+          "hash": "sha256:5288affcec43f612161c0e9edbce648d3c29d2b150bc2bf02000cfd7f1fcf9d5"
+        },
+        {
+          "ref": "AC-miniloan-097",
+          "hash": "sha256:e7b6f5d351d52e3b73582468d2cff80205cd7c716c7dab97d9162658b34cbc37"
+        },
+        {
+          "ref": "AC-miniloan-100",
+          "hash": "sha256:7c443e90b678afa9c13723195bb492afb096700dd4b31a7c8fa4b15daca89ba9"
+        },
+        {
+          "ref": "AC-miniloan-101",
+          "hash": "sha256:b9946fa3e14694863bf66de7236cbe7c946929e4857288b034a738238152b51b"
+        },
+        {
+          "ref": "AC-miniloan-102",
+          "hash": "sha256:c167f3fd64c47fd041f3448a12926b7b02f4a36352a2458b233314e876aae4b9"
+        },
+        {
+          "ref": "AC-miniloan-103",
+          "hash": "sha256:1af81807cdc6d5f27013cd77cbf9dbfec8116334665fd756a8e983d226813338"
+        },
+        {
+          "ref": "AC-miniloan-104",
+          "hash": "sha256:f5933f7bfcd92ad51b473a437e15f992471a63f6c2a358459891c0a39cf69c3b"
+        },
+        {
+          "ref": "AC-miniloan-105",
+          "hash": "sha256:d56754f4e53713bbbe28ffd4399ea0f5f0683796712535bc5a2d449643cf71f8"
+        },
+        {
+          "ref": "AC-miniloan-106",
+          "hash": "sha256:48616d8c4bd65a1e64660b3af2508d814d97dfd756820d7c8296f9f7409de920"
+        },
+        {
+          "ref": "AC-miniloan-129",
+          "hash": "sha256:dfd3b13d37627838d0ec4779adf6841611154606198756a2eeecdc99749d64de"
+        },
+        {
+          "ref": "AC-miniloan-130",
+          "hash": "sha256:3ca8165e863aa3b2e9a22fb7afe6f99f1475d49686a9291bbc7f2390b0b4d7fd"
+        },
+        {
+          "ref": "AC-miniloan-131",
+          "hash": "sha256:f61a2479bff2cd1023c10740d25af32e259a437e986dc878d991b66ff0aa06c6"
+        },
+        {
+          "ref": "AC-miniloan-132",
+          "hash": "sha256:d686b176e08f8fe35284e7b86dd3f9a2910951ebc780004c0572078f1d49da7b"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-005",
+          "hash": "sha256:5eb8e29373707acc40efcf34a10654ff129c246fa2453590943d67fbc3940447"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-007",
+          "hash": "sha256:ee458e8a16a4b4a9a21d1273aa09269426dbca09ce7f8664fe2a777f92bc4402"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "ENT-012",
+          "hash": "sha256:ae5125718e3e8efd44634645f4688128092dfc5b60b2e50209f6919e9a768bb8"
+        },
+        {
+          "ref": "API-010",
+          "hash": "sha256:d58fdf9f7225f2b8c80b8b289f175e4fa0038b3eaaab280f59cde2ff6474f9b3"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-010",
+      "title_th": "ออกตารางผ่อนฉบับใหม่ทับทั้งฉบับ และล็อกตารางของบัญชีที่ปิดแล้ว",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/ReissueSchedule.cs",
+        "apps/api/Miniloan.Api/Endpoints/ScheduleReissueEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/ReissueScheduleTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-008",
+        "AC-miniloan-009",
+        "AC-miniloan-010",
+        "AC-miniloan-011",
+        "AC-miniloan-107",
+        "AC-miniloan-108",
+        "AC-miniloan-109"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-010",
+          "hash": "sha256:2ac1990345a7343a4eed34ec2c0c35efb93db8f4fca32d4c9c4bb33f8695edec"
+        },
+        {
+          "ref": "AC-miniloan-008",
+          "hash": "sha256:e9e3f3ac46d625c9974e8868bdb4d126b239efda05c5f9305dd7cf137cda441d"
+        },
+        {
+          "ref": "AC-miniloan-009",
+          "hash": "sha256:1bc62314e819fbf3a6940d53143193be8e34bf7c14797b4da196548b5463abb7"
+        },
+        {
+          "ref": "AC-miniloan-010",
+          "hash": "sha256:04b9250f35e8622f55bc3be06c4ab131e55aa9a43a7c4eaabbb7fde8c0e5cbb5"
+        },
+        {
+          "ref": "AC-miniloan-011",
+          "hash": "sha256:3a3e2162be8cdb3cd6fcf28a4d418341c3ea779a1d716f36fa0ce1d1d69a4b1a"
+        },
+        {
+          "ref": "AC-miniloan-107",
+          "hash": "sha256:d2094bbd16d1f501d374df37f3640132c4d7a587b99c6251799b5ba9ca23aa6c"
+        },
+        {
+          "ref": "AC-miniloan-108",
+          "hash": "sha256:f991e7f3d730555d7276ba250da64c7b4997231b5d7641a9d96abda9228a721b"
+        },
+        {
+          "ref": "AC-miniloan-109",
+          "hash": "sha256:bff4db7981e3198f44805e9a5982a1cee0188cf877df40a98ccef806d5461893"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-007",
+          "hash": "sha256:ee458e8a16a4b4a9a21d1273aa09269426dbca09ce7f8664fe2a777f92bc4402"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "API-011",
+          "hash": "sha256:a84c6de69c8186710097480ad245e17595adb7a906ca0027f6a0ce89609258bc"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-011",
+      "title_th": "อ่านตารางผ่อนของบัญชี พร้อมบังคับขอบเขตข้อมูลที่ชั้น API",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/ScheduleReadEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/ScheduleReadTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-098",
+        "AC-miniloan-099"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-011",
+          "hash": "sha256:036b0aaebcf36e90e9c2c58317954437511c7cedd00294ee50f9625072ed7fe4"
+        },
+        {
+          "ref": "AC-miniloan-098",
+          "hash": "sha256:36110553f8dc19d40323fdddb47b65bd0a33687625b31ce05b03bbc218cb9f25"
+        },
+        {
+          "ref": "AC-miniloan-099",
+          "hash": "sha256:0ff3a438ac7c8415439a139739465a9c14fcefc57fe451e0166dbd5dded7f38d"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-007",
+          "hash": "sha256:ee458e8a16a4b4a9a21d1273aa09269426dbca09ce7f8664fe2a777f92bc4402"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "API-012",
+          "hash": "sha256:680c2a6c3be380cc279e02f336b689b854745140f165decad8ecc97250409e31"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-012",
+      "title_th": "บันทึกการชำระตรงยอดงวด และปฏิเสธการชำระบางส่วน",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Payments/Payment.cs",
+        "apps/api/Miniloan.Api/Domain/Payments/ExactInstallmentRules.cs",
+        "apps/api/Miniloan.Api/Endpoints/PaymentEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Payments/ExactInstallmentRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-004",
+        "AC-miniloan-012",
+        "AC-miniloan-013",
+        "AC-miniloan-014",
+        "AC-miniloan-069",
+        "AC-miniloan-070"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-012",
+          "hash": "sha256:8ed47bd7ce44b240bba08ecbffc7f1494518eb01aa629d1aec792d5ec9d3f78e"
+        },
+        {
+          "ref": "AC-miniloan-004",
+          "hash": "sha256:d9e4cd01d276d9dbe3ad1328e766730e2e74150346ca7e1d5aec1f03892c5ad8"
+        },
+        {
+          "ref": "AC-miniloan-012",
+          "hash": "sha256:bde8f33a136168fbb2437f351210ff05c1d3eb152610eacc5bc42c23e856d89f"
+        },
+        {
+          "ref": "AC-miniloan-013",
+          "hash": "sha256:3d44d09c32eca6a1b23f7dcdd947818500753abf0ff46053623fbce515f87421"
+        },
+        {
+          "ref": "AC-miniloan-014",
+          "hash": "sha256:4772592d78b533a67d1a7a0284f9c13c7b91d9e2c669168e1abd4a0fc19719b3"
+        },
+        {
+          "ref": "AC-miniloan-069",
+          "hash": "sha256:e49d272860b114228b4710fce2ce0703023b6ad5f0b79d471f059907c18e2e7b"
+        },
+        {
+          "ref": "AC-miniloan-070",
+          "hash": "sha256:e595ded5d10fd915d32030c7b8810b17a5b308f4d9335a6f10aa0b0bcd966393"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "ENT-009",
+          "hash": "sha256:72d79e935e964e40763a43f8fa911a129ab426484d2b554fd17a2ea07a922e45"
+        },
+        {
+          "ref": "ENT-012",
+          "hash": "sha256:ae5125718e3e8efd44634645f4688128092dfc5b60b2e50209f6919e9a768bb8"
+        },
+        {
+          "ref": "API-014",
+          "hash": "sha256:fbdbf5d3b94d766411477a2d7d14be74d525a5cccc95d76e559ff553501f3c9b"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-013",
+      "title_th": "รับชำระเกินยอดงวด คิดค่าธรรมเนียมการโปะ และตัดเงินต้น",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Payments/OverpaymentRules.cs",
+        "apps/api/Miniloan.Api.Tests/Payments/OverpaymentRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-086",
+        "AC-miniloan-087",
+        "AC-miniloan-088"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-013",
+          "hash": "sha256:5a22cca8467b5607affc50d89c124f02e2532e6604a8f195ef4b2cc7ab2b0869"
+        },
+        {
+          "ref": "AC-miniloan-086",
+          "hash": "sha256:17058d081fd7fe26b7d3d7d9877aaa0350a447481d32230866a380874daf0b3d"
+        },
+        {
+          "ref": "AC-miniloan-087",
+          "hash": "sha256:4ed056909abe7128bece395e55842cc9da8616f1b9d26e914f9d790bcfa9cb67"
+        },
+        {
+          "ref": "AC-miniloan-088",
+          "hash": "sha256:0263e06b9d8405933dbbc9cfa2783a0b8807dfc5455aec65416991be20647d2e"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-007",
+          "hash": "sha256:ee458e8a16a4b4a9a21d1273aa09269426dbca09ce7f8664fe2a777f92bc4402"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "ENT-009",
+          "hash": "sha256:72d79e935e964e40763a43f8fa911a129ab426484d2b554fd17a2ea07a922e45"
+        },
+        {
+          "ref": "API-014",
+          "hash": "sha256:fbdbf5d3b94d766411477a2d7d14be74d525a5cccc95d76e559ff553501f3c9b"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-014",
+      "title_th": "ปิดบัญชีเมื่อชำระครบทุกงวด และกันการปิดซ้ำ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/CloseAccount.cs",
+        "apps/api/Miniloan.Api/Endpoints/AccountDetailEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/CloseAccountTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-004",
+        "AC-miniloan-006",
+        "AC-miniloan-007",
+        "AC-miniloan-069"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-014",
+          "hash": "sha256:0a79195caa18184a840d5045e03b409f3291a6e34fb75af79de109886b2fbbbd"
+        },
+        {
+          "ref": "AC-miniloan-004",
+          "hash": "sha256:d9e4cd01d276d9dbe3ad1328e766730e2e74150346ca7e1d5aec1f03892c5ad8"
+        },
+        {
+          "ref": "AC-miniloan-006",
+          "hash": "sha256:cc864350d13cd0ee12a912ca7d76679ca5d93384f588fabe2a216c032434bf2a"
+        },
+        {
+          "ref": "AC-miniloan-007",
+          "hash": "sha256:404ad0bff9e7a811fdcea378f2b210a6730e1c4e40067ed602f666fcd5d7c855"
+        },
+        {
+          "ref": "AC-miniloan-069",
+          "hash": "sha256:e49d272860b114228b4710fce2ce0703023b6ad5f0b79d471f059907c18e2e7b"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "ENT-009",
+          "hash": "sha256:72d79e935e964e40763a43f8fa911a129ab426484d2b554fd17a2ea07a922e45"
+        },
+        {
+          "ref": "API-014",
+          "hash": "sha256:fbdbf5d3b94d766411477a2d7d14be74d525a5cccc95d76e559ff553501f3c9b"
+        },
+        {
+          "ref": "API-023",
+          "hash": "sha256:a4b2eee47d720f4b8df7faf4e1f75a0e80189d3dfb776a11f3805cee561b55ba"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-015",
+      "title_th": "คิดยอดปิดบัญชีก่อนกำหนด — เงินต้นคงเหลือ ดอกเบี้ยค้างจ่าย actual/365 และยอดรวม",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/EarlyPayoffQuote.cs",
+        "apps/api/Miniloan.Api/Endpoints/EarlyPayoffEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/EarlyPayoffQuoteTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-071",
+        "AC-miniloan-072",
+        "AC-miniloan-073",
+        "AC-miniloan-074",
+        "AC-miniloan-075"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-015",
+          "hash": "sha256:388942b1a5a67f8ce86279a514de57e75542d7e848154e3695a71eb8e4fa8693"
+        },
+        {
+          "ref": "AC-miniloan-071",
+          "hash": "sha256:b1e08904d5fd2649874777be1b8217dc7f80f339f869150567186b015a5a793b"
+        },
+        {
+          "ref": "AC-miniloan-072",
+          "hash": "sha256:aefbfbef31b208dd458dc0d297a90a31b74b9458ca6deb5aadac1c2511fcbc1d"
+        },
+        {
+          "ref": "AC-miniloan-073",
+          "hash": "sha256:86cc47a15867dd4fa2e1ea41a2dc95cf3246344793baedbfa39a83ceb8e5ea79"
+        },
+        {
+          "ref": "AC-miniloan-074",
+          "hash": "sha256:654470a6dc832b7f624338aa60ec36a163a6f377d418daca27bd78409b6b21cc"
+        },
+        {
+          "ref": "AC-miniloan-075",
+          "hash": "sha256:c40a772144fd383eccad4e90021b5a9ef64a199e1c0ee0f42f10791a1d7c28e4"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "ENT-009",
+          "hash": "sha256:72d79e935e964e40763a43f8fa911a129ab426484d2b554fd17a2ea07a922e45"
+        },
+        {
+          "ref": "API-015",
+          "hash": "sha256:c4848be126b24d2603615503c02feb14224be35f78a26d4a1ef5efc3b2ef34d2"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-016",
+      "title_th": "ปิดบัญชีก่อนกำหนดเมื่อชำระยอดปิดครบเต็มจำนวน",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/EarlyClosureRules.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/EarlyClosureRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-015"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-005"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-016",
+          "hash": "sha256:eb6200eb999b6fb8eca65141d11556dcc3ffae145e36069fa4775d37cb4fe07c"
+        },
+        {
+          "ref": "AC-miniloan-005",
+          "hash": "sha256:f0277941bf441aafde51ce5e26005e3cb3051782955b47205937680e5afe45a0"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-008",
+          "hash": "sha256:11862cdde119c4aff17107adf425b4aa3831eff3f272fa10f0aec5b897462d86"
+        },
+        {
+          "ref": "ENT-009",
+          "hash": "sha256:72d79e935e964e40763a43f8fa911a129ab426484d2b554fd17a2ea07a922e45"
+        },
+        {
+          "ref": "API-014",
+          "hash": "sha256:fbdbf5d3b94d766411477a2d7d14be74d525a5cccc95d76e559ff553501f3c9b"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-017",
+      "title_th": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว และล็อกการแก้ตรงทุกกรณี",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Adjustments/ClosedAccountAdjustment.cs",
+        "apps/api/Miniloan.Api/Endpoints/AdjustmentRequestEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Adjustments/ClosedAccountAdjustmentTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-014",
+        "FE-miniloan-019"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-076",
+        "AC-miniloan-077",
+        "AC-miniloan-078",
+        "AC-miniloan-080",
+        "AC-miniloan-081",
+        "AC-miniloan-108"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-017",
+          "hash": "sha256:b13f1f4959cacdc287bc2d44727950634fb676935134b6bf02df60f0393f191c"
+        },
+        {
+          "ref": "AC-miniloan-076",
+          "hash": "sha256:5d72b6b03a593982407577ecee26e28669a5cb1dd21e109d240e21e908991488"
+        },
+        {
+          "ref": "AC-miniloan-077",
+          "hash": "sha256:840c6a706fd6360d4ec9a2a1e9c11a151c825ca75c3965694fcd351acbad5201"
+        },
+        {
+          "ref": "AC-miniloan-078",
+          "hash": "sha256:3d5b6a0a77385e766ced6c8d43090115f617469ace63a8058d6966357dc4820f"
+        },
+        {
+          "ref": "AC-miniloan-080",
+          "hash": "sha256:35236791620d128e207eb2fc9d04711d23097a5e139a84269eb6110cc0f263ff"
+        },
+        {
+          "ref": "AC-miniloan-081",
+          "hash": "sha256:21901d6181831c7efbd5eec2bc4948a08b97451c64d46070c8149a351abf1978"
+        },
+        {
+          "ref": "AC-miniloan-108",
+          "hash": "sha256:f991e7f3d730555d7276ba250da64c7b4997231b5d7641a9d96abda9228a721b"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-010",
+          "hash": "sha256:3837d2359654af5038c18e5dca44d17c34d653313378ba6a57adb8c39bdf6911"
+        },
+        {
+          "ref": "API-016",
+          "hash": "sha256:7c26e1458b79466d1fa5d88d5bcae669a7a4e578c646b08a686db4fad5fd36b8"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-018",
+      "title_th": "อนุมัติหรือปฏิเสธคำขอปรับปรุง ด้วยหลัก four-eyes",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Adjustments/FourEyesRules.cs",
+        "apps/api/Miniloan.Api/Endpoints/AdjustmentDecisionEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Adjustments/FourEyesRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-017"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-076",
+        "AC-miniloan-079",
+        "AC-miniloan-084",
+        "AC-miniloan-085"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-018",
+          "hash": "sha256:033a7b5b571b4412693b3dc203027702da52656bb86097037382ad0a6894a5dd"
+        },
+        {
+          "ref": "AC-miniloan-076",
+          "hash": "sha256:5d72b6b03a593982407577ecee26e28669a5cb1dd21e109d240e21e908991488"
+        },
+        {
+          "ref": "AC-miniloan-079",
+          "hash": "sha256:fb756aac173145c89013b32f5790b6482968102f99f902ba20dde3fb06c0b40a"
+        },
+        {
+          "ref": "AC-miniloan-084",
+          "hash": "sha256:97c1cd9133298d575da0777a772ff6d9e3b0e65994ed2c24f7180d9f42ce3892"
+        },
+        {
+          "ref": "AC-miniloan-085",
+          "hash": "sha256:801ba42821ff9b98e3970ca42be50ae6d940f57467bcada26898dd79dfe1f40a"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "ENT-010",
+          "hash": "sha256:3837d2359654af5038c18e5dca44d17c34d653313378ba6a57adb8c39bdf6911"
+        },
+        {
+          "ref": "ENT-011",
+          "hash": "sha256:da1c8910047ab82d5129bdec7d0b2c1d34d4860082b661eeb642be729cff246e"
+        },
+        {
+          "ref": "API-017",
+          "hash": "sha256:295fe0f5b9f32d1b20a5e394e4a01a52da70b8bb17654bbaa5b400b824ba3d0a"
+        },
+        {
+          "ref": "API-018",
+          "hash": "sha256:d9b6b4d770d6b0101b3d248156ef9f36f417997cc6b15be2914a1b28999466d0"
+        },
+        {
+          "ref": "API-024",
+          "hash": "sha256:cbad3e0e23d3a8eddfeb96bd51d218adbd0755e612dac46464aaacf86c5a01be"
+        },
+        {
+          "ref": "API-025",
+          "hash": "sha256:7f1b268d7fc7eafafa0036caa5e9be977130cf92244600421b8986865e6e367e"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-019",
+      "title_th": "ตั้งค่าและอ่าน role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Adjustments/ApproverRoleSetting.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApproverRoleEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Adjustments/ApproverRoleSettingTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-014"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-082",
+        "AC-miniloan-083",
+        "AC-miniloan-089"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-019",
+          "hash": "sha256:ee07f2056ed7ab2047f784b9c5eaf2be6a5a2a44214d5c86fb39cef294c4fdc4"
+        },
+        {
+          "ref": "AC-miniloan-082",
+          "hash": "sha256:1b307da991348f2608934ee372fff476ffe55b361053513ceedcbc32adc04f2f"
+        },
+        {
+          "ref": "AC-miniloan-083",
+          "hash": "sha256:3f499d1041b781fe577755879584f01913499b5d25c1e7dad458dcc5255b1036"
+        },
+        {
+          "ref": "AC-miniloan-089",
+          "hash": "sha256:6f487cffc9dac5d57cdeae2b7e414d271370747433d51bdc9036acd4aab0c68f"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "ENT-011",
+          "hash": "sha256:da1c8910047ab82d5129bdec7d0b2c1d34d4860082b661eeb642be729cff246e"
+        },
+        {
+          "ref": "API-019",
+          "hash": "sha256:706f8bb6422bcb789fb033c8dc1b6671d612871e1381c12dc55b8ba3cc10c752"
+        },
+        {
+          "ref": "API-022",
+          "hash": "sha256:fb6c61e407fe149a84594b7e44c78b7b662a941de041335aa332a2c313353cd3"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-020",
+      "title_th": "แดชบอร์ดภาพรวมสถานะ — ห้าตัวเลขที่ไม่นับซ้ำ",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Dashboard/StatusSummary.cs",
+        "apps/api/Miniloan.Api/Endpoints/DashboardEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Dashboard/StatusSummaryTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009",
+        "FE-miniloan-014"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-110",
+        "AC-miniloan-111",
+        "AC-miniloan-112"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-020",
+          "hash": "sha256:73479673aa8160c6f3de5105c2e73e00ab2261702ffd6fde57d36a5bcec6ac7e"
+        },
+        {
+          "ref": "AC-miniloan-110",
+          "hash": "sha256:1470c64b17e60491b33a99d1cb426c15294fde9d9d35342042f3608854462401"
+        },
+        {
+          "ref": "AC-miniloan-111",
+          "hash": "sha256:09dcf945171105f4809ed2506994b3d0fc253b0f9e213944a81cfcea5784c9d3"
+        },
+        {
+          "ref": "AC-miniloan-112",
+          "hash": "sha256:808a88c814bb11d99fea53379dcbe33d6ec5139cd32f40c7d9a46712152808f8"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "API-020",
+          "hash": "sha256:083cae3a7c15f958ce3b8b5be49e62bcd9bd82dd2268740c7f844a0fd34a8cf1"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-021",
+      "title_th": "บังคับกฎธุรกิจที่ชั้น API เมื่อเรียกตรงโดยไม่ผ่านหน้าจอ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/Filters/BusinessRuleFilter.cs",
+        "apps/api/Miniloan.Api.Tests/Enforcement/DirectApiCallTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-005"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-113",
+        "AC-miniloan-114"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-021",
+          "hash": "sha256:204d4dc33be628d49ac2c1794ff6d479ffe026ca4b929cc7b3c14815c5efe213"
+        },
+        {
+          "ref": "AC-miniloan-113",
+          "hash": "sha256:37f2b06859153cd8b5b36ab83c2c8ce21c5e87efb231a586014133559827fe9e"
+        },
+        {
+          "ref": "AC-miniloan-114",
+          "hash": "sha256:66ad484e1b629cbee203409bf674e2355286327dd3adce05d674b9a00d72b17f"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "API-007",
+          "hash": "sha256:a3fee741a54ea2534e4d7d44f7aef3f3b0bb89eb0695a50c7b75d8efece43a71"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-022",
+      "title_th": "ปฏิเสธข้อมูลผิดกฎที่ API พร้อมรหัสข้อผิดพลาดที่อ่านได้ด้วยเครื่องและข้อความไทย",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/Errors/ProblemDetailsFactory.cs",
+        "apps/api/Miniloan.Api.Tests/Enforcement/ValidationErrorContractTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-001"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-115",
+        "AC-miniloan-116"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-022",
+          "hash": "sha256:f42d1f2117ba8f4c4e392883d895b56123926ad338680ee8d2ff5433a64d6a48"
+        },
+        {
+          "ref": "AC-miniloan-115",
+          "hash": "sha256:812359bf294931000239191886ca6f36bd3dce69e95066b005a202560a21b661"
+        },
+        {
+          "ref": "AC-miniloan-116",
+          "hash": "sha256:d9a943ad3e81d5bef3b58d3a00cf2306e76cf94f05afc0e1038146d1b0829fbc"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "API-001",
+          "hash": "sha256:5b11840b5f8c56e892728cead778d6c9d42ab594ea6de0947178ba8cd8c308d9"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-023",
+      "title_th": "ขอบเขตข้อมูลของ Applicant — เห็นเฉพาะใบสมัครและบัญชีของตัวเอง",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Authorization/ApplicantScope.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationListEndpoints.cs",
+        "apps/api/Miniloan.Api/Endpoints/AccountListEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Authorization/ApplicantScopeTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-002"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-126",
+        "AC-miniloan-127",
+        "AC-miniloan-128"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-023",
+          "hash": "sha256:58db0e5a303e2636dc05a0e0e27281ef3996715fd4b37d7b3bb28998a8d57ada"
+        },
+        {
+          "ref": "AC-miniloan-126",
+          "hash": "sha256:db566c53ce2f5edb3e2d1a9292377b387cbcfc28c03071b20d832fcf08f6ace1"
+        },
+        {
+          "ref": "AC-miniloan-127",
+          "hash": "sha256:33fc11368d311166620ca61c7898b063961e522f8b067702f1661bb2e62a2f00"
+        },
+        {
+          "ref": "AC-miniloan-128",
+          "hash": "sha256:0079a51277f16801760ee4d2779eff5cb18a3aab67b1785b1b49d4ae367393e3"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "API-005",
+          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
+        },
+        {
+          "ref": "API-013",
+          "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-024",
+      "title_th": "ขอบเขตบัญชีที่ Operations ถูก assign — บังคับที่ชั้น API ทั้งอ่านและเขียน",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Authorization/OperationsScope.cs",
+        "apps/api/Miniloan.Api.Tests/Authorization/OperationsScopeTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-135",
+        "AC-miniloan-136",
+        "AC-miniloan-137"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-024",
+          "hash": "sha256:bbe9652bddd53f7974d33e4e9b0702ba7ea82b22d0e2560b2101778a0d7d4dbc"
+        },
+        {
+          "ref": "AC-miniloan-135",
+          "hash": "sha256:fe5485dde0d18cce648ec16304bbd6e41ad23343695c5359ebe4080ae0fa495e"
+        },
+        {
+          "ref": "AC-miniloan-136",
+          "hash": "sha256:6b68658a761fce91a5a7c749f48a5620404e18ddbe446e701522fb9fe89a4853"
+        },
+        {
+          "ref": "AC-miniloan-137",
+          "hash": "sha256:1203201a4ab479ec94f60561992aac3e6ee55529a904024b1c0b8199aebba9a9"
+        },
+        {
+          "ref": "ENT-004",
+          "hash": "sha256:3ca678ac038668043b3fdf920e2e4ae193158342f97d5a50431e32e08b036ea2"
+        },
+        {
+          "ref": "ENT-006",
+          "hash": "sha256:f317808a09506c5fd92bc6c31e87df174426f2129be0de8d20201ea31dfd703c"
+        },
+        {
+          "ref": "API-013",
+          "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
+        },
+        {
+          "ref": "API-014",
+          "hash": "sha256:fbdbf5d3b94d766411477a2d7d14be74d525a5cccc95d76e559ff553501f3c9b"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-025",
+      "title_th": "ตรวจ token จำลองทุกคำขอ ก่อนแตะข้อมูลใดๆ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/Auth/MockTokenAuthentication.cs",
+        "apps/api/Miniloan.Api.Tests/Auth/MockTokenAuthenticationTests.cs"
+      ],
+      "depends_on": [],
+      "acceptance_refs": [
+        "AC-miniloan-123",
+        "AC-miniloan-124",
+        "AC-miniloan-125"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-025",
+          "hash": "sha256:743d20307adccfc9b52e16a3016edfa5e31ae041b469e89ad223712530b23c7c"
+        },
+        {
+          "ref": "AC-miniloan-123",
+          "hash": "sha256:85132b4362b62a6244890480c6d1c3d1edf890c51d4f35a5d3699ee015503e72"
+        },
+        {
+          "ref": "AC-miniloan-124",
+          "hash": "sha256:64be6ab96fc3d8149f8e97668a0c443d765d4a43581e1f2b77a609a021ec8ff5"
+        },
+        {
+          "ref": "AC-miniloan-125",
+          "hash": "sha256:a08b0a9e8d2ca12a2d95e594e1afcaba0647882621b76a84ec1e1ccf82e31697"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "API-005",
+          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-026",
+      "title_th": "แสดงสถานะข้อผิดพลาดเมื่อ API ปิดให้บริการ พร้อมปุ่มลองใหม่ที่กู้คืนได้เอง",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/components/ApiErrorState.tsx",
+        "apps/web/lib/api-client.ts",
+        "apps/web/__tests__/api-error-state.test.tsx"
+      ],
+      "depends_on": [],
+      "acceptance_refs": [
+        "AC-miniloan-119",
+        "AC-miniloan-120"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-026",
+          "hash": "sha256:931c0fcd46ed3750ad13acb7ba753d8c0fae8e3b3a2cc004a60934e594d15229"
+        },
+        {
+          "ref": "AC-miniloan-119",
+          "hash": "sha256:650d537b51fd22d79e3b5cd7de2f7eb5e5d7d8e52bfc35f561c5b6f0845fd4aa"
+        },
+        {
+          "ref": "AC-miniloan-120",
+          "hash": "sha256:f8354993256d39a01679d5fdacc595c045f143c004d52ef3b1de841d5acee85c"
+        },
+        {
+          "ref": "UI-miniloan-002",
+          "hash": "sha256:333f21d2dcbe42f90601c716646f4ef6961a8c60d5f6e0bbd5b9664cb46f840a"
+        },
+        {
+          "ref": "API-005",
+          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-027",
+      "title_th": "รักษาสัญญา OpenAPI ที่ทดสอบได้ — response ตรง schema ทุกฟิลด์",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/OpenApi/SchemaRegistration.cs",
+        "apps/api/Miniloan.Api.Tests/Contract/OpenApiContractTests.cs"
+      ],
+      "depends_on": [],
+      "acceptance_refs": [
+        "AC-miniloan-121",
+        "AC-miniloan-122"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-027",
+          "hash": "sha256:5953b48215bd5fde62451caffeabcc9e187b24936d65de3f129ae1173ea6932e"
+        },
+        {
+          "ref": "AC-miniloan-121",
+          "hash": "sha256:363a2041ae38023fc833ec9c9227814eb2a9ece7ff4bf98a8e80386fcc8e500c"
+        },
+        {
+          "ref": "AC-miniloan-122",
+          "hash": "sha256:bdc79b1e034d5b5e3ed2786d1b51c355dda602aaf3cdb4c74001ca9f8d3691a0"
+        },
+        {
+          "ref": "API-001",
+          "hash": "sha256:5b11840b5f8c56e892728cead778d6c9d42ab594ea6de0947178ba8cd8c308d9"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-028",
+      "title_th": "endpoint ประเมินวงเงินอนุมัติสูงสุดล่วงหน้า — ตัวเลขที่หน้าเว็บต้องถามแทนการคำนวณเอง",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/MaxAmountPreviewEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Assessment/MaxAmountPreviewTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-003"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-117",
+        "AC-miniloan-118"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-028",
+          "hash": "sha256:217d4c72201caa71e9e72d708f12f906fe4b7e874957140abd346bdd3ba3e7a3"
+        },
+        {
+          "ref": "AC-miniloan-117",
+          "hash": "sha256:fe3c8a969300bf607685b28b146b924e65d14e8285cf0c2fc77f6b5e664519e1"
+        },
+        {
+          "ref": "AC-miniloan-118",
+          "hash": "sha256:1957a869515f50d04a4f9146256df21348851d8119da4166fa60b2abd9212ce8"
+        },
+        {
+          "ref": "ENT-002",
+          "hash": "sha256:668ebb77e5e08d8da43acb70a3f00259241ef222ea9e6df10ec611782324d04b"
+        },
+        {
+          "ref": "ENT-003",
+          "hash": "sha256:0a428eebc1285e9d951ad1b9c70c8e2ae6fed3b24e71a438fb4e803bcd57fb6f"
+        },
+        {
+          "ref": "API-021",
+          "hash": "sha256:5557d7433c8c624c8239a581b8d094ee564e3eadf894800aad308643e6ec411f"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-029",
+      "title_th": "หน้ากรอกและยื่นใบสมัคร — บันทึกร่าง ยื่น และขอวงเงินสูงสุดจาก API ทุกครั้ง",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/applications/new/page.tsx",
+        "apps/web/components/ApplicationForm.tsx",
+        "apps/web/lib/applications.ts",
+        "apps/web/__tests__/application-form.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-001",
+        "FE-miniloan-002",
+        "FE-miniloan-026",
+        "FE-miniloan-028"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-026",
+        "AC-miniloan-029",
+        "AC-miniloan-030",
+        "AC-miniloan-032",
+        "AC-miniloan-033",
+        "AC-miniloan-116",
+        "AC-miniloan-117",
+        "AC-miniloan-118",
+        "AC-miniloan-133"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-026",
+          "hash": "sha256:8c17183bd722366259c05f6007f95023e292bcb39c0aee502d62378f2e7d066a"
+        },
+        {
+          "ref": "AC-miniloan-029",
+          "hash": "sha256:a6733bd5351238de36d82955b66235f18259d2f8768ac4cc4bd02643e77e50f8"
+        },
+        {
+          "ref": "AC-miniloan-030",
+          "hash": "sha256:f9bc142341a688f18d9d39202987d7a10ace1188a5ae9aea9f60289dfb9dc953"
+        },
+        {
+          "ref": "AC-miniloan-032",
+          "hash": "sha256:eaae6100b306df62eef4692cf257db436b84f5156ed4f1da9c9456e084e515a5"
+        },
+        {
+          "ref": "AC-miniloan-033",
+          "hash": "sha256:19e513b1189ecc08d28f16054e2332ece3403ebb050c5bc28040802105d0e878"
+        },
+        {
+          "ref": "AC-miniloan-116",
+          "hash": "sha256:d9a943ad3e81d5bef3b58d3a00cf2306e76cf94f05afc0e1038146d1b0829fbc"
+        },
+        {
+          "ref": "AC-miniloan-117",
+          "hash": "sha256:fe3c8a969300bf607685b28b146b924e65d14e8285cf0c2fc77f6b5e664519e1"
+        },
+        {
+          "ref": "AC-miniloan-118",
+          "hash": "sha256:1957a869515f50d04a4f9146256df21348851d8119da4166fa60b2abd9212ce8"
+        },
+        {
+          "ref": "AC-miniloan-133",
+          "hash": "sha256:ef9fc340fb94d3b34149fa6b30c44c121de8cf0a6b49b2803e0a93644c147c7c"
+        },
+        {
+          "ref": "UI-miniloan-001",
+          "hash": "sha256:4a6768a1a1eb58648c7799b87d3c9ba8f51fdf93166cfa0a3d080df2517e87b5"
+        },
+        {
+          "ref": "API-001",
+          "hash": "sha256:5b11840b5f8c56e892728cead778d6c9d42ab594ea6de0947178ba8cd8c308d9"
+        },
+        {
+          "ref": "API-002",
+          "hash": "sha256:1c68e7121f561d88987c93b04e62c87e103110e048adee5c19babf9aa1d9b47b"
+        },
+        {
+          "ref": "API-003",
+          "hash": "sha256:e177fa11520b708028bc82fa640f2716761beb9679f1ff8d60a4e726de4a7579"
+        },
+        {
+          "ref": "API-021",
+          "hash": "sha256:5557d7433c8c624c8239a581b8d094ee564e3eadf894800aad308643e6ec411f"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-030",
+      "title_th": "รายการใบสมัครและบัญชีของฉัน พร้อมหน้ารายละเอียดและผลการประเมิน",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/me/page.tsx",
+        "apps/web/app/me/applications/[id]/page.tsx",
+        "apps/web/components/AssessmentResult.tsx",
+        "apps/web/__tests__/my-applications.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-003",
+        "FE-miniloan-023",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-034",
+        "AC-miniloan-035",
+        "AC-miniloan-041",
+        "AC-miniloan-044",
+        "AC-miniloan-126"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-034",
+          "hash": "sha256:b4db506a3247d30643c7dfe628da9155baaca21f8db7948ecb4741d6e58a15ab"
+        },
+        {
+          "ref": "AC-miniloan-035",
+          "hash": "sha256:fc71c744bf03ec1642f3a92443ae8bfd58a67b7f1fe63089aa8f8bcaadb4a977"
+        },
+        {
+          "ref": "AC-miniloan-041",
+          "hash": "sha256:90bdf28a0188e7e83c96a1c795a1a2e37a801040a87cca60ff18a710557c3f47"
+        },
+        {
+          "ref": "AC-miniloan-044",
+          "hash": "sha256:329d313a6e4e98c832286fcdc36e2ae201c6ad4fe6e43a715dd8886efa4a0f7d"
+        },
+        {
+          "ref": "AC-miniloan-126",
+          "hash": "sha256:db566c53ce2f5edb3e2d1a9292377b387cbcfc28c03071b20d832fcf08f6ace1"
+        },
+        {
+          "ref": "UI-miniloan-002",
+          "hash": "sha256:333f21d2dcbe42f90601c716646f4ef6961a8c60d5f6e0bbd5b9664cb46f840a"
+        },
+        {
+          "ref": "UI-miniloan-003",
+          "hash": "sha256:a912512b108db1a63875042d196a557997f57c4ced99d739b717a81ec8b9e967"
+        },
+        {
+          "ref": "API-004",
+          "hash": "sha256:0290bb2f51c3a070c7c8c4b27bdf7daff261c687c345d1a349c87502a85e97f8"
+        },
+        {
+          "ref": "API-005",
+          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
+        },
+        {
+          "ref": "API-013",
+          "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-031",
+      "title_th": "ตารางผ่อนและยอดปิดบัญชีก่อนกำหนดของผู้กู้",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/me/accounts/[id]/schedule/page.tsx",
+        "apps/web/app/me/accounts/[id]/payoff/page.tsx",
+        "apps/web/components/ScheduleTable.tsx",
+        "apps/web/__tests__/schedule-table.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-010",
+        "FE-miniloan-011",
+        "FE-miniloan-015",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-001",
+        "AC-miniloan-002",
+        "AC-miniloan-003",
+        "AC-miniloan-008",
+        "AC-miniloan-011",
+        "AC-miniloan-027",
+        "AC-miniloan-071",
+        "AC-miniloan-073",
+        "AC-miniloan-074",
+        "AC-miniloan-075",
+        "AC-miniloan-094",
+        "AC-miniloan-095",
+        "AC-miniloan-098"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-001",
+          "hash": "sha256:778580aec42c434ffe49a6fce67f4c73099d7979a47bae481eb2845ca6cf514d"
+        },
+        {
+          "ref": "AC-miniloan-002",
+          "hash": "sha256:e29b0828e33fb2753849c547d01522e7fe1b98559739f47efea9d1176bd45c02"
+        },
+        {
+          "ref": "AC-miniloan-003",
+          "hash": "sha256:135118b1c297db5684aee33950594584b220dd4f83f2fe2ff892a54fdbdf3481"
+        },
+        {
+          "ref": "AC-miniloan-008",
+          "hash": "sha256:e9e3f3ac46d625c9974e8868bdb4d126b239efda05c5f9305dd7cf137cda441d"
+        },
+        {
+          "ref": "AC-miniloan-011",
+          "hash": "sha256:3a3e2162be8cdb3cd6fcf28a4d418341c3ea779a1d716f36fa0ce1d1d69a4b1a"
+        },
+        {
+          "ref": "AC-miniloan-027",
+          "hash": "sha256:d1ad099c23bae8ebe80ccca2e03398224748553f02d8f8ea8558fa330dc0d0e1"
+        },
+        {
+          "ref": "AC-miniloan-071",
+          "hash": "sha256:b1e08904d5fd2649874777be1b8217dc7f80f339f869150567186b015a5a793b"
+        },
+        {
+          "ref": "AC-miniloan-073",
+          "hash": "sha256:86cc47a15867dd4fa2e1ea41a2dc95cf3246344793baedbfa39a83ceb8e5ea79"
+        },
+        {
+          "ref": "AC-miniloan-074",
+          "hash": "sha256:654470a6dc832b7f624338aa60ec36a163a6f377d418daca27bd78409b6b21cc"
+        },
+        {
+          "ref": "AC-miniloan-075",
+          "hash": "sha256:c40a772144fd383eccad4e90021b5a9ef64a199e1c0ee0f42f10791a1d7c28e4"
+        },
+        {
+          "ref": "AC-miniloan-094",
+          "hash": "sha256:d36169c992285db75d3ab844b6e3046e230318851a1843796e47c87520cda77e"
+        },
+        {
+          "ref": "AC-miniloan-095",
+          "hash": "sha256:0be5674d4f9a45b69a2c2cf11331c602834c64a17a8551ed9a302576269740aa"
+        },
+        {
+          "ref": "AC-miniloan-098",
+          "hash": "sha256:36110553f8dc19d40323fdddb47b65bd0a33687625b31ce05b03bbc218cb9f25"
+        },
+        {
+          "ref": "UI-miniloan-004",
+          "hash": "sha256:d4b4ca412f677303ef7557f2b972c3d0193f3c3337923991e5e153af5f3cb844"
+        },
+        {
+          "ref": "UI-miniloan-005",
+          "hash": "sha256:58d7b44c733b826a658c8b8920836bce6afbfdae3bfa1293b1f1771f7e713387"
+        },
+        {
+          "ref": "API-012",
+          "hash": "sha256:680c2a6c3be380cc279e02f336b689b854745140f165decad8ecc97250409e31"
+        },
+        {
+          "ref": "API-015",
+          "hash": "sha256:c4848be126b24d2603615503c02feb14224be35f78a26d4a1ef5efc3b2ef34d2"
+        },
+        {
+          "ref": "API-023",
+          "hash": "sha256:a4b2eee47d720f4b8df7faf4e1f75a0e80189d3dfb776a11f3805cee561b55ba"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-032",
+      "title_th": "คิวใบสมัครที่ยังไม่ถูกมอบหมาย และการมอบหมายของหัวหน้าเจ้าหน้าที่สินเชื่อ",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/supervisor/queue/page.tsx",
+        "apps/web/components/AssignDialog.tsx",
+        "apps/web/__tests__/supervisor-queue.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-004",
+        "FE-miniloan-008",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-064",
+        "AC-miniloan-066",
+        "AC-miniloan-090"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-064",
+          "hash": "sha256:5211a93db59f0a4e1ad4bac88807089a0cc0e74b5b3d799ee1588e6833ce7fa0"
+        },
+        {
+          "ref": "AC-miniloan-066",
+          "hash": "sha256:efd69b2b899d4d3e9beda4dddb2256fb45aa476734db38d72415e4daa44cef4c"
+        },
+        {
+          "ref": "AC-miniloan-090",
+          "hash": "sha256:7f1b5d968cfd5d7a269d9f11dadc6807a9e6e0f106c3e82591bba02c25b06696"
+        },
+        {
+          "ref": "UI-miniloan-010",
+          "hash": "sha256:59fe813637211274205df4fddcc1f1d83080b6c9a5cc0d78e98da5e911dbb276"
+        },
+        {
+          "ref": "API-005",
+          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
+        },
+        {
+          "ref": "API-006",
+          "hash": "sha256:ad96a79713cc815b24fd7c008a6f06406f0b7d103109b90fa3f5ae1e7f303538"
+        },
+        {
+          "ref": "API-009",
+          "hash": "sha256:fcde8631308472cdbe6d90666dc8e05eef78a172b87fc6e164d972edea5ce3d2"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-033",
+      "title_th": "คิวและหน้าพิจารณาใบสมัครของเจ้าหน้าที่สินเชื่อ — อนุมัติ ปฏิเสธ ยกเลิก เบิกจ่าย",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/officer/queue/page.tsx",
+        "apps/web/app/officer/applications/[id]/page.tsx",
+        "apps/web/components/DecisionPanel.tsx",
+        "apps/web/__tests__/decision-panel.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-005",
+        "FE-miniloan-006",
+        "FE-miniloan-007",
+        "FE-miniloan-009",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-046",
+        "AC-miniloan-047",
+        "AC-miniloan-049",
+        "AC-miniloan-050",
+        "AC-miniloan-051",
+        "AC-miniloan-053",
+        "AC-miniloan-055",
+        "AC-miniloan-056",
+        "AC-miniloan-063",
+        "AC-miniloan-131",
+        "AC-miniloan-132"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-046",
+          "hash": "sha256:2c8fcf5a201b12a97b94759777d228567cd187f2227166e7f1a13f494ebd0f53"
+        },
+        {
+          "ref": "AC-miniloan-047",
+          "hash": "sha256:9421aab5b3bd496508c207665ae493fa3bbd8e529a1b3950e4959a99fe9bb3ec"
+        },
+        {
+          "ref": "AC-miniloan-049",
+          "hash": "sha256:6aaecd33dd39f7c4e64f468a4d404f0ad3fd69e6a0d910c3ce177f90edd35d4b"
+        },
+        {
+          "ref": "AC-miniloan-050",
+          "hash": "sha256:c02ca0e0a73bdf328ed739fa05a10bd6b2c295c187e35b68f82e139d1a3f9785"
+        },
+        {
+          "ref": "AC-miniloan-051",
+          "hash": "sha256:30adbd684d69b930fef0a425d3568cc0c4c3fcbfea632117eccf74938dc187c7"
+        },
+        {
+          "ref": "AC-miniloan-053",
+          "hash": "sha256:2e087ffc423602c0a06853216bbc27920d9a7595bd9358477d88e9b82a72a8e2"
+        },
+        {
+          "ref": "AC-miniloan-055",
+          "hash": "sha256:4950e95c94a27f16e65daceab1b6be426b55f252ac464c1d1caf1e90eab1cede"
+        },
+        {
+          "ref": "AC-miniloan-056",
+          "hash": "sha256:d5dd8d9ced0e5f2050a499f40e10bda0547e5418e59c929de91dd672dd4b27bd"
+        },
+        {
+          "ref": "AC-miniloan-063",
+          "hash": "sha256:1ac350e1142b4317ad51714a01ed39671e0639069cdbb5a9ac376db0cd35a209"
+        },
+        {
+          "ref": "AC-miniloan-131",
+          "hash": "sha256:f61a2479bff2cd1023c10740d25af32e259a437e986dc878d991b66ff0aa06c6"
+        },
+        {
+          "ref": "AC-miniloan-132",
+          "hash": "sha256:d686b176e08f8fe35284e7b86dd3f9a2910951ebc780004c0572078f1d49da7b"
+        },
+        {
+          "ref": "UI-miniloan-006",
+          "hash": "sha256:7f0bfaecd5f987624aa28ba59e6de00ae2370bc6a3a5b56119ee4f660413ca9f"
+        },
+        {
+          "ref": "UI-miniloan-007",
+          "hash": "sha256:ddaaf8e1af66b4055d8d70f08a8785c03b52f1152530f35352e9126d6bb9a5f4"
+        },
+        {
+          "ref": "API-004",
+          "hash": "sha256:0290bb2f51c3a070c7c8c4b27bdf7daff261c687c345d1a349c87502a85e97f8"
+        },
+        {
+          "ref": "API-007",
+          "hash": "sha256:a3fee741a54ea2534e4d7d44f7aef3f3b0bb89eb0695a50c7b75d8efece43a71"
+        },
+        {
+          "ref": "API-008",
+          "hash": "sha256:5be25caaef1cefa24a64333e438b65c8273dbf5b08c7cfd564db4af6b162fbaa"
+        },
+        {
+          "ref": "API-009",
+          "hash": "sha256:fcde8631308472cdbe6d90666dc8e05eef78a172b87fc6e164d972edea5ce3d2"
+        },
+        {
+          "ref": "API-010",
+          "hash": "sha256:d58fdf9f7225f2b8c80b8b289f175e4fa0038b3eaaab280f59cde2ff6474f9b3"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-034",
+      "title_th": "หน้าแดชบอร์ดภาพรวมสถานะ — ห้าตัวเลข ศูนย์คือศูนย์",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/officer/dashboard/page.tsx",
+        "apps/web/__tests__/dashboard.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-020",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-110",
+        "AC-miniloan-111",
+        "AC-miniloan-112"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-110",
+          "hash": "sha256:1470c64b17e60491b33a99d1cb426c15294fde9d9d35342042f3608854462401"
+        },
+        {
+          "ref": "AC-miniloan-111",
+          "hash": "sha256:09dcf945171105f4809ed2506994b3d0fc253b0f9e213944a81cfcea5784c9d3"
+        },
+        {
+          "ref": "AC-miniloan-112",
+          "hash": "sha256:808a88c814bb11d99fea53379dcbe33d6ec5139cd32f40c7d9a46712152808f8"
+        },
+        {
+          "ref": "UI-miniloan-009",
+          "hash": "sha256:855ae82941f8c64a4fdb0cdbfbc6d4dcc7c757e96f001cd121dfa89385fe279b"
+        },
+        {
+          "ref": "API-020",
+          "hash": "sha256:083cae3a7c15f958ce3b8b5be49e62bcd9bd82dd2268740c7f844a0fd34a8cf1"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-035",
+      "title_th": "หน้าตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/officer/settings/approver-role/page.tsx",
+        "apps/web/__tests__/approver-role.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-019",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-082",
+        "AC-miniloan-083",
+        "AC-miniloan-089"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-082",
+          "hash": "sha256:1b307da991348f2608934ee372fff476ffe55b361053513ceedcbc32adc04f2f"
+        },
+        {
+          "ref": "AC-miniloan-083",
+          "hash": "sha256:3f499d1041b781fe577755879584f01913499b5d25c1e7dad458dcc5255b1036"
+        },
+        {
+          "ref": "AC-miniloan-089",
+          "hash": "sha256:6f487cffc9dac5d57cdeae2b7e414d271370747433d51bdc9036acd4aab0c68f"
+        },
+        {
+          "ref": "UI-miniloan-008",
+          "hash": "sha256:ecd2d4fcc6697c107c034775fa7d4b41719611b23f746c95f54a42c4e1801b09"
+        },
+        {
+          "ref": "API-019",
+          "hash": "sha256:706f8bb6422bcb789fb033c8dc1b6671d612871e1381c12dc55b8ba3cc10c752"
+        },
+        {
+          "ref": "API-022",
+          "hash": "sha256:fb6c61e407fe149a84594b7e44c78b7b662a941de041335aa332a2c313353cd3"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-036",
+      "title_th": "บัญชีสินเชื่อที่ Operations ดูแล — บันทึกชำระ ปิดบัญชี และยื่นคำขอปรับปรุง",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/ops/accounts/page.tsx",
+        "apps/web/app/ops/accounts/[id]/page.tsx",
+        "apps/web/components/PaymentForm.tsx",
+        "apps/web/__tests__/payment-form.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-010",
+        "FE-miniloan-012",
+        "FE-miniloan-013",
+        "FE-miniloan-014",
+        "FE-miniloan-016",
+        "FE-miniloan-017",
+        "FE-miniloan-024",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-004",
+        "AC-miniloan-005",
+        "AC-miniloan-006",
+        "AC-miniloan-012",
+        "AC-miniloan-013",
+        "AC-miniloan-069",
+        "AC-miniloan-070",
+        "AC-miniloan-076",
+        "AC-miniloan-077",
+        "AC-miniloan-086",
+        "AC-miniloan-087",
+        "AC-miniloan-135",
+        "AC-miniloan-137"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-004",
+          "hash": "sha256:d9e4cd01d276d9dbe3ad1328e766730e2e74150346ca7e1d5aec1f03892c5ad8"
+        },
+        {
+          "ref": "AC-miniloan-005",
+          "hash": "sha256:f0277941bf441aafde51ce5e26005e3cb3051782955b47205937680e5afe45a0"
+        },
+        {
+          "ref": "AC-miniloan-006",
+          "hash": "sha256:cc864350d13cd0ee12a912ca7d76679ca5d93384f588fabe2a216c032434bf2a"
+        },
+        {
+          "ref": "AC-miniloan-012",
+          "hash": "sha256:bde8f33a136168fbb2437f351210ff05c1d3eb152610eacc5bc42c23e856d89f"
+        },
+        {
+          "ref": "AC-miniloan-013",
+          "hash": "sha256:3d44d09c32eca6a1b23f7dcdd947818500753abf0ff46053623fbce515f87421"
+        },
+        {
+          "ref": "AC-miniloan-069",
+          "hash": "sha256:e49d272860b114228b4710fce2ce0703023b6ad5f0b79d471f059907c18e2e7b"
+        },
+        {
+          "ref": "AC-miniloan-070",
+          "hash": "sha256:e595ded5d10fd915d32030c7b8810b17a5b308f4d9335a6f10aa0b0bcd966393"
+        },
+        {
+          "ref": "AC-miniloan-076",
+          "hash": "sha256:5d72b6b03a593982407577ecee26e28669a5cb1dd21e109d240e21e908991488"
+        },
+        {
+          "ref": "AC-miniloan-077",
+          "hash": "sha256:840c6a706fd6360d4ec9a2a1e9c11a151c825ca75c3965694fcd351acbad5201"
+        },
+        {
+          "ref": "AC-miniloan-086",
+          "hash": "sha256:17058d081fd7fe26b7d3d7d9877aaa0350a447481d32230866a380874daf0b3d"
+        },
+        {
+          "ref": "AC-miniloan-087",
+          "hash": "sha256:4ed056909abe7128bece395e55842cc9da8616f1b9d26e914f9d790bcfa9cb67"
+        },
+        {
+          "ref": "AC-miniloan-135",
+          "hash": "sha256:fe5485dde0d18cce648ec16304bbd6e41ad23343695c5359ebe4080ae0fa495e"
+        },
+        {
+          "ref": "AC-miniloan-137",
+          "hash": "sha256:1203201a4ab479ec94f60561992aac3e6ee55529a904024b1c0b8199aebba9a9"
+        },
+        {
+          "ref": "UI-miniloan-011",
+          "hash": "sha256:85cec957b720e520ccdb1476f630d12315420561b80e64cc9e84b90b74c8d99b"
+        },
+        {
+          "ref": "UI-miniloan-012",
+          "hash": "sha256:336fe5a8b2aed4d77cdc634216c7d2ec83e810c311c456e3bca8e80463e17f09"
+        },
+        {
+          "ref": "API-011",
+          "hash": "sha256:a84c6de69c8186710097480ad245e17595adb7a906ca0027f6a0ce89609258bc"
+        },
+        {
+          "ref": "API-013",
+          "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
+        },
+        {
+          "ref": "API-014",
+          "hash": "sha256:fbdbf5d3b94d766411477a2d7d14be74d525a5cccc95d76e559ff553501f3c9b"
+        },
+        {
+          "ref": "API-016",
+          "hash": "sha256:7c26e1458b79466d1fa5d88d5bcae669a7a4e578c646b08a686db4fad5fd36b8"
+        },
+        {
+          "ref": "API-023",
+          "hash": "sha256:a4b2eee47d720f4b8df7faf4e1f75a0e80189d3dfb776a11f3805cee561b55ba"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-037",
+      "title_th": "คิวและหน้าพิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้วของผู้อนุมัติ",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/approver/adjustments/page.tsx",
+        "apps/web/app/approver/adjustments/[id]/page.tsx",
+        "apps/web/__tests__/adjustment-decision.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-018",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-079",
+        "AC-miniloan-084",
+        "AC-miniloan-085"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-079",
+          "hash": "sha256:fb756aac173145c89013b32f5790b6482968102f99f902ba20dde3fb06c0b40a"
+        },
+        {
+          "ref": "AC-miniloan-084",
+          "hash": "sha256:97c1cd9133298d575da0777a772ff6d9e3b0e65994ed2c24f7180d9f42ce3892"
+        },
+        {
+          "ref": "AC-miniloan-085",
+          "hash": "sha256:801ba42821ff9b98e3970ca42be50ae6d940f57467bcada26898dd79dfe1f40a"
+        },
+        {
+          "ref": "UI-miniloan-013",
+          "hash": "sha256:d5d6482d5a1821646f25155ed86a8ecdabfaa1eecce4faa349e6349ef531c579"
+        },
+        {
+          "ref": "UI-miniloan-014",
+          "hash": "sha256:23b99713adc37a19e8ca98c942faeb60dd97a19eed0cd64ef23d5e0ec07f724f"
+        },
+        {
+          "ref": "API-017",
+          "hash": "sha256:295fe0f5b9f32d1b20a5e394e4a01a52da70b8bb17654bbaa5b400b824ba3d0a"
+        },
+        {
+          "ref": "API-018",
+          "hash": "sha256:d9b6b4d770d6b0101b3d248156ef9f36f417997cc6b15be2914a1b28999466d0"
+        },
+        {
+          "ref": "API-024",
+          "hash": "sha256:cbad3e0e23d3a8eddfeb96bd51d218adbd0755e612dac46464aaacf86c5a01be"
+        },
+        {
+          "ref": "API-025",
+          "hash": "sha256:7f1b268d7fc7eafafa0036caa5e9be977130cf92244600421b8986865e6e367e"
+        }
+      ],
+      "status": "draft"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "GAP-miniloan-001",
+      "to": "design",
+      "about": "UC-miniloan-004",
+      "question_th": "DQ-miniloan-002 ยังไม่ถูกปิดที่โต๊ะ design — หัวหน้าของ Loan Officer เห็นใบสมัครที่มอบหมายให้ลูกน้องหรือไม่ และระบบนี้มีลำดับชั้นของเจ้าหน้าที่หรือเปล่า · ถ้าไม่ตอบ ขอบเขตข้อมูลของหน่วยมอบหมาย ยกเลิกโดยหัวหน้า และรายการของตัวเอง จะถูกเดา",
+      "found_at": "2026-09-04",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": [
+        "FE-miniloan-004",
+        "FE-miniloan-008",
+        "FE-miniloan-023",
+        "FE-miniloan-032"
+      ]
+    },
+    {
+      "id": "GAP-miniloan-002",
+      "to": "design",
+      "about": "UC-miniloan-020",
+      "question_th": "DQ-miniloan-004 ยังไม่ถูกปิดที่โต๊ะ design — แดชบอร์ดและยอดรวมตาม BR-miniloan-024@v1 ใช้ขอบเขตข้อมูลเดียวกับการเปิดดูรายใบหรือไม่ · Loan Officer เห็นจำนวนของทั้งระบบ หรือเห็นเฉพาะที่ตัวเองรับผิดชอบ",
+      "found_at": "2026-09-04",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": [
+        "FE-miniloan-020",
+        "FE-miniloan-034"
+      ]
+    },
+    {
+      "id": "GAP-miniloan-003",
+      "to": "design",
+      "about": "UC-miniloan-009",
+      "question_th": "DQ-miniloan-008 ยังไม่ถูกปิดที่โต๊ะ design — ขอบเขตของ transaction อยู่ตรงไหน · ข้อมูลที่เขียนลงไปแล้วก่อนการเรียกล้มเหลว ต้อง rollback ทั้งก้อนหรือค้างครึ่งทางได้ (เบิกจ่าย+สร้างตารางผ่อน · บันทึกชำระ+ปิดบัญชี)",
+      "found_at": "2026-09-04",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": [
+        "FE-miniloan-009",
+        "FE-miniloan-012",
+        "FE-miniloan-013",
+        "FE-miniloan-014",
+        "FE-miniloan-016",
+        "FE-miniloan-036"
+      ]
+    }
+  ],
   "rollup": {
-    "features_total": 0,
-    "by_status": {},
-    "by_origin": {},
-    "by_app": {},
-    "gaps_open": 0,
+    "features_total": 37,
+    "by_status": {
+      "draft": 37
+    },
+    "by_origin": {
+      "new": 37
+    },
+    "by_app": {
+      "api": 27,
+      "web": 10
+    },
+    "gaps_open": 3,
     "ready_for_phase5": false
   }
 }

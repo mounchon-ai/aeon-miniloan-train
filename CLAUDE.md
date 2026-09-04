@@ -1,3 +1,4 @@
+
 # miniloan
 
 Personal loan intake, assessment, approval, disbursement, repayment and closure — built through the `aeon` req → design → mock → dev pipeline. Requirement source of truth: `.aeon/req/requirements.json`. Design source of truth: `.aeon/design/`.
@@ -8,6 +9,7 @@ Two apps, strictly separated (REQ-miniloan-006, locked in `.aeon/design/context.
 
 - `apps/api` — ASP.NET Core (.NET 8, C#). **Every business rule is enforced here.** Exposes a testable OpenAPI contract.
 - `apps/web` — Next.js (React/TypeScript). A thin client only: it calls the API for every decision (eligibility, approval, amounts) and never computes or re-validates business logic itself.
+  Styled with **Tailwind CSS v4**, bound to the design-system tokens (see Conventions) — never Tailwind’s own palette.
 - `db` — PostgreSQL. Money is stored as `numeric`/`decimal`, never floating point.
 
 ## Commands
@@ -29,6 +31,7 @@ docker compose -f docker/docker-compose.yml up
 - Every write that can be retried is guarded by a database unique constraint (idempotent writes), not by client-side dedup.
 - No automatic retry queue — a failed API call surfaces immediately and the user re-issues it themselves (REQ-miniloan-006 explicitly puts retry queues out of scope).
 - Authentication is a mock/token stand-in this round, not real auth — do not build a real auth system against this codebase.
+- **Tailwind utilities resolve to design-system tokens, never to Tailwind’s default palette.** `apps/web/app/theme.tokens.css` is GENERATED from `.aeon/mockup/theme.json` by `scripts/sync-theme-tokens.mjs` and committed — `docker-compose` builds `apps/web` with `context: ../apps/web`, so `.aeon/` is outside the build context and cannot be imported. `@theme inline` in `globals.css` maps every utility onto those `var(--…)` names; a raw hex or a `blue-600` in a component is a bug, because the mockups under `mockups/` reference the same tokens and the two must not drift.
 
 ## Mistakes already made
 

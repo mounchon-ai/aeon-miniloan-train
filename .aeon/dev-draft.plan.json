@@ -1,0 +1,2398 @@
+{
+  "module": "miniloan",
+  "features": [
+    {
+      "id": "FE-miniloan-001",
+      "title_th": "บันทึกและแก้ไขร่างใบสมัคร พร้อมตรวจช่วงจำนวนเงินกู้และจำนวนงวด",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/LoanApplication.cs",
+        "apps/api/Miniloan.Api/Domain/Applications/DraftRules.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationDraftEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/DraftRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-025",
+        "FE-miniloan-027"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-023",
+        "AC-miniloan-024",
+        "AC-miniloan-025",
+        "AC-miniloan-026",
+        "AC-miniloan-032",
+        "AC-miniloan-033"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-001"
+        },
+        {
+          "ref": "AC-miniloan-023"
+        },
+        {
+          "ref": "AC-miniloan-024"
+        },
+        {
+          "ref": "AC-miniloan-025"
+        },
+        {
+          "ref": "AC-miniloan-026"
+        },
+        {
+          "ref": "AC-miniloan-032"
+        },
+        {
+          "ref": "AC-miniloan-033"
+        },
+        {
+          "ref": "ENT-001"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "API-001"
+        },
+        {
+          "ref": "API-002"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-002",
+      "title_th": "ยื่นใบสมัครและกันการยื่นซ้ำด้วยข้อจำกัดไม่ซ้ำที่ฐานข้อมูล",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/SubmitApplication.cs",
+        "apps/api/Miniloan.Api/Domain/Idempotency/IdempotencyKey.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationSubmitEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/SubmitApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-001"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-029",
+        "AC-miniloan-030",
+        "AC-miniloan-031",
+        "AC-miniloan-045",
+        "AC-miniloan-061",
+        "AC-miniloan-133",
+        "AC-miniloan-134"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-002"
+        },
+        {
+          "ref": "AC-miniloan-029"
+        },
+        {
+          "ref": "AC-miniloan-030"
+        },
+        {
+          "ref": "AC-miniloan-031"
+        },
+        {
+          "ref": "AC-miniloan-045"
+        },
+        {
+          "ref": "AC-miniloan-061"
+        },
+        {
+          "ref": "AC-miniloan-133"
+        },
+        {
+          "ref": "AC-miniloan-134"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-012"
+        },
+        {
+          "ref": "API-003"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-003",
+      "title_th": "ประเมินสินเชื่ออัตโนมัติเมื่อยื่น — เกณฑ์คุณสมบัติ วงเงินสูงสุด DTI และ Credit Band",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Assessment/CreditAssessment.cs",
+        "apps/api/Miniloan.Api/Domain/Assessment/EligibilityRules.cs",
+        "apps/api/Miniloan.Api/Domain/Assessment/MaxAmountCalculator.cs",
+        "apps/api/Miniloan.Api/Domain/Assessment/DtiCalculator.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationDetailEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Assessment/CreditAssessmentTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-002"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-015",
+        "AC-miniloan-016",
+        "AC-miniloan-017",
+        "AC-miniloan-018",
+        "AC-miniloan-019",
+        "AC-miniloan-020",
+        "AC-miniloan-021",
+        "AC-miniloan-022",
+        "AC-miniloan-027",
+        "AC-miniloan-028",
+        "AC-miniloan-034",
+        "AC-miniloan-035",
+        "AC-miniloan-036",
+        "AC-miniloan-037",
+        "AC-miniloan-038",
+        "AC-miniloan-039",
+        "AC-miniloan-040",
+        "AC-miniloan-041",
+        "AC-miniloan-042",
+        "AC-miniloan-043",
+        "AC-miniloan-044",
+        "AC-miniloan-045",
+        "AC-miniloan-063"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-003"
+        },
+        {
+          "ref": "AC-miniloan-015"
+        },
+        {
+          "ref": "AC-miniloan-016"
+        },
+        {
+          "ref": "AC-miniloan-017"
+        },
+        {
+          "ref": "AC-miniloan-018"
+        },
+        {
+          "ref": "AC-miniloan-019"
+        },
+        {
+          "ref": "AC-miniloan-020"
+        },
+        {
+          "ref": "AC-miniloan-021"
+        },
+        {
+          "ref": "AC-miniloan-022"
+        },
+        {
+          "ref": "AC-miniloan-027"
+        },
+        {
+          "ref": "AC-miniloan-028"
+        },
+        {
+          "ref": "AC-miniloan-034"
+        },
+        {
+          "ref": "AC-miniloan-035"
+        },
+        {
+          "ref": "AC-miniloan-036"
+        },
+        {
+          "ref": "AC-miniloan-037"
+        },
+        {
+          "ref": "AC-miniloan-038"
+        },
+        {
+          "ref": "AC-miniloan-039"
+        },
+        {
+          "ref": "AC-miniloan-040"
+        },
+        {
+          "ref": "AC-miniloan-041"
+        },
+        {
+          "ref": "AC-miniloan-042"
+        },
+        {
+          "ref": "AC-miniloan-043"
+        },
+        {
+          "ref": "AC-miniloan-044"
+        },
+        {
+          "ref": "AC-miniloan-045"
+        },
+        {
+          "ref": "AC-miniloan-063"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-003"
+        },
+        {
+          "ref": "API-003"
+        },
+        {
+          "ref": "API-004"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-004",
+      "title_th": "มอบหมายใบสมัครให้เจ้าหน้าที่สินเชื่อ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/ApplicationAssignment.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationAssignEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/ApplicationAssignmentTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-003"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-064",
+        "AC-miniloan-065",
+        "AC-miniloan-066"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-004"
+        },
+        {
+          "ref": "AC-miniloan-064"
+        },
+        {
+          "ref": "AC-miniloan-065"
+        },
+        {
+          "ref": "AC-miniloan-066"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "ENT-013"
+        },
+        {
+          "ref": "API-006"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-005",
+      "title_th": "อนุมัติใบสมัคร พร้อมกันวงเงินเกินและสิทธิ์ผู้พิจารณาที่ถูกมอบหมาย",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/ApproveApplication.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationApproveEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/ApproveApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-004"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-045",
+        "AC-miniloan-046",
+        "AC-miniloan-049",
+        "AC-miniloan-050",
+        "AC-miniloan-051",
+        "AC-miniloan-052",
+        "AC-miniloan-053",
+        "AC-miniloan-054",
+        "AC-miniloan-062"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-005"
+        },
+        {
+          "ref": "AC-miniloan-045"
+        },
+        {
+          "ref": "AC-miniloan-046"
+        },
+        {
+          "ref": "AC-miniloan-049"
+        },
+        {
+          "ref": "AC-miniloan-050"
+        },
+        {
+          "ref": "AC-miniloan-051"
+        },
+        {
+          "ref": "AC-miniloan-052"
+        },
+        {
+          "ref": "AC-miniloan-053"
+        },
+        {
+          "ref": "AC-miniloan-054"
+        },
+        {
+          "ref": "AC-miniloan-062"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "API-004"
+        },
+        {
+          "ref": "API-007"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-006",
+      "title_th": "ปฏิเสธใบสมัครพร้อมเหตุผลบังคับ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/RejectApplication.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationRejectEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/RejectApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-004"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-055",
+        "AC-miniloan-056",
+        "AC-miniloan-057"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-006"
+        },
+        {
+          "ref": "AC-miniloan-055"
+        },
+        {
+          "ref": "AC-miniloan-056"
+        },
+        {
+          "ref": "AC-miniloan-057"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "API-008"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-007",
+      "title_th": "ยกเลิกใบสมัครโดยเจ้าหน้าที่ที่รับผิดชอบ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/CancelApplication.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationCancelEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/CancelApplicationTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-004"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-047",
+        "AC-miniloan-048",
+        "AC-miniloan-067",
+        "AC-miniloan-068"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-007"
+        },
+        {
+          "ref": "AC-miniloan-047"
+        },
+        {
+          "ref": "AC-miniloan-048"
+        },
+        {
+          "ref": "AC-miniloan-067"
+        },
+        {
+          "ref": "AC-miniloan-068"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "API-009"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-008",
+      "title_th": "ยกเลิกใบสมัครโดยหัวหน้าเจ้าหน้าที่สินเชื่อ (ใบที่ยังไม่ถูกมอบหมาย)",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Applications/SupervisorCancelRules.cs",
+        "apps/api/Miniloan.Api.Tests/Applications/SupervisorCancelRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-007"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-067",
+        "AC-miniloan-068",
+        "AC-miniloan-090",
+        "AC-miniloan-091",
+        "AC-miniloan-092"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-008"
+        },
+        {
+          "ref": "AC-miniloan-067"
+        },
+        {
+          "ref": "AC-miniloan-068"
+        },
+        {
+          "ref": "AC-miniloan-090"
+        },
+        {
+          "ref": "AC-miniloan-091"
+        },
+        {
+          "ref": "AC-miniloan-092"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "API-009"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-009",
+      "title_th": "เบิกจ่ายเงินกู้ สร้างบัญชีและตารางผ่อน EMI พร้อมผูกเวอร์ชันอัตราดอกเบี้ยและปัดครึ่งขึ้น",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/LoanAccount.cs",
+        "apps/api/Miniloan.Api/Domain/Accounts/RepaymentSchedule.cs",
+        "apps/api/Miniloan.Api/Domain/Accounts/EmiCalculator.cs",
+        "apps/api/Miniloan.Api/Domain/Money/RoundHalfUp.cs",
+        "apps/api/Miniloan.Api/Domain/Rates/InterestRateVersion.cs",
+        "apps/api/Miniloan.Api/Endpoints/DisbursementEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/EmiCalculatorTests.cs",
+        "apps/api/Miniloan.Api.Tests/Money/RoundHalfUpTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-005"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-001",
+        "AC-miniloan-002",
+        "AC-miniloan-003",
+        "AC-miniloan-045",
+        "AC-miniloan-058",
+        "AC-miniloan-059",
+        "AC-miniloan-060",
+        "AC-miniloan-093",
+        "AC-miniloan-094",
+        "AC-miniloan-095",
+        "AC-miniloan-096",
+        "AC-miniloan-097",
+        "AC-miniloan-100",
+        "AC-miniloan-101",
+        "AC-miniloan-102",
+        "AC-miniloan-103",
+        "AC-miniloan-104",
+        "AC-miniloan-105",
+        "AC-miniloan-106",
+        "AC-miniloan-129",
+        "AC-miniloan-130",
+        "AC-miniloan-131",
+        "AC-miniloan-132"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-009"
+        },
+        {
+          "ref": "AC-miniloan-001"
+        },
+        {
+          "ref": "AC-miniloan-002"
+        },
+        {
+          "ref": "AC-miniloan-003"
+        },
+        {
+          "ref": "AC-miniloan-045"
+        },
+        {
+          "ref": "AC-miniloan-058"
+        },
+        {
+          "ref": "AC-miniloan-059"
+        },
+        {
+          "ref": "AC-miniloan-060"
+        },
+        {
+          "ref": "AC-miniloan-093"
+        },
+        {
+          "ref": "AC-miniloan-094"
+        },
+        {
+          "ref": "AC-miniloan-095"
+        },
+        {
+          "ref": "AC-miniloan-096"
+        },
+        {
+          "ref": "AC-miniloan-097"
+        },
+        {
+          "ref": "AC-miniloan-100"
+        },
+        {
+          "ref": "AC-miniloan-101"
+        },
+        {
+          "ref": "AC-miniloan-102"
+        },
+        {
+          "ref": "AC-miniloan-103"
+        },
+        {
+          "ref": "AC-miniloan-104"
+        },
+        {
+          "ref": "AC-miniloan-105"
+        },
+        {
+          "ref": "AC-miniloan-106"
+        },
+        {
+          "ref": "AC-miniloan-129"
+        },
+        {
+          "ref": "AC-miniloan-130"
+        },
+        {
+          "ref": "AC-miniloan-131"
+        },
+        {
+          "ref": "AC-miniloan-132"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-005"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-007"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "ENT-012"
+        },
+        {
+          "ref": "API-010"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-010",
+      "title_th": "ออกตารางผ่อนฉบับใหม่ทับทั้งฉบับ และล็อกตารางของบัญชีที่ปิดแล้ว",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/ReissueSchedule.cs",
+        "apps/api/Miniloan.Api/Endpoints/ScheduleReissueEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/ReissueScheduleTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-008",
+        "AC-miniloan-009",
+        "AC-miniloan-010",
+        "AC-miniloan-011",
+        "AC-miniloan-107",
+        "AC-miniloan-108",
+        "AC-miniloan-109"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-010"
+        },
+        {
+          "ref": "AC-miniloan-008"
+        },
+        {
+          "ref": "AC-miniloan-009"
+        },
+        {
+          "ref": "AC-miniloan-010"
+        },
+        {
+          "ref": "AC-miniloan-011"
+        },
+        {
+          "ref": "AC-miniloan-107"
+        },
+        {
+          "ref": "AC-miniloan-108"
+        },
+        {
+          "ref": "AC-miniloan-109"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-007"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "API-011"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-011",
+      "title_th": "อ่านตารางผ่อนของบัญชี พร้อมบังคับขอบเขตข้อมูลที่ชั้น API",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/ScheduleReadEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/ScheduleReadTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-098",
+        "AC-miniloan-099"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-011"
+        },
+        {
+          "ref": "AC-miniloan-098"
+        },
+        {
+          "ref": "AC-miniloan-099"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-007"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "API-012"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-012",
+      "title_th": "บันทึกการชำระตรงยอดงวด และปฏิเสธการชำระบางส่วน",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Payments/Payment.cs",
+        "apps/api/Miniloan.Api/Domain/Payments/ExactInstallmentRules.cs",
+        "apps/api/Miniloan.Api/Endpoints/PaymentEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Payments/ExactInstallmentRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-004",
+        "AC-miniloan-012",
+        "AC-miniloan-013",
+        "AC-miniloan-014",
+        "AC-miniloan-069",
+        "AC-miniloan-070"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-012"
+        },
+        {
+          "ref": "AC-miniloan-004"
+        },
+        {
+          "ref": "AC-miniloan-012"
+        },
+        {
+          "ref": "AC-miniloan-013"
+        },
+        {
+          "ref": "AC-miniloan-014"
+        },
+        {
+          "ref": "AC-miniloan-069"
+        },
+        {
+          "ref": "AC-miniloan-070"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "ENT-009"
+        },
+        {
+          "ref": "ENT-012"
+        },
+        {
+          "ref": "API-014"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-013",
+      "title_th": "รับชำระเกินยอดงวด คิดค่าธรรมเนียมการโปะ และตัดเงินต้น",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Payments/OverpaymentRules.cs",
+        "apps/api/Miniloan.Api.Tests/Payments/OverpaymentRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-086",
+        "AC-miniloan-087",
+        "AC-miniloan-088"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-013"
+        },
+        {
+          "ref": "AC-miniloan-086"
+        },
+        {
+          "ref": "AC-miniloan-087"
+        },
+        {
+          "ref": "AC-miniloan-088"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-007"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "ENT-009"
+        },
+        {
+          "ref": "API-014"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-014",
+      "title_th": "ปิดบัญชีเมื่อชำระครบทุกงวด และกันการปิดซ้ำ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/CloseAccount.cs",
+        "apps/api/Miniloan.Api/Endpoints/AccountDetailEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/CloseAccountTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-004",
+        "AC-miniloan-006",
+        "AC-miniloan-007",
+        "AC-miniloan-069"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-014"
+        },
+        {
+          "ref": "AC-miniloan-004"
+        },
+        {
+          "ref": "AC-miniloan-006"
+        },
+        {
+          "ref": "AC-miniloan-007"
+        },
+        {
+          "ref": "AC-miniloan-069"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "ENT-009"
+        },
+        {
+          "ref": "API-014"
+        },
+        {
+          "ref": "API-023"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-015",
+      "title_th": "คิดยอดปิดบัญชีก่อนกำหนด — เงินต้นคงเหลือ ดอกเบี้ยค้างจ่าย actual/365 และยอดรวม",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/EarlyPayoffQuote.cs",
+        "apps/api/Miniloan.Api/Endpoints/EarlyPayoffEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/EarlyPayoffQuoteTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-071",
+        "AC-miniloan-072",
+        "AC-miniloan-073",
+        "AC-miniloan-074",
+        "AC-miniloan-075"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-015"
+        },
+        {
+          "ref": "AC-miniloan-071"
+        },
+        {
+          "ref": "AC-miniloan-072"
+        },
+        {
+          "ref": "AC-miniloan-073"
+        },
+        {
+          "ref": "AC-miniloan-074"
+        },
+        {
+          "ref": "AC-miniloan-075"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "ENT-009"
+        },
+        {
+          "ref": "API-015"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-016",
+      "title_th": "ปิดบัญชีก่อนกำหนดเมื่อชำระยอดปิดครบเต็มจำนวน",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Accounts/EarlyClosureRules.cs",
+        "apps/api/Miniloan.Api.Tests/Accounts/EarlyClosureRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-015"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-005"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-016"
+        },
+        {
+          "ref": "AC-miniloan-005"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-008"
+        },
+        {
+          "ref": "ENT-009"
+        },
+        {
+          "ref": "API-014"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-017",
+      "title_th": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว และล็อกการแก้ตรงทุกกรณี",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Adjustments/ClosedAccountAdjustment.cs",
+        "apps/api/Miniloan.Api/Endpoints/AdjustmentRequestEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Adjustments/ClosedAccountAdjustmentTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-014",
+        "FE-miniloan-019"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-076",
+        "AC-miniloan-077",
+        "AC-miniloan-078",
+        "AC-miniloan-080",
+        "AC-miniloan-081",
+        "AC-miniloan-108"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-017"
+        },
+        {
+          "ref": "AC-miniloan-076"
+        },
+        {
+          "ref": "AC-miniloan-077"
+        },
+        {
+          "ref": "AC-miniloan-078"
+        },
+        {
+          "ref": "AC-miniloan-080"
+        },
+        {
+          "ref": "AC-miniloan-081"
+        },
+        {
+          "ref": "AC-miniloan-108"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-010"
+        },
+        {
+          "ref": "API-016"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-018",
+      "title_th": "อนุมัติหรือปฏิเสธคำขอปรับปรุง ด้วยหลัก four-eyes",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Adjustments/FourEyesRules.cs",
+        "apps/api/Miniloan.Api/Endpoints/AdjustmentDecisionEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Adjustments/FourEyesRulesTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-017"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-076",
+        "AC-miniloan-079",
+        "AC-miniloan-084",
+        "AC-miniloan-085"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-018"
+        },
+        {
+          "ref": "AC-miniloan-076"
+        },
+        {
+          "ref": "AC-miniloan-079"
+        },
+        {
+          "ref": "AC-miniloan-084"
+        },
+        {
+          "ref": "AC-miniloan-085"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "ENT-010"
+        },
+        {
+          "ref": "ENT-011"
+        },
+        {
+          "ref": "API-017"
+        },
+        {
+          "ref": "API-018"
+        },
+        {
+          "ref": "API-024"
+        },
+        {
+          "ref": "API-025"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-019",
+      "title_th": "ตั้งค่าและอ่าน role ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Adjustments/ApproverRoleSetting.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApproverRoleEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Adjustments/ApproverRoleSettingTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-014"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-082",
+        "AC-miniloan-083",
+        "AC-miniloan-089"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-019"
+        },
+        {
+          "ref": "AC-miniloan-082"
+        },
+        {
+          "ref": "AC-miniloan-083"
+        },
+        {
+          "ref": "AC-miniloan-089"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "ENT-011"
+        },
+        {
+          "ref": "API-019"
+        },
+        {
+          "ref": "API-022"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-020",
+      "title_th": "แดชบอร์ดภาพรวมสถานะ — ห้าตัวเลขที่ไม่นับซ้ำ",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Dashboard/StatusSummary.cs",
+        "apps/api/Miniloan.Api/Endpoints/DashboardEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Dashboard/StatusSummaryTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-009",
+        "FE-miniloan-014"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-110",
+        "AC-miniloan-111",
+        "AC-miniloan-112"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-020"
+        },
+        {
+          "ref": "AC-miniloan-110"
+        },
+        {
+          "ref": "AC-miniloan-111"
+        },
+        {
+          "ref": "AC-miniloan-112"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "API-020"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-021",
+      "title_th": "บังคับกฎธุรกิจที่ชั้น API เมื่อเรียกตรงโดยไม่ผ่านหน้าจอ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/Filters/BusinessRuleFilter.cs",
+        "apps/api/Miniloan.Api.Tests/Enforcement/DirectApiCallTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-005"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-113",
+        "AC-miniloan-114"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-021"
+        },
+        {
+          "ref": "AC-miniloan-113"
+        },
+        {
+          "ref": "AC-miniloan-114"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "API-007"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-022",
+      "title_th": "ปฏิเสธข้อมูลผิดกฎที่ API พร้อมรหัสข้อผิดพลาดที่อ่านได้ด้วยเครื่องและข้อความไทย",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/Errors/ProblemDetailsFactory.cs",
+        "apps/api/Miniloan.Api.Tests/Enforcement/ValidationErrorContractTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-001"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-115",
+        "AC-miniloan-116"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-022"
+        },
+        {
+          "ref": "AC-miniloan-115"
+        },
+        {
+          "ref": "AC-miniloan-116"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "API-001"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-023",
+      "title_th": "ขอบเขตข้อมูลของ Applicant — เห็นเฉพาะใบสมัครและบัญชีของตัวเอง",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Authorization/ApplicantScope.cs",
+        "apps/api/Miniloan.Api/Endpoints/ApplicationListEndpoints.cs",
+        "apps/api/Miniloan.Api/Endpoints/AccountListEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Authorization/ApplicantScopeTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-002"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-126",
+        "AC-miniloan-127",
+        "AC-miniloan-128"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-023"
+        },
+        {
+          "ref": "AC-miniloan-126"
+        },
+        {
+          "ref": "AC-miniloan-127"
+        },
+        {
+          "ref": "AC-miniloan-128"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "API-005"
+        },
+        {
+          "ref": "API-013"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-024",
+      "title_th": "ขอบเขตบัญชีที่ Operations ถูก assign — บังคับที่ชั้น API ทั้งอ่านและเขียน",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Domain/Authorization/OperationsScope.cs",
+        "apps/api/Miniloan.Api.Tests/Authorization/OperationsScopeTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-012"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-135",
+        "AC-miniloan-136",
+        "AC-miniloan-137"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-024"
+        },
+        {
+          "ref": "AC-miniloan-135"
+        },
+        {
+          "ref": "AC-miniloan-136"
+        },
+        {
+          "ref": "AC-miniloan-137"
+        },
+        {
+          "ref": "ENT-004"
+        },
+        {
+          "ref": "ENT-006"
+        },
+        {
+          "ref": "API-013"
+        },
+        {
+          "ref": "API-014"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-025",
+      "title_th": "ตรวจ token จำลองทุกคำขอ ก่อนแตะข้อมูลใดๆ",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/Auth/MockTokenAuthentication.cs",
+        "apps/api/Miniloan.Api.Tests/Auth/MockTokenAuthenticationTests.cs"
+      ],
+      "depends_on": [],
+      "acceptance_refs": [
+        "AC-miniloan-123",
+        "AC-miniloan-124",
+        "AC-miniloan-125"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-025"
+        },
+        {
+          "ref": "AC-miniloan-123"
+        },
+        {
+          "ref": "AC-miniloan-124"
+        },
+        {
+          "ref": "AC-miniloan-125"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "API-005"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-026",
+      "title_th": "แสดงสถานะข้อผิดพลาดเมื่อ API ปิดให้บริการ พร้อมปุ่มลองใหม่ที่กู้คืนได้เอง",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/components/ApiErrorState.tsx",
+        "apps/web/lib/api-client.ts",
+        "apps/web/__tests__/api-error-state.test.tsx"
+      ],
+      "depends_on": [],
+      "acceptance_refs": [
+        "AC-miniloan-119",
+        "AC-miniloan-120"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-026"
+        },
+        {
+          "ref": "AC-miniloan-119"
+        },
+        {
+          "ref": "AC-miniloan-120"
+        },
+        {
+          "ref": "UI-miniloan-002"
+        },
+        {
+          "ref": "API-005"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-027",
+      "title_th": "รักษาสัญญา OpenAPI ที่ทดสอบได้ — response ตรง schema ทุกฟิลด์",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/OpenApi/SchemaRegistration.cs",
+        "apps/api/Miniloan.Api.Tests/Contract/OpenApiContractTests.cs"
+      ],
+      "depends_on": [],
+      "acceptance_refs": [
+        "AC-miniloan-121",
+        "AC-miniloan-122"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-027"
+        },
+        {
+          "ref": "AC-miniloan-121"
+        },
+        {
+          "ref": "AC-miniloan-122"
+        },
+        {
+          "ref": "API-001"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-028",
+      "title_th": "endpoint ประเมินวงเงินอนุมัติสูงสุดล่วงหน้า — ตัวเลขที่หน้าเว็บต้องถามแทนการคำนวณเอง",
+      "app_ref": "api",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "endpoint",
+        "domain",
+        "persistence",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/api/Miniloan.Api/Endpoints/MaxAmountPreviewEndpoints.cs",
+        "apps/api/Miniloan.Api.Tests/Assessment/MaxAmountPreviewTests.cs"
+      ],
+      "depends_on": [
+        "FE-miniloan-003"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-117",
+        "AC-miniloan-118"
+      ],
+      "traces_up": [
+        {
+          "ref": "UC-miniloan-028"
+        },
+        {
+          "ref": "AC-miniloan-117"
+        },
+        {
+          "ref": "AC-miniloan-118"
+        },
+        {
+          "ref": "ENT-002"
+        },
+        {
+          "ref": "ENT-003"
+        },
+        {
+          "ref": "API-021"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-029",
+      "title_th": "หน้ากรอกและยื่นใบสมัคร — บันทึกร่าง ยื่น และขอวงเงินสูงสุดจาก API ทุกครั้ง",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/applications/new/page.tsx",
+        "apps/web/components/ApplicationForm.tsx",
+        "apps/web/lib/applications.ts",
+        "apps/web/__tests__/application-form.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-001",
+        "FE-miniloan-002",
+        "FE-miniloan-026",
+        "FE-miniloan-028"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-026",
+        "AC-miniloan-029",
+        "AC-miniloan-030",
+        "AC-miniloan-032",
+        "AC-miniloan-033",
+        "AC-miniloan-116",
+        "AC-miniloan-117",
+        "AC-miniloan-118",
+        "AC-miniloan-133"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-026"
+        },
+        {
+          "ref": "AC-miniloan-029"
+        },
+        {
+          "ref": "AC-miniloan-030"
+        },
+        {
+          "ref": "AC-miniloan-032"
+        },
+        {
+          "ref": "AC-miniloan-033"
+        },
+        {
+          "ref": "AC-miniloan-116"
+        },
+        {
+          "ref": "AC-miniloan-117"
+        },
+        {
+          "ref": "AC-miniloan-118"
+        },
+        {
+          "ref": "AC-miniloan-133"
+        },
+        {
+          "ref": "UI-miniloan-001"
+        },
+        {
+          "ref": "API-001"
+        },
+        {
+          "ref": "API-002"
+        },
+        {
+          "ref": "API-003"
+        },
+        {
+          "ref": "API-021"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-030",
+      "title_th": "รายการใบสมัครและบัญชีของฉัน พร้อมหน้ารายละเอียดและผลการประเมิน",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/me/page.tsx",
+        "apps/web/app/me/applications/[id]/page.tsx",
+        "apps/web/components/AssessmentResult.tsx",
+        "apps/web/__tests__/my-applications.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-003",
+        "FE-miniloan-023",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-034",
+        "AC-miniloan-035",
+        "AC-miniloan-041",
+        "AC-miniloan-044",
+        "AC-miniloan-126"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-034"
+        },
+        {
+          "ref": "AC-miniloan-035"
+        },
+        {
+          "ref": "AC-miniloan-041"
+        },
+        {
+          "ref": "AC-miniloan-044"
+        },
+        {
+          "ref": "AC-miniloan-126"
+        },
+        {
+          "ref": "UI-miniloan-002"
+        },
+        {
+          "ref": "UI-miniloan-003"
+        },
+        {
+          "ref": "API-004"
+        },
+        {
+          "ref": "API-005"
+        },
+        {
+          "ref": "API-013"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-031",
+      "title_th": "ตารางผ่อนและยอดปิดบัญชีก่อนกำหนดของผู้กู้",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/me/accounts/[id]/schedule/page.tsx",
+        "apps/web/app/me/accounts/[id]/payoff/page.tsx",
+        "apps/web/components/ScheduleTable.tsx",
+        "apps/web/__tests__/schedule-table.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-010",
+        "FE-miniloan-011",
+        "FE-miniloan-015",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-001",
+        "AC-miniloan-002",
+        "AC-miniloan-003",
+        "AC-miniloan-008",
+        "AC-miniloan-011",
+        "AC-miniloan-027",
+        "AC-miniloan-071",
+        "AC-miniloan-073",
+        "AC-miniloan-074",
+        "AC-miniloan-075",
+        "AC-miniloan-094",
+        "AC-miniloan-095",
+        "AC-miniloan-098"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-001"
+        },
+        {
+          "ref": "AC-miniloan-002"
+        },
+        {
+          "ref": "AC-miniloan-003"
+        },
+        {
+          "ref": "AC-miniloan-008"
+        },
+        {
+          "ref": "AC-miniloan-011"
+        },
+        {
+          "ref": "AC-miniloan-027"
+        },
+        {
+          "ref": "AC-miniloan-071"
+        },
+        {
+          "ref": "AC-miniloan-073"
+        },
+        {
+          "ref": "AC-miniloan-074"
+        },
+        {
+          "ref": "AC-miniloan-075"
+        },
+        {
+          "ref": "AC-miniloan-094"
+        },
+        {
+          "ref": "AC-miniloan-095"
+        },
+        {
+          "ref": "AC-miniloan-098"
+        },
+        {
+          "ref": "UI-miniloan-004"
+        },
+        {
+          "ref": "UI-miniloan-005"
+        },
+        {
+          "ref": "API-012"
+        },
+        {
+          "ref": "API-015"
+        },
+        {
+          "ref": "API-023"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-032",
+      "title_th": "คิวใบสมัครที่ยังไม่ถูกมอบหมาย และการมอบหมายของหัวหน้าเจ้าหน้าที่สินเชื่อ",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/supervisor/queue/page.tsx",
+        "apps/web/components/AssignDialog.tsx",
+        "apps/web/__tests__/supervisor-queue.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-004",
+        "FE-miniloan-008",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-064",
+        "AC-miniloan-066",
+        "AC-miniloan-090"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-064"
+        },
+        {
+          "ref": "AC-miniloan-066"
+        },
+        {
+          "ref": "AC-miniloan-090"
+        },
+        {
+          "ref": "UI-miniloan-010"
+        },
+        {
+          "ref": "API-005"
+        },
+        {
+          "ref": "API-006"
+        },
+        {
+          "ref": "API-009"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-033",
+      "title_th": "คิวและหน้าพิจารณาใบสมัครของเจ้าหน้าที่สินเชื่อ — อนุมัติ ปฏิเสธ ยกเลิก เบิกจ่าย",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/officer/queue/page.tsx",
+        "apps/web/app/officer/applications/[id]/page.tsx",
+        "apps/web/components/DecisionPanel.tsx",
+        "apps/web/__tests__/decision-panel.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-005",
+        "FE-miniloan-006",
+        "FE-miniloan-007",
+        "FE-miniloan-009",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-046",
+        "AC-miniloan-047",
+        "AC-miniloan-049",
+        "AC-miniloan-050",
+        "AC-miniloan-051",
+        "AC-miniloan-053",
+        "AC-miniloan-055",
+        "AC-miniloan-056",
+        "AC-miniloan-063",
+        "AC-miniloan-131",
+        "AC-miniloan-132"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-046"
+        },
+        {
+          "ref": "AC-miniloan-047"
+        },
+        {
+          "ref": "AC-miniloan-049"
+        },
+        {
+          "ref": "AC-miniloan-050"
+        },
+        {
+          "ref": "AC-miniloan-051"
+        },
+        {
+          "ref": "AC-miniloan-053"
+        },
+        {
+          "ref": "AC-miniloan-055"
+        },
+        {
+          "ref": "AC-miniloan-056"
+        },
+        {
+          "ref": "AC-miniloan-063"
+        },
+        {
+          "ref": "AC-miniloan-131"
+        },
+        {
+          "ref": "AC-miniloan-132"
+        },
+        {
+          "ref": "UI-miniloan-006"
+        },
+        {
+          "ref": "UI-miniloan-007"
+        },
+        {
+          "ref": "API-004"
+        },
+        {
+          "ref": "API-007"
+        },
+        {
+          "ref": "API-008"
+        },
+        {
+          "ref": "API-009"
+        },
+        {
+          "ref": "API-010"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-034",
+      "title_th": "หน้าแดชบอร์ดภาพรวมสถานะ — ห้าตัวเลข ศูนย์คือศูนย์",
+      "app_ref": "web",
+      "type": "crud",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/officer/dashboard/page.tsx",
+        "apps/web/__tests__/dashboard.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-020",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-110",
+        "AC-miniloan-111",
+        "AC-miniloan-112"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-110"
+        },
+        {
+          "ref": "AC-miniloan-111"
+        },
+        {
+          "ref": "AC-miniloan-112"
+        },
+        {
+          "ref": "UI-miniloan-009"
+        },
+        {
+          "ref": "API-020"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-035",
+      "title_th": "หน้าตั้งค่าผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/officer/settings/approver-role/page.tsx",
+        "apps/web/__tests__/approver-role.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-019",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-082",
+        "AC-miniloan-083",
+        "AC-miniloan-089"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-082"
+        },
+        {
+          "ref": "AC-miniloan-083"
+        },
+        {
+          "ref": "AC-miniloan-089"
+        },
+        {
+          "ref": "UI-miniloan-008"
+        },
+        {
+          "ref": "API-019"
+        },
+        {
+          "ref": "API-022"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-036",
+      "title_th": "บัญชีสินเชื่อที่ Operations ดูแล — บันทึกชำระ ปิดบัญชี และยื่นคำขอปรับปรุง",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/ops/accounts/page.tsx",
+        "apps/web/app/ops/accounts/[id]/page.tsx",
+        "apps/web/components/PaymentForm.tsx",
+        "apps/web/__tests__/payment-form.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-010",
+        "FE-miniloan-012",
+        "FE-miniloan-013",
+        "FE-miniloan-014",
+        "FE-miniloan-016",
+        "FE-miniloan-017",
+        "FE-miniloan-024",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-004",
+        "AC-miniloan-005",
+        "AC-miniloan-006",
+        "AC-miniloan-012",
+        "AC-miniloan-013",
+        "AC-miniloan-069",
+        "AC-miniloan-070",
+        "AC-miniloan-076",
+        "AC-miniloan-077",
+        "AC-miniloan-086",
+        "AC-miniloan-087",
+        "AC-miniloan-135",
+        "AC-miniloan-137"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-004"
+        },
+        {
+          "ref": "AC-miniloan-005"
+        },
+        {
+          "ref": "AC-miniloan-006"
+        },
+        {
+          "ref": "AC-miniloan-012"
+        },
+        {
+          "ref": "AC-miniloan-013"
+        },
+        {
+          "ref": "AC-miniloan-069"
+        },
+        {
+          "ref": "AC-miniloan-070"
+        },
+        {
+          "ref": "AC-miniloan-076"
+        },
+        {
+          "ref": "AC-miniloan-077"
+        },
+        {
+          "ref": "AC-miniloan-086"
+        },
+        {
+          "ref": "AC-miniloan-087"
+        },
+        {
+          "ref": "AC-miniloan-135"
+        },
+        {
+          "ref": "AC-miniloan-137"
+        },
+        {
+          "ref": "UI-miniloan-011"
+        },
+        {
+          "ref": "UI-miniloan-012"
+        },
+        {
+          "ref": "API-011"
+        },
+        {
+          "ref": "API-013"
+        },
+        {
+          "ref": "API-014"
+        },
+        {
+          "ref": "API-016"
+        },
+        {
+          "ref": "API-023"
+        }
+      ],
+      "status": "draft"
+    },
+    {
+      "id": "FE-miniloan-037",
+      "title_th": "คิวและหน้าพิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้วของผู้อนุมัติ",
+      "app_ref": "web",
+      "type": "command",
+      "origin": "new",
+      "layering": [
+        "route",
+        "component",
+        "api-client",
+        "unit-test"
+      ],
+      "files_planned": [
+        "apps/web/app/approver/adjustments/page.tsx",
+        "apps/web/app/approver/adjustments/[id]/page.tsx",
+        "apps/web/__tests__/adjustment-decision.test.tsx"
+      ],
+      "depends_on": [
+        "FE-miniloan-018",
+        "FE-miniloan-026"
+      ],
+      "acceptance_refs": [
+        "AC-miniloan-079",
+        "AC-miniloan-084",
+        "AC-miniloan-085"
+      ],
+      "traces_up": [
+        {
+          "ref": "AC-miniloan-079"
+        },
+        {
+          "ref": "AC-miniloan-084"
+        },
+        {
+          "ref": "AC-miniloan-085"
+        },
+        {
+          "ref": "UI-miniloan-013"
+        },
+        {
+          "ref": "UI-miniloan-014"
+        },
+        {
+          "ref": "API-017"
+        },
+        {
+          "ref": "API-018"
+        },
+        {
+          "ref": "API-024"
+        },
+        {
+          "ref": "API-025"
+        }
+      ],
+      "status": "draft"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "GAP-miniloan-001",
+      "to": "design",
+      "about": "UC-miniloan-004",
+      "question_th": "DQ-miniloan-002 ยังไม่ถูกปิดที่โต๊ะ design — หัวหน้าของ Loan Officer เห็นใบสมัครที่มอบหมายให้ลูกน้องหรือไม่ และระบบนี้มีลำดับชั้นของเจ้าหน้าที่หรือเปล่า · ถ้าไม่ตอบ ขอบเขตข้อมูลของหน่วยมอบหมาย ยกเลิกโดยหัวหน้า และรายการของตัวเอง จะถูกเดา",
+      "blocks": [
+        "FE-miniloan-004",
+        "FE-miniloan-008",
+        "FE-miniloan-023",
+        "FE-miniloan-032"
+      ]
+    },
+    {
+      "id": "GAP-miniloan-002",
+      "to": "design",
+      "about": "UC-miniloan-020",
+      "question_th": "DQ-miniloan-004 ยังไม่ถูกปิดที่โต๊ะ design — แดชบอร์ดและยอดรวมตาม BR-miniloan-024@v1 ใช้ขอบเขตข้อมูลเดียวกับการเปิดดูรายใบหรือไม่ · Loan Officer เห็นจำนวนของทั้งระบบ หรือเห็นเฉพาะที่ตัวเองรับผิดชอบ",
+      "blocks": [
+        "FE-miniloan-020",
+        "FE-miniloan-034"
+      ]
+    },
+    {
+      "id": "GAP-miniloan-003",
+      "to": "design",
+      "about": "UC-miniloan-009",
+      "question_th": "DQ-miniloan-008 ยังไม่ถูกปิดที่โต๊ะ design — ขอบเขตของ transaction อยู่ตรงไหน · ข้อมูลที่เขียนลงไปแล้วก่อนการเรียกล้มเหลว ต้อง rollback ทั้งก้อนหรือค้างครึ่งทางได้ (เบิกจ่าย+สร้างตารางผ่อน · บันทึกชำระ+ปิดบัญชี)",
+      "blocks": [
+        "FE-miniloan-009",
+        "FE-miniloan-012",
+        "FE-miniloan-013",
+        "FE-miniloan-014",
+        "FE-miniloan-016",
+        "FE-miniloan-036"
+      ]
+    }
+  ]
+}
