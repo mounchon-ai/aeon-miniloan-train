@@ -34,7 +34,7 @@
         "required": false,
         "source": "asked",
         "decided_by": "aplus191",
-        "decided_at": "2026-09-03"
+        "decided_at": "2026-09-04"
       },
       {
         "name": "queue",
@@ -42,7 +42,7 @@
         "required": false,
         "source": "asked",
         "decided_by": "aplus191",
-        "decided_at": "2026-09-03"
+        "decided_at": "2026-09-04"
       },
       {
         "name": "other",
@@ -75,7 +75,7 @@
       {
         "app_ref": "api",
         "root": "apps/api",
-        "layout_th": "ASP.NET Core Web API project เดียว",
+        "layout_th": "Java (Spring Boot 3.x, Maven) — package-based layering ใต้ com.miniloan (DEC-001). pom.xml และ src/main/resources อยู่นอกชั้นที่ประกาศไว้โดยตั้งใจ — เป็นไฟล์ build/config ระดับ root ของแอป ไม่มีหน่วยไหน track ไว้ใน manifest.files (ดู CLAUDE.md ส่วน \"ความผิดพลาดที่เคยเกิด\")",
         "layers": [
           {
             "name": "Domain",
@@ -110,7 +110,7 @@
       {
         "app_ref": "web",
         "root": "apps/web",
-        "layout_th": "Next.js app (App Router)",
+        "layout_th": "Angular (standalone components) — core/shared/features (DEC-003). main.ts, index.html, styles.scss และ package.json/angular.json/tsconfig*.json อยู่นอกชั้นที่ประกาศไว้โดยตั้งใจ — เป็นไฟล์ bootstrap/build ของ Angular CLI ระดับ root ของแอป ไม่มีหน่วยไหน track ไว้ใน manifest.files (ดู CLAUDE.md ส่วน \"ความผิดพลาดที่เคยเกิด\")",
         "layers": [
           {
             "name": "Core",
