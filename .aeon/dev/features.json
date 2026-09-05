@@ -857,7 +857,46 @@
           "hash": "sha256:ad96a79713cc815b24fd7c008a6f06406f0b7d103109b90fa3f5ae1e7f303538"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 2,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 66, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (7 in ApplicationAssignmentServiceTest, 3 in ApplicationAssignmentControllerTest, plus the 56 FE-001..005 already had)",
+            "at": "2026-09-05T15:16:02Z"
+          },
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57730607 bytes",
+            "at": "2026-09-05T15:16:16Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-05"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/ApplicationAssignmentController.java",
+          "apps/api/src/main/java/com/miniloan/service/ApplicationAssignmentService.java",
+          "apps/api/src/main/java/com/miniloan/domain/ApplicationAssignment.java",
+          "apps/api/src/main/java/com/miniloan/domain/LoanApplication.java",
+          "apps/api/src/main/java/com/miniloan/repository/ApplicationAssignmentRepository.java",
+          "apps/api/src/test/java/com/miniloan/service/ApplicationAssignmentServiceTest.java",
+          "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java",
+          "apps/api/src/test/java/com/miniloan/controller/ApplicationAssignmentControllerTest.java"
+        ],
+        "unit_tests": [],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-006",
+            "route": "POST /applications/{id}/assign",
+            "file": "apps/api/src/main/java/com/miniloan/controller/ApplicationAssignmentController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-007",
@@ -2901,8 +2940,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 5,
-      "draft": 24
+      "validated": 6,
+      "draft": 23
     },
     "by_origin": {
       "new": 29

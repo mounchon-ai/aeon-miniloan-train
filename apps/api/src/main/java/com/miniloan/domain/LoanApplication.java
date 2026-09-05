@@ -103,6 +103,14 @@ public class LoanApplication {
 
     private Instant submittedAt;
 
+    /**
+     * The Loan Officer responsible right now (BR-miniloan-032@v1). Null until a supervisor assigns
+     * one, and that null is the normal state of a freshly assessed application, not a fault
+     * (AC-miniloan-066). The assignment history lives in ENT-013; this is the only field anything
+     * asks when deciding who may act.
+     */
+    private String assignedLoanOfficerId;
+
     protected LoanApplication() {
         // JPA
     }
@@ -198,6 +206,67 @@ public class LoanApplication {
         }
     }
 
+    /**
+     * BR-miniloan-032@v1 — a supervisor hands the application to one Loan Officer; the system never
+     * distributes work itself and an officer cannot pick one up. Re-assigning is allowed and simply
+     * moves this pointer: ENT-013 keeps the row that says who held it before, and UC-miniloan-004's
+     * "not yet assigned" precondition describes where the main flow starts rather than an invariant
+     * (decided with the project owner on 2026-09-05).
+     */
+    public void assignTo(String loanOfficerId) {
+        if (status != Status.UnderReview) {
+            throw new NotAssignableException(status);
+        }
+        this.assignedLoanOfficerId = loanOfficerId;
+        this.updatedAt = Instant.now();
+    }
+
+    /**
+     * The guard every officer-only action goes through (BR-miniloan-032@v1). Holding the same role
+     * is not enough — AC-miniloan-065 turns down a second Loan Officer with identical rights — and
+     * an unassigned application turns everyone down (AC-miniloan-066). The units that expose those
+     * actions are FE-miniloan-007 (approve) and FE-miniloan-008 (reject); this is the rule they
+     * call, kept on the aggregate so no caller can route around it.
+     */
+    public void requireAssignedTo(String loanOfficerId) {
+        if (assignedLoanOfficerId == null) {
+            throw new NotAssignedException();
+        }
+        if (!assignedLoanOfficerId.equals(loanOfficerId)) {
+            throw new AssignedToAnotherOfficerException(assignedLoanOfficerId);
+        }
+    }
+
+    public static class NotAssignableException extends RuntimeException {
+        public NotAssignableException(Status status) {
+            super("มอบหมายไม่ได้ — ใบสมัครนี้อยู่สถานะ " + status + " ไม่ใช่ UnderReview");
+        }
+    }
+
+    public static class NotAssignedException extends RuntimeException {
+        public NotAssignedException() {
+            super("ดำเนินการไม่ได้ — ใบสมัครนี้ยังไม่ถูกมอบหมายให้ผู้พิจารณา");
+        }
+    }
+
+    /**
+     * Carries the assignee so the acting unit can phrase its own refusal — AC-miniloan-065's exact
+     * wording ("อนุมัติไม่ได้ — ...") belongs to the approve action, and reject and cancel each name
+     * themselves differently.
+     */
+    public static class AssignedToAnotherOfficerException extends RuntimeException {
+        private final String assignedLoanOfficerId;
+
+        public AssignedToAnotherOfficerException(String assignedLoanOfficerId) {
+            super("ดำเนินการไม่ได้ — ใบสมัครนี้มอบหมายให้ " + assignedLoanOfficerId + " เป็นผู้พิจารณา");
+            this.assignedLoanOfficerId = assignedLoanOfficerId;
+        }
+
+        public String getAssignedLoanOfficerId() {
+            return assignedLoanOfficerId;
+        }
+    }
+
     public void applyDraftFields(
             String fullName,
             Integer age,
@@ -272,5 +341,9 @@ public class LoanApplication {
 
     public Instant getSubmittedAt() {
         return submittedAt;
+    }
+
+    public String getAssignedLoanOfficerId() {
+        return assignedLoanOfficerId;
     }
 }

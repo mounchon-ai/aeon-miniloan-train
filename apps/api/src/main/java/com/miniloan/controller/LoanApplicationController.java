@@ -1,7 +1,9 @@
 package com.miniloan.controller;
 
+import com.miniloan.domain.ApplicationAssignment;
 import com.miniloan.domain.CreditAssessment;
 import com.miniloan.domain.LoanApplication;
+import com.miniloan.service.ApplicationAssignmentService;
 import com.miniloan.service.CreditAssessmentService;
 import com.miniloan.service.LoanApplicationDraftService;
 import com.miniloan.service.LoanApplicationDraftService.DraftFields;
@@ -52,11 +54,15 @@ public class LoanApplicationController {
 
     private final LoanApplicationDraftService draftService;
     private final LoanApplicationSubmitService submitService;
+    private final ApplicationAssignmentService assignmentService;
 
     public LoanApplicationController(
-            LoanApplicationDraftService draftService, LoanApplicationSubmitService submitService) {
+            LoanApplicationDraftService draftService,
+            LoanApplicationSubmitService submitService,
+            ApplicationAssignmentService assignmentService) {
         this.draftService = draftService;
         this.submitService = submitService;
+        this.assignmentService = assignmentService;
     }
 
     @PostMapping
@@ -80,7 +86,7 @@ public class LoanApplicationController {
     public ResponseEntity<ApplicationDetailResponse> submit(
             @PathVariable UUID id, HttpServletRequest httpRequest) {
         String applicantId = requireApplicant(httpRequest);
-        return ResponseEntity.ok(ApplicationDetailResponse.from(submitService.submit(id, applicantId)));
+        return ResponseEntity.ok(detailOf(submitService.submit(id, applicantId), id));
     }
 
     /** API-004 — scope is decided per role in the service, from rbac.json. */
@@ -88,7 +94,11 @@ public class LoanApplicationController {
     public ResponseEntity<ApplicationDetailResponse> detail(
             @PathVariable UUID id, HttpServletRequest httpRequest) {
         String role = (String) httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
-        return ResponseEntity.ok(ApplicationDetailResponse.from(submitService.findDetail(id, role)));
+        return ResponseEntity.ok(detailOf(submitService.findDetail(id, role), id));
+    }
+
+    private ApplicationDetailResponse detailOf(SubmitResult result, UUID id) {
+        return ApplicationDetailResponse.from(result, assignmentService.latest(id).orElse(null));
     }
 
     private String requireApplicant(HttpServletRequest httpRequest) {
@@ -236,15 +246,37 @@ public class LoanApplicationController {
     /** AC-miniloan-035: a draft has no assessment, and the note says why rather than leaving a hole. */
     public static final String NO_ASSESSMENT_NOTE = "ยังไม่มีผลการประเมิน — ใบสมัครนี้ยังไม่ได้ยื่น";
 
-    public record ApplicationDetailResponse(
-            LoanApplicationResponse application, CreditAssessmentResponse assessment, String assessmentNote) {
+    /**
+     * ผู้รับผิดชอบ (ENT-013 · FE-miniloan-006). Null on an application no supervisor has handed on
+     * yet, which is the normal state rather than a fault (AC-miniloan-066).
+     */
+    public record AssignmentResponse(String loanOfficerId, String assignedBy, Instant assignedAt) {
 
-        static ApplicationDetailResponse from(SubmitResult result) {
+        static AssignmentResponse from(ApplicationAssignment assignment) {
+            return new AssignmentResponse(
+                    assignment.getLoanOfficerId(), assignment.getAssignedBy(), assignment.getAssignedAt());
+        }
+    }
+
+    public record ApplicationDetailResponse(
+            LoanApplicationResponse application,
+            CreditAssessmentResponse assessment,
+            String assessmentNote,
+            AssignmentResponse assignment) {
+
+        /**
+         * AC-miniloan-064 wants "ผู้รับผิดชอบ: ก. (มอบหมายโดย … เมื่อ …)" on the application page.
+         * The officer is on the application row itself, but who handed it over and when live only on
+         * the ENT-013 round, so both travel here — apps/web renders what the API returns and computes
+         * nothing (REQ-miniloan-006).
+         */
+        static ApplicationDetailResponse from(SubmitResult result, ApplicationAssignment assignment) {
             boolean assessed = result.assessment() != null;
             return new ApplicationDetailResponse(
                     LoanApplicationResponse.from(result.application()),
                     assessed ? CreditAssessmentResponse.from(result.assessment()) : null,
-                    assessed ? null : NO_ASSESSMENT_NOTE);
+                    assessed ? null : NO_ASSESSMENT_NOTE,
+                    assignment == null ? null : AssignmentResponse.from(assignment));
         }
     }
 
