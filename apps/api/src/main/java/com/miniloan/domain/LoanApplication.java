@@ -11,14 +11,21 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * ใบสมัครสินเชื่อ (ENT-002 · STM-miniloan-001). This unit (FE-miniloan-004) only ever writes
- * {@link Status#Draft} rows — every other status, and the fields that go with it
- * (assignedLoanOfficerId, approvedAmount, rejectionReason, ...), belongs to the unit that first
- * needs it (FE-miniloan-005 onward) and is added to this same entity there.
+ * ใบสมัครสินเชื่อ (ENT-002 · STM-miniloan-001). FE-miniloan-004 only ever wrote
+ * {@link Status#Draft} rows; FE-miniloan-005 adds the two transitions out of it —
+ * {@link #submit()} (Draft → Submitted, the applicant's own) and
+ * {@link #moveToUnderReview()} (Submitted → UnderReview, the system's). Every other status, and the
+ * fields that go with it (assignedLoanOfficerId, approvedAmount, rejectionReason, ...), belongs to
+ * the unit that first needs it and is added to this same entity there.
+ *
+ * <p>BR-miniloan-010@v1: status changes happen through methods on this aggregate and nowhere else —
+ * there is no setter, and no path back.
  *
  * <p>ENT-001 (Applicant) is not a persisted entity anywhere in the build plan — the mock-auth
  * scheme (FE-miniloan-002) has exactly one demo identity per role, so {@code applicantId} is
@@ -40,6 +47,13 @@ public class LoanApplication {
     public static final String AMOUNT_OUT_OF_RANGE_CODE = "LOAN_AMOUNT_OUT_OF_RANGE";
     public static final String AMOUNT_OUT_OF_RANGE_MESSAGE =
             "จำนวนเงินกู้ที่ขอต้องอยู่ระหว่าง 10,000 – 1,000,000 บาท";
+
+    /** The other half of BR-miniloan-004@v1's range — monthly instalments, 6 to 60 of them. */
+    public static final int MIN_TERM_MONTHS = 6;
+
+    public static final int MAX_TERM_MONTHS = 60;
+    public static final String TERM_OUT_OF_RANGE_CODE = "LOAN_TERM_OUT_OF_RANGE";
+    public static final String TERM_OUT_OF_RANGE_MESSAGE = "จำนวนงวดต้องอยู่ระหว่าง 6 – 60 งวด";
 
     public enum Status {
         Draft,
@@ -110,6 +124,78 @@ public class LoanApplication {
             return Optional.of(new RangeViolation(AMOUNT_OUT_OF_RANGE_CODE, AMOUNT_OUT_OF_RANGE_MESSAGE));
         }
         return Optional.empty();
+    }
+
+    /** AC-miniloan-115 for the tenor half of BR-miniloan-004@v1's range. */
+    public static Optional<RangeViolation> validateRequestedTermMonths(Integer termMonths) {
+        if (termMonths == null) {
+            return Optional.empty();
+        }
+        if (termMonths < MIN_TERM_MONTHS || termMonths > MAX_TERM_MONTHS) {
+            return Optional.of(new RangeViolation(TERM_OUT_OF_RANGE_CODE, TERM_OUT_OF_RANGE_MESSAGE));
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * BR-miniloan-007@v1 — the six fields submission requires, reported in full and in the order the
+     * form asks for them. AC-miniloan-030 is explicit that naming only the first missing field is
+     * wrong: the applicant fixes one round of corrections, not six.
+     */
+    public List<String> missingRequiredFields() {
+        List<String> missing = new ArrayList<>();
+        if (fullName == null || fullName.isBlank()) {
+            missing.add("ชื่อ");
+        }
+        if (age == null) {
+            missing.add("อายุ");
+        }
+        if (monthlyIncome == null) {
+            missing.add("รายได้");
+        }
+        if (currentEmploymentMonths == null) {
+            missing.add("อายุงาน");
+        }
+        if (requestedAmount == null) {
+            missing.add("จำนวนเงินกู้");
+        }
+        if (requestedTermMonths == null) {
+            missing.add("จำนวนงวด");
+        }
+        return List.copyOf(missing);
+    }
+
+    /**
+     * Draft → Submitted (STM-miniloan-001). BR-miniloan-031@v2 puts this edge in the hands of the
+     * owning applicant alone; the caller has already resolved that, this method guards the state.
+     */
+    public void submit() {
+        if (status != Status.Draft) {
+            throw new IllegalStateTransitionException(status, Status.Submitted);
+        }
+        this.status = Status.Submitted;
+        Instant now = Instant.now();
+        this.submittedAt = now;
+        this.updatedAt = now;
+    }
+
+    /**
+     * Submitted → UnderReview (STM-miniloan-001). AC-miniloan-063: no role has this edge — it is the
+     * assessment finishing on Band A or B, which is why no endpoint anywhere exposes it and no
+     * screen carries a button for it.
+     */
+    public void moveToUnderReview() {
+        if (status != Status.Submitted) {
+            throw new IllegalStateTransitionException(status, Status.UnderReview);
+        }
+        this.status = Status.UnderReview;
+        this.updatedAt = Instant.now();
+    }
+
+    public static class IllegalStateTransitionException extends RuntimeException {
+        public IllegalStateTransitionException(Status from, Status to) {
+            super("ใบสมัครสถานะ " + from + " เดินไปสถานะ " + to + " ไม่ได้");
+        }
     }
 
     public void applyDraftFields(

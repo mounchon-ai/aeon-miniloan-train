@@ -729,7 +729,75 @@
           "hash": "sha256:0290bb2f51c3a070c7c8c4b27bdf7daff261c687c345d1a349c87502a85e97f8"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 2,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 56, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (6 in CreditAssessmentServiceTest$DtiGoldenRows, 6 in $MaxApprovableGoldenRows, 6 in $Banding, 7 in $Eligibility, 8 in LoanApplicationSubmitServiceTest, plus the 23 FE-001..004 already had)",
+            "at": "2026-09-05T14:59:39Z"
+          },
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57713343 bytes",
+            "at": "2026-09-05T14:57:55Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-05"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java",
+          "apps/api/src/main/java/com/miniloan/service/LoanApplicationSubmitService.java",
+          "apps/api/src/main/java/com/miniloan/service/CreditAssessmentService.java",
+          "apps/api/src/main/java/com/miniloan/domain/LoanApplication.java",
+          "apps/api/src/main/java/com/miniloan/domain/CreditAssessment.java",
+          "apps/api/src/main/java/com/miniloan/domain/IdempotencyKey.java",
+          "apps/api/src/main/java/com/miniloan/domain/InstalmentCalculator.java",
+          "apps/api/src/main/java/com/miniloan/repository/CreditAssessmentRepository.java",
+          "apps/api/src/main/java/com/miniloan/repository/IdempotencyKeyRepository.java",
+          "apps/api/src/test/java/com/miniloan/service/CreditAssessmentServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/service/LoanApplicationSubmitServiceTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/CreditAssessmentServiceTest.java",
+            "calc_ref": "CALC-miniloan-002@v1",
+            "gd_ref": "GD-miniloan-003"
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/CreditAssessmentServiceTest.java",
+            "calc_ref": "CALC-miniloan-003@v1",
+            "gd_ref": "GD-miniloan-004"
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-001",
+            "route": "POST /applications",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          },
+          {
+            "api_ref": "API-002",
+            "route": "PUT /applications/{id}",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          },
+          {
+            "api_ref": "API-003",
+            "route": "POST /applications/{id}/submit",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          },
+          {
+            "api_ref": "API-004",
+            "route": "GET /applications/{id}",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-006",
@@ -2795,13 +2863,43 @@
       "blocks": [
         "FE-miniloan-001"
       ]
+    },
+    {
+      "id": "GAP-miniloan-002",
+      "to": "design",
+      "about": "sitemap.json",
+      "question_th": "sitemap.json ประกาศผังเมนูไว้ครบแล้ว (label · parent · order · entry · app) แต่ไม่มี artifact ใบไหนประกาศลิงก์เมนูเหล่านั้นเป็น control ที่มี id — screens.json ประกาศเฉพาะ field/action ที่อยู่ในหน้า และ wireframe ทั้ง 14 ใบก็วาดเฉพาะของในหน้าเช่นกัน ผลคือ FE-miniloan-001 (เปลือกของแอป web) render ลิงก์เมนู 4 อันอยู่บนดิสก์แล้ว (UI-miniloan-002 · UI-miniloan-009 · UI-miniloan-010 · UI-miniloan-011 ตาม entry:true และ role ที่ rbac.json ACL-023/030/031/032 กำหนด) โดยไม่มี data-testid ที่ใครประกาศให้ใช้ได้สักอัน ⇒ qa เดินเมนูของแอปนี้ไม่ได้เลยสักปุ่ม และ dev มินต์ id เองไม่ได้ เพราะ DV13 สาขา e ปฏิเสธ testid ที่ไม่อยู่บน wireframe ใบไหนเลย (ทั้ง 14 หน้า drawn ครบ) และสาขานั้นไม่มีช่องยกเว้นให้การ์ดคำถามด้วย ขอให้ design ตัดสินสองข้อ: (1) ลิงก์เมนูของกรอบแอปเป็น control ที่ design ประกาศหรือไม่ และประกาศไว้ที่ไฟล์ไหน (2) ถ้าใช่ control ระดับกรอบแอปสังกัดหน้าไหน เพราะรูปของ id ที่ mock ใช้คือ <screen-id>-<key> ซึ่งต้องมี screen ให้ผูก แล้วจึงให้ mock เป็นผู้มินต์ id ตามประตู 89 — dev ไม่พิมพ์ testid เอง (ประตู 37)",
+      "found_at": "2026-09-05",
+      "found_by": "/dev:plan",
+      "status": "answered",
+      "answer_th": "เปลือกของแอป (แถบเมนู) เป็นของ mock ไม่ใช่ของ design และ design ประกาศสิ่งที่ตัวเองเป็นเจ้าของครบแล้ว — sitemap.json มี label · parent · order · entry · app ครบทั้ง 14 โหนด ซึ่งคือสิ่งที่ MV24 (gate 71) เรียกว่า a menu worth of sitemap และบังคับว่าทุกหน้าที่ลูกค้าเปิดต้องถูกวาดอยู่ในเปลือกนั้น · testid ของลิงก์เมนูถูกมินต์ไว้แล้วโดย mock: navControlId(screen) = nav-<ui-id ตัวพิมพ์เล็ก> ที่ mock/scripts/wireframes.mjs บรรทัด 184 (gate 69) เช่น nav-ui-miniloan-002 · nav-ui-miniloan-009 · nav-ui-miniloan-010 · nav-ui-miniloan-011 โดยลิงก์ที่ถูกกฎคือทุกหน้าที่ sitemap มอบให้แอปนั้น · id เหล่านี้เป็น furniture ของหน้า จงใจอยู่นอก controls[] ของ wireframe (mock/scripts/html.mjs บรรทัด 823) design จึงไม่ต้องประกาศ control ของกรอบแอปเพิ่ม และรายการ kind ของ design ก็ปิดตายที่ 13 ค่าโดยไม่มีค่าไหนหมายถึงกรอบแอป (auth เป็นค่าเดียวที่แปลว่าหน้านั้นไม่มีเปลือก) · บันทึกการตัดสินไว้ที่ ADR-004 · ข้อจำกัดที่ยังเหลือไม่ใช่คำถามที่ design ค้างตอบ: roster ของ dev (build.mjs wireframeControls) อ่านเฉพาะ controls[] จึงมองไม่เห็น furniture id ทำให้ยังบันทึก nav-ui-miniloan-002 ลง manifest.ui_controls ไม่ได้โดยไม่ชน DV13 สาขา e และ DV17 — เป็นการตัดสินของเจ้าของโปรเจกต์เรื่องโค้ด plugin ที่ใช้ร่วมกัน",
+      "answered_in": "changes.json",
+      "closed_by": "aplus191",
+      "blocks": [
+        "FE-miniloan-001"
+      ]
+    },
+    {
+      "id": "GAP-miniloan-003",
+      "to": "design",
+      "about": "screens.json",
+      "question_th": "FE-miniloan-001 มีตัวสลับบทบาท (select 5 role → token, label 'บทบาท (ทดลอง)') อยู่บนแถบเมนูของทุกหน้าบนดิสก์แล้ว — เป็นการตัดสินใจของ dev เองตอนสร้างหน่วยนี้ เพื่อให้ mock-token scheme (Authorization: Bearer <token> ต่อ role) ใช้งานได้ โดยไม่มี requirement · use case · screens.json · wireframe ใบไหนขอมัน จึงเป็น control Class B ที่ขึ้นไปอยู่บนหน้าจอแล้วก่อนจะมีใครขอ ตามกติกาข้อ 9 (ไม่มีใครขอ = ไม่ใช่ของที่ควรอยู่บนหน้า) ขอให้ design ตัดสินอย่างใดอย่างหนึ่ง: (ก) absorb — ประกาศมันเป็น control ของกรอบแอปพร้อมระบุว่า role ไหนเห็นได้ แล้วให้ mock มินต์ testid ให้ หรือ (ข) สั่งถอดออก พร้อมบอกว่าการสลับ role สำหรับ demo จะเกิดที่ไหนแทน (สลับ token ด้วยมือ · หน้า login จำลองที่ยังไม่มีใน sitemap · หรือไม่ต้องมีเลย) — dev จะไม่ลบเองและไม่ประกาศเอง เพราะทั้งสองทางเป็นคำตัดสินของ design ไม่ใช่ของ dev",
+      "found_at": "2026-09-05",
+      "found_by": "/dev:plan",
+      "status": "answered",
+      "answer_th": "absorb — ตัวสลับบทบาทเป็นของประจำเปลือก (shell) ไม่ใช่ control ของหน้าจอใดหน้าจอหนึ่ง design จึงไม่ประกาศมันใน screens.json เพราะเปลือกเป็นของ mock (MV24/MV29 · gate 71) และบ้านของมันคือ conventions.json ของ mock ซึ่งถือ shell.productName และ shell.signedInAs อยู่แล้ว · มันไม่ใช่ control ที่ไม่มีใครขอ แต่เป็นตัวยืนแทนหน้าเข้าสู่ระบบที่รอบนี้จงใจไม่มี ตามที่ CLAUDE.md ประกาศเองว่า auth รอบนี้เป็น mock/token stand-in ไม่ใช่ auth จริง · design ไม่สั่งถอด และไม่ประกาศเป็น control ของหน้าจอ บันทึกไว้ที่ ADR-004 · เรื่องที่ยังเปิดอยู่และเป็นคนละคำถามกับการ์ดใบนี้: ขั้นที่ 4a ของ /design:sitemap (gate 66) เสนอว่าผลิตภัณฑ์ที่มี role และ defaultEffect deny ควรมีหน้า kind auth (เข้าสู่ระบบ · ออกจากระบบ · ขอรหัสผ่านใหม่) ซึ่งโปรเจกต์นี้ยังไม่มีสักหน้าใน 14 หน้า — เป็นข้อเสนอที่รอเจ้าของตัดสิน",
+      "answered_in": "changes.json",
+      "closed_by": "aplus191",
+      "blocks": [
+        "FE-miniloan-001"
+      ]
     }
   ],
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 4,
-      "draft": 25
+      "validated": 5,
+      "draft": 24
     },
     "by_origin": {
       "new": 29
