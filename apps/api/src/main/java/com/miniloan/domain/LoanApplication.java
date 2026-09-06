@@ -406,6 +406,41 @@ public class LoanApplication {
     }
 
     /**
+     * Approved → Disbursed (STM-miniloan-001 · BR-miniloan-014@v1). The last edge out of this
+     * aggregate: Disbursed is final, and from here the loan lives on ENT-006 instead.
+     *
+     * <p>No column is added for the moment it happened. ENT-006 already declares
+     * {@code disbursedAt} and BR-miniloan-014@v1 makes the account and the application one-to-one,
+     * so AC-miniloan-060's "เบิกจ่ายไปแล้วเมื่อ {วันที่เวลา}" is read off the account rather than
+     * kept twice and left to disagree.
+     */
+    public void disburse() {
+        if (status != Status.Approved) {
+            throw new NotDisbursableException(this);
+        }
+        this.status = Status.Disbursed;
+        this.updatedAt = Instant.now();
+    }
+
+    /**
+     * AC-miniloan-059 for everything short of approval. The already-disbursed case is
+     * AC-miniloan-060 and is refused before this method, by the caller that can read the account
+     * and quote its time.
+     */
+    public static class NotDisbursableException extends RuntimeException {
+        private final Status status;
+
+        public NotDisbursableException(LoanApplication application) {
+            super("เบิกจ่ายไม่ได้ — ใบสมัครนี้ยังไม่ได้รับอนุมัติ");
+            this.status = application.status;
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+    }
+
+    /**
      * Draft · Submitted · UnderReview · Approved → Cancelled (STM-miniloan-001 ·
      * BR-miniloan-047@v1). WHO may take this edge is not a question the aggregate can answer — it
      * depends on whether the application has been assigned, and that is BR-miniloan-031@v2's split

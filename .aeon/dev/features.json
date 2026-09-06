@@ -1443,7 +1443,60 @@
           "hash": "sha256:d58fdf9f7225f2b8c80b8b289f175e4fa0038b3eaaab280f59cde2ff6474f9b3"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 3,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 145, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (12 in AmortizationScheduleServiceTest and 16 in DisbursementServiceTest, on top of the 117 FE-001..009 had). Round 1: the calculator alone was red at Tests run: 12, Failures: 1 -- GD-miniloan-002 row 2 wanted a residual principal of 28,752.61 and full-precision arithmetic gave 28,752.64; the monthly rate is now held at the 10 places CALC-miniloan-001@v2 types annual_rate as, which reproduces every signed row. Round 2: red at Tests run: 145, Failures: 1 -- the repeat-disbursement assertion compared the in-memory Instant with the microseconds the column keeps; the expectation is read back from the row. No golden value was touched.",
+            "at": "2026-09-06T03:59:24Z"
+          },
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57806572 bytes",
+            "at": "2026-09-06T03:59:49Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/domain/LoanApplication.java",
+          "apps/api/src/main/java/com/miniloan/domain/InterestRateVersion.java",
+          "apps/api/src/main/java/com/miniloan/domain/LoanAccount.java",
+          "apps/api/src/main/java/com/miniloan/domain/RepaymentSchedule.java",
+          "apps/api/src/main/java/com/miniloan/domain/Installment.java",
+          "apps/api/src/main/java/com/miniloan/repository/LoanAccountRepository.java",
+          "apps/api/src/main/java/com/miniloan/repository/InterestRateVersionRepository.java",
+          "apps/api/src/main/java/com/miniloan/repository/RepaymentScheduleRepository.java",
+          "apps/api/src/main/java/com/miniloan/repository/InstallmentRepository.java",
+          "apps/api/src/main/java/com/miniloan/service/AmortizationScheduleService.java",
+          "apps/api/src/main/java/com/miniloan/service/DisbursementService.java",
+          "apps/api/src/main/java/com/miniloan/service/config/ClockConfig.java",
+          "apps/api/src/main/java/com/miniloan/service/config/InterestRateBootstrap.java",
+          "apps/api/src/main/java/com/miniloan/controller/DisbursementController.java",
+          "apps/api/src/test/java/com/miniloan/service/AmortizationScheduleServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/service/DisbursementServiceTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/AmortizationScheduleServiceTest.java",
+            "calc_ref": "CALC-miniloan-001@v2",
+            "gd_ref": "GD-miniloan-002"
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-010",
+            "route": "POST /applications/{id}/disburse",
+            "file": "apps/api/src/main/java/com/miniloan/controller/DisbursementController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-011",
@@ -3076,8 +3129,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 9,
-      "draft": 20
+      "validated": 10,
+      "draft": 19
     },
     "by_origin": {
       "new": 29
