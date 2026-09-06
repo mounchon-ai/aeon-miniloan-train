@@ -1,6 +1,7 @@
 package com.miniloan.repository;
 
 import com.miniloan.domain.RepaymentSchedule;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,14 @@ public interface RepaymentScheduleRepository extends JpaRepository<RepaymentSche
      * of them is current.
      */
     Optional<RepaymentSchedule> findByLoanAccountIdAndCurrentIsTrue(UUID loanAccountId);
+
+    /**
+     * AC-miniloan-011: every revision an account has ever been issued, oldest first — nothing is
+     * removed when it is replaced (BR-miniloan-044@v1), so this list only ever grows.
+     *
+     * <p>Ordered by revision number rather than by {@code issuedAt}: the number is what
+     * BR-miniloan-044@v1 increments, and the only field guaranteed to separate two revisions issued
+     * inside the same clock tick.
+     */
+    List<RepaymentSchedule> findByLoanAccountIdOrderByRevisionNumberAsc(UUID loanAccountId);
 }

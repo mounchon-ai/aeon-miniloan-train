@@ -1574,7 +1574,51 @@
           "hash": "sha256:a84c6de69c8186710097480ad245e17595adb7a906ca0027f6a0ce89609258bc"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 165, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (9 in AmortizationScheduleReissueTest incl. its nested TheReissuedTableIsTheSignedTable, and 11 in RepaymentScheduleControllerTest, on top of the 145 FE-001..010 had). Green on the first round -- build.iterations stays 0, and no assertion, golden row or health check was touched. The first green run had 162; the three added after it drive the two refusal routes and API-011 over real HTTP through AuthTokenFilter with MockMvc, because a direct controller-bean call proves the decision but never the ROUTING that AC-miniloan-009/010 depend on.",
+            "at": "2026-09-06T04:22:41Z"
+          },
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57827825 bytes",
+            "at": "2026-09-06T04:23:00Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/domain/RepaymentSchedule.java",
+          "apps/api/src/main/java/com/miniloan/repository/RepaymentScheduleRepository.java",
+          "apps/api/src/main/java/com/miniloan/service/AmortizationScheduleService.java",
+          "apps/api/src/main/java/com/miniloan/service/RepaymentScheduleReissueService.java",
+          "apps/api/src/main/java/com/miniloan/controller/RepaymentScheduleController.java",
+          "apps/api/src/test/java/com/miniloan/service/AmortizationScheduleReissueTest.java",
+          "apps/api/src/test/java/com/miniloan/controller/RepaymentScheduleControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/AmortizationScheduleReissueTest.java",
+            "calc_ref": "CALC-miniloan-001@v2",
+            "gd_ref": "GD-miniloan-002"
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-011",
+            "route": "POST /loan-accounts/{id}/reschedule",
+            "file": "apps/api/src/main/java/com/miniloan/controller/RepaymentScheduleController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-012",
@@ -3132,8 +3176,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 10,
-      "draft": 19
+      "validated": 11,
+      "draft": 18
     },
     "by_origin": {
       "new": 29
