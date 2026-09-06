@@ -6981,9 +6981,12 @@
       "category": "calculation",
       "blocked_until": "entity:Money",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "จำนวนเงินเก็บเป็น decimal(18,2) หน่วยบาท ปัดทันทีทุกจุดที่เกิดด้วย round half up ตาม BR-miniloan-035@v1 — 2 ตำแหน่งทศนิยม (สตางค์) ทุกฟิลด์ประเภท money",
+      "answered_at": "2026-09-03T03:39:19Z",
+      "resulted_in": [
+        "ENT-008"
+      ]
     },
     {
       "id": "DQ-miniloan-002",
@@ -6992,9 +6995,12 @@
       "category": "data_scope",
       "blocked_until": "entity:LoanOfficer (ยังไม่มี entity หรือลำดับชั้นของ role)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ระบบนี้มีลำดับชั้นของพนักงานเป็นข้อมูล แต่ลำดับชั้นนั้นไม่ให้สิทธิ์มองเห็นเพิ่ม — ENT-004 Staff มีฟิลด์ supervisorId (reference -> ENT-004, optional) บันทึกผู้บังคับบัญชาโดยตรงไว้ ส่วนขอบเขตสิทธิ์ตัดสินที่ rbac.json: delegation.enabled = false และ scopeInheritance = null จึงไม่มีการสืบทอดขอบเขตจากลูกน้องขึ้นมาหาหัวหน้า และ ROLE-003 ไม่มี ACL ข้อใดให้ดูใบสมัครที่ถูกมอบหมายให้ ROLE-002 ไปแล้ว (ACL-003 มอบหมายได้ตอน UnderReview · ACL-007 ยกเลิกได้เฉพาะใบที่ยังไม่ถูกมอบหมาย Draft/Submitted · ACL-031 เห็นเฉพาะคิวใบที่ยังไม่ถูกมอบหมาย) เมื่อรวมกับ defaultEffect: deny คำตอบคือ หัวหน้าของ Loan Officer ไม่เห็นใบสมัครที่มอบหมายให้ลูกน้องไปแล้ว",
+      "answered_at": "2026-09-05",
+      "resulted_in": [
+        "ENT-004"
+      ]
     },
     {
       "id": "DQ-miniloan-003",
@@ -7003,9 +7009,12 @@
       "category": "data_scope",
       "blocked_until": "entity:ApplicationAssignment (UL-miniloan-013 ยังไม่ถูกผูกกับ entity)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "เก็บประวัติการมอบหมายทุกครั้งเป็นแถวใหม่ใน ApplicationAssignment ไม่ทับของเดิม — ส่วนสิทธิ์การมองเห็น/อนุมัติของใบสมัคร อ้างอิงเฉพาะ LoanApplication.assignedLoanOfficerId ปัจจุบันเท่านั้น เจ้าหน้าที่คนเดิมที่ถูกถอดออกจะไม่เห็นใบสมัครนั้นอีกผ่านเส้นทางปกติ",
+      "answered_at": "2026-09-03T03:39:19Z",
+      "resulted_in": [
+        "ENT-013"
+      ]
     },
     {
       "id": "DQ-miniloan-004",
@@ -7014,9 +7023,12 @@
       "category": "data_scope",
       "blocked_until": "entity:LoanApplication / LoanAccount (ต้องรู้ก่อนว่าฟิลด์เจ้าของและผู้รับมอบหมายอยู่ที่ไหน)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "แดชบอร์ดใช้ขอบเขตข้อมูลเดียวกับการเปิดดูรายใบ คือ own ไม่ใช่ทั้งระบบ — ACL-018 (UC-miniloan-020 ดูแดชบอร์ดภาพรวมสถานะ) scope: own และ ACL-030 (UI-miniloan-009 เปิดหน้าแดชบอร์ด) scope: own ซึ่งตรงกับ ACL-027/ACL-028 (UI-miniloan-006 คิวใบสมัครที่มอบหมายให้ฉัน · UI-miniloan-007 พิจารณาใบสมัคร) ที่เป็น own เช่นกัน ดังนั้นยอดรวมตาม BR-miniloan-024@v1 ที่ Loan Officer เห็นบนแดชบอร์ด นับเฉพาะใบสมัครและบัญชีที่ตัวเองถูกมอบหมาย ไม่ใช่ของทั้งระบบ",
+      "answered_at": "2026-09-05",
+      "resulted_in": [
+        "ACL-018"
+      ]
     },
     {
       "id": "DQ-miniloan-005",
@@ -7025,9 +7037,12 @@
       "category": "temporal",
       "blocked_until": "entity:InterestRate (UL-miniloan-014 ยังไม่ถูกผูกกับ entity)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "แก้ไขเวอร์ชันอัตราดอกเบี้ยที่ประกาศไปแล้วไม่ได้ (immutable) ต้องสร้างเวอร์ชันใหม่เสมอเมื่อจะเปลี่ยนค่า",
+      "answered_at": "2026-09-03T03:39:19Z",
+      "resulted_in": [
+        "ENT-005"
+      ]
     },
     {
       "id": "DQ-miniloan-006",
@@ -7036,9 +7051,12 @@
       "category": "temporal",
       "blocked_until": "entity:InterestRate",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ใช้ soft-archive ผ่านฟิลด์ isArchived — เวอร์ชันเก่าซ่อนจากรายการเลือกใช้งานปกติเมื่อมีเวอร์ชันใหม่ แต่ยังอ้างอิงได้เสมอ ห้ามลบจริง",
+      "answered_at": "2026-09-03T03:39:19Z",
+      "resulted_in": [
+        "ENT-005"
+      ]
     },
     {
       "id": "DQ-miniloan-007",
@@ -7058,9 +7076,12 @@
       "category": "integration",
       "blocked_until": "entity:LoanApplication / LoanAccount (ยังไม่มีขอบเขต aggregate)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "ขอบเขต transaction คือทั้งคำสั่งเบิกจ่าย: เปลี่ยนสถานะใบสมัครเป็น Disbursed, สร้าง LoanAccount, สร้าง RepaymentSchedule และ Installment ทุกงวด อยู่ในธุรกรรมเดียวกันทั้งหมด ล้มเหลวที่จุดใดก็ตาม = rollback ทั้งก้อน ไม่มีบัญชีที่ไม่มีตารางผ่อน และไม่มีสถานะครึ่งทางให้ต้องซ่อมทีหลัง · กู้คืนด้วยการที่ผู้ใช้สั่งซ้ำเอง ไม่มี retry อัตโนมัติตาม BR-miniloan-042@v1 และ REQ-miniloan-006 · การสั่งซ้ำปลอดภัยเพราะ ENT-012 IdempotencyKey บังคับคู่ (commandType, requestId) ด้วย unique constraint ที่ db · บันทึกไว้ที่ interfaces.json ruleEnforcement ของ BR-miniloan-015@v1 enforceAt [domain, db] ผ่าน ADR-004 · SCN-miniloan-035 และ SCN-miniloan-036 ที่เซ็นแล้วพิสูจน์ข้อนี้อยู่ก่อนแล้ว",
+      "answered_at": "2026-09-05",
+      "resulted_in": [
+        "ADR-004"
+      ]
     },
     {
       "id": "DQ-miniloan-009",
@@ -7069,9 +7090,12 @@
       "category": "idempotency",
       "blocked_until": "entity:LoanApplication / Payment (ยังไม่มีฟิลด์ให้ตั้ง unique constraint)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "key กันซ้ำคือคู่ (commandType, requestId) โดย requestId เป็นค่าที่ client ส่งมาต่อครั้ง (idempotency key) เก็บในตาราง IdempotencyKey พร้อม unique constraint ที่ฐานข้อมูล ครอบคลุมคำสั่งยื่นใบสมัคร อนุมัติ ปฏิเสธ ยกเลิก เบิกจ่าย และบันทึกการชำระ",
+      "answered_at": "2026-09-03T03:39:19Z",
+      "resulted_in": [
+        "ENT-012"
+      ]
     },
     {
       "id": "DQ-miniloan-010",
@@ -7091,9 +7115,12 @@
       "category": "data_scope",
       "blocked_until": "entity:LoanAccount (ยังไม่มีฟิลด์ผู้รับผิดชอบที่สืบทอดจาก Loan Officer)",
       "answer_phase": "domain",
-      "state": "open",
-      "answer": null,
-      "answered_at": null
+      "state": "answered",
+      "answer": "assignedOperationsId บน LoanAccount เป็นค่า snapshot ที่บันทึกครั้งเดียว ณ วันเบิกจ่ายจาก Loan Officer ของใบสมัครต้นทาง และไม่อัปเดตตามภายหลัง เพราะสเปกปัจจุบันไม่มีกลไกมอบหมายใหม่หลังเบิกจ่าย หากอนาคตมีกลไกนั้นจริง ต้องกลับมาแก้จุดนี้",
+      "answered_at": "2026-09-03T03:39:19Z",
+      "resulted_in": [
+        "ENT-006"
+      ]
     }
   ],
   "rollup": {
@@ -7101,7 +7128,7 @@
     "rules_with_example": 54,
     "rules_with_green_test": 0,
     "open_questions": 0,
-    "open_deferred": 11,
+    "open_deferred": 2,
     "rule_coverage": 1,
     "ready_for_next_step": true
   },

@@ -1,0 +1,65 @@
+{
+  "module": "miniloan",
+  "features": [
+    {
+      "id": "FE-miniloan-015",
+      "title_th": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
+      "app_ref": "api",
+      "type": "command",
+      "origin": "new",
+      "files_planned": [
+        "apps/api/src/main/java/com/miniloan/controller/ClosedAccountAdjustmentController.java",
+        "apps/api/src/main/java/com/miniloan/service/ClosedAccountAdjustmentService.java",
+        "apps/api/src/main/java/com/miniloan/domain/ClosedAccountAdjustment.java",
+        "apps/api/src/main/java/com/miniloan/repository/ClosedAccountAdjustmentRepository.java",
+        "apps/api/src/test/java/com/miniloan/service/ClosedAccountAdjustmentServiceTest.java"
+      ],
+      "depends_on": ["FE-miniloan-013", "FE-miniloan-017"],
+      "acceptance_refs": [
+        "AC-miniloan-076",
+        "AC-miniloan-077",
+        "AC-miniloan-078",
+        "AC-miniloan-080",
+        "AC-miniloan-081",
+        "AC-miniloan-108"
+      ],
+      "traces_up": [
+        { "ref": "UC-miniloan-017" },
+        { "ref": "AC-miniloan-076" },
+        { "ref": "AC-miniloan-077" },
+        { "ref": "AC-miniloan-078" },
+        { "ref": "AC-miniloan-080" },
+        { "ref": "AC-miniloan-081" },
+        { "ref": "AC-miniloan-108" },
+        { "ref": "ENT-004" },
+        { "ref": "ENT-006" },
+        { "ref": "ENT-010" },
+        { "ref": "API-016" }
+      ],
+      "status": "validated"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "GAP-miniloan-006",
+      "to": "design",
+      "about": "ENT-010",
+      "question_th": "ENT-010 ประกาศ fieldName เป็น type: string อิสระ — ไม่มี enum ไม่มี whitelist และไม่มี artifact ใบไหน map ค่าของมันไปหา attribute ของ ENT-006 · FE-miniloan-015 บันทึกคำขอได้โดยไม่ต้องรู้ เพราะมันเก็บ oldValue/newValue เป็นข้อความล้วน แต่ FE-miniloan-016 ต้องเอาค่าใหม่ไปลงบัญชีจริงตาม AC-miniloan-076 (\"ค่าบนบัญชีเปลี่ยนเป็นค่าใหม่ก็ต่อเมื่อผ่านขั้นที่สองแล้ว\") และไม่มีอะไรให้มันใช้ลง — ENT-006 ไม่มีทางเขียนค่าลง attribute ใดเลยนอกจาก outstandingPrincipal (reducePrincipal, BR-miniloan-020@v1) กับ status (close, BR-miniloan-021@v1) ซึ่งทั้งสองทางเป็นของกฎอื่นที่ไม่ใช่การปรับปรุงหลังปิดบัญชี ขอให้ design ตัดสินสามข้อ: (1) attribute ใดของ ENT-006 บ้างที่ปรับปรุงหลังปิดบัญชีได้ตาม BR-miniloan-038@v1 (2) fieldName รับค่าอะไรได้บ้าง — เป็นรายการปิดที่ design ประกาศ หรือเป็นชื่อ attribute ของ ENT-006 ตรง ๆ (3) การเขียนค่าใหม่ทับ ขัดกับ invariant ที่ ENT-006 ถือไว้หรือไม่ (BR-miniloan-021@v1 · 023@v1 · 034@v1 · 037@v1) และถ้าขัด ข้อไหนชนะ · dev มินต์รายการ field เองไม่ได้ เพราะเป็นการตัดสินว่าข้อมูลอะไรของบัญชีที่ปิดแล้วแก้ได้ ซึ่งเป็นคำถามเชิงนโยบาย ไม่ใช่รายละเอียดการเขียนโค้ด",
+      "blocks": ["FE-miniloan-016"]
+    },
+    {
+      "id": "GAP-miniloan-007",
+      "to": "design",
+      "about": "UC-miniloan-017",
+      "question_th": "alternateFlow ของ UC-miniloan-017 เขียนว่า \"ยื่นคำขอปรับปรุงมากกว่าหนึ่งฟิลด์ในคำขอเดียวกัน\" แต่ ENT-010 ถือหนึ่ง fieldName กับ oldValue/newValue ของมันต่อหนึ่งแถว และไม่มี artifact ใบไหนมี id ที่จับกลุ่มหลายแถวให้เป็นคำขอเดียวกัน · ไม่มีเกณฑ์รับใบไหนใน 076/077/078/080/081/108 แตะหลายฟิลด์เลย FE-miniloan-015 จึงสร้าง API-016 แบบหนึ่งฟิลด์ต่อหนึ่งคำขอ (build แล้ว commit 1687dd7) เพราะถ้ารับหลายฟิลด์ในคอลเดียวจะเกิด N แถวอิสระ แล้วคำว่า \"หนึ่งคำขอ\" จะกู้กลับจากข้อมูลไม่ได้ ซึ่ง AC-miniloan-085 นับมันอยู่ (\"มีคำขอรออนุมัติ 1 รายการ\") ขอให้ design ตัดสินว่า (ก) alternateFlow นี้หมายถึงหลายคำขออิสระที่ยื่นติด ๆ กัน ⇒ สิ่งที่สร้างไว้ถูกแล้วและ alternateFlow ไม่ต้องแก้ หรือ (ข) เป็นคำขอก้อนเดียวที่ถืออนุมัติหลายฟิลด์พร้อมกัน ⇒ ENT-010 ต้องมีฟิลด์จัดกลุ่ม และต้องระบุว่า AC-miniloan-085 นับก้อนหรือนับแถว รวมทั้งว่าอนุมัติทีละฟิลด์ได้หรือต้องทั้งก้อน",
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-008",
+      "to": "req",
+      "about": "BR-miniloan-040@v1",
+      "question_th": "FE-miniloan-017 ปฏิเสธการล้างค่า role ผู้อนุมัติให้กลับเป็นว่าง (ApproverRoleRequiredException · commit e41cff3) — เป็นคำตัดสินของ dev เอง ไม่มีเกณฑ์รับใบไหนขอ จึงเป็น Class B ที่ขึ้นไปอยู่บนของจริงแล้ว · เหตุผลที่ทำไว้แบบนั้น: ENT-011 ประกาศ approverRole เป็น required: false ซึ่งแปลว่า null เก็บได้ แต่ BR-miniloan-040@v1 พูดถึง \"ยังไม่ได้ตั้ง\" ในฐานะสถานะที่ต้องออกไป ไม่ใช่สถานะที่เดินกลับเข้าไปได้ และไม่มีกฎข้อไหนบอกว่าคำขอที่สถานะ Pending ค้างอยู่จะเป็นอย่างไรถ้าผู้อนุมัติหายไป ขอให้ req ตัดสิน: (1) Loan Officer ล้างค่า role ผู้อนุมัติกลับเป็นว่างได้หรือไม่ตาม BR-miniloan-048@v1 (2) ถ้าได้ คำขอที่ Pending อยู่ตอนนั้นเป็นอย่างไร — ค้างต่อจนกว่าจะตั้งใหม่ ถูกปฏิเสธอัตโนมัติ หรืออนุมัติไม่ได้ชั่วคราว · ถ้าคำตอบคือล้างไม่ได้ ขอให้เขียนลงใน BR-miniloan-040@v1 เพื่อให้โค้ดที่ commit ไปแล้วมีต้นน้ำรองรับ ไม่ใช่ยืนอยู่ด้วยการตัดสินของ dev",
+      "blocks": []
+    }
+  ]
+}

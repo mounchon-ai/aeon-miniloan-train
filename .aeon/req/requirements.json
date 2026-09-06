@@ -3662,5 +3662,903 @@
     }
   ],
   "codeSources": [],
+  "calculations": [
+    {
+      "id": "CALC-miniloan-001@v2",
+      "baseId": "CALC-miniloan-001",
+      "version": 2,
+      "status": "draft",
+      "constrains": "BR-miniloan-016@v1",
+      "effectiveFrom": "2026-09-01",
+      "formula": "EMI = P × r × (1+r)^n / ((1+r)^n − 1) · P = เงินต้น · r = อัตราดอกเบี้ยต่อเดือน (= อัตราต่อปี / 12) · n = จำนวนงวด · ดอกเบี้ยงวดที่ t = ยอดคงเหลือ × r · เงินต้นงวดที่ t = EMI − ดอกเบี้ยงวดที่ t",
+      "inputs": [
+        {
+          "name": "principal",
+          "type": "money(2)",
+          "description": "เงินต้นตั้งต้น P เป็นบาท/สตางค์ — ช่วงที่รับได้ 10,000–1,000,000 บาท ตาม BR-miniloan-004@v1 · การกรองค่านอกช่วงเป็นหน้าที่ของกฎข้อนั้น ไม่ใช่ของสัญญานี้"
+        },
+        {
+          "name": "annual_rate",
+          "type": "rate(10)",
+          "description": "อัตราดอกเบี้ยต่อปีของเวอร์ชันอัตราที่มีผล ณ วันเบิกจ่าย ตาม BR-miniloan-036@v1 และ BR-miniloan-037@v1 · สัญญาหาร 12 เองเพื่อให้ได้ r ต่อเดือน ผู้เรียกไม่ต้องหารมาก่อน"
+        },
+        {
+          "name": "term_months",
+          "type": "int",
+          "description": "จำนวนงวด n เป็นรายเดือน — ช่วงที่รับได้ 6–60 งวด ตาม BR-miniloan-004@v1"
+        }
+      ],
+      "numericType": "decimal",
+      "roundingMode": "HALF_UP",
+      "roundingPoints": "ปัดทันทีทุกจุดที่เกิดขึ้นตาม BR-miniloan-035@v1 — ไม่มีบัญชีภายในที่คำนวณเต็มความละเอียดอีกต่อไป มีคอลัมน์เดียวที่ทุกกฎอ่านค่าได้: ค่างวดที่แสดง = round(EMI, 2) เท่ากันทุกแถว (แถวสุดท้ายอาจต่างเล็กน้อยตาม residual_policy) · ดอกเบี้ยของแถว = round(ยอดคงเหลือก่อนแถวนี้ × r, 2) · เงินต้นของแถว = round(EMI, 2) − ดอกเบี้ยของแถว โดยหักเอา ไม่ปัดซ้ำ · ยอดคงเหลือหลังแถว = ยอดคงเหลือก่อนแถวนี้ − เงินต้นของแถว — ค่านี้ปัดแล้วและเป็นค่าเดียวที่มีอยู่ ไม่มีคู่ขนานที่ละเอียดกว่า จึงไม่มีกรณีที่คอลัมน์ยอดคงเหลือที่แสดงกับยอดคงเหลือ \"จริง\" ต่างกันระหว่างทางอีกต่อไป",
+      "residualPolicy": "งวดสุดท้ายดูดเศษ: เงินต้นของงวดสุดท้าย = P − ผลรวมเงินต้นของงวดที่ 1 ถึง n−1 (ทั้งหมดเป็นค่าที่ปัดแล้ว เพราะไม่มีคอลัมน์อื่นให้เทียบอีกต่อไป) · ทำให้ผลรวมเงินต้นทุกงวดในตารางเท่ากับ P พอดี และยอดคงเหลือหลังงวดสุดท้ายเป็น 0 พอดี ตาม BR-miniloan-017@v1 · ดอกเบี้ยของงวดสุดท้ายยังเป็น round(ดอกเบี้ยงวดนั้น, 2) ตามปกติ และค่างวดสุดท้าย = เงินต้น + ดอกเบี้ยของแถวนั้น จึงอาจต่างจากงวดอื่นเล็กน้อยเหมือนเดิม",
+      "boundaryBehavior": [
+        "r = 0 (อัตรา 0% ต่อปี) → (1+0)^n − 1 = 0 สูตร EMI หารด้วยศูนย์ · สัญญาสลับไปใช้ EMI = P / n แทน ดอกเบี้ยทุกงวดเป็น 0 เงินต้นทุกงวดเท่ากับค่างวด และงวดสุดท้ายยังดูดเศษตามเดิม · ขอบนี้เข้าถึงได้จริงเพราะอัตราเป็นข้อมูลหลักที่ตั้งค่าได้และมีเวอร์ชันตาม BR-miniloan-036@v1 แม้ค่าที่ประกาศอยู่ตอนนี้จะเป็น 25% ต่อปี",
+        "P นอกช่วง 10,000–1,000,000 บาท หรือ n นอกช่วง 6–60 งวด → สัญญาไม่คำนวณและไม่คืนตาราง · การปฏิเสธเกิดก่อนถึงสูตร และเป็นหน้าที่ของ BR-miniloan-004@v1 ไม่ใช่ของสัญญานี้",
+        "n = 1 → ตารางมีแถวเดียว งวดแรกเป็นงวดสุดท้ายด้วย · ดอกเบี้ย = P × r · เงินต้น = P · ยอดคงเหลือหลังงวดนั้น = 0 · กฎดูดเศษของงวดสุดท้ายจึงกินตัวเอง · เขียนไว้แม้ BR-miniloan-004@v1 จะห้าม n < 6 เพราะสัญญาต้องนิยามพฤติกรรมของตัวเองได้โดยไม่พึ่งกฎอื่น"
+      ],
+      "questions": [],
+      "deferredQuestions": [
+        "DQ-miniloan-001"
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-06",
+            "line": 111
+          },
+          "quote": "งวดผ่อนเท่ากันทุกงวด (EMI): `EMI = P × r × (1+r)^n / ((1+r)^n − 1)` · `P` = เงินต้น, `r` = อัตราดอกเบี้ยต่อเดือน (= อัตราต่อปี / 12), `n` = จำนวนงวด · แต่ละงวดแยกเป็นดอกเบี้ย (ยอดคงเหลือ × r) และเงินต้น (EMI − ดอกเบี้ย) · งวดสุดท้ายปัดเศษให้ยอดคงเหลือเป็น 0 พอดี",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-016",
+          "locator": {
+            "section": "[1]–[9] · รอบเก็บสัญญาการคำนวณ 2026-08-15"
+          },
+          "quote": "formula → ตาม BR-06 ทุกตัวอักษร · inputs → P + อัตราต่อปี + n · numeric_type → decimal · rounding_mode → HALF_UP · rounding_points → คำนวณเต็มความละเอียด ปัดตอนเขียนแถว · residual → งวดสุดท้ายดูดเศษ ปิดกับคอลัมน์ที่แสดง · boundary → r=0, นอกช่วง BR-004, n=1 · เงินต้นในแถวหักเอาจากค่างวด",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "CALC-miniloan-002@v1",
+      "baseId": "CALC-miniloan-002",
+      "version": 1,
+      "status": "draft",
+      "constrains": "BR-miniloan-002@v1",
+      "effectiveFrom": "2026-09-01",
+      "formula": "DTI = (ภาระหนี้เดิมต่อเดือน + งวดใหม่โดยประมาณ) / รายได้ต่อเดือน · เกณฑ์ผ่าน: DTI ≤ 0.70 (70%) · งวดใหม่โดยประมาณ = ค่างวดที่แสดง (round(EMI,2) ตาม CALC-miniloan-001@v2) คำนวณจากจำนวนเงินกู้ที่ขอ (ไม่ใช่ยอดอนุมัติ) จำนวนงวดที่ขอ และอัตราดอกเบี้ยที่มีผล ณ วันประเมิน — ไม่มีสูตรประมาณแยกอีกชุด · คำนวณครั้งเดียวตอนยื่น ไม่คำนวณใหม่แม้เจ้าหน้าที่จะปรับวงเงินลงตาม BR-miniloan-012@v1",
+      "inputs": [
+        {
+          "name": "existing_monthly_debt",
+          "type": "money(2)",
+          "description": "ภาระหนี้เดิมต่อเดือนของผู้สมัคร"
+        },
+        {
+          "name": "monthly_income",
+          "type": "money(2)",
+          "description": "รายได้ต่อเดือนของผู้สมัคร — ต้อง ≥ 15,000 บาทตาม BR-miniloan-001@v1 · การกรองเป็นหน้าที่ของกฎข้อนั้น ไม่ใช่ของสัญญานี้"
+        },
+        {
+          "name": "requested_principal",
+          "type": "money(2)",
+          "description": "จำนวนเงินกู้ที่ขอ — ช่วงที่รับได้ 10,000–1,000,000 บาทตาม BR-miniloan-004@v1 · ป้อนเข้า CALC-miniloan-001@v2 เพื่อหางวดใหม่"
+        },
+        {
+          "name": "requested_term_months",
+          "type": "int",
+          "description": "จำนวนงวดที่ขอ — ช่วง 6–60 งวดตาม BR-miniloan-004@v1 · ป้อนเข้า CALC-miniloan-001@v2"
+        },
+        {
+          "name": "annual_rate",
+          "type": "rate(10)",
+          "description": "อัตราดอกเบี้ยต่อปีของเวอร์ชันที่มีผล ณ วันประเมิน ตาม BR-miniloan-036@v1/037@v1 · ป้อนเข้า CALC-miniloan-001@v2"
+        }
+      ],
+      "numericType": "decimal",
+      "roundingMode": "HALF_UP",
+      "roundingPoints": "งวดใหม่โดยประมาณ = ค่างวดที่แสดง (round(EMI,2)) จาก CALC-miniloan-001@v2 — ไม่ใช่ EMI ดิบที่ยังไม่ปัด (ตัดสินในรอบ /req:calc นี้ 2026-09-01) · การเปรียบเทียบผ่าน/ไม่ผ่านเกณฑ์ 70% ต้องใช้ยอดบาทที่แน่นอน ไม่ใช่เปอร์เซ็นต์ที่ปัดแล้ว — เทียบ (existing_monthly_debt + งวดใหม่) กับ (monthly_income × 0.70) ตรงๆ โดยไม่ปัดค่ากลางใดๆ ก่อนเทียบ (ยืนยันจาก EX-miniloan-038: 21,001 บาท เกิน 21,000 บาทจริง แม้ปัดเปอร์เซ็นต์แล้วได้ 70.00% เท่ากับเคสที่ผ่าน) · ตัวเลขเปอร์เซ็นต์ที่แสดงบนหน้าจอ (เช่น \"70.00%\") ปัด 2 ตำแหน่งจากอัตราส่วนจริงเพื่อการแสดงผลเท่านั้น ไม่ใช่ค่าที่ใช้ตัดสิน",
+      "residualPolicy": null,
+      "boundaryBehavior": [
+        "DTI = 70.00% พอดี (เท่ากับเพดานเป๊ะ) → ผ่านเกณฑ์ ไม่ใช่ตก (ตาม EX-miniloan-037 ที่ยืนยันแล้ว) — เพราะกฎเขียนว่า ≤ 70% ไม่ใช่ < 70%",
+        "รายได้ต่อเดือนต่ำกว่า 15,000 บาท → ไม่ถึงสัญญานี้ ถูกกรองไปแล้วโดย BR-miniloan-001@v1 ก่อนถึงขั้นประเมิน DTI",
+        "จำนวนเงินกู้ที่ขอหรือจำนวนงวดนอกช่วง 10,000–1,000,000 บาท / 6–60 งวด → ไม่ถึงสัญญานี้เช่นกัน เป็นด่านของ BR-miniloan-004@v1",
+        "อัตราดอกเบี้ย 0% ต่อปี → งวดใหม่ใช้ EMI = P/n ตาม boundary ของ CALC-miniloan-001@v2 เอง สัญญานี้ไม่ต้องนิยามซ้ำ เพราะรับค่างวดที่คำนวณมาแล้วเป็นอินพุตเดียว"
+      ],
+      "questions": [],
+      "deferredQuestions": [
+        "DQ-miniloan-001"
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-02"
+          },
+          "quote": "Debt-to-Income หลังรวมงวดใหม่ ต้อง ≤ 70% ของรายได้ต่อเดือน · สูตร: `DTI = (ภาระหนี้เดิมต่อเดือน + งวดใหม่โดยประมาณ) / รายได้ต่อเดือน`",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-009",
+          "locator": {
+            "section": "[1] Q-miniloan-001"
+          },
+          "quote": "งวดใหม่โดยประมาณ คือ EMI ตาม BR-miniloan-016@v1 คำนวณจากจำนวนเงินกู้ที่ขอ จำนวนงวดที่ขอ และอัตราดอกเบี้ยที่มีผล ณ วันประเมิน — ใช้สูตรเดียวกับที่สร้างตารางผ่อนจริง ไม่มีสูตรประมาณแยกอีกชุด",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-018",
+          "locator": {
+            "section": "[1]-[7] รอบเก็บสัญญาการคำนวณ 2026-09-01"
+          },
+          "quote": "งวดใหม่โดยประมาณใช้ค่างวดที่ปัดแล้ว round(EMI,2) จาก CALC-miniloan-001@v2 · เปรียบเทียบผ่าน/ไม่ผ่านด้วยยอดบาทที่แน่นอน ไม่ใช่เปอร์เซ็นต์ที่ปัดแล้ว ตาม EX-miniloan-038",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "CALC-miniloan-003@v1",
+      "baseId": "CALC-miniloan-003",
+      "version": 1,
+      "status": "draft",
+      "constrains": "BR-miniloan-003@v1",
+      "effectiveFrom": "2026-09-01",
+      "formula": "วงเงินอนุมัติสูงสุด (MaxApprovableAmount) = MIN(5 × รายได้ต่อเดือน, 1,000,000 บาท) — 5 เท่าของรายได้ หรือ 1,000,000 บาท แล้วแต่ค่าไหนน้อยกว่า",
+      "inputs": [
+        {
+          "name": "monthly_income",
+          "type": "money(2)",
+          "description": "รายได้ต่อเดือนของผู้สมัคร — ต้อง ≥ 15,000 บาทตาม BR-miniloan-001@v1 (การกรองเป็นหน้าที่ของกฎข้อนั้น ไม่ใช่ของสัญญานี้)"
+        }
+      ],
+      "numericType": "decimal",
+      "roundingMode": "HALF_UP",
+      "roundingPoints": "ไม่มีจุดที่ต้องปัดจริงในทางปฏิบัติ — ตัวคูณ (5) เป็นจำนวนเต็ม เงิน money(2) คูณด้วยจำนวนเต็มยังคงมี 2 ตำแหน่งทศนิยมพอดีเสมอ ไม่มีเศษเกิดขึ้น · เพดาน 1,000,000.00 บาทก็มี 2 ตำแหน่งอยู่แล้ว การเทียบ MIN จึงไม่มีจุดปัดเช่นกัน · ระบุ HALF_UP ไว้เพื่อความสอดคล้องกับสัญญาอื่นในระบบ เผื่อกรณีในอนาคตที่ตัวคูณไม่ใช่จำนวนเต็ม",
+      "residualPolicy": null,
+      "boundaryBehavior": [
+        "รายได้ 199,999 บาท → 5×199,999 = 999,995 บาท (ต่ำกว่าเพดาน 5 บาท) → ใช้ค่าจากสูตร (EX-miniloan-020)",
+        "รายได้ 200,000 บาทพอดี → 5×200,000 = 1,000,000 บาทพอดี → สูตรกับเพดานให้คำตอบตรงกัน เป็นจุดที่เขียนเงื่อนไขผิดด้าน (< แทน ≤ หรือกลับกัน) จะพลาด (EX-miniloan-021)",
+        "รายได้ 250,000 บาท → 5×250,000 = 1,250,000 บาท เกินเพดาน → ใช้เพดาน 1,000,000 บาท และต้องระบุว่าเพดานเป็นตัวจำกัด ไม่ใช่สูตร ตาม BR-miniloan-009@v1 (EX-miniloan-022)",
+        "รายได้ต่ำกว่า 15,000 บาท → ไม่ถึงสัญญานี้ ถูกกรองโดย BR-miniloan-001@v1 ก่อนแล้ว"
+      ],
+      "questions": [],
+      "deferredQuestions": [],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-03"
+          },
+          "quote": "วงเงินอนุมัติสูงสุด = 5 เท่าของรายได้ต่อเดือน และไม่เกิน 1,000,000 บาท",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-019",
+          "locator": {
+            "section": "[1]-[7] รอบเก็บสัญญาการคำนวณ 2026-09-01"
+          },
+          "quote": "ไม่มีจุดที่ต้องปัดจริง เพราะตัวคูณเป็นจำนวนเต็ม (5) · boundary ทั้งหมดสกัดตรงจาก EX-miniloan-019–022",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "CALC-miniloan-004@v1",
+      "baseId": "CALC-miniloan-004",
+      "version": 1,
+      "status": "draft",
+      "constrains": "BR-miniloan-022@v1",
+      "effectiveFrom": "2026-09-01",
+      "formula": "ยอดปิดบัญชีก่อนกำหนด (EarlySettlementAmount) = เงินต้นคงเหลือ (RemainingPrincipal) + ดอกเบี้ยค้างจ่าย (AccruedInterest) + ค่าธรรมเนียมปิดก่อนกำหนด (EarlySettlementFee) · EarlySettlementFee = RemainingPrincipal × 1% · AccruedInterest = RemainingPrincipal × AnnualRate × DaysElapsed / 365 · DaysElapsed = ClosingDate − LastPaidDueDate (จำนวนวันจริง) · 1% และ 365 เป็นค่าคงที่ในสูตร ไม่ใช่ input",
+      "inputs": [
+        {
+          "name": "remaining_principal",
+          "type": "money(2)",
+          "description": "เงินต้นคงเหลือ ณ วันที่ปิด — อ่านจากคอลัมน์ยอดคงเหลือของตารางผ่อนฉบับล่าสุดตาม BR-miniloan-053@v1 เท่านั้น ไม่คำนวณขึ้นใหม่จากสูตรอื่น"
+        },
+        {
+          "name": "annual_rate",
+          "type": "rate(10)",
+          "description": "อัตราดอกเบี้ยต่อปีของเวอร์ชันที่ผูกกับบัญชีตอนสร้างตารางผ่อน ตาม BR-miniloan-036@v1 และ BR-miniloan-037@v1 — ไม่ใช่อัตรา master ปัจจุบัน"
+        },
+        {
+          "name": "last_paid_due_date",
+          "type": "date",
+          "description": "วันครบกำหนดของงวดล่าสุดที่ชำระแล้ว · ถ้ายังไม่มีงวดไหนถูกชำระเลย ใช้วันเบิกจ่ายของบัญชีแทน"
+        },
+        {
+          "name": "closing_date",
+          "type": "date",
+          "description": "วันที่ขอปิดบัญชี ป้อนโดย Operations/Applicant · ต้อง ≥ last_paid_due_date มิฉะนั้นสัญญาปฏิเสธ input ก่อนเข้าสูตร"
+        }
+      ],
+      "numericType": "decimal",
+      "roundingMode": "HALF_UP",
+      "roundingPoints": "ปัดทันทีเฉพาะที่บรรทัดดอกเบี้ยค้างจ่ายและบรรทัดค่าธรรมเนียมปิดก่อนกำหนด เป็นค่าเดียวแต่ละบรรทัด (2 ตำแหน่ง) สอดคล้องกับ BR-miniloan-035@v1 · เงินต้นคงเหลือเป็นค่าที่ปัดมาแล้วจากคอลัมน์ตารางผ่อน (ตาม CALC-miniloan-001@v2) อ่านตรงๆ ไม่ปัดซ้ำ · ผลรวมทั้งสามบรรทัด (เงินต้นคงเหลือ + ดอกเบี้ยที่ปัดแล้ว + ค่าธรรมเนียมที่ปัดแล้ว) ไม่ปัดซ้ำอีกชั้น เพราะทุกตัวเป็น 2 ตำแหน่งอยู่แล้วรวมกันยังคงเป็น 2 ตำแหน่งพอดี",
+      "residualPolicy": null,
+      "boundaryBehavior": [
+        "closing_date เท่ากับ last_paid_due_date พอดี (ช่วงนับยาว 0 วัน) → ดอกเบี้ยค้างจ่าย = 0.00 บาท เป็นศูนย์โดยนิยาม ไม่ใช่ผลจากการปัด (EX-miniloan-075)",
+        "closing_date = last_paid_due_date + 1 วัน → ดอกเบี้ยค้างจ่ายของ 1 วันเต็ม คำนวณจากสูตรตามปกติ ไม่ปัดขึ้นเป็นทั้งงวดหรือทั้งเดือน ตัวหารคือ 365 เท่านั้น (EX-miniloan-076)",
+        "closing_date ก่อน last_paid_due_date (ป้อนย้อนหลัง) → สัญญาปฏิเสธ input ทันทีก่อนเข้าสูตร ไม่คำนวณต่อและไม่คืนค่าดอกเบี้ยติดลบ",
+        "ยังไม่มีงวดไหนถูกชำระเลย (ขอยอดปิดบัญชีก่อนงวดแรกถึงกำหนด) → last_paid_due_date อ้างอิงวันเบิกจ่ายของบัญชีแทน ไม่ใช่ค่าว่างหรือ error",
+        "annual_rate = 0% ต่อปี → AccruedInterest = 0.00 บาทเสมอไม่ว่า DaysElapsed จะเป็นเท่าไร (ตัวเศษเป็น 0 ไม่ใช่ตัวหาร จึงไม่มีปัญหาหารด้วยศูนย์) — ขอบเดียวกับที่ CALC-miniloan-001@v2 นิยามไว้สำหรับอัตรา 0%"
+      ],
+      "questions": [],
+      "deferredQuestions": [
+        "DQ-miniloan-001"
+      ],
+      "provenance": [
+        {
+          "source": "SRC-001",
+          "locator": {
+            "section": "5 · BR-07"
+          },
+          "quote": "ยอดปิดบัญชี = เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่ายถึงวันที่ปิด + ค่าธรรมเนียมปิดก่อนกำหนด (สมมติ 1% ของเงินต้นคงเหลือ) · ดอกเบี้ยของงวดในอนาคตที่ยังไม่ถึงกำหนด **ไม่คิด**",
+          "confidence": 0.95
+        },
+        {
+          "source": "SRC-012",
+          "locator": {
+            "section": "[1] Q-miniloan-004"
+          },
+          "quote": "ดอกเบี้ยค้างจ่ายของยอดปิดบัญชีก่อนกำหนดใช้ฐานนับวัน actual/365 นับจากวันครบกำหนดงวดล่าสุดที่ชำระแล้วถึงวันที่ปิด",
+          "confidence": 1
+        },
+        {
+          "source": "SRC-021",
+          "locator": {
+            "section": "[1]-[7] รอบเก็บสัญญาการคำนวณ 2026-09-01"
+          },
+          "quote": "formula → ตามร่าง ยืนยันครบ · numeric_type → decimal · rounding_mode → HALF_UP · rounding_points → ปัดที่ดอกเบี้ยและค่าธรรมเนียมเท่านั้น เงินต้นคงเหลืออ่านตรงจากตาราง · residual → ไม่มี · boundary → ย้อนหลังปฏิเสธ, ยังไม่มีงวดจ่ายอ้างวันเบิกจ่าย",
+          "confidence": 1
+        }
+      ],
+      "extensions": {}
+    }
+  ],
+  "goldenDatasets": [
+    {
+      "id": "GD-miniloan-001",
+      "proves": [
+        "CALC-miniloan-001@v1",
+        "BR-miniloan-016@v1"
+      ],
+      "status": "validated",
+      "computedAt": "2026-08-15T14:37+07:00",
+      "verifiedBy": "mounc",
+      "verifiedAt": "2026-08-15T14:52+07:00",
+      "mismatches": [],
+      "rows": [
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0.25",
+            "term_months": 12
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "9,504.42",
+            "rows": 12,
+            "first_row": {
+              "interest": "2,083.33",
+              "principal": "7,421.09",
+              "instalment": "9,504.42"
+            },
+            "last_row": {
+              "interest": "193.97",
+              "principal": "9,310.46",
+              "instalment": "9,504.43"
+            },
+            "sum_principal": "100,000.00",
+            "sum_interest": "14,053.05",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 1000000,
+            "annual_rate": "0.25",
+            "term_months": 60
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "29,351.32",
+            "rows": 60,
+            "first_row": {
+              "interest": "20,833.33",
+              "principal": "8,517.99",
+              "instalment": "29,351.32"
+            },
+            "last_row": {
+              "interest": "599.01",
+              "principal": "28,752.48",
+              "instalment": "29,351.49"
+            },
+            "sum_principal": "1,000,000.00",
+            "sum_interest": "761,079.37",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 10000,
+            "annual_rate": "0.25",
+            "term_months": 6
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "1,790.28",
+            "rows": 6,
+            "first_row": {
+              "interest": "208.33",
+              "principal": "1,581.95",
+              "instalment": "1,790.28"
+            },
+            "last_row": {
+              "interest": "36.54",
+              "principal": "1,753.76",
+              "instalment": "1,790.30"
+            },
+            "sum_principal": "10,000.00",
+            "sum_interest": "741.70",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0",
+            "term_months": 12
+          },
+          "expected": {
+            "computed": true,
+            "branch": "r=0 → EMI = P / n",
+            "instalment_shown": "8,333.33",
+            "rows": 12,
+            "first_row": {
+              "interest": "0.00",
+              "principal": "8,333.33",
+              "instalment": "8,333.33"
+            },
+            "last_row": {
+              "interest": "0.00",
+              "principal": "8,333.37",
+              "instalment": "8,333.37"
+            },
+            "sum_principal": "100,000.00",
+            "sum_interest": "0.00",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0.25",
+            "term_months": 1
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "102,083.33",
+            "rows": 1,
+            "first_row": {
+              "interest": "2,083.33",
+              "principal": "100,000.00",
+              "instalment": "102,083.33"
+            },
+            "last_row": {
+              "interest": "2,083.33",
+              "principal": "100,000.00",
+              "instalment": "102,083.33"
+            },
+            "sum_principal": "100,000.00",
+            "sum_interest": "2,083.33",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 9999,
+            "annual_rate": "0.25",
+            "term_months": 12
+          },
+          "expected": {
+            "computed": false,
+            "declined_by": "BR-miniloan-004@v1",
+            "reason": "เงินต้น 9999 บาท อยู่นอกช่วง 10,000–1,000,000 ที่ BR-miniloan-004@v1 รับได้"
+          }
+        },
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0.25",
+            "term_months": 61
+          },
+          "expected": {
+            "computed": false,
+            "declined_by": "BR-miniloan-004@v1",
+            "reason": "จำนวนงวด 61 อยู่นอกช่วง 6–60 ที่ BR-miniloan-004@v1 รับได้"
+          }
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "GD-miniloan-002",
+      "proves": [
+        "CALC-miniloan-001@v2",
+        "BR-miniloan-016@v1"
+      ],
+      "status": "validated",
+      "computedAt": "2026-09-01T11:00+07:00",
+      "verifiedBy": "aplus191",
+      "verifiedAt": "2026-09-01T12:00+07:00",
+      "mismatches": [],
+      "rows": [
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0.25",
+            "term_months": 12
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "9,504.42",
+            "rows": 12,
+            "first_row": {
+              "interest": "2,083.33",
+              "principal": "7,421.09",
+              "instalment": "9,504.42"
+            },
+            "last_row": {
+              "interest": "193.97",
+              "principal": "9,310.46",
+              "instalment": "9,504.43"
+            },
+            "sum_principal": "100,000.00",
+            "sum_interest": "14,053.05",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 1000000,
+            "annual_rate": "0.25",
+            "term_months": 60
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "29,351.32",
+            "rows": 60,
+            "first_row": {
+              "interest": "20,833.33",
+              "principal": "8,517.99",
+              "instalment": "29,351.32"
+            },
+            "last_row": {
+              "interest": "599.01",
+              "principal": "28,752.61",
+              "instalment": "29,351.62"
+            },
+            "sum_principal": "1,000,000.00",
+            "sum_interest": "761,079.50",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 10000,
+            "annual_rate": "0.25",
+            "term_months": 6
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "1,790.28",
+            "rows": 6,
+            "first_row": {
+              "interest": "208.33",
+              "principal": "1,581.95",
+              "instalment": "1,790.28"
+            },
+            "last_row": {
+              "interest": "36.54",
+              "principal": "1,753.76",
+              "instalment": "1,790.30"
+            },
+            "sum_principal": "10,000.00",
+            "sum_interest": "741.70",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0",
+            "term_months": 12
+          },
+          "expected": {
+            "computed": true,
+            "branch": "r=0 → EMI = P / n",
+            "instalment_shown": "8,333.33",
+            "rows": 12,
+            "first_row": {
+              "interest": "0.00",
+              "principal": "8,333.33",
+              "instalment": "8,333.33"
+            },
+            "last_row": {
+              "interest": "0.00",
+              "principal": "8,333.37",
+              "instalment": "8,333.37"
+            },
+            "sum_principal": "100,000.00",
+            "sum_interest": "0.00",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0.25",
+            "term_months": 1
+          },
+          "expected": {
+            "computed": true,
+            "branch": "สูตร EMI ปกติ",
+            "instalment_shown": "102,083.33",
+            "rows": 1,
+            "first_row": {
+              "interest": "2,083.33",
+              "principal": "100,000.00",
+              "instalment": "102,083.33"
+            },
+            "last_row": {
+              "interest": "2,083.33",
+              "principal": "100,000.00",
+              "instalment": "102,083.33"
+            },
+            "sum_principal": "100,000.00",
+            "sum_interest": "2,083.33",
+            "final_balance": "0.00"
+          }
+        },
+        {
+          "input": {
+            "principal": 9999,
+            "annual_rate": "0.25",
+            "term_months": 12
+          },
+          "expected": {
+            "computed": false,
+            "declined_by": "BR-miniloan-004@v1",
+            "reason": "เงินต้น 9999 บาท อยู่นอกช่วง 10,000–1,000,000 ที่ BR-miniloan-004@v1 รับได้"
+          }
+        },
+        {
+          "input": {
+            "principal": 100000,
+            "annual_rate": "0.25",
+            "term_months": 61
+          },
+          "expected": {
+            "computed": false,
+            "declined_by": "BR-miniloan-004@v1",
+            "reason": "จำนวนงวด 61 อยู่นอกช่วง 6–60 ที่ BR-miniloan-004@v1 รับได้"
+          }
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "GD-miniloan-003",
+      "proves": [
+        "CALC-miniloan-002@v1",
+        "BR-miniloan-002@v1"
+      ],
+      "status": "validated",
+      "computedAt": "2026-09-01T14:00+07:00",
+      "verifiedBy": "aplus191",
+      "verifiedAt": "2026-09-01T15:00+07:00",
+      "mismatches": [],
+      "rows": [
+        {
+          "input": {
+            "existing_monthly_debt": "10500.00",
+            "monthly_income": "30000.00",
+            "requested_principal": 100000,
+            "requested_term_months": 12,
+            "annual_rate": "0.25"
+          },
+          "expected": {
+            "new_instalment": "9,504.42",
+            "total_debt": "20,004.42",
+            "threshold_ratio": "0.70",
+            "dti_shown": "66.68%",
+            "pass": true
+          }
+        },
+        {
+          "input": {
+            "existing_monthly_debt": "11495.58",
+            "monthly_income": "30000.00",
+            "requested_principal": 100000,
+            "requested_term_months": 12,
+            "annual_rate": "0.25"
+          },
+          "expected": {
+            "new_instalment": "9,504.42",
+            "total_debt": "21,000.00",
+            "threshold_ratio": "0.70",
+            "dti_shown": "70.00%",
+            "pass": true
+          }
+        },
+        {
+          "input": {
+            "existing_monthly_debt": "11495.59",
+            "monthly_income": "30000.00",
+            "requested_principal": 100000,
+            "requested_term_months": 12,
+            "annual_rate": "0.25"
+          },
+          "expected": {
+            "new_instalment": "9,504.42",
+            "total_debt": "21,000.01",
+            "threshold_ratio": "0.70",
+            "dti_shown": "70.00%",
+            "pass": false
+          }
+        },
+        {
+          "input": {
+            "existing_monthly_debt": "3000.00",
+            "monthly_income": "20000.00",
+            "requested_principal": 120000,
+            "requested_term_months": 12,
+            "annual_rate": "0"
+          },
+          "expected": {
+            "new_instalment": "10,000.00",
+            "total_debt": "13,000.00",
+            "threshold_ratio": "0.70",
+            "dti_shown": "65.00%",
+            "pass": true
+          }
+        },
+        {
+          "input": {
+            "existing_monthly_debt": "500.00",
+            "monthly_income": "15000.00",
+            "requested_principal": 10000,
+            "requested_term_months": 6,
+            "annual_rate": "0.25"
+          },
+          "expected": {
+            "new_instalment": "1,790.28",
+            "total_debt": "2,290.28",
+            "threshold_ratio": "0.70",
+            "dti_shown": "15.27%",
+            "pass": true
+          }
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "GD-miniloan-004",
+      "proves": [
+        "CALC-miniloan-003@v1",
+        "BR-miniloan-003@v1"
+      ],
+      "status": "validated",
+      "computedAt": "2026-09-01T17:00+07:00",
+      "verifiedBy": "aplus191",
+      "verifiedAt": "2026-09-01T17:30+07:00",
+      "mismatches": [],
+      "rows": [
+        {
+          "input": {
+            "monthly_income": "30000.00"
+          },
+          "expected": {
+            "formula_value": "150,000.00",
+            "cap": "1,000,000.00",
+            "limited_by": "formula",
+            "max_approvable": "150,000.00"
+          }
+        },
+        {
+          "input": {
+            "monthly_income": "199999.00"
+          },
+          "expected": {
+            "formula_value": "999,995.00",
+            "cap": "1,000,000.00",
+            "limited_by": "formula",
+            "max_approvable": "999,995.00"
+          }
+        },
+        {
+          "input": {
+            "monthly_income": "200000.00"
+          },
+          "expected": {
+            "formula_value": "1,000,000.00",
+            "cap": "1,000,000.00",
+            "limited_by": "formula",
+            "max_approvable": "1,000,000.00"
+          }
+        },
+        {
+          "input": {
+            "monthly_income": "250000.00"
+          },
+          "expected": {
+            "formula_value": "1,250,000.00",
+            "cap": "1,000,000.00",
+            "limited_by": "cap",
+            "max_approvable": "1,000,000.00"
+          }
+        },
+        {
+          "input": {
+            "monthly_income": "15000.00"
+          },
+          "expected": {
+            "formula_value": "75,000.00",
+            "cap": "1,000,000.00",
+            "limited_by": "formula",
+            "max_approvable": "75,000.00"
+          }
+        },
+        {
+          "input": {
+            "monthly_income": "45678.33"
+          },
+          "expected": {
+            "formula_value": "228,391.65",
+            "cap": "1,000,000.00",
+            "limited_by": "formula",
+            "max_approvable": "228,391.65"
+          }
+        }
+      ],
+      "extensions": {}
+    },
+    {
+      "id": "GD-miniloan-005",
+      "proves": [
+        "CALC-miniloan-004@v1",
+        "BR-miniloan-022@v1"
+      ],
+      "status": "validated",
+      "computedAt": "2026-09-01T19:00+07:00",
+      "verifiedBy": "aplus191",
+      "verifiedAt": "2026-09-01T19:30+07:00",
+      "mismatches": [],
+      "rows": [
+        {
+          "input": {
+            "remaining_principal": "50000.00",
+            "annual_rate": "0.25",
+            "last_paid_due_date": "2026-06-15",
+            "closing_date": "2026-06-25"
+          },
+          "expected": {
+            "computed": true,
+            "days_elapsed": 10,
+            "remaining_principal": "50,000.00",
+            "accrued_interest": "342.47",
+            "early_settlement_fee": "500.00",
+            "early_settlement_amount": "50,842.47"
+          }
+        },
+        {
+          "input": {
+            "remaining_principal": "50000.00",
+            "annual_rate": "0.25",
+            "last_paid_due_date": "2026-06-15",
+            "closing_date": "2026-06-15"
+          },
+          "expected": {
+            "computed": true,
+            "days_elapsed": 0,
+            "remaining_principal": "50,000.00",
+            "accrued_interest": "0.00",
+            "early_settlement_fee": "500.00",
+            "early_settlement_amount": "50,500.00"
+          }
+        },
+        {
+          "input": {
+            "remaining_principal": "50000.00",
+            "annual_rate": "0.25",
+            "last_paid_due_date": "2026-06-15",
+            "closing_date": "2026-06-16"
+          },
+          "expected": {
+            "computed": true,
+            "days_elapsed": 1,
+            "remaining_principal": "50,000.00",
+            "accrued_interest": "34.25",
+            "early_settlement_fee": "500.00",
+            "early_settlement_amount": "50,534.25"
+          }
+        },
+        {
+          "input": {
+            "remaining_principal": "50000.00",
+            "annual_rate": "0.25",
+            "last_paid_due_date": "2026-06-15",
+            "closing_date": "2026-06-14"
+          },
+          "expected": {
+            "computed": false,
+            "declined_by": "CALC-miniloan-004@v1 boundary_behavior",
+            "reason": "closing_date (2026-06-14) ก่อน last_paid_due_date (2026-06-15) — ป้อนย้อนหลัง สัญญาปฏิเสธ input ก่อนเข้าสูตร"
+          }
+        },
+        {
+          "input": {
+            "remaining_principal": "50000.00",
+            "annual_rate": "0",
+            "last_paid_due_date": "2026-06-15",
+            "closing_date": "2026-07-15"
+          },
+          "expected": {
+            "computed": true,
+            "days_elapsed": 30,
+            "remaining_principal": "50,000.00",
+            "accrued_interest": "0.00",
+            "early_settlement_fee": "500.00",
+            "early_settlement_amount": "50,500.00"
+          }
+        },
+        {
+          "input": {
+            "remaining_principal": "100000.00",
+            "annual_rate": "0.25",
+            "last_paid_due_date": "2026-01-10",
+            "closing_date": "2026-01-20"
+          },
+          "expected": {
+            "computed": true,
+            "days_elapsed": 10,
+            "remaining_principal": "100,000.00",
+            "accrued_interest": "684.93",
+            "early_settlement_fee": "1,000.00",
+            "early_settlement_amount": "101,684.93"
+          }
+        },
+        {
+          "input": {
+            "remaining_principal": "73456.78",
+            "annual_rate": "0.18",
+            "last_paid_due_date": "2026-03-01",
+            "closing_date": "2026-04-17"
+          },
+          "expected": {
+            "computed": true,
+            "days_elapsed": 47,
+            "remaining_principal": "73,456.78",
+            "accrued_interest": "1,702.59",
+            "early_settlement_fee": "734.57",
+            "early_settlement_amount": "75,893.94"
+          }
+        }
+      ],
+      "extensions": {}
+    }
+  ],
   "extensions": {}
 }

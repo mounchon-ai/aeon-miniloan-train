@@ -128,7 +128,7 @@
     {
       "id": "export",
       "command": "/design:export",
-      "status": "stale",
+      "status": "done",
       "requires": [
         "overview",
         "function",
@@ -143,8 +143,7 @@
         "../export/design-document.md"
       ],
       "attempts": 0,
-      "updatedAt": "2026-09-06T14:48:32Z",
-      "staleBecause": "ADR-006"
+      "updatedAt": "2026-09-06T14:58:25Z"
     }
   ],
   "openQuestions": []
