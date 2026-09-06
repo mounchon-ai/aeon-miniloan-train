@@ -1717,7 +1717,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/RepaymentScheduleController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "e697ea402dc6ad58fbc0f0cf32a5f289ea7010b5"
+      ]
     },
     {
       "id": "FE-miniloan-013",
