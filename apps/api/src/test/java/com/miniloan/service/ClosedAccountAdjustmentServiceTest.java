@@ -6,10 +6,13 @@ import static org.assertj.core.api.Assertions.within;
 
 import com.miniloan.domain.ApproverRoleSetting.ApproverRole;
 import com.miniloan.domain.ClosedAccountAdjustment;
+import com.miniloan.domain.ClosedAccountAdjustment.AdjustableField;
 import com.miniloan.domain.LoanAccount;
+import com.miniloan.domain.Payment;
 import com.miniloan.repository.ApproverRoleSettingRepository;
 import com.miniloan.repository.ClosedAccountAdjustmentRepository;
 import com.miniloan.repository.LoanAccountRepository;
+import com.miniloan.repository.PaymentRepository;
 import com.miniloan.service.ClosedAccountAdjustmentService.AccountNotClosedException;
 import com.miniloan.service.ClosedAccountAdjustmentService.AdjustmentFields;
 import com.miniloan.service.ClosedAccountAdjustmentService.AdjustmentFieldsRequiredException;
@@ -17,6 +20,7 @@ import com.miniloan.service.ClosedAccountAdjustmentService.ApproverRoleNotSetExc
 import com.miniloan.service.ClosedAccountAdjustmentService.DirectAccountEditRefusedException;
 import com.miniloan.service.ClosedAccountAdjustmentService.NotAssignedOperationsException;
 import com.miniloan.service.ClosedAccountAdjustmentService.OperationsOnlyException;
+import com.miniloan.service.ClosedAccountAdjustmentService.TargetRecordMismatchException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -50,8 +54,27 @@ class ClosedAccountAdjustmentServiceTest {
     private static final String ANOTHER_OPERATIONS = "ROLE-004-another-person";
     private static final String ADJUSTMENT_APPROVER = "ROLE-005";
 
-    private static final AdjustmentFields LAST_PAYMENT =
-            new AdjustmentFields("lastPaymentAmount", "8,500.00", "8,050.00");
+    /**
+     * ADR-006 replaced a free string with ENT-010's closed list, so a fixture can no longer be a
+     * constant: every request names the row it applies to, and for a LoanAccount.* field that row is
+     * the account under test.
+     */
+    private static AdjustmentFields closeReasonOf(LoanAccount account) {
+        return new AdjustmentFields(
+                account.getId().toString(),
+                AdjustableField.LOAN_ACCOUNT_CLOSE_REASON,
+                "FullyPaid",
+                "EarlySettlement");
+    }
+
+    /** For the gates that fire before any account is read, so the target never matters. */
+    private static AdjustmentFields anyFields() {
+        return new AdjustmentFields(
+                UUID.randomUUID().toString(),
+                AdjustableField.LOAN_ACCOUNT_CLOSE_REASON,
+                "FullyPaid",
+                "EarlySettlement");
+    }
 
     @Autowired private ClosedAccountAdjustmentService service;
     @Autowired private ApproverRoleSettingService approverSettings;
@@ -59,6 +82,7 @@ class ClosedAccountAdjustmentServiceTest {
     @Autowired private ClosedAccountAdjustmentRepository adjustments;
     @Autowired private ApproverRoleSettingRepository approverRoles;
     @Autowired private LoanAccountRepository accounts;
+    @Autowired private PaymentRepository payments;
 
     @BeforeEach
     void clean() {
@@ -78,6 +102,19 @@ class ClosedAccountAdjustmentServiceTest {
         return accounts.save(account);
     }
 
+    private Payment paymentOn(LoanAccount account, String amount) {
+        return payments.save(
+                new Payment(
+                        account.getId(),
+                        null,
+                        new BigDecimal(amount),
+                        Payment.PaymentType.InstallmentExact,
+                        null,
+                        null,
+                        OPERATIONS,
+                        Instant.now()));
+    }
+
     private LoanAccount activeAccountOf(String operations) {
         return accounts.save(
                 new LoanAccount(
@@ -93,16 +130,17 @@ class ClosedAccountAdjustmentServiceTest {
             approverRoleIsSetTo(ApproverRole.LoanOfficer);
             LoanAccount account = closedAccountOf(OPERATIONS);
 
-            var result = service.submit(account.getId(), OPERATIONS, LAST_PAYMENT);
+            var result = service.submit(account.getId(), OPERATIONS, closeReasonOf(account));
 
             assertThat(result.message())
                     .isEqualTo("ส่งคำขอปรับปรุงบัญชีที่ปิดแล้วเรียบร้อย — รออนุมัติจาก LoanOfficer");
             ClosedAccountAdjustment filed = result.adjustment();
             assertThat(filed.getStatus()).isEqualTo(ClosedAccountAdjustment.Status.Pending);
             assertThat(filed.getLoanAccountId()).isEqualTo(account.getId());
-            assertThat(filed.getFieldName()).isEqualTo("lastPaymentAmount");
-            assertThat(filed.getOldValue()).isEqualTo("8,500.00");
-            assertThat(filed.getNewValue()).isEqualTo("8,050.00");
+            assertThat(filed.getTargetRecordId()).isEqualTo(account.getId().toString());
+            assertThat(filed.getFieldName()).isEqualTo(AdjustableField.LOAN_ACCOUNT_CLOSE_REASON);
+            assertThat(filed.getOldValue()).isEqualTo("FullyPaid");
+            assertThat(filed.getNewValue()).isEqualTo("EarlySettlement");
             assertThat(filed.getRequestedBy()).isEqualTo(OPERATIONS);
             assertThat(filed.getRequestedAt()).isNotNull();
         }
@@ -117,7 +155,7 @@ class ClosedAccountAdjustmentServiceTest {
             LoanAccount account = closedAccountOf(OPERATIONS);
 
             ClosedAccountAdjustment filed =
-                    service.submit(account.getId(), OPERATIONS, LAST_PAYMENT).adjustment();
+                    service.submit(account.getId(), OPERATIONS, closeReasonOf(account)).adjustment();
 
             assertThat(filed.getApprovedBy()).isNull();
             assertThat(filed.getApprovedAt()).isNull();
@@ -134,7 +172,7 @@ class ClosedAccountAdjustmentServiceTest {
             LoanAccount account = closedAccountOf(OPERATIONS);
             Instant closedAt = account.getClosedAt();
 
-            service.submit(account.getId(), OPERATIONS, LAST_PAYMENT);
+            service.submit(account.getId(), OPERATIONS, closeReasonOf(account));
 
             LoanAccount reloaded = accounts.findById(account.getId()).orElseThrow();
             assertThat(reloaded.getStatus()).isEqualTo(LoanAccount.Status.Closed);
@@ -156,13 +194,13 @@ class ClosedAccountAdjustmentServiceTest {
         void theRoleItWaitsOnComesFromTheSetting() {
             approverRoleIsSetTo(ApproverRole.Supervisor);
             LoanAccount first = closedAccountOf(OPERATIONS);
-            assertThat(service.submit(first.getId(), OPERATIONS, LAST_PAYMENT).message())
+            assertThat(service.submit(first.getId(), OPERATIONS, closeReasonOf(first)).message())
                     .isEqualTo("ส่งคำขอปรับปรุงบัญชีที่ปิดแล้วเรียบร้อย — รออนุมัติจาก Supervisor");
 
             approverRoleIsSetTo(ApproverRole.Operations);
 
             LoanAccount second = closedAccountOf(OPERATIONS);
-            assertThat(service.submit(second.getId(), OPERATIONS, LAST_PAYMENT).message())
+            assertThat(service.submit(second.getId(), OPERATIONS, closeReasonOf(second)).message())
                     .isEqualTo("ส่งคำขอปรับปรุงบัญชีที่ปิดแล้วเรียบร้อย — รออนุมัติจาก Operations");
         }
     }
@@ -175,7 +213,7 @@ class ClosedAccountAdjustmentServiceTest {
         void filingIsRefusedAndNoRequestExists() {
             LoanAccount account = closedAccountOf(OPERATIONS);
 
-            assertThatThrownBy(() -> service.submit(account.getId(), OPERATIONS, LAST_PAYMENT))
+            assertThatThrownBy(() -> service.submit(account.getId(), OPERATIONS, closeReasonOf(account)))
                     .isInstanceOf(ApproverRoleNotSetException.class)
                     .hasMessage(
                             "ยังไม่ได้ตั้ง role ผู้อนุมัติ — ใช้ฟีเจอร์แก้ข้อมูลบัญชีที่ปิดแล้วไม่ได้ · ให้ Loan Officer ตั้งค่า role ผู้อนุมัติก่อน");
@@ -191,7 +229,7 @@ class ClosedAccountAdjustmentServiceTest {
          */
         @Test
         void theGateIsOnTheFeatureNotOnOneAccount() {
-            assertThatThrownBy(() -> service.submit(UUID.randomUUID(), OPERATIONS, LAST_PAYMENT))
+            assertThatThrownBy(() -> service.submit(UUID.randomUUID(), OPERATIONS, anyFields()))
                     .isInstanceOf(ApproverRoleNotSetException.class);
 
             assertThat(adjustments.count()).isZero();
@@ -219,7 +257,7 @@ class ClosedAccountAdjustmentServiceTest {
 
             for (String role :
                     new String[] {APPLICANT, LOAN_OFFICER, SUPERVISOR, ADJUSTMENT_APPROVER, null}) {
-                assertThatThrownBy(() -> service.submit(account.getId(), role, LAST_PAYMENT))
+                assertThatThrownBy(() -> service.submit(account.getId(), role, closeReasonOf(account)))
                         .isInstanceOf(OperationsOnlyException.class)
                         .hasMessage("ไม่มีสิทธิ์ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว — ทำได้เฉพาะเจ้าหน้าที่ Operations");
             }
@@ -233,7 +271,7 @@ class ClosedAccountAdjustmentServiceTest {
             approverRoleIsSetTo(ApproverRole.LoanOfficer);
             LoanAccount account = closedAccountOf(ANOTHER_OPERATIONS);
 
-            assertThatThrownBy(() -> service.submit(account.getId(), OPERATIONS, LAST_PAYMENT))
+            assertThatThrownBy(() -> service.submit(account.getId(), OPERATIONS, closeReasonOf(account)))
                     .isInstanceOf(NotAssignedOperationsException.class);
 
             assertThat(adjustments.count()).isZero();
@@ -245,29 +283,124 @@ class ClosedAccountAdjustmentServiceTest {
             approverRoleIsSetTo(ApproverRole.LoanOfficer);
             LoanAccount account = activeAccountOf(OPERATIONS);
 
-            assertThatThrownBy(() -> service.submit(account.getId(), OPERATIONS, LAST_PAYMENT))
+            assertThatThrownBy(() -> service.submit(account.getId(), OPERATIONS, closeReasonOf(account)))
                     .isInstanceOf(AccountNotClosedException.class)
                     .hasMessage("บัญชีนี้ยังไม่ปิด — คำขอปรับปรุงใช้กับบัญชีที่ปิดแล้วเท่านั้น");
 
             assertThat(adjustments.count()).isZero();
         }
 
-        /** ENT-010 declares all three required, so a blank is refused rather than stored as one. */
+        /** ENT-010 declares all four capture attributes required, so a blank is refused. */
         @Test
         void anIncompleteRequestIsRefused() {
             approverRoleIsSetTo(ApproverRole.LoanOfficer);
             LoanAccount account = closedAccountOf(OPERATIONS);
+            String id = account.getId().toString();
 
             assertThatThrownBy(
                             () ->
                                     service.submit(
-                                            account.getId(), OPERATIONS, new AdjustmentFields("lastPaymentAmount", " ", "8,050.00")))
+                                            account.getId(),
+                                            OPERATIONS,
+                                            new AdjustmentFields(
+                                                    id, AdjustableField.LOAN_ACCOUNT_CLOSE_REASON, " ", "EarlySettlement")))
                     .isInstanceOf(AdjustmentFieldsRequiredException.class);
             assertThatThrownBy(
                             () ->
                                     service.submit(
-                                            account.getId(), OPERATIONS, new AdjustmentFields(null, "8,500.00", "8,050.00")))
+                                            account.getId(),
+                                            OPERATIONS,
+                                            new AdjustmentFields(id, null, "FullyPaid", "EarlySettlement")))
                     .isInstanceOf(AdjustmentFieldsRequiredException.class);
+            assertThatThrownBy(
+                            () ->
+                                    service.submit(
+                                            account.getId(),
+                                            OPERATIONS,
+                                            new AdjustmentFields(
+                                                    null,
+                                                    AdjustableField.LOAN_ACCOUNT_CLOSE_REASON,
+                                                    "FullyPaid",
+                                                    "EarlySettlement")))
+                    .isInstanceOf(AdjustmentFieldsRequiredException.class);
+
+            assertThat(adjustments.count()).isZero();
+        }
+
+        /**
+         * ADR-006 · AC-miniloan-076's own example — "ยอดชำระงวดสุดท้ายถูกบันทึกผิด" is a Payment,
+         * which is why the scope is the account AND its payments rather than the account alone.
+         */
+        @Test
+        void aPaymentOfThisAccountMayBeNamedAsTheTarget() {
+            approverRoleIsSetTo(ApproverRole.LoanOfficer);
+            LoanAccount account = closedAccountOf(OPERATIONS);
+            Payment payment = paymentOn(account, "8500.00");
+
+            var filed =
+                    service
+                            .submit(
+                                    account.getId(),
+                                    OPERATIONS,
+                                    new AdjustmentFields(
+                                            payment.getId().toString(),
+                                            AdjustableField.PAYMENT_AMOUNT,
+                                            "8,500.00",
+                                            "8,050.00"))
+                            .adjustment();
+
+            assertThat(filed.getFieldName()).isEqualTo(AdjustableField.PAYMENT_AMOUNT);
+            assertThat(filed.getTargetRecordId()).isEqualTo(payment.getId().toString());
+            assertThat(filed.getStatus()).isEqualTo(ClosedAccountAdjustment.Status.Pending);
+        }
+
+        /**
+         * ENT-010's validation on targetRecordId, enforced rather than described: another account's
+         * payment is ACL-015's scope walked around through a field nobody checked.
+         */
+        @Test
+        void aPaymentOfAnotherAccountIsRefused() {
+            approverRoleIsSetTo(ApproverRole.LoanOfficer);
+            LoanAccount mine = closedAccountOf(OPERATIONS);
+            LoanAccount theirs = closedAccountOf(OPERATIONS);
+            Payment elsewhere = paymentOn(theirs, "8500.00");
+
+            assertThatThrownBy(
+                            () ->
+                                    service.submit(
+                                            mine.getId(),
+                                            OPERATIONS,
+                                            new AdjustmentFields(
+                                                    elsewhere.getId().toString(),
+                                                    AdjustableField.PAYMENT_AMOUNT,
+                                                    "8,500.00",
+                                                    "8,050.00")))
+                    .isInstanceOf(TargetRecordMismatchException.class);
+
+            assertThat(adjustments.count()).isZero();
+        }
+
+        /** A LoanAccount.* field may name this account and nothing else — not even another account. */
+        @Test
+        void anAccountFieldMustNameTheAccountBeingAdjusted() {
+            approverRoleIsSetTo(ApproverRole.LoanOfficer);
+            LoanAccount mine = closedAccountOf(OPERATIONS);
+            LoanAccount theirs = closedAccountOf(OPERATIONS);
+
+            assertThatThrownBy(
+                            () -> service.submit(mine.getId(), OPERATIONS, closeReasonOf(theirs)))
+                    .isInstanceOf(TargetRecordMismatchException.class);
+            assertThatThrownBy(
+                            () ->
+                                    service.submit(
+                                            mine.getId(),
+                                            OPERATIONS,
+                                            new AdjustmentFields(
+                                                    "not-a-uuid",
+                                                    AdjustableField.PAYMENT_AMOUNT,
+                                                    "8,500.00",
+                                                    "8,050.00")))
+                    .isInstanceOf(TargetRecordMismatchException.class);
 
             assertThat(adjustments.count()).isZero();
         }
@@ -282,7 +415,7 @@ class ClosedAccountAdjustmentServiceTest {
             approverRoleIsSetTo(ApproverRole.LoanOfficer);
             LoanAccount account = closedAccountOf(OPERATIONS);
             ClosedAccountAdjustment filed =
-                    service.submit(account.getId(), OPERATIONS, LAST_PAYMENT).adjustment();
+                    service.submit(account.getId(), OPERATIONS, closeReasonOf(account)).adjustment();
             Instant decidedAt = Instant.now();
 
             filed.approve(LOAN_OFFICER, decidedAt);
@@ -290,7 +423,7 @@ class ClosedAccountAdjustmentServiceTest {
             assertThat(filed.getStatus()).isEqualTo(ClosedAccountAdjustment.Status.Approved);
             assertThat(filed.getApprovedBy()).isEqualTo(LOAN_OFFICER);
             assertThat(filed.getApprovedAt()).isEqualTo(decidedAt);
-            assertThat(filed.getOldValue()).isEqualTo("8,500.00");
+            assertThat(filed.getOldValue()).isEqualTo("FullyPaid");
         }
 
         /**
@@ -302,7 +435,7 @@ class ClosedAccountAdjustmentServiceTest {
             approverRoleIsSetTo(ApproverRole.Operations);
             LoanAccount account = closedAccountOf(OPERATIONS);
             ClosedAccountAdjustment filed =
-                    service.submit(account.getId(), OPERATIONS, LAST_PAYMENT).adjustment();
+                    service.submit(account.getId(), OPERATIONS, closeReasonOf(account)).adjustment();
 
             assertThatThrownBy(() -> filed.approve(OPERATIONS, Instant.now()))
                     .isInstanceOf(IllegalStateException.class)
@@ -319,7 +452,7 @@ class ClosedAccountAdjustmentServiceTest {
             approverRoleIsSetTo(ApproverRole.LoanOfficer);
             LoanAccount account = closedAccountOf(OPERATIONS);
             ClosedAccountAdjustment filed =
-                    service.submit(account.getId(), OPERATIONS, LAST_PAYMENT).adjustment();
+                    service.submit(account.getId(), OPERATIONS, closeReasonOf(account)).adjustment();
             filed.reject(LOAN_OFFICER, Instant.now());
 
             assertThatThrownBy(() -> filed.approve(SUPERVISOR, Instant.now()))
@@ -341,7 +474,7 @@ class ClosedAccountAdjustmentServiceTest {
         approverRoleIsSetTo(ApproverRole.LoanOfficer);
         LoanAccount account = closedAccountOf(OPERATIONS);
         ClosedAccountAdjustment filed =
-                service.submit(account.getId(), OPERATIONS, LAST_PAYMENT).adjustment();
+                service.submit(account.getId(), OPERATIONS, closeReasonOf(account)).adjustment();
         filed.approve(LOAN_OFFICER, Instant.now());
         adjustments.save(filed);
 

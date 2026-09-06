@@ -2,6 +2,7 @@ package com.miniloan.controller;
 
 import com.miniloan.controller.LoanApplicationController.ErrorResponse;
 import com.miniloan.domain.ClosedAccountAdjustment;
+import com.miniloan.domain.ClosedAccountAdjustment.AdjustableField;
 import com.miniloan.service.ClosedAccountAdjustmentService;
 import com.miniloan.service.ClosedAccountAdjustmentService.AccountDeletionRefusedException;
 import com.miniloan.service.ClosedAccountAdjustmentService.AccountNotClosedException;
@@ -13,6 +14,7 @@ import com.miniloan.service.ClosedAccountAdjustmentService.LoanAccountNotFoundEx
 import com.miniloan.service.ClosedAccountAdjustmentService.NotAssignedOperationsException;
 import com.miniloan.service.ClosedAccountAdjustmentService.OperationsOnlyException;
 import com.miniloan.service.ClosedAccountAdjustmentService.SubmitResult;
+import com.miniloan.service.ClosedAccountAdjustmentService.TargetRecordMismatchException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.util.UUID;
@@ -72,7 +74,10 @@ public class ClosedAccountAdjustmentController {
                                         id,
                                         role,
                                         new AdjustmentFields(
-                                                request.fieldName(), request.oldValue(), request.newValue()))));
+                                                request.targetRecordId(),
+                                                request.fieldName(),
+                                                request.oldValue(),
+                                                request.newValue()))));
     }
 
     /**
@@ -134,6 +139,13 @@ public class ClosedAccountAdjustmentController {
                 .body(new ErrorResponse("LOAN_ACCOUNT_NOT_CLOSED", ex.getMessage()));
     }
 
+    /** ADR-006 — the row named does not belong to this account, or is not a row at all. */
+    @ExceptionHandler(TargetRecordMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleTargetMismatch(TargetRecordMismatchException ex) {
+        return ResponseEntity.unprocessableEntity()
+                .body(new ErrorResponse("ADJUSTMENT_TARGET_MISMATCH", ex.getMessage()));
+    }
+
     @ExceptionHandler(AdjustmentFieldsRequiredException.class)
     public ResponseEntity<ErrorResponse> handleFieldsRequired(AdjustmentFieldsRequiredException ex) {
         return ResponseEntity.badRequest()
@@ -148,8 +160,14 @@ public class ClosedAccountAdjustmentController {
 
     // ── wire shapes ─────────────────────────────────────────────────────────
 
-    /** ENT-010's three required attributes — one field per request, see the service comment. */
-    public record AdjustmentRequest(String fieldName, String oldValue, String newValue) {}
+    /**
+     * ENT-010's required capture attributes — one field per request, see the service comment.
+     * {@code fieldName} deserialises from the DECLARED name design wrote ("Payment.amount"), because
+     * that is the value ENT-010's enum lists and the only one a client has been told about; anything
+     * outside the five is refused by the type before this method runs.
+     */
+    public record AdjustmentRequest(
+            String targetRecordId, AdjustableField fieldName, String oldValue, String newValue) {}
 
     /**
      * AC-miniloan-085: an undecided request has no approver and no approval time, so both travel as
@@ -158,6 +176,7 @@ public class ClosedAccountAdjustmentController {
     public record AdjustmentResponse(
             UUID id,
             UUID loanAccountId,
+            String targetRecordId,
             String fieldName,
             String oldValue,
             String newValue,
@@ -172,7 +191,8 @@ public class ClosedAccountAdjustmentController {
             return new AdjustmentResponse(
                     filed.getId(),
                     filed.getLoanAccountId(),
-                    filed.getFieldName(),
+                    filed.getTargetRecordId(),
+                    filed.getFieldName().declaredName(),
                     filed.getOldValue(),
                     filed.getNewValue(),
                     filed.getRequestedBy(),

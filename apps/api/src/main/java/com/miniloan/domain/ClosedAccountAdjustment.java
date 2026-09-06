@@ -1,6 +1,11 @@
 package com.miniloan.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,10 +37,16 @@ import java.util.UUID;
  * the object. AC-miniloan-079's sentence is a different thing and belongs to FE-miniloan-016, which
  * refuses the caller before it ever gets this far; what is here is the floor under that.
  *
- * <p><b>{@code fieldName} is a free string because ENT-010 says {@code type: string}.</b> No enum,
- * no whitelist, and no mapping to a {@link LoanAccount} attribute exists anywhere in the design — so
- * nothing is validated against a list this unit would have had to invent. What that leaves open for
- * the unit that APPLIES an approved change is raised in FE-miniloan-015's build report.
+ * <p><b>{@code fieldName} is a closed list design declares, and {@code targetRecordId} names the row
+ * it applies to</b> (ADR-006, answering GAP-miniloan-006). It used to be a free string with nothing
+ * behind it, which left the unit that APPLIES an approved change with no way to apply one. The scope
+ * is the account AND that account's payments, because AC-miniloan-076's own example — "ยอดชำระงวด
+ * สุดท้ายถูกบันทึกผิด" — lives on {@link Payment} and on no {@link LoanAccount} attribute at all.
+ *
+ * <p><b>ENT-008's instalments are absent from that list on purpose</b>: BR-miniloan-045@v1
+ * locks a closed account's schedule permanently and AC-miniloan-108 proves an approved adjustment
+ * does not unlock it. The list simply has no way to name one, so the fence is the type rather than a
+ * check somebody has to remember.
  */
 @Entity
 @Table(name = "closed_account_adjustments")
@@ -48,6 +59,77 @@ public class ClosedAccountAdjustment {
         Rejected
     }
 
+    /** Which entity the row named by {@code targetRecordId} belongs to. */
+    public enum TargetEntity {
+        LoanAccount,
+        Payment
+    }
+
+    /**
+     * ENT-010's {@code fieldName} value list, verbatim (ADR-006). The constant names are Java's; the
+     * strings are design's, and {@link #declaredName()} is the only form that crosses the wire or
+     * reaches the database — see {@link AdjustableFieldConverter}.
+     *
+     * <p>Each value carries the entity it names, so {@code targetRecordId} can be checked against it
+     * without a second field repeating what this one already says.
+     */
+    public enum AdjustableField {
+        LOAN_ACCOUNT_CLOSED_AT("LoanAccount.closedAt", TargetEntity.LoanAccount),
+        LOAN_ACCOUNT_CLOSE_REASON("LoanAccount.closeReason", TargetEntity.LoanAccount),
+        LOAN_ACCOUNT_ASSIGNED_OPERATIONS_ID(
+                "LoanAccount.assignedOperationsId", TargetEntity.LoanAccount),
+        PAYMENT_AMOUNT("Payment.amount", TargetEntity.Payment),
+        PAYMENT_RECORDED_AT("Payment.recordedAt", TargetEntity.Payment);
+
+        private final String declaredName;
+        private final TargetEntity targetEntity;
+
+        AdjustableField(String declaredName, TargetEntity targetEntity) {
+            this.declaredName = declaredName;
+            this.targetEntity = targetEntity;
+        }
+
+        @JsonValue
+        public String declaredName() {
+            return declaredName;
+        }
+
+        public TargetEntity targetEntity() {
+            return targetEntity;
+        }
+
+        /** Anything outside ENT-010's list is refused here rather than stored and puzzled over later. */
+        @JsonCreator
+        public static AdjustableField ofDeclaredName(String declaredName) {
+            for (AdjustableField candidate : values()) {
+                if (candidate.declaredName.equals(declaredName)) {
+                    return candidate;
+                }
+            }
+            throw new IllegalArgumentException("ไม่รู้จักฟิลด์ที่ขอแก้: " + declaredName);
+        }
+    }
+
+    /**
+     * Persists the DECLARED name, not the Java constant. ENT-010's list is what a reader of the
+     * database is entitled to see, and a column holding {@code LOAN_ACCOUNT_CLOSED_AT} would be a
+     * second spelling of a value design already spelled once.
+     */
+    @Converter
+    public static class AdjustableFieldConverter
+            implements AttributeConverter<AdjustableField, String> {
+
+        @Override
+        public String convertToDatabaseColumn(AdjustableField attribute) {
+            return attribute == null ? null : attribute.declaredName();
+        }
+
+        @Override
+        public AdjustableField convertToEntityAttribute(String dbData) {
+            return dbData == null ? null : AdjustableField.ofDeclaredName(dbData);
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -55,8 +137,13 @@ public class ClosedAccountAdjustment {
     @Column(nullable = false)
     private UUID loanAccountId;
 
+    /** ADR-006 — the row the change applies to; equals loanAccountId for a LoanAccount.* field. */
     @Column(nullable = false)
-    private String fieldName;
+    private String targetRecordId;
+
+    @Convert(converter = AdjustableFieldConverter.class)
+    @Column(nullable = false)
+    private AdjustableField fieldName;
 
     @Column(nullable = false)
     private String oldValue;
@@ -88,12 +175,14 @@ public class ClosedAccountAdjustment {
 
     public ClosedAccountAdjustment(
             UUID loanAccountId,
-            String fieldName,
+            String targetRecordId,
+            AdjustableField fieldName,
             String oldValue,
             String newValue,
             String requestedBy,
             Instant requestedAt) {
         this.loanAccountId = loanAccountId;
+        this.targetRecordId = targetRecordId;
         this.fieldName = fieldName;
         this.oldValue = oldValue;
         this.newValue = newValue;
@@ -135,7 +224,11 @@ public class ClosedAccountAdjustment {
         return loanAccountId;
     }
 
-    public String getFieldName() {
+    public String getTargetRecordId() {
+        return targetRecordId;
+    }
+
+    public AdjustableField getFieldName() {
         return fieldName;
     }
 

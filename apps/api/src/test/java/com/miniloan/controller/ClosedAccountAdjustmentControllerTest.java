@@ -51,8 +51,16 @@ class ClosedAccountAdjustmentControllerTest {
 
     private static final String APPLICANT_TOKEN = "Bearer mock-role-001";
 
-    private static final String BODY =
-            "{\"fieldName\":\"lastPaymentAmount\",\"oldValue\":\"8,500.00\",\"newValue\":\"8,050.00\"}";
+    /**
+     * ADR-006 — fieldName crosses the wire as the DECLARED name ENT-010 lists, and targetRecordId
+     * names the row. The account id is substituted per test because a LoanAccount.* field may name
+     * only the account being adjusted.
+     */
+    private static String body(java.util.UUID accountId) {
+        return "{\"targetRecordId\":\""
+                + accountId
+                + "\",\"fieldName\":\"LoanAccount.closeReason\",\"oldValue\":\"FullyPaid\",\"newValue\":\"EarlySettlement\"}";
+    }
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ApproverRoleSettingService approverSettings;
@@ -86,11 +94,13 @@ class ClosedAccountAdjustmentControllerTest {
                         post("/loan-accounts/{id}/adjustments", account.getId())
                                 .header("Authorization", OPERATIONS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(BODY))
+                                .content(body(account.getId())))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("Pending"))
                 .andExpect(jsonPath("$.approverRole").value("Supervisor"))
-                .andExpect(jsonPath("$.oldValue").value("8,500.00"))
+                .andExpect(jsonPath("$.targetRecordId").value(account.getId().toString()))
+                .andExpect(jsonPath("$.fieldName").value("LoanAccount.closeReason"))
+                .andExpect(jsonPath("$.oldValue").value("FullyPaid"))
                 .andExpect(jsonPath("$.approvedBy").doesNotExist())
                 .andExpect(
                         jsonPath("$.message")
@@ -108,7 +118,7 @@ class ClosedAccountAdjustmentControllerTest {
                         post("/loan-accounts/{id}/adjustments", account.getId())
                                 .header("Authorization", APPLICANT_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(BODY))
+                                .content(body(account.getId())))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value("ADJUSTMENT_OPERATIONS_ONLY"));
 
@@ -125,7 +135,7 @@ class ClosedAccountAdjustmentControllerTest {
                         post("/loan-accounts/{id}/adjustments", account.getId())
                                 .header("Authorization", OPERATIONS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(BODY))
+                                .content(body(account.getId())))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("APPROVER_ROLE_NOT_SET"))
                 .andExpect(
@@ -149,7 +159,7 @@ class ClosedAccountAdjustmentControllerTest {
                         post("/loan-accounts/{id}/adjustments", account.getId())
                                 .header("Authorization", OPERATIONS_TOKEN)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(BODY))
+                                .content(body(account.getId())))
                 .andExpect(status().isCreated());
 
         mockMvc
@@ -213,6 +223,29 @@ class ClosedAccountAdjustmentControllerTest {
         assertThat(survived.getPrincipalAmount()).isEqualByComparingTo("100000.00");
     }
 
+    /**
+     * ADR-006 — a fieldName outside ENT-010's five is refused by the contract before any rule runs.
+     * The list is design's, and a value nobody declared cannot reach the service to be argued with.
+     */
+    @Test
+    void aFieldNameOutsideTheDeclaredListIsRefused() throws Exception {
+        approverSettings.set(LOAN_OFFICER, ApproverRole.Supervisor);
+        LoanAccount account = closedAccount();
+
+        mockMvc
+                .perform(
+                        post("/loan-accounts/{id}/adjustments", account.getId())
+                                .header("Authorization", OPERATIONS_TOKEN)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        "{\"targetRecordId\":\""
+                                                + account.getId()
+                                                + "\",\"fieldName\":\"LoanAccount.principalAmount\",\"oldValue\":\"1\",\"newValue\":\"2\"}"))
+                .andExpect(status().is4xxClientError());
+
+        assertThat(adjustments.count()).isZero();
+    }
+
     /** BR-miniloan-030@v1 — the filter has no exemption list, and these three routes are not one. */
     @Test
     void noneOfTheThreeRoutesIsReachableWithoutAToken() throws Exception {
@@ -222,7 +255,7 @@ class ClosedAccountAdjustmentControllerTest {
                 .perform(
                         post("/loan-accounts/{id}/adjustments", account.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(BODY))
+                                .content(body(account.getId())))
                 .andExpect(status().isUnauthorized());
         mockMvc
                 .perform(

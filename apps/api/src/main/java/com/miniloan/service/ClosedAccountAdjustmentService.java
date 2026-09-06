@@ -2,9 +2,13 @@ package com.miniloan.service;
 
 import com.miniloan.domain.ApproverRoleSetting.ApproverRole;
 import com.miniloan.domain.ClosedAccountAdjustment;
+import com.miniloan.domain.ClosedAccountAdjustment.AdjustableField;
+import com.miniloan.domain.ClosedAccountAdjustment.TargetEntity;
 import com.miniloan.domain.LoanAccount;
+import com.miniloan.domain.Payment;
 import com.miniloan.repository.ClosedAccountAdjustmentRepository;
 import com.miniloan.repository.LoanAccountRepository;
+import com.miniloan.repository.PaymentRepository;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.UUID;
@@ -35,6 +39,12 @@ import org.springframework.transaction.annotation.Transactional;
  * of a rule, and indistinguishable from a typo in the path. BR-miniloan-025@v1 asks for the rule at
  * the API, so both refusals are declared and both carry the criterion's own sentence.
  *
+ * <p><b>What may be adjusted is design's closed list, not this unit's</b> (ADR-006, answering
+ * GAP-miniloan-006). {@link AdjustableField} is ENT-010's five values verbatim, and each one carries
+ * the entity it names, so {@code targetRecordId} is checked against the field rather than against a
+ * second flag repeating it. A LoanAccount.* field may only name this account; a Payment.* field may
+ * only name a payment OF this account — the scope stays per account exactly as ACL-015 is.
+ *
  * <p><b>One field per request.</b> ENT-010 holds one {@code fieldName} with its own old and new
  * value, and design mints no group id anywhere — so a call that took several fields would write
  * several independent rows and make "one คำขอ" unrecoverable from the data, which AC-miniloan-085
@@ -49,16 +59,19 @@ public class ClosedAccountAdjustmentService {
 
     private final ClosedAccountAdjustmentRepository adjustments;
     private final LoanAccountRepository accounts;
+    private final PaymentRepository payments;
     private final ApproverRoleSettingService approvers;
     private final Clock clock;
 
     public ClosedAccountAdjustmentService(
             ClosedAccountAdjustmentRepository adjustments,
             LoanAccountRepository accounts,
+            PaymentRepository payments,
             ApproverRoleSettingService approvers,
             Clock clock) {
         this.adjustments = adjustments;
         this.accounts = accounts;
+        this.payments = payments;
         this.approvers = approvers;
         this.clock = clock;
     }
@@ -98,10 +111,22 @@ public class ClosedAccountAdjustmentService {
         }
     }
 
-    /** ENT-010 declares fieldName, oldValue and newValue required, and a blank is not a value. */
+    /** ENT-010 declares all four capture attributes required, and a blank is not a value. */
     public static class AdjustmentFieldsRequiredException extends RuntimeException {
         public AdjustmentFieldsRequiredException() {
-            super("ต้องระบุชื่อฟิลด์ ค่าเดิม และค่าใหม่ให้ครบ");
+            super("ต้องระบุรายการที่ขอแก้ ชื่อฟิลด์ ค่าเดิม และค่าใหม่ให้ครบ");
+        }
+    }
+
+    /**
+     * ENT-010's validation on {@code targetRecordId} (ADR-006), enforced rather than described: a
+     * LoanAccount.* field names this account and nothing else, and a Payment.* field names a payment
+     * OF this account. Pointing at another account's payment would be ACL-015's {@code scope: own}
+     * walked around through a field nobody checked.
+     */
+    public static class TargetRecordMismatchException extends RuntimeException {
+        public TargetRecordMismatchException(String message) {
+            super(message);
         }
     }
 
@@ -126,8 +151,9 @@ public class ClosedAccountAdjustmentService {
         }
     }
 
-    /** UC-miniloan-017: "ระบุค่าเดิมและค่าใหม่" — ENT-010's three required attributes, and no more. */
-    public record AdjustmentFields(String fieldName, String oldValue, String newValue) {}
+    /** UC-miniloan-017: "ระบุค่าเดิมและค่าใหม่" — ENT-010's required attributes, and no more. */
+    public record AdjustmentFields(
+            String targetRecordId, AdjustableField fieldName, String oldValue, String newValue) {}
 
     /** What one filed request is, and the approver it is now waiting on. */
     public record SubmitResult(ClosedAccountAdjustment adjustment, ApproverRole approverRole) {
@@ -165,9 +191,13 @@ public class ClosedAccountAdjustmentService {
         if (account.getStatus() != LoanAccount.Status.Closed) {
             throw new AccountNotClosedException();
         }
-        if (isBlank(fields.fieldName()) || isBlank(fields.oldValue()) || isBlank(fields.newValue())) {
+        if (fields.fieldName() == null
+                || isBlank(fields.targetRecordId())
+                || isBlank(fields.oldValue())
+                || isBlank(fields.newValue())) {
             throw new AdjustmentFieldsRequiredException();
         }
+        requireTargetBelongsToAccount(fields, account);
 
         // BR-miniloan-041@v1: a row of its own. Nothing on the account is written here, and there is
         // no branch below that could — the account object is not passed on.
@@ -175,6 +205,7 @@ public class ClosedAccountAdjustmentService {
                 adjustments.save(
                         new ClosedAccountAdjustment(
                                 loanAccountId,
+                                fields.targetRecordId().trim(),
                                 fields.fieldName(),
                                 fields.oldValue(),
                                 fields.newValue(),
@@ -195,6 +226,39 @@ public class ClosedAccountAdjustmentService {
     /** AC-miniloan-078 — likewise refused outright; the adjustment path is the only way in. */
     public void refuseAccountDeletion() {
         throw new AccountDeletionRefusedException();
+    }
+
+    /**
+     * The field says which entity its row lives in, so nothing here has to be told twice. A payment
+     * is looked up rather than trusted: an id that parses is not an id that belongs to this account.
+     */
+    private void requireTargetBelongsToAccount(AdjustmentFields fields, LoanAccount account) {
+        String target = fields.targetRecordId().trim();
+        if (fields.fieldName().targetEntity() == TargetEntity.LoanAccount) {
+            if (!account.getId().toString().equals(target)) {
+                throw new TargetRecordMismatchException(
+                        "รายการที่ขอแก้ต้องเป็นบัญชีที่กำลังเปิดอยู่ — "
+                                + fields.fieldName().declaredName()
+                                + " เป็นฟิลด์ของบัญชี");
+            }
+            return;
+        }
+
+        UUID paymentId;
+        try {
+            paymentId = UUID.fromString(target);
+        } catch (IllegalArgumentException notAUuid) {
+            throw new TargetRecordMismatchException("รายการชำระที่ขอแก้ไม่ใช่ id ที่ถูกต้อง: " + target);
+        }
+        Payment payment =
+                payments
+                        .findById(paymentId)
+                        .orElseThrow(
+                                () -> new TargetRecordMismatchException("ไม่พบรายการชำระ " + paymentId));
+        if (!payment.getLoanAccountId().equals(account.getId())) {
+            throw new TargetRecordMismatchException(
+                    "รายการชำระ " + paymentId + " ไม่ใช่ของบัญชีสินเชื่อนี้");
+        }
     }
 
     private static boolean isBlank(String value) {
