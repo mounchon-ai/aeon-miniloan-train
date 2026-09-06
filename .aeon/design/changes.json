@@ -137,6 +137,18 @@
       "recordedAt": "2026-09-06T09:10:00Z",
       "absorbed": true,
       "absorbedAt": "2026-09-06T09:55:02Z"
+    },
+    {
+      "id": "ADR-006",
+      "origin": "design",
+      "kind": "revised",
+      "moved": [
+        "ENT-010"
+      ],
+      "reason": "design ตัดสินเอง (ไม่มีใบเปลี่ยนแปลงจาก req) — dev เปิด GAP-miniloan-006 ระหว่าง /dev:plan: ENT-010 ประกาศ fieldName เป็น type: string อิสระ ไม่มีรายการค่าที่รับได้ และไม่มี artifact ใบไหน map ค่าของมันไปหา attribute ของเอนทิตีใดเลย · FE-miniloan-015 (ยื่นคำขอ) ไม่เดือดร้อนเพราะมันเก็บ oldValue/newValue เป็นข้อความล้วน แต่ FE-miniloan-016 ต้องเอาค่าใหม่ไปลงของจริงตาม AC-miniloan-076 (\"ค่าบนบัญชีเปลี่ยนเป็นค่าใหม่ก็ต่อเมื่อผ่านขั้นที่สองแล้ว\") และไม่มีอะไรให้มันใช้ลง ⇒ dev จะต้องมินต์รายการฟิลด์เอง ซึ่งเป็นการตัดสินว่าข้อมูลอะไรของบัญชีที่ปิดแล้วแก้ได้ ไม่ใช่รายละเอียดการเขียนโค้ด · ข้อเท็จจริงที่ชี้ขาดรูปของคำตอบ: ตัวอย่างของ AC-miniloan-076 เองคือ \"ยอดชำระงวดสุดท้ายถูกบันทึกผิด\" ซึ่งอยู่ที่ ENT-009 Payment.amount ไม่ใช่ attribute ใดของ ENT-006 เลย ขอบเขตของการปรับปรุงจึงเป็นบัญชี *และรายการชำระของบัญชีนั้น* ไม่ใช่ตัวบัญชีอย่างเดียว · การแก้: fieldName เปลี่ยนจาก string เป็น enum ที่ถือรายการปิดของชื่อฟิลด์แบบเต็ม (LoanAccount.closedAt · LoanAccount.closeReason · LoanAccount.assignedOperationsId · Payment.amount · Payment.recordedAt) และเพิ่ม attribute targetRecordId เพื่อระบุแถวที่ถูกแก้ เพราะ Payment ไม่ใช่ตัวบัญชีและ loanAccountId ชี้มันไม่ได้ · ENT-008 Installment ไม่อยู่ในรายการเลย และนั่นไม่ใช่การตัดสินใหม่ — BR-miniloan-045@v1 ล็อกตารางผ่อนของบัญชีที่ปิดแล้วถาวร และ AC-miniloan-108 พิสูจน์ไว้แล้วว่าถึงมีผู้อนุมัติก็แก้ไม่ได้ · ฟิลด์ที่ถูกกันออกจากรายการโดยมีกฎรองรับ: applicationId (unique constraint หนึ่งใบสมัครหนึ่งบัญชี), interestRateVersionId (BR-miniloan-037@v1 ผูกถาวร), status (BR-miniloan-021@v1 เป็นเจ้าของประตูปิดบัญชี) · ฟิลด์ที่ถูกกันออกด้วยเหตุผลที่ design เขียนเองรอบนี้ ไม่ใช่กฎที่ใครประกาศไว้ก่อน: principalAmount, outstandingPrincipal, termMonths, disbursedAt — หลักที่ใช้คือ \"ปรับปรุงได้เฉพาะข้อเท็จจริงที่ถูกบันทึก ไม่ใช่ค่าที่คำนวณมาหรือค่าที่เป็นตัวตนของบัญชี\" · สิ่งที่ ADR ใบนี้ไม่ตัดสินและยกเป็นการ์ดแยกไปหา req: เมื่อ Payment.amount ที่ปิดบัญชีถูกแก้ให้น้อยลง outstandingPrincipal ที่เป็น 0.00 กับ closeReason: FullyPaid หมายความว่าอะไร — BR-miniloan-021@v1 เป็นเจ้าของทั้งสองค่า และเป็นคำถามเชิงกฎ ไม่ใช่รูปของข้อมูล · ผลต่อโค้ดที่ลงไปแล้ว: FE-miniloan-015 commit 1687dd7 เก็บ fieldName เป็น String และไม่มี targetRecordId จึงต้องผ่าน /dev:revise · หน่วยที่ถูกบล็อกอยู่คือ FE-miniloan-016",
+      "recordedAt": "2026-09-06T14:05:00Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-06T14:20:00Z"
     }
   ]
 }

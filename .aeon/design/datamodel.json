@@ -3,7 +3,7 @@
   "producedBy": "design · scripts/datamodel.mjs",
   "project": "miniloan",
   "status": "approved",
-  "approvedAt": "2026-09-03T05:17:39Z",
+  "approvedAt": "2026-09-06T14:55:02Z",
   "approvedBy": "aplus191",
   "entities": [
     {
@@ -716,16 +716,32 @@
           "validation": "บัญชีที่ขอปรับปรุง ต้องสถานะ Closed"
         },
         {
-          "name": "fieldName",
+          "name": "targetRecordId",
           "type": "string",
           "required": true,
-          "validation": "ชื่อฟิลด์ของบัญชีที่ขอแก้"
+          "validation": "id ของแถวที่ถูกแก้จริง — เมื่อ fieldName ขึ้นต้นด้วย LoanAccount. ค่านี้เท่ากับ loanAccountId เสมอ · เมื่อขึ้นต้นด้วย Payment. ค่านี้คือ id ของ ENT-009 ที่ต้องเป็นรายการชำระของบัญชีเดียวกันกับ loanAccountId · เก็บเป็น string ไม่ใช่ reference เพราะปลายทางเป็นได้สองเอนทิตี ซึ่ง type reference ที่ต้องระบุเอนทิตีเดียวรับไม่ได้ (ADR-006)"
+        },
+        {
+          "name": "fieldName",
+          "type": "enum",
+          "values": [
+            "LoanAccount.closedAt",
+            "LoanAccount.closeReason",
+            "LoanAccount.assignedOperationsId",
+            "Payment.amount",
+            "Payment.recordedAt"
+          ],
+          "required": true,
+          "validation": "ฟิลด์ที่ขอแก้ ระบุเป็นชื่อเต็ม <เอนทิตี>.<attribute> จากรายการปิดข้างต้น (ADR-006 · ตอบ GAP-miniloan-006) · ขอบเขตครอบคลุมทั้งตัวบัญชีและรายการชำระของบัญชีนั้น เพราะตัวอย่างของ AC-miniloan-076 เองคือการแก้ยอดชำระงวดสุดท้าย ซึ่งอยู่ที่ ENT-009 ไม่ใช่ ENT-006 · ENT-008 Installment ไม่อยู่ในรายการเลย เพราะ BR-miniloan-045@v1 ล็อกตารางผ่อนของบัญชีที่ปิดแล้วถาวร และ AC-miniloan-108 พิสูจน์ว่าถึงมีผู้อนุมัติก็ยังแก้ไม่ได้ · ฟิลด์ที่ถูกกันออกโดยมีกฎรองรับ: applicationId (หนึ่งใบสมัครหนึ่งบัญชี) · interestRateVersionId (BR-miniloan-037@v1 ผูกถาวร) · status (BR-miniloan-021@v1 เป็นเจ้าของประตูปิดบัญชี) · ฟิลด์ที่ถูกกันออกด้วยหลักที่ design เขียนเองใน ADR-006 ไม่ใช่กฎที่ใครประกาศไว้ก่อน: principalAmount · outstandingPrincipal · termMonths · disbursedAt — หลักนั้นคือ ปรับปรุงได้เฉพาะข้อเท็จจริงที่ถูกบันทึก ไม่ใช่ค่าที่คำนวณมาหรือค่าที่เป็นตัวตนของบัญชี",
+          "rules": [
+            "BR-miniloan-045@v1"
+          ]
         },
         {
           "name": "oldValue",
           "type": "string",
           "required": true,
-          "validation": "ค่าเดิมของบัญชี ต้องเก็บไว้ไม่ถูกทับ ตาม BR-miniloan-041@v1",
+          "validation": "ค่าเดิมของฟิลด์ที่ระบุ เก็บเป็นข้อความที่ render แล้ว ต้องเก็บไว้ไม่ถูกทับ ตาม BR-miniloan-041@v1 · ฟิลด์ที่เป็นจำนวนเงินใช้รูปสองตำแหน่งทศนิยมตาม BR-miniloan-035@v1",
           "rules": [
             "BR-miniloan-041@v1"
           ]
@@ -734,7 +750,7 @@
           "name": "newValue",
           "type": "string",
           "required": true,
-          "validation": "ค่าใหม่ที่ขอแก้ ตาม BR-miniloan-041@v1",
+          "validation": "ค่าใหม่ที่ขอแก้ เก็บเป็นข้อความที่ render แล้ว รูปเดียวกับ oldValue ตาม BR-miniloan-041@v1",
           "rules": [
             "BR-miniloan-041@v1"
           ]

@@ -99,7 +99,7 @@
     {
       "id": "sitemap",
       "command": "/design:sitemap",
-      "status": "done",
+      "status": "stale",
       "requires": [
         "function",
         "rbac"
@@ -108,8 +108,9 @@
         "sitemap.json",
         "modules/<module>/screens.json"
       ],
-      "attempts": 1,
-      "updatedAt": "2026-09-05T14:24:32Z"
+      "attempts": 0,
+      "updatedAt": "2026-09-06T14:48:32Z",
+      "staleBecause": "ADR-006"
     },
     {
       "id": "interface",
@@ -128,7 +129,7 @@
     {
       "id": "export",
       "command": "/design:export",
-      "status": "done",
+      "status": "stale",
       "requires": [
         "overview",
         "function",
@@ -142,8 +143,9 @@
       "artifacts": [
         "../export/design-document.md"
       ],
-      "attempts": 1,
-      "updatedAt": "2026-09-06T09:51:46Z"
+      "attempts": 0,
+      "updatedAt": "2026-09-06T14:48:32Z",
+      "staleBecause": "ADR-006"
     }
   ],
   "openQuestions": []
