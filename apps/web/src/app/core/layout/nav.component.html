@@ -2,7 +2,12 @@
   <ul class="app-nav__links">
     @for (entry of entries(); track entry.screen) {
       <li>
-        <a [routerLink]="entry.path" routerLinkActive="is-active">{{ entry.label }}</a>
+        <a
+          [routerLink]="entry.path"
+          routerLinkActive="is-active"
+          [attr.data-testid]="navTestId(entry.screen)"
+          >{{ entry.label }}</a
+        >
       </li>
     }
   </ul>

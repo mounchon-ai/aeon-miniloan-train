@@ -218,22 +218,22 @@
       ],
       "status": "validated",
       "build": {
-        "iterations": 0,
+        "iterations": 1,
         "proof": [
           {
-            "cmd": "cd apps/web && npx ng build",
-            "result": "Application bundle generation complete. [1.070 seconds] - Output location: D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\web\\dist\\miniloan-web (browser/ subfolder present, matches Dockerfile COPY path)",
-            "at": "2026-09-04T08:01:59Z"
+            "cmd": "cd apps/web && npm test -- --watch=false",
+            "result": "Test Files 3 passed (3) · Tests 9 passed (9) · Duration 10.38s (vitest v4.1.11) — one more than the 8 this unit was recorded with: the nav link now asserts the rendered data-testid, not only the component's entries()",
+            "at": "2026-09-06T02:56:51Z"
           },
           {
-            "cmd": "cd apps/web && npm test -- --watch=false",
-            "result": "Test Files 3 passed (3) · Tests 8 passed (8) · Duration 691ms (vitest v4.1.11)",
-            "at": "2026-09-04T08:01:52Z"
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.554 seconds] - main 241.94 kB / styles 12.89 kB, Output location: D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\web\\dist\\miniloan-web",
+            "at": "2026-09-06T02:57:23Z"
           }
         ],
         "last_error": null,
         "recorded_by": "aplus191",
-        "recorded_at": "2026-09-04"
+        "recorded_at": "2026-09-06"
       },
       "manifest": {
         "files": [

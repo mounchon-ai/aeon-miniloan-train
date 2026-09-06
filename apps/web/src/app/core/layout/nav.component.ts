@@ -38,6 +38,18 @@ const NAV_ENTRIES: readonly NavEntry[] = [
 export class NavComponent {
   private readonly currentRole = inject(CurrentRoleService);
 
+  /**
+   * The nav link's data-testid, keyed by the DESTINATION screen — mock's own
+   * navControlId (mock/scripts/wireframes.mjs, gate 69), copied rather than
+   * invented here. These ids are shell furniture and deliberately sit outside
+   * every wireframe's controls[] (mock/scripts/html.mjs mintedTestids), which
+   * is exactly why dev may render them but cannot record them in
+   * manifest.ui_controls — see GAP-miniloan-002's answer and ADR-004.
+   */
+  navTestId(screen: string): string {
+    return `nav-${screen.toLowerCase()}`;
+  }
+
   readonly roles = this.currentRole.roles;
   readonly role = this.currentRole.role;
 
