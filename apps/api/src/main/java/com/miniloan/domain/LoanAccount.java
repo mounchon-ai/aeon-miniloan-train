@@ -149,6 +149,50 @@ public class LoanAccount {
         this.closedAt = at;
     }
 
+    /**
+     * ENT-010's three {@code LoanAccount.*} adjustable fields, applied by FE-miniloan-016 AFTER a
+     * request has been approved (BR-miniloan-038@v1 · BR-miniloan-041@v1). They are not general
+     * setters and must not become any: each one refuses an account that is not Closed, because the
+     * only door design opened to them is a closed account's approved adjustment. An Active account
+     * changes through {@link #reducePrincipal} and {@link #close} exactly as it always did.
+     *
+     * <p>They are deliberately three narrow methods rather than one that takes a field name: the
+     * closed list of what may be adjusted is ENT-010's, and it is already expressed as a type there.
+     * A method per field means an unlisted field has nothing here to call.
+     */
+    public void applyApprovedClosedAt(Instant closedAt) {
+        requireClosedForAdjustment();
+        if (closedAt == null) {
+            throw new IllegalArgumentException("เวลาปิดบัญชีที่อนุมัติแล้วเป็นค่าว่างไม่ได้");
+        }
+        this.closedAt = closedAt;
+    }
+
+    /** ENT-006's two doors stay two — a reason outside {@link CloseReason} cannot be expressed. */
+    public void applyApprovedCloseReason(CloseReason reason) {
+        requireClosedForAdjustment();
+        if (reason == null) {
+            throw new IllegalArgumentException("เหตุผลการปิดบัญชีที่อนุมัติแล้วเป็นค่าว่างไม่ได้");
+        }
+        this.closeReason = reason;
+    }
+
+    /** BR-miniloan-054@v1's owner of the account — reassigned only through an approved request. */
+    public void applyApprovedAssignedOperationsId(String assignedOperationsId) {
+        requireClosedForAdjustment();
+        if (assignedOperationsId == null || assignedOperationsId.isBlank()) {
+            throw new IllegalArgumentException("ผู้ดูแลบัญชีที่อนุมัติแล้วเป็นค่าว่างไม่ได้");
+        }
+        this.assignedOperationsId = assignedOperationsId;
+    }
+
+    private void requireClosedForAdjustment() {
+        if (this.status != Status.Closed) {
+            throw new IllegalStateException(
+                    "บัญชีนี้ยังไม่ปิด — การปรับปรุงที่อนุมัติแล้วใช้กับบัญชีที่ปิดแล้วเท่านั้น");
+        }
+    }
+
     public UUID getId() {
         return id;
     }

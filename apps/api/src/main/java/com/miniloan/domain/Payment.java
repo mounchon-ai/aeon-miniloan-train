@@ -97,6 +97,40 @@ public class Payment {
         this.recordedAt = recordedAt;
     }
 
+    /**
+     * ENT-010's two {@code Payment.*} adjustable fields, applied by FE-miniloan-016 after approval.
+     *
+     * <p><b>This is not a second way to record a payment.</b> BR-miniloan-034@v1 keeps the recording
+     * of a payment with Operations and {@link PaymentService} is still the only place a row is
+     * created; these two correct a row that already exists, and only because BR-miniloan-038@v1's
+     * approved request said so. The caller checks the approval and the account's Closed state —
+     * neither is knowable from here, since a payment holds no status of its own — and what this
+     * class can still enforce, it does: the amount goes through {@link Money#round} exactly as the
+     * constructor's did (BR-miniloan-035@v1), so a corrected figure never keeps more decimals than
+     * the original was allowed.
+     *
+     * <p>{@code recordedBy} is deliberately NOT adjustable. ENT-010 lists five fields and it is not
+     * one of them — who recorded a payment is a fact about what happened, not a value to correct.
+     */
+    public void applyApprovedAmount(BigDecimal amount) {
+        if (amount == null) {
+            throw new IllegalArgumentException("ยอดชำระที่อนุมัติแล้วเป็นค่าว่างไม่ได้");
+        }
+        // Deliberately no sign or range check: the CONSTRUCTOR has none either, and a corrected
+        // amount refused by a rule the original was never held to would be this unit inventing a
+        // requirement — the same shape as FE-miniloan-017's ApproverRoleRequiredException, which is
+        // now GAP-miniloan-008. What a payment amount may be is req's to say.
+        this.amount = Money.round(amount);
+    }
+
+    /** The time the payment was taken — corrected, never blanked. */
+    public void applyApprovedRecordedAt(Instant recordedAt) {
+        if (recordedAt == null) {
+            throw new IllegalArgumentException("เวลาที่บันทึกการชำระที่อนุมัติแล้วเป็นค่าว่างไม่ได้");
+        }
+        this.recordedAt = recordedAt;
+    }
+
     public UUID getId() {
         return id;
     }

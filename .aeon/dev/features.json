@@ -2182,7 +2182,7 @@
       "type": "command",
       "origin": "new",
       "files_planned": [
-        "apps/api/src/main/java/com/miniloan/controller/ClosedAccountAdjustmentController.java",
+        "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java",
         "apps/api/src/main/java/com/miniloan/service/ClosedAccountAdjustmentDecisionService.java",
         "apps/api/src/test/java/com/miniloan/service/ClosedAccountAdjustmentDecisionServiceTest.java"
       ],
@@ -2246,7 +2246,71 @@
           "hash": "sha256:7f1b268d7fc7eafafa0036caa5e9be977130cf92244600421b8986865e6e367e"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 304, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (26 new on top of the 278 the suite held after FE-miniloan-015's rework: ClosedAccountAdjustmentDecisionServiceTest 19 across 5 @Nested groups, AdjustmentControllerTest 7). Green on round 1 -- build.iterations is 0, no repair round was needed. An earlier green run of this same unit read 303; the extra test is theQueueRefusesToServeAnyOtherStatus, added when API-024 was narrowed to ACL-016's Pending condition before the stop. No assertion was relaxed, no golden row touched, no health check removed; the two H2-precision comparisons on Instant use isCloseTo(..., within(1, MILLIS)) for the same reason FE-miniloan-015 does, not to make a failing assertion pass. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it ran in the container every unit since FE-miniloan-010 has recorded.",
+            "at": "2026-09-06T15:52:40Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57976859 bytes",
+            "at": "2026-09-06T15:53:35Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java",
+          "apps/api/src/main/java/com/miniloan/service/ClosedAccountAdjustmentDecisionService.java",
+          "apps/api/src/main/java/com/miniloan/repository/ClosedAccountAdjustmentRepository.java",
+          "apps/api/src/main/java/com/miniloan/domain/LoanAccount.java",
+          "apps/api/src/main/java/com/miniloan/domain/Payment.java",
+          "apps/api/src/test/java/com/miniloan/service/ClosedAccountAdjustmentDecisionServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/controller/AdjustmentControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/ClosedAccountAdjustmentDecisionServiceTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/controller/AdjustmentControllerTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-017",
+            "route": "POST /adjustments/{id}/approve",
+            "file": "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java"
+          },
+          {
+            "api_ref": "API-018",
+            "route": "POST /adjustments/{id}/reject",
+            "file": "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java"
+          },
+          {
+            "api_ref": "API-024",
+            "route": "GET /adjustments?status=Pending",
+            "file": "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java"
+          },
+          {
+            "api_ref": "API-025",
+            "route": "GET /adjustments/{id}",
+            "file": "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-017",
@@ -3523,13 +3587,26 @@
       "answered_in": null,
       "closed_by": null,
       "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-010",
+      "to": "design",
+      "about": "AC-miniloan-084",
+      "question_th": "AC-miniloan-084 กับ AC-miniloan-085 วัดที่ \"เปิดดูประวัติการปรับปรุงของบัญชีนั้น\" — 084 ต้องการหนึ่งรายการพร้อมห้าช่อง (ค่าเดิม · ค่าใหม่ · ผู้ขอแก้ · ผู้อนุมัติ · เวลาอนุมัติ) และ 085 ต้องการข้อความ \"ยังไม่มีรายการปรับปรุงที่มีผล · มีคำขอรออนุมัติ 1 รายการ\" ซึ่งเป็นการนับคำขอที่รออนุมัติ *ของบัญชีนั้น* · แต่ต้นน้ำไม่มีบ้านให้ทั้งสองข้อ: (1) ไม่มี endpoint ไหนเป็นประวัติรายบัญชี — API-024 คือ GET /adjustments?status=Pending (ทั้งระบบ ไม่กรองบัญชี ไม่มีสถานะ Approved) และ API-025 คือ GET /adjustments/{id} (ทีละคำขอ ไม่ใช่รายการ) จึงไม่มีทางตอบทั้ง \"รายการปรับปรุงที่มีผลของบัญชีนี้\" และ \"จำนวนคำขอรออนุมัติของบัญชีนี้\" ได้ในคำขอเดียว (2) ไม่มีหน้าจอไหนใน screens.json แสดง ENT-010.approvedBy หรือ ENT-010.approvedAt เลย — UI-miniloan-013 เป็น list ของคำขอรออนุมัติ (ฟิลด์ pending-*) และ UI-miniloan-014 เป็น workflow หน้าพิจารณา (ฟิลด์ review-adj-*) ทั้งคู่มองคำขอที่ยังไม่ถูกตัดสิน ไม่มีหน้าไหนมองย้อนหลัง · ขอให้ design ตัดสินว่าประวัติการปรับปรุงรายบัญชีอยู่ที่ไหน: เพิ่ม endpoint ใหม่ (เช่น GET /loan-accounts/{id}/adjustments ที่คืนทั้งรายการที่อนุมัติแล้วและจำนวนที่รออนุมัติ) และเพิ่มฟิลด์/โซนบนหน้าจอที่มีอยู่ หรือมินต์หน้าจอใหม่ · FE-miniloan-016 สร้างส่วนที่เหลือของ UC-miniloan-018 ได้ครบ (อนุมัติ · ปฏิเสธ · four-eyes ตาม AC-076/079 · API-017/018/024/025 และบันทึก approvedBy/approvedAt ลง ENT-010 จริง) จึงไม่บล็อกหน่วยไหน แต่ AC-084/085 จะยังพิสูจน์ไม่ครบจนกว่าจะมีคำตอบใบนี้",
+      "found_at": "2026-09-06",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
     }
   ],
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 16,
-      "draft": 13
+      "validated": 17,
+      "draft": 12
     },
     "by_origin": {
       "new": 27,
@@ -3540,7 +3617,7 @@
       "web": 10,
       "api": 19
     },
-    "gaps_open": 4,
+    "gaps_open": 5,
     "ready_for_phase5": false
   }
 }

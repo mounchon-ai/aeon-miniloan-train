@@ -14,4 +14,13 @@ public interface ClosedAccountAdjustmentRepository
      * ย้อนหลัง" state BR-miniloan-040@v1 says the system must have no way to reach.
      */
     List<ClosedAccountAdjustment> findByLoanAccountIdOrderByRequestedAtAsc(UUID loanAccountId);
+
+    /**
+     * API-024's queue — oldest first, because the approver works through it in the order the
+     * requests arrived. The status is a parameter rather than a hard-coded Pending so the same
+     * method answers UI-miniloan-013 today and the per-account history GAP-miniloan-010 asks design
+     * about, without a second query written from a guess about what that history will need.
+     */
+    List<ClosedAccountAdjustment> findByStatusOrderByRequestedAtAsc(
+            ClosedAccountAdjustment.Status status);
 }
