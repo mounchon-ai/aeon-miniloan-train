@@ -2055,7 +2055,7 @@
       "title_th": "ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว",
       "app_ref": "api",
       "type": "command",
-      "origin": "new",
+      "origin": "change",
       "files_planned": [
         "apps/api/src/main/java/com/miniloan/controller/ClosedAccountAdjustmentController.java",
         "apps/api/src/main/java/com/miniloan/service/ClosedAccountAdjustmentService.java",
@@ -2114,7 +2114,7 @@
         },
         {
           "ref": "ENT-010",
-          "hash": "sha256:3837d2359654af5038c18e5dca44d17c34d653313378ba6a57adb8c39bdf6911"
+          "hash": "sha256:29a3de09315509c01ade36a9c5f2225c0f5cc8ae520fe015e3a7c29ee6425537"
         },
         {
           "ref": "API-016",
@@ -2123,17 +2123,17 @@
       ],
       "status": "validated",
       "build": {
-        "iterations": 1,
+        "iterations": 0,
         "proof": [
           {
             "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
-            "result": "Tests run: 274, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (23 new on top of the 251 FE-001..014+017 had: ClosedAccountAdjustmentServiceTest 2 + its nested FilingARequest 4, WithNoApproverRoleSet 3, WhoMayFileIt 4, TheRequestsOwnLifeCycle 3 -- counted separately by surefire -- and ClosedAccountAdjustmentControllerTest 7). Round 1 was RED with 1 failure and build.iterations records it: FilingARequest.filingTouchesNothingOnTheAccount compared closedAt nanosecond-exact (expected 2026-09-06T13:35:25.061221586Z, was ...061222Z) -- H2 stores an Instant at microsecond precision and rounds on the way in, so the assertion was measuring the storage engine rather than the rule. Fixed as an assertion written wrong (one of the three things a repair round may touch): isCloseTo(closedAt, within(1, MILLIS)), which a closedAt that had actually moved would still fail. No production code changed between the two rounds, and no golden row or health check was touched. ContractOpenApiTest (FE-miniloan-003) proves the springdoc MECHANISM against a test-only fixture controller and enumerates no real route, so ClosedAccountAdjustmentControllerTest is what proves API-016 and the two declared refusal routes exist, over real HTTP through AuthTokenFilter. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it ran in the container FE-miniloan-010..014/017 already recorded, against the same volume-cached repo.",
-            "at": "2026-09-06T13:36:31Z"
+            "result": "Tests run: 278, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (4 new on top of the 274 this unit had before the rework: ClosedAccountAdjustmentServiceTest.FilingARequest gains aPaymentOfThisAccountMayBeNamedAsTheTarget, aPaymentOfAnotherAccountIsRefused and anAccountFieldMustNameTheAccountBeingAdjusted; ClosedAccountAdjustmentControllerTest gains aFieldNameOutsideTheDeclaredListIsRefused). Green on round 1 of THIS build -- build.iterations is 0 for the rework, and the 1 recorded for the original build of 2026-09-06 is superseded rather than lost: commits[] keeps 1687dd7 beside the new hash and git holds the rest. No assertion was relaxed, no golden row touched, no health check removed. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it ran in the container every unit since FE-miniloan-010 has recorded.",
+            "at": "2026-09-06T15:12:40Z"
           },
           {
             "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
-            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57947820 bytes",
-            "at": "2026-09-06T13:36:54Z"
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57954541 bytes",
+            "at": "2026-09-06T15:13:56Z"
           }
         ],
         "last_error": null,
@@ -2171,7 +2171,8 @@
         ]
       },
       "commits": [
-        "1687dd70cfd6dcd3a1536076a095fc7a20e7bee5"
+        "1687dd70cfd6dcd3a1536076a095fc7a20e7bee5",
+        "f89949dd0766a57b783fc3b21f2ca6a6dc9a8a5b"
       ]
     },
     {
@@ -2222,7 +2223,7 @@
         },
         {
           "ref": "ENT-010",
-          "hash": "sha256:3837d2359654af5038c18e5dca44d17c34d653313378ba6a57adb8c39bdf6911"
+          "hash": "sha256:29a3de09315509c01ade36a9c5f2225c0f5cc8ae520fe015e3a7c29ee6425537"
         },
         {
           "ref": "ENT-011",
@@ -3531,8 +3532,9 @@
       "draft": 13
     },
     "by_origin": {
-      "new": 28,
-      "bind": 1
+      "new": 27,
+      "bind": 1,
+      "change": 1
     },
     "by_app": {
       "web": 10,
