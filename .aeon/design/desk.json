@@ -50,6 +50,30 @@
       "at": "2026-09-03T03:39:19Z",
       "answeredByNode": "ENT-006",
       "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-002",
+      "answer": "ระบบนี้มีลำดับชั้นของพนักงานเป็นข้อมูล แต่ลำดับชั้นนั้นไม่ให้สิทธิ์มองเห็นเพิ่ม — ENT-004 Staff มีฟิลด์ supervisorId (reference -> ENT-004, optional) บันทึกผู้บังคับบัญชาโดยตรงไว้ ส่วนขอบเขตสิทธิ์ตัดสินที่ rbac.json: delegation.enabled = false และ scopeInheritance = null จึงไม่มีการสืบทอดขอบเขตจากลูกน้องขึ้นมาหาหัวหน้า และ ROLE-003 ไม่มี ACL ข้อใดให้ดูใบสมัครที่ถูกมอบหมายให้ ROLE-002 ไปแล้ว (ACL-003 มอบหมายได้ตอน UnderReview · ACL-007 ยกเลิกได้เฉพาะใบที่ยังไม่ถูกมอบหมาย Draft/Submitted · ACL-031 เห็นเฉพาะคิวใบที่ยังไม่ถูกมอบหมาย) เมื่อรวมกับ defaultEffect: deny คำตอบคือ หัวหน้าของ Loan Officer ไม่เห็นใบสมัครที่มอบหมายให้ลูกน้องไปแล้ว",
+      "by": "aplus191",
+      "at": "2026-09-05",
+      "answeredByNode": "ENT-004",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-004",
+      "answer": "แดชบอร์ดใช้ขอบเขตข้อมูลเดียวกับการเปิดดูรายใบ คือ own ไม่ใช่ทั้งระบบ — ACL-018 (UC-miniloan-020 ดูแดชบอร์ดภาพรวมสถานะ) scope: own และ ACL-030 (UI-miniloan-009 เปิดหน้าแดชบอร์ด) scope: own ซึ่งตรงกับ ACL-027/ACL-028 (UI-miniloan-006 คิวใบสมัครที่มอบหมายให้ฉัน · UI-miniloan-007 พิจารณาใบสมัคร) ที่เป็น own เช่นกัน ดังนั้นยอดรวมตาม BR-miniloan-024@v1 ที่ Loan Officer เห็นบนแดชบอร์ด นับเฉพาะใบสมัครและบัญชีที่ตัวเองถูกมอบหมาย ไม่ใช่ของทั้งระบบ",
+      "by": "aplus191",
+      "at": "2026-09-05",
+      "answeredByNode": "ACL-018",
+      "extensions": {}
+    },
+    {
+      "dq": "DQ-miniloan-008",
+      "answer": "ขอบเขต transaction คือทั้งคำสั่งเบิกจ่าย: เปลี่ยนสถานะใบสมัครเป็น Disbursed, สร้าง LoanAccount, สร้าง RepaymentSchedule และ Installment ทุกงวด อยู่ในธุรกรรมเดียวกันทั้งหมด ล้มเหลวที่จุดใดก็ตาม = rollback ทั้งก้อน ไม่มีบัญชีที่ไม่มีตารางผ่อน และไม่มีสถานะครึ่งทางให้ต้องซ่อมทีหลัง · กู้คืนด้วยการที่ผู้ใช้สั่งซ้ำเอง ไม่มี retry อัตโนมัติตาม BR-miniloan-042@v1 และ REQ-miniloan-006 · การสั่งซ้ำปลอดภัยเพราะ ENT-012 IdempotencyKey บังคับคู่ (commandType, requestId) ด้วย unique constraint ที่ db · บันทึกไว้ที่ interfaces.json ruleEnforcement ของ BR-miniloan-015@v1 enforceAt [domain, db] ผ่าน ADR-004 · SCN-miniloan-035 และ SCN-miniloan-036 ที่เซ็นแล้วพิสูจน์ข้อนี้อยู่ก่อนแล้ว",
+      "by": "aplus191",
+      "at": "2026-09-05",
+      "answeredByNode": "ADR-004",
+      "extensions": {}
     }
   ],
   "gaps": [],

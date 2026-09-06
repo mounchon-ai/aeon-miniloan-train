@@ -3,7 +3,7 @@
   "producedBy": "design · scripts/interfaces.mjs",
   "project": "miniloan",
   "status": "approved",
-  "approvedAt": "2026-09-03T05:17:39Z",
+  "approvedAt": "2026-09-06T09:55:52Z",
   "approvedBy": "aplus191",
   "integrations": [],
   "endpoints": [
@@ -156,6 +156,12 @@
       "name": "ดูรายละเอียดคำขอปรับปรุงบัญชี",
       "operation": "GET /adjustments/{id}",
       "purpose": "ดึงรายละเอียดคำขอปรับปรุงบัญชีหนึ่งคำขอเพื่อใช้พิจารณา"
+    },
+    {
+      "id": "API-026",
+      "name": "บันทึกการชำระยอดปิดบัญชีก่อนกำหนด",
+      "operation": "POST /loan-accounts/{id}/payoff-settlement",
+      "purpose": "Operations บันทึกการชำระยอดปิดบัญชีก่อนกำหนดเต็มจำนวนตามที่ API-015 คำนวณไว้ · เมื่อยอดครบ บัญชีเปลี่ยนเป็น Closed ด้วยเหตุผล EarlySettlement และงวดที่เหลือถูกยกเลิกตาม BR-miniloan-023@v1 · ยอดที่ไม่ตรงกับยอดปิดบัญชี ณ วันที่บันทึกถูกปฏิเสธทั้งรายการ ไม่รับชำระบางส่วนและไม่รับเกิน · แยกจาก API-014 เพราะ API-014 รับชำระ 'รายงวด' และคิดค่าธรรมเนียม 1% จากส่วนเกินตาม BR-miniloan-046@v2 ขณะที่ยอดปิดก่อนกำหนดคิด 1% จากเงินต้นคงเหลือตาม BR-miniloan-022@v1 — ฐานการคำนวณคนละตัว"
     }
   ],
   "ruleEnforcement": [
@@ -274,9 +280,10 @@
     {
       "rule": "BR-miniloan-015@v1",
       "enforceAt": [
-        "domain"
+        "domain",
+        "db"
       ],
-      "note": "กฎย่อยของการสร้างตารางผ่อน คำนวณที่ domain"
+      "note": "คำนวณตารางผ่อนที่ domain · ขอบเขตของ transaction คือทั้งคำสั่งเบิกจ่าย: เปลี่ยนสถานะใบสมัครเป็น Disbursed, สร้าง LoanAccount, สร้าง RepaymentSchedule และ Installment ทุกงวด อยู่ในธุรกรรมเดียวกันทั้งหมด ล้มเหลวที่จุดใดก็ตาม = rollback ทั้งก้อน ไม่มีบัญชีที่ไม่มีตารางผ่อน และไม่มีสถานะครึ่งทางให้ใครต้องมาซ่อมทีหลัง (ตอบ DQ-miniloan-008 · ADR-004) · กู้คืนด้วยการที่ผู้ใช้สั่งซ้ำเอง ไม่มี retry อัตโนมัติตาม BR-miniloan-042@v1 และ REQ-miniloan-006 · การสั่งซ้ำปลอดภัยเพราะ ENT-012 IdempotencyKey บังคับคู่ (commandType, requestId) ด้วย unique constraint ที่ db ซึ่งเป็นเหตุผลที่ db อยู่ในรายการนี้ ไม่ใช่แค่ domain · SCN-miniloan-035 และ SCN-miniloan-036 เป็นสองใบที่พิสูจน์ข้อนี้อยู่แล้ว"
     },
     {
       "rule": "BR-miniloan-016@v1",
@@ -326,9 +333,10 @@
     {
       "rule": "BR-miniloan-022@v1",
       "enforceAt": [
+        "api",
         "domain"
       ],
-      "note": "สูตรคำนวณยอดปิดบัญชีก่อนกำหนด"
+      "note": "สูตรคำนวณยอดปิดบัญชีก่อนกำหนด — domain คำนวณ (เงินต้นคงเหลือ + ดอกเบี้ยค้างจ่าย + ค่าธรรมเนียม 1% ของเงินต้นคงเหลือ) และ api ปฏิเสธการชำระที่ยอดไม่ตรงกับตัวเลขนั้น ณ วันที่บันทึก · ชั้น api ถูกเพิ่มพร้อม API-026 (ADR-005) เพราะก่อนหน้านี้ไม่มี endpoint ใดรับ UC-miniloan-016 ทำให้ ACL-014 ที่สั่ง enforceAt [api, domain] ไม่มีที่อยู่ให้บังคับได้จริง"
     },
     {
       "rule": "BR-miniloan-023@v1",

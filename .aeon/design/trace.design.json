@@ -3438,6 +3438,16 @@
       "from": "UI-miniloan-014",
       "rel": "calls",
       "to": "API-018"
+    },
+    {
+      "from": "FUN-miniloan-011",
+      "rel": "exposedAs",
+      "to": "API-026"
+    },
+    {
+      "from": "UI-miniloan-012",
+      "rel": "calls",
+      "to": "API-026"
     }
   ]
 }

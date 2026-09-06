@@ -111,6 +111,32 @@
       "recordedAt": "2026-09-04T06:00:00Z",
       "absorbed": true,
       "absorbedAt": "2026-09-04T07:24:57Z"
+    },
+    {
+      "id": "ADR-004",
+      "origin": "design",
+      "kind": "revised",
+      "moved": [
+        "BR-miniloan-015@v1"
+      ],
+      "reason": "design ตัดสินเอง (ไม่มีใบเปลี่ยนแปลงจาก req) — DQ-miniloan-008 ถามว่าขอบเขต transaction อยู่ตรงไหนเมื่อเบิกจ่ายสำเร็จแต่สร้างตารางผ่อนไม่สำเร็จ เจ้าของตัดสินว่า atomic ทั้งคำสั่ง: เบิกจ่าย -> สร้าง LoanAccount -> สร้าง RepaymentSchedule และ Installment ทุกงวด อยู่ในธุรกรรมเดียว ล้มเหลวคือ rollback ทั้งก้อน ไม่มีสถานะครึ่งทาง แล้วผู้ใช้สั่งซ้ำเองด้วย requestId เดิม กันซ้ำที่ ENT-012 ด้วย unique constraint ที่ฐานข้อมูล การตัดสินนี้ไม่ได้เปลี่ยนพฤติกรรมที่ตกลงไว้ แต่เป็นการเขียนลงในช่องที่มีไว้ถือมันโดยเฉพาะ คือ interfaces.json ruleEnforcement ของ BR-miniloan-015@v1 ซึ่งเดิมระบุแค่ domain และ note ไม่ได้พูดถึงขอบเขตธุรกรรมเลย — SCN-miniloan-035 และ SCN-miniloan-036 ที่เซ็นไปแล้วบังคับผลลัพธ์นี้อยู่ก่อนแล้ว (ล้มทันที ไม่มี retry อัตโนมัติ และสั่งซ้ำแล้วต้องได้บัญชีเดียว ไม่เกิดบัญชีที่สอง) จึงไม่มีขั้น scenario หรือ function ใดต้องทำใหม่ || แก้ไขเมื่อ 2026-09-05 ระหว่างรัน /design:sitemap: ใบนี้เคยพ่วงการ์ด GAP-miniloan-002 และ GAP-miniloan-003 ของ dev ไว้ด้วย พร้อมข้อความว่า design ต้องตัดสินว่ากรอบแอปมี control อะไรบ้าง สังกัดหน้าไหน — ข้อความนั้นผิด และถอนออกจากใบนี้แล้ว หลักฐานสามชิ้นจากโค้ดของ plugin เอง: (1) mock/scripts/wireframes.mjs มี navControlId = nav-<ui-id ตัวพิมพ์เล็ก> ซึ่งมินต์ testid ของลิงก์เมนูให้อยู่แล้ว (gate 69) (2) mock/scripts/html.mjs บรรทัด 823 ระบุว่า id เหล่านี้เป็น furniture ของหน้า จงใจอยู่นอก controls[] และ MV24/MV29 (gate 71) บังคับว่าทุกหน้าที่ลูกค้าเปิดต้องถูกวาดในเปลือกของผลิตภัณฑ์ (3) รายการ kind ของ design ปิดตายที่ 13 ค่าและไม่มีค่าไหนหมายถึงกรอบแอป ส่วน auth คือค่าเดียวที่บอกว่าหน้านั้นไม่มีเปลือก ดังนั้นเปลือกแอปเป็นของ mock ไม่ใช่ของ design และ design ประกาศสิ่งที่ตัวเองเป็นเจ้าของครบแล้วใน sitemap.json (label · parent · order · entry · app) ขั้น sitemap จึงไม่มีงานต้องทำใหม่ ส่วนที่ยังเหลือจริงเป็นเรื่องของเจ้าของโปรเจกต์ตัดสิน ไม่ใช่ของ design: roster ของ dev (build.mjs wireframeControls) อ่านเฉพาะ controls[] ของ wireframe จึงมองไม่เห็น furniture id ของ mock ทำให้ dev บันทึก nav-ui-miniloan-002 ลง manifest.ui_controls ไม่ได้โดยไม่ชน DV13 สาขา e และ DV17",
+      "recordedAt": "2026-09-05T00:00:00Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-05T14:35:20Z"
+    },
+    {
+      "id": "ADR-005",
+      "origin": "design",
+      "kind": "revised",
+      "moved": [
+        "UC-miniloan-016",
+        "ACL-014",
+        "FUN-miniloan-011"
+      ],
+      "reason": "design ตัดสินเอง (ไม่มีใบเปลี่ยนแปลงจาก req — change-set.json ทั้ง 5 ใบถูกบันทึกและ absorb ครบแล้ว) — dev เปิด GAP-miniloan-005 ระหว่าง /dev:plan: rbac.json ประกาศ ACL-014 ให้ ROLE-004 (Operations) ทำ action \"บันทึกการชำระยอดปิดบัญชีก่อนกำหนด\" บน UC-miniloan-016 พร้อม enforceAt: [api, domain] แต่ interfaces.json ไม่เอ่ยถึง UC-miniloan-016 เลยสักครั้ง และไม่มี endpoint ใบไหนรับ action นี้ ⇒ ชั้น api ที่ ACL-014 สั่งให้บังคับใช้ ไม่มีที่อยู่ให้บังคับได้จริง · endpoint ที่มีอยู่แล้วสองใบรับแทนไม่ได้: API-015 (GET /loan-accounts/{id}/payoff-quote) เป็นการ 'ขอยอด' ของ UC-miniloan-015 ไม่ใช่การรับชำระ และ API-014 (POST /loan-accounts/{id}/payments) ประกาศ purpose ว่า 'บันทึกยอดชำระของงวดที่ค้าง' ซึ่งเป็นการชำระรายงวด โดยค่าธรรมเนียม 1% ของมันคิดจากส่วนเกินตาม BR-miniloan-046@v2 ขณะที่ยอดปิดบัญชีก่อนกำหนดคิด 1% จากเงินต้นคงเหลือตาม BR-miniloan-022@v1 — ฐานการคำนวณคนละตัว API-014 จึงรับ action นี้ไม่ได้โดยไม่แก้สัญญาของตัวเอง · การแก้คือประกาศ endpoint ของ UC-miniloan-016 ลง interfaces.json พร้อม ruleEnforcement ของ BR-miniloan-022@v1 และต่อ edge FUN-miniloan-011 exposedAs <API ใหม่> กับ UI-miniloan-005 calls <API ใหม่> · ไม่มีพฤติกรรม สิทธิ์ หรือเกณฑ์รับใบไหนเปลี่ยน — AC-miniloan-005 กับ ACL-014 บังคับผลลัพธ์นี้อยู่ก่อนแล้ว สิ่งที่ขาดคือช่องที่มีไว้ถือที่อยู่ของมันโดยเฉพาะ ซึ่งเป็นรูปเดียวกับ ADR-004 ที่เขียนขอบเขตธุรกรรมของ BR-miniloan-015@v1 ลง interfaces.json · หน่วยที่ถูกบล็อกอยู่คือ FE-miniloan-014",
+      "recordedAt": "2026-09-06T09:10:00Z",
+      "absorbed": true,
+      "absorbedAt": "2026-09-06T09:55:02Z"
     }
   ]
 }
