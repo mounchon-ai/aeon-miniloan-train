@@ -40,7 +40,9 @@ public class IdempotencyKey {
         RejectApplication,
         CancelApplication,
         DisburseLoan,
-        RecordPayment
+        RecordPayment,
+        /** FE-miniloan-014 · UC-miniloan-016 — a payoff is its own command, not a RecordPayment. */
+        SettleEarly
     }
 
     @Id

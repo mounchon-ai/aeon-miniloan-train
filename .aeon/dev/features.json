@@ -1736,7 +1736,6 @@
       ],
       "acceptance_refs": [
         "AC-miniloan-004",
-        "AC-miniloan-005",
         "AC-miniloan-006",
         "AC-miniloan-007",
         "AC-miniloan-012",
@@ -1765,20 +1764,12 @@
           "hash": "sha256:0a79195caa18184a840d5045e03b409f3291a6e34fb75af79de109886b2fbbbd"
         },
         {
-          "ref": "UC-miniloan-016",
-          "hash": "sha256:eb6200eb999b6fb8eca65141d11556dcc3ffae145e36069fa4775d37cb4fe07c"
-        },
-        {
           "ref": "UC-miniloan-024",
           "hash": "sha256:bbe9652bddd53f7974d33e4e9b0702ba7ea82b22d0e2560b2101778a0d7d4dbc"
         },
         {
           "ref": "AC-miniloan-004",
           "hash": "sha256:d9e4cd01d276d9dbe3ad1328e766730e2e74150346ca7e1d5aec1f03892c5ad8"
-        },
-        {
-          "ref": "AC-miniloan-005",
-          "hash": "sha256:f0277941bf441aafde51ce5e26005e3cb3051782955b47205937680e5afe45a0"
         },
         {
           "ref": "AC-miniloan-006",
@@ -1932,7 +1923,7 @@
     },
     {
       "id": "FE-miniloan-014",
-      "title_th": "คำนวณยอดปิดบัญชีก่อนกำหนด",
+      "title_th": "คำนวณยอดปิดบัญชีก่อนกำหนด และรับชำระยอดนั้นเพื่อปิดบัญชี",
       "app_ref": "api",
       "type": "command",
       "origin": "new",
@@ -1942,9 +1933,11 @@
         "apps/api/src/test/java/com/miniloan/service/EarlyClosureQuoteServiceTest.java"
       ],
       "depends_on": [
-        "FE-miniloan-010"
+        "FE-miniloan-010",
+        "FE-miniloan-013"
       ],
       "acceptance_refs": [
+        "AC-miniloan-005",
         "AC-miniloan-071",
         "AC-miniloan-072",
         "AC-miniloan-073",
@@ -1955,6 +1948,14 @@
         {
           "ref": "UC-miniloan-015",
           "hash": "sha256:388942b1a5a67f8ce86279a514de57e75542d7e848154e3695a71eb8e4fa8693"
+        },
+        {
+          "ref": "UC-miniloan-016",
+          "hash": "sha256:eb6200eb999b6fb8eca65141d11556dcc3ffae145e36069fa4775d37cb4fe07c"
+        },
+        {
+          "ref": "AC-miniloan-005",
+          "hash": "sha256:f0277941bf441aafde51ce5e26005e3cb3051782955b47205937680e5afe45a0"
         },
         {
           "ref": "AC-miniloan-071",
@@ -1991,9 +1992,60 @@
         {
           "ref": "API-015",
           "hash": "sha256:c4848be126b24d2603615503c02feb14224be35f78a26d4a1ef5efc3b2ef34d2"
+        },
+        {
+          "ref": "API-026",
+          "hash": "sha256:4becd6c68075ba6118550cdacbc8c4ab21c9eb30906c6e7379c3185654231ba3"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 230, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (18 new: EarlyClosureQuoteServiceTest 11 and its nested GoldenRows 7, counted separately by surefire, on top of the 212 FE-001..013 had). Green on round 1 -- build.iterations stays 0, and no assertion, golden row or health check was touched. GoldenRows is GD-miniloan-005 row for row: six rows the dataset marks computed:true are asserted through Money.exact against its expected strings character for character, and row 4 (computed:false, declined_by CALC-miniloan-004@v1 boundary_behavior) is asserted as a refusal because the contract declines a backdated closing date before the formula. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it ran in the container FE-miniloan-010/011/012/013 already recorded, against the same volume-cached repo.",
+            "at": "2026-09-06T10:09:52Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57911310 bytes",
+            "at": "2026-09-06T10:12:40Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/EarlyClosureController.java",
+          "apps/api/src/main/java/com/miniloan/service/EarlyClosureQuoteService.java",
+          "apps/api/src/test/java/com/miniloan/service/EarlyClosureQuoteServiceTest.java",
+          "apps/api/src/main/java/com/miniloan/domain/EarlySettlementCalculator.java",
+          "apps/api/src/main/java/com/miniloan/service/EarlyClosureSettlementService.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/EarlyClosureQuoteServiceTest.java",
+            "calc_ref": "CALC-miniloan-004@v1",
+            "gd_ref": "GD-miniloan-005"
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-015",
+            "route": "GET /loan-accounts/{id}/payoff-quote",
+            "file": "apps/api/src/main/java/com/miniloan/controller/EarlyClosureController.java"
+          },
+          {
+            "api_ref": "API-026",
+            "route": "POST /loan-accounts/{id}/payoff-settlement",
+            "file": "apps/api/src/main/java/com/miniloan/controller/EarlyClosureController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-015",
@@ -3277,13 +3329,41 @@
       "blocks": [
         "FE-miniloan-001"
       ]
+    },
+    {
+      "id": "GAP-miniloan-004",
+      "to": "req",
+      "about": "requirements.json",
+      "question_th": "BR-miniloan-046@v2 ประกาศกลไกการโปะเงินต้นไว้สองแบบในข้อเดียวกัน — \"หักค่าธรรมเนียมออกจากส่วนเกินก่อนนำไปตัดเงินต้น\" กับ \"เงินต้นลดลง = ส่วนเกิน × 99%\" — ทั้งสองให้คำตอบตรงกันที่ AC-miniloan-086 (ส่วนเกิน 20,000.00 → fee 200.00 → ตัดเงินต้น 19,800.00) และที่ AC-miniloan-087 (ส่วนเกิน 0.01 → fee 0.00 → ตัดเงินต้น 0.01) จึงไม่มีเกณฑ์รับใบไหนแยกสองแบบนี้ออกจากกัน แต่มันให้คำตอบต่างกันในเคสอื่น · BR-miniloan-046@v2 อ้างว่า BR-miniloan-050@v1 เป็นข้อที่ปักกลไกให้แน่ชัด และ AC-miniloan-086 ก็อ้างถึงเช่นกัน แต่ไม่มีอะไรใต้ requirements[].rules[] ถือ id นั้นอยู่เลย ขอให้ req ตอบว่า (ก) BR-miniloan-050@v1 มีอยู่จริงไหม ถ้ามีขอให้ export ลงสัญญา หรือ (ข) ถ้าไม่มี ขอให้ระบุลงใน BR-miniloan-046@v2 ว่ากลไกที่ถูกต้องคือแบบไหน · FE-miniloan-013 สร้างและ commit ด้วยแบบ \"หักก่อนตัด\" ไปแล้ว (เหตุผล: ENT-009 เก็บ prepaymentFee เป็นค่าที่ปัดแล้ว และ BR-miniloan-035@v1 ห้ามเก็บค่าที่ยังไม่ปัด) คำตอบที่เลือกอีกแบบจึงแปลว่าต้องแก้โค้ดที่ commit ไปแล้ว ไม่ใช่หน่วยที่ถูกบล็อกอยู่",
+      "found_at": "2026-09-06",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-005",
+      "to": "design",
+      "about": "interfaces.json",
+      "question_th": "ACL-014 ให้ ROLE-004 (Operations) ทำ action \"บันทึกการชำระยอดปิดบัญชีก่อนกำหนด\" บน UC-miniloan-016 โดยระบุ enforceAt: [api, domain] — แต่ interfaces.json ไม่เอ่ยถึง UC-miniloan-016 เลยสักครั้ง และไม่มี endpoint ใบไหนรับ action นี้ · API-015 (GET /loan-accounts/{id}/payoff-quote) เป็นการ \"ขอยอด\" ของ UC-miniloan-015 ไม่ใช่การรับชำระ · API-014 (POST /loan-accounts/{id}/payments) ประกาศ purpose ว่า \"บันทึกยอดชำระของงวดที่ค้าง\" ซึ่งเป็นการชำระรายงวด และค่าธรรมเนียม 1% ของมันคิดจาก \"ส่วนเกิน\" ตาม BR-miniloan-046@v2 ขณะที่ยอดปิดบัญชีก่อนกำหนดคิด 1% จาก \"เงินต้นคงเหลือ\" ตาม BR-miniloan-022@v1 — ฐานคนละตัว API-014 จึงรับ action นี้ไม่ได้โดยไม่แก้สัญญาของตัวเอง ขอให้ design ประกาศ endpoint สำหรับ UC-miniloan-016 ใน interfaces.json (method · path · request · response · พฤติกรรมเมื่อยอดไม่ตรงกับ payoff quote) เพื่อให้ ACL-014 บังคับใช้ที่ชั้น api ได้จริง",
+      "found_at": "2026-09-06",
+      "found_by": "/dev:plan",
+      "status": "answered",
+      "answer_th": "design ประกาศ endpoint ของ UC-miniloan-016 ลง interfaces.json แล้วผ่าน ADR-005 (revoke -> เขียน -> sign ใหม่ รูปเดียวกับ ADR-003/ADR-004): API-026 \"บันทึกการชำระยอดปิดบัญชีก่อนกำหนด\" · operation POST /loan-accounts/{id}/payoff-settlement · purpose ระบุว่า Operations บันทึกการชำระเต็มจำนวนตามที่ API-015 คำนวณไว้ เมื่อยอดครบบัญชีเป็น Closed ด้วยเหตุผล EarlySettlement และงวดที่เหลือถูกยกเลิกตาม BR-miniloan-023@v1 ส่วนยอดที่ไม่ตรงถูกปฏิเสธทั้งรายการ ไม่รับบางส่วนและไม่รับเกิน · ruleEnforcement ของ BR-miniloan-022@v1 ถูกแก้จาก [domain] เป็น [api, domain] เพื่อให้ ACL-014 ที่สั่ง enforceAt [api, domain] มีที่อยู่ให้บังคับได้จริง · ต่อ edge FUN-miniloan-011 exposedAs API-026 และ UI-miniloan-012 calls API-026 (UI-miniloan-012 ประกาศ action record-payoff-payment ของ ROLE-004 ไว้อยู่แล้ว หน้าจอจึงไม่เคยผิด ขาดแค่ endpoint) · ยืนยันบนดิสก์แล้ว: check.mjs = PASS no violations (40 rules), export.mjs --validate = already current, approve.mjs --ready = 10 ready of 10 โดย interfaces.json signed by aplus191 2026-09-06T09:55:52Z",
+      "answered_in": "interfaces.json",
+      "closed_by": "aplus191",
+      "blocks": [
+        "FE-miniloan-014"
+      ]
     }
   ],
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 13,
-      "draft": 16
+      "validated": 14,
+      "draft": 15
     },
     "by_origin": {
       "new": 28,
@@ -3293,7 +3373,7 @@
       "web": 10,
       "api": 19
     },
-    "gaps_open": 0,
+    "gaps_open": 1,
     "ready_for_phase5": false
   }
 }
