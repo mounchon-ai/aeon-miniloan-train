@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +109,36 @@ public class LoanApplication {
      * asks when deciding who may act.
      */
     private String assignedLoanOfficerId;
+
+    /**
+     * BR-miniloan-011@v1 — the approver and the moment, kept on the application itself rather than
+     * in a separate log (AC-miniloan-049). {@code approvedAmount} is what the officer actually
+     * granted and may be lower than {@code requestedAmount}, which is never overwritten: the DTI on
+     * the assessment was computed from the requested figure at submission and does not move
+     * (AC-miniloan-040 · AC-miniloan-054).
+     */
+    @Column(precision = 19, scale = 2)
+    private BigDecimal approvedAmount;
+
+    private String approvedBy;
+
+    private Instant approvedAt;
+
+    /**
+     * BR-miniloan-013@v1 — the reason, which is never optional (AC-miniloan-056), together with who
+     * refused and when.
+     *
+     * <p>ENT-002 enumerates only {@code rejectionReason}, but AC-miniloan-055 asks the application
+     * page for "ปฏิเสธโดย {ชื่อเจ้าหน้าที่} เมื่อ {วันที่เวลา} · เหตุผล: …" — the actor and the
+     * moment have to come from somewhere, and the opposite outcome already keeps its own pair on
+     * this row (BR-miniloan-011@v1's approvedBy/approvedAt). These two mirror that pair rather than
+     * inventing a different shape; the enumeration gap is raised for design as a datamodel note.
+     */
+    private String rejectionReason;
+
+    private String rejectedBy;
+
+    private Instant rejectedAt;
 
     protected LoanApplication() {
         // JPA
@@ -237,6 +266,130 @@ public class LoanApplication {
         }
     }
 
+    /**
+     * UnderReview → Approved (STM-miniloan-001 · BR-miniloan-011@v1 · BR-miniloan-012@v1). The
+     * caller has already established that this is the assigned officer; what is settled here is the
+     * state, the ceiling and the record.
+     *
+     * @param amount what the officer grants — null means "at the amount that was requested"
+     * @param maxApprovableAmount the ceiling from the stored CreditAssessment, not one recomputed
+     *     now: BR-miniloan-012@v1 measures against what the applicant was actually assessed on
+     */
+    public void approve(BigDecimal amount, BigDecimal maxApprovableAmount, String approvedBy) {
+        if (status != Status.UnderReview) {
+            throw new NotApprovableException(this);
+        }
+        BigDecimal granted = Money.round(amount == null ? requestedAmount : amount);
+        if (granted.compareTo(maxApprovableAmount) > 0) {
+            throw new AmountExceedsMaxApprovableException(granted, maxApprovableAmount);
+        }
+        this.approvedAmount = granted;
+        this.approvedBy = approvedBy;
+        Instant now = Instant.now();
+        this.approvedAt = now;
+        this.status = Status.Approved;
+        this.updatedAt = now;
+    }
+
+    /**
+     * Three different refusals, because the caller is told three different things: an application
+     * still being assessed has not reached review yet (AC-miniloan-050), one already approved says
+     * when that happened and keeps its original approver (AC-miniloan-051), and one already
+     * rejected is a final state with no edge out (AC-miniloan-057).
+     */
+    public static class NotApprovableException extends RuntimeException {
+        private final Status status;
+
+        public NotApprovableException(LoanApplication application) {
+            super(messageFor(application));
+            this.status = application.status;
+        }
+
+        /**
+         * AC-miniloan-057 measures the boundary of STM-miniloan-001's final state: a Rejected
+         * application refused with "ยังไม่เข้าสู่การพิจารณา" would be telling the officer the one
+         * thing that is not true about it.
+         */
+        private static String messageFor(LoanApplication application) {
+            return switch (application.status) {
+                case Approved -> "อนุมัติไม่ได้ — ใบสมัครนี้อนุมัติไปแล้วเมื่อ " + application.approvedAt;
+                case Rejected -> "อนุมัติไม่ได้ — ใบสมัครนี้ถูกปฏิเสธไปแล้ว";
+                default -> "อนุมัติไม่ได้ — ใบสมัครนี้ยังไม่เข้าสู่การพิจารณา";
+            };
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+    }
+
+    /** AC-miniloan-053: the officer is told both figures and what to do, not just "no". */
+    public static class AmountExceedsMaxApprovableException extends RuntimeException {
+        public AmountExceedsMaxApprovableException(BigDecimal amount, BigDecimal maxApprovableAmount) {
+            super(
+                    "อนุมัติไม่ได้ — จำนวนเงินที่ขอ " + Money.format(amount) + " บาท เกินวงเงินอนุมัติสูงสุด "
+                            + Money.format(maxApprovableAmount) + " บาท กรุณาปรับวงเงินก่อน");
+        }
+    }
+
+    /**
+     * UnderReview → Rejected (STM-miniloan-001 · BR-miniloan-013@v1). The caller has already
+     * established that this is the assigned officer; what is settled here is the state, the reason
+     * and the record.
+     *
+     * <p>The reason is checked before anything is written, because AC-miniloan-056 requires the
+     * application to still read UnderReview after the blank one is turned down — a half-applied
+     * rejection would satisfy the message and break the row. Blank is the same as absent: the
+     * acceptance criterion says "เว้นช่องเหตุผลไว้ว่าง", and a form posts an empty string rather
+     * than nothing at all.
+     *
+     * @param reason why the officer refused — required, and stored trimmed
+     * @param rejectedBy the assigned officer, recorded alongside the moment so AC-miniloan-055's
+     *     line can be rendered from the row itself
+     */
+    public void reject(String reason, String rejectedBy) {
+        if (status != Status.UnderReview) {
+            throw new NotRejectableException(this);
+        }
+        String stated = reason == null ? "" : reason.trim();
+        if (stated.isEmpty()) {
+            throw new RejectionReasonRequiredException();
+        }
+        this.rejectionReason = stated;
+        this.rejectedBy = rejectedBy;
+        Instant now = Instant.now();
+        this.rejectedAt = now;
+        this.status = Status.Rejected;
+        this.updatedAt = now;
+    }
+
+    /** AC-miniloan-056's wording, to the character — the officer is told what is missing. */
+    public static class RejectionReasonRequiredException extends RuntimeException {
+        public RejectionReasonRequiredException() {
+            super("ปฏิเสธไม่ได้ — ต้องระบุเหตุผลการปฏิเสธ");
+        }
+    }
+
+    /**
+     * The mirror of {@link NotApprovableException}: Rejected is final, so a second rejection names
+     * the first one rather than pretending the application never reached review.
+     */
+    public static class NotRejectableException extends RuntimeException {
+        private final Status status;
+
+        public NotRejectableException(LoanApplication application) {
+            super(
+                    application.status == Status.Rejected
+                            ? "ปฏิเสธไม่ได้ — ใบสมัครนี้ถูกปฏิเสธไปแล้วเมื่อ " + application.rejectedAt
+                            : "ปฏิเสธไม่ได้ — ใบสมัครนี้ยังไม่เข้าสู่การพิจารณา");
+            this.status = application.status;
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+    }
+
     public static class NotAssignableException extends RuntimeException {
         public NotAssignableException(Status status) {
             super("มอบหมายไม่ได้ — ใบสมัครนี้อยู่สถานะ " + status + " ไม่ใช่ UnderReview");
@@ -286,9 +439,10 @@ public class LoanApplication {
     }
 
     // Money is rounded round-half-up at the point it occurs (CLAUDE.md) — never store an
-    // unrounded value and round only for display.
+    // unrounded value and round only for display. FE-miniloan-007 moved the one implementation
+    // to Money so a domain message and a stored column cannot disagree.
     private static BigDecimal roundMoney(BigDecimal value) {
-        return value == null ? null : value.setScale(2, RoundingMode.HALF_UP);
+        return Money.round(value);
     }
 
     public UUID getId() {
@@ -345,5 +499,29 @@ public class LoanApplication {
 
     public String getAssignedLoanOfficerId() {
         return assignedLoanOfficerId;
+    }
+
+    public BigDecimal getApprovedAmount() {
+        return approvedAmount;
+    }
+
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public Instant getApprovedAt() {
+        return approvedAt;
+    }
+
+    public String getRejectionReason() {
+        return rejectionReason;
+    }
+
+    public String getRejectedBy() {
+        return rejectedBy;
+    }
+
+    public Instant getRejectedAt() {
+        return rejectedAt;
     }
 }

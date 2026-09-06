@@ -4,15 +4,12 @@ import com.miniloan.domain.CreditAssessment;
 import com.miniloan.domain.CreditAssessment.Band;
 import com.miniloan.domain.InstalmentCalculator;
 import com.miniloan.domain.LoanApplication;
+import com.miniloan.domain.Money;
 import com.miniloan.repository.CreditAssessmentRepository;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import org.springframework.stereotype.Service;
 
 /**
@@ -55,8 +52,6 @@ public class CreditAssessmentService {
      * declared rate stands in as a constant here rather than being invented as a half-built feature.
      */
     public static final BigDecimal ANNUAL_INTEREST_RATE = new BigDecimal("0.25");
-
-    private static final MathContext WORKING = MathContext.DECIMAL128;
 
     private final CreditAssessmentRepository repository;
 
@@ -220,34 +215,22 @@ public class CreditAssessmentService {
         return age >= MIN_AGE && age <= MAX_AGE;
     }
 
-    /**
-     * Comma-grouped baht, with the satang dropped when there are none — the prose form the
-     * acceptance criteria use ("รายได้ 30,000 บาท/เดือน"), for the reason lines a person reads.
-     * Grouping and decimal symbols are pinned to {@link Locale#US} so the text of a stored reason
-     * never depends on the JVM's default locale.
-     */
+    // The three below moved to com.miniloan.domain.Money when FE-miniloan-007 needed the same
+    // formatting inside a domain message (AC-miniloan-053). They stay here as the names this
+    // package and its tests already call, and there is exactly one implementation behind them.
+
+    /** The prose form the acceptance criteria use — "รายได้ 30,000 บาท/เดือน". */
     public static String money(BigDecimal amount) {
-        BigDecimal scaled = amount.setScale(2, RoundingMode.HALF_UP);
-        String pattern = scaled.stripTrailingZeros().scale() <= 0 ? "#,##0" : "#,##0.00";
-        return format(pattern, scaled);
+        return Money.format(amount);
     }
 
-    /**
-     * The same amount as a money(2) figure — always two decimals, which is how req's golden
-     * datasets write every baht value ("150,000.00"). Separate from {@link #money(BigDecimal)}
-     * because a number and the sentence it appears in are not obliged to look the same.
-     */
+    /** The money(2) form req's golden datasets use — "150,000.00". */
     public static String moneyExact(BigDecimal amount) {
-        return format("#,##0.00", amount.setScale(2, RoundingMode.HALF_UP));
+        return Money.exact(amount);
     }
 
     /** Display only — CALC-miniloan-002@v1 forbids deciding pass/fail on this value. */
     public static String percent(BigDecimal ratio) {
-        BigDecimal shown = ratio.multiply(new BigDecimal("100"), WORKING).setScale(2, RoundingMode.HALF_UP);
-        return format("#,##0.00", shown) + "%";
-    }
-
-    private static String format(String pattern, BigDecimal value) {
-        return new DecimalFormat(pattern, DecimalFormatSymbols.getInstance(Locale.US)).format(value);
+        return Money.percent(ratio);
     }
 }

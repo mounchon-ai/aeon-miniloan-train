@@ -190,6 +190,18 @@ public class LoanApplicationController {
         }
     }
 
+    /**
+     * {@code requestedAmount} is what the applicant asked for and never changes; {@code
+     * approvedAmount} is what the officer granted and may be lower (BR-miniloan-012@v1). Both
+     * travel, because AC-miniloan-054 turns on the two being different and the DTI still belonging
+     * to the first.
+     *
+     * <p>{@code approvedBy} / {@code approvedAt} are here rather than in a separate log so
+     * AC-miniloan-049's "อนุมัติโดย ก. เมื่อ …" can be rendered from what API-004 returns, and
+     * {@code rejectionReason} / {@code rejectedBy} / {@code rejectedAt} travel for the same reason
+     * on the other outcome — AC-miniloan-055's "ปฏิเสธโดย … เมื่อ … · เหตุผล: …" is a line the web
+     * renders and never assembles from anything it worked out itself (REQ-miniloan-006).
+     */
     public record LoanApplicationResponse(
             UUID id,
             String status,
@@ -200,6 +212,12 @@ public class LoanApplicationController {
             BigDecimal existingMonthlyDebt,
             BigDecimal requestedAmount,
             Integer requestedTermMonths,
+            BigDecimal approvedAmount,
+            String approvedBy,
+            Instant approvedAt,
+            String rejectionReason,
+            String rejectedBy,
+            Instant rejectedAt,
             Instant createdAt,
             Instant updatedAt) {
 
@@ -214,6 +232,12 @@ public class LoanApplicationController {
                     application.getExistingMonthlyDebt(),
                     application.getRequestedAmount(),
                     application.getRequestedTermMonths(),
+                    application.getApprovedAmount(),
+                    application.getApprovedBy(),
+                    application.getApprovedAt(),
+                    application.getRejectionReason(),
+                    application.getRejectedBy(),
+                    application.getRejectedAt(),
                     application.getCreatedAt(),
                     application.getUpdatedAt());
         }
