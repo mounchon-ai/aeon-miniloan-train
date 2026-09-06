@@ -2310,7 +2310,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/AdjustmentController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "90ed8824027c7cd9f1028e9abc4e2c2f259e898a"
+      ]
     },
     {
       "id": "FE-miniloan-017",
