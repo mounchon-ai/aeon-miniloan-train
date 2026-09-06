@@ -1671,7 +1671,53 @@
           "hash": "sha256:680c2a6c3be380cc279e02f336b689b854745140f165decad8ecc97250409e31"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 179, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (9 in the new RepaymentScheduleQueryServiceTest and 5 added to RepaymentScheduleControllerTest, on top of the 165 FE-001..011 had). Green on round 1 -- build.iterations stays 0, and no assertion, golden row or health check was touched. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it runs in the container FE-miniloan-010/011 already recorded, against the same volume-cached repo.",
+            "at": "2026-09-06T04:38:10Z"
+          },
+          {
+            "cmd": "docker run --rm -v D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57837840 bytes",
+            "at": "2026-09-06T04:39:31Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/RepaymentScheduleController.java",
+          "apps/api/src/main/java/com/miniloan/service/RepaymentScheduleQueryService.java",
+          "apps/api/src/test/java/com/miniloan/service/RepaymentScheduleQueryServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/controller/RepaymentScheduleControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/RepaymentScheduleQueryServiceTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/controller/RepaymentScheduleControllerTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-012",
+            "route": "GET /loan-accounts/{id}/schedule",
+            "file": "apps/api/src/main/java/com/miniloan/controller/RepaymentScheduleController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-013",
@@ -3179,8 +3225,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 11,
-      "draft": 18
+      "validated": 12,
+      "draft": 17
     },
     "by_origin": {
       "new": 29

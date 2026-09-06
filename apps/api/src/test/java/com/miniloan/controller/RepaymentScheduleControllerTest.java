@@ -3,6 +3,7 @@ package com.miniloan.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -10,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.miniloan.controller.RepaymentScheduleController.RescheduleResponse;
 import com.miniloan.controller.RepaymentScheduleController.RevisionResponse;
+import com.miniloan.controller.RepaymentScheduleController.ScheduleResponse;
 import com.miniloan.domain.Installment;
 import com.miniloan.domain.InterestRateVersion;
 import com.miniloan.domain.LoanAccount;
@@ -27,6 +29,8 @@ import com.miniloan.service.LoanApplicationApprovalService;
 import com.miniloan.service.LoanApplicationDraftService;
 import com.miniloan.service.LoanApplicationDraftService.DraftFields;
 import com.miniloan.service.LoanApplicationSubmitService;
+import com.miniloan.service.RepaymentScheduleQueryService.AccountNotActiveException;
+import com.miniloan.service.RepaymentScheduleQueryService.NotAccountOwnerException;
 import com.miniloan.service.RepaymentScheduleReissueService.AccountClosedException;
 import com.miniloan.service.RepaymentScheduleReissueService.LoanAccountNotFoundException;
 import com.miniloan.service.RepaymentScheduleReissueService.NotAssignedOperationsException;
@@ -70,6 +74,15 @@ class RepaymentScheduleControllerTest {
     /** FE-miniloan-002's scheme — AuthTokenFilter gates every route, this one included. */
     private static final String OPERATIONS_TOKEN = "Bearer mock-role-004";
 
+    private static final String APPLICANT_TOKEN = "Bearer mock-role-001";
+
+    /**
+     * AC-miniloan-099's "ผู้สมัคร ข." — a different PERSON, not a different role. The mock scheme
+     * mints one token per role, and the identity the service compares is a plain String, so a second
+     * applicant is expressible without touching {@code MockTokenService}.
+     */
+    private static final String ANOTHER_APPLICANT = "ROLE-001-another-person";
+
     @Autowired private MockMvc mockMvc;
     @Autowired private RepaymentScheduleController controller;
     @Autowired private DisbursementService disbursement;
@@ -108,12 +121,18 @@ class RepaymentScheduleControllerTest {
     }
 
     private LoanAccount disbursedAccount() {
-        rateVersions.save(
-                new InterestRateVersion(RATE_25_PERCENT, LocalDate.now().minusYears(1), SUPERVISOR));
+        return disbursedAccountOwnedBy(APPLICANT);
+    }
+
+    private LoanAccount disbursedAccountOwnedBy(String applicantId) {
+        if (rateVersions.count() == 0) {
+            rateVersions.save(
+                    new InterestRateVersion(RATE_25_PERCENT, LocalDate.now().minusYears(1), SUPERVISOR));
+        }
         UUID applicationId =
                 draftService
                         .saveNewDraft(
-                                APPLICANT,
+                                applicantId,
                                 new DraftFields(
                                         "ทดสอบ ผู้สมัคร",
                                         35,
@@ -123,7 +142,7 @@ class RepaymentScheduleControllerTest {
                                         new BigDecimal("100000.00"),
                                         12))
                         .getId();
-        submitService.submit(applicationId, APPLICANT);
+        submitService.submit(applicationId, applicantId);
         assignmentService.assign(applicationId, OFFICER, SUPERVISOR);
         approvalService.approve(applicationId, null, OFFICER);
         return disbursement.disburse(applicationId, OFFICER).account();
@@ -346,5 +365,104 @@ class RepaymentScheduleControllerTest {
                 .andExpect(jsonPath("$.revisionNumber").value(2))
                 .andExpect(jsonPath("$.installments.length()").value(12))
                 .andExpect(jsonPath("$.revisions.length()").value(2));
+    }
+
+    // ── API-012 · ดูตารางผ่อนชำระ (FE-miniloan-012) ────────────────────────────
+    //
+    // AC-miniloan-099 says the refusal happens "ทั้งจากหน้าจอและด้วยการเรียก API ตรง", so the API
+    // half is measured over HTTP, through AuthTokenFilter, at the path interfaces.json declares —
+    // a bean call would measure the decision and leave a wrong path or verb green.
+
+    /** AC-miniloan-098 over HTTP: the owner gets the whole table at the declared path. */
+    @Test
+    void theScheduleRouteAnswersARealGetWithTheWholeTable() throws Exception {
+        LoanAccount account = disbursedAccount();
+
+        mockMvc
+                .perform(
+                        get("/loan-accounts/{id}/schedule", account.getId())
+                                .header("Authorization", APPLICANT_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.revisionNumber").value(1))
+                .andExpect(jsonPath("$.accountStatus").value("Active"))
+                .andExpect(jsonPath("$.installments.length()").value(12))
+                .andExpect(jsonPath("$.installments[0].number").value(1))
+                .andExpect(jsonPath("$.installments[11].number").value(12))
+                .andExpect(jsonPath("$.installments[0].status").value("Due"))
+                .andExpect(jsonPath("$.installments[11].remainingBalance").value(0));
+    }
+
+    /**
+     * AC-miniloan-099 over HTTP — ก. calls the API directly for ข.'s account: 403, the sentence the
+     * criterion quotes, and not one instalment row in the body.
+     */
+    @Test
+    void callingTheApiDirectlyForAnotherApplicantsScheduleIsRefusedWithNoRowLeaked() throws Exception {
+        LoanAccount theirs = disbursedAccountOwnedBy(ANOTHER_APPLICANT);
+
+        mockMvc
+                .perform(
+                        get("/loan-accounts/{id}/schedule", theirs.getId())
+                                .header("Authorization", APPLICANT_TOKEN))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("SCHEDULE_VIEW_APPLICANT_ONLY"))
+                .andExpect(jsonPath("$.message").value("ไม่มีสิทธิ์เข้าถึงบัญชีสินเชื่อนี้"))
+                .andExpect(jsonPath("$.installments").doesNotExist());
+
+        // ข.'s table is still whole — the refusal read nothing away.
+        var current = schedules.findByLoanAccountIdAndCurrentIsTrue(theirs.getId()).orElseThrow();
+        assertThat(installments.findByRepaymentScheduleIdOrderByInstallmentNumberAsc(current.getId()))
+                .hasSize(12);
+    }
+
+    /**
+     * ACL-010 is the only entry for UC-miniloan-011 and {@code rbac.json} denies by default, so every
+     * other role is turned away by the route before the service runs — with the same sentence, so the
+     * refusal never says whether the account exists.
+     */
+    @Test
+    void anyRoleOtherThanApplicantIsRefusedByTheScheduleRoute() {
+        LoanAccount account = disbursedAccount();
+
+        for (String role : List.of(OFFICER, SUPERVISOR, OPERATIONS, ADMIN)) {
+            assertThatThrownBy(() -> controller.schedule(account.getId(), as(role)))
+                    .isInstanceOf(NotAccountOwnerException.class);
+        }
+
+        assertThat(controller.handleNotAccountOwner().getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(controller.handleNotAccountOwner().getBody().message())
+                .isEqualTo("ไม่มีสิทธิ์เข้าถึงบัญชีสินเชื่อนี้");
+    }
+
+    /** The route's own reading of the same table the reschedule route hands back. */
+    @Test
+    void theOwnerReadsTheRevisionInForceThroughTheRoute() {
+        LoanAccount account = disbursedAccount();
+        controller.reschedule(account.getId(), as(OPERATIONS));
+
+        var response = controller.schedule(account.getId(), as(APPLICANT));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ScheduleResponse body = response.getBody();
+        assertThat(body.revisionNumber()).isEqualTo(2);
+        assertThat(body.installments()).hasSize(12);
+        assertThat(body.totalPrincipal()).isEqualByComparingTo("100000.00");
+        assertThat(body.principalAmount()).isEqualByComparingTo("100000.00");
+        assertThat(body.termMonths()).isEqualTo(12);
+    }
+
+    /** ACL-010's condition, mapped by the route: a Closed account is a 409, not a 500. */
+    @Test
+    void aClosedAccountIsRefusedByTheScheduleRouteAsAConflict() {
+        LoanAccount account = disbursedAccount();
+        forceClosed(account.getId());
+
+        assertThatThrownBy(() -> controller.schedule(account.getId(), as(APPLICANT)))
+                .isInstanceOf(AccountNotActiveException.class);
+
+        var mapped = controller.handleAccountNotActive(new AccountNotActiveException());
+        assertThat(mapped.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+        assertThat(mapped.getBody().code()).isEqualTo("LOAN_ACCOUNT_NOT_ACTIVE");
+        assertThat(mapped.getBody().message()).isEqualTo("ดูตารางผ่อนไม่ได้ — บัญชีนี้ปิดแล้ว");
     }
 }
