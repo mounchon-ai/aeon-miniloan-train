@@ -1023,7 +1023,7 @@
         ],
         "last_error": null,
         "recorded_by": "aplus191",
-        "recorded_at": "2026-09-05"
+        "recorded_at": "2026-09-06"
       },
       "manifest": {
         "files": [
@@ -1050,7 +1050,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationDecisionController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "a8b3614959ed0bb8a6651e288a0c2bcbc98664e6"
+      ]
     },
     {
       "id": "FE-miniloan-008",
@@ -1147,7 +1150,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "a8b3614959ed0bb8a6651e288a0c2bcbc98664e6"
+      ]
     },
     {
       "id": "FE-miniloan-009",
