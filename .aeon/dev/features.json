@@ -2045,7 +2045,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/EarlyClosureController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "df2ecd0f5e4f86e64073169a8f6d9684aaf4c87c"
+      ]
     },
     {
       "id": "FE-miniloan-015",
