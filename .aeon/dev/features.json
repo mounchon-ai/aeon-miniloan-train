@@ -3476,10 +3476,10 @@
       "question_th": "ENT-010 ประกาศ fieldName เป็น type: string อิสระ — ไม่มี enum ไม่มี whitelist และไม่มี artifact ใบไหน map ค่าของมันไปหา attribute ของ ENT-006 · FE-miniloan-015 บันทึกคำขอได้โดยไม่ต้องรู้ เพราะมันเก็บ oldValue/newValue เป็นข้อความล้วน แต่ FE-miniloan-016 ต้องเอาค่าใหม่ไปลงบัญชีจริงตาม AC-miniloan-076 (\"ค่าบนบัญชีเปลี่ยนเป็นค่าใหม่ก็ต่อเมื่อผ่านขั้นที่สองแล้ว\") และไม่มีอะไรให้มันใช้ลง — ENT-006 ไม่มีทางเขียนค่าลง attribute ใดเลยนอกจาก outstandingPrincipal (reducePrincipal, BR-miniloan-020@v1) กับ status (close, BR-miniloan-021@v1) ซึ่งทั้งสองทางเป็นของกฎอื่นที่ไม่ใช่การปรับปรุงหลังปิดบัญชี ขอให้ design ตัดสินสามข้อ: (1) attribute ใดของ ENT-006 บ้างที่ปรับปรุงหลังปิดบัญชีได้ตาม BR-miniloan-038@v1 (2) fieldName รับค่าอะไรได้บ้าง — เป็นรายการปิดที่ design ประกาศ หรือเป็นชื่อ attribute ของ ENT-006 ตรง ๆ (3) การเขียนค่าใหม่ทับ ขัดกับ invariant ที่ ENT-006 ถือไว้หรือไม่ (BR-miniloan-021@v1 · 023@v1 · 034@v1 · 037@v1) และถ้าขัด ข้อไหนชนะ · dev มินต์รายการ field เองไม่ได้ เพราะเป็นการตัดสินว่าข้อมูลอะไรของบัญชีที่ปิดแล้วแก้ได้ ซึ่งเป็นคำถามเชิงนโยบาย ไม่ใช่รายละเอียดการเขียนโค้ด",
       "found_at": "2026-09-06",
       "found_by": "/dev:plan",
-      "status": "open",
-      "answer_th": null,
-      "answered_in": null,
-      "closed_by": null,
+      "status": "answered",
+      "answer_th": "design ตัดสินและเขียนลง datamodel.json แล้วผ่าน ADR-006 (revoke → เขียน → sign ใหม่ รูปเดียวกับ ADR-003/004/005) · ขอบเขตของการปรับปรุงคือบัญชี *และรายการชำระของบัญชีนั้น* เพราะตัวอย่างของ AC-miniloan-076 เองคือ \"ยอดชำระงวดสุดท้ายถูกบันทึกผิด\" ซึ่งอยู่ที่ ENT-009 Payment.amount ไม่ใช่ attribute ใดของ ENT-006 เลย · ENT-010 เปลี่ยนสองจุด: (1) fieldName เปลี่ยนจาก type string อิสระ เป็น type enum ที่ถือรายการปิด 5 ค่า — LoanAccount.closedAt · LoanAccount.closeReason · LoanAccount.assignedOperationsId · Payment.amount · Payment.recordedAt (2) เพิ่ม attribute targetRecordId type string required เพื่อระบุแถวที่ถูกแก้ เก็บเป็น string ไม่ใช่ reference เพราะปลายทางเป็นได้สองเอนทิตี · ENT-008 Installment ไม่อยู่ในรายการเลย และไม่ใช่การตัดสินใหม่ — BR-miniloan-045@v1 ล็อกตารางผ่อนของบัญชีที่ปิดแล้วถาวร และ AC-miniloan-108 พิสูจน์ไว้แล้ว · ฟิลด์ที่กันออกโดยมีกฎรองรับ: applicationId · interestRateVersionId (BR-miniloan-037@v1) · status (BR-miniloan-021@v1) · ฟิลด์ที่กันออกด้วยหลักที่ design เขียนเองใน ADR-006 ไม่ใช่กฎเดิม: principalAmount · outstandingPrincipal · termMonths · disbursedAt โดยหลักคือ 'ปรับปรุงได้เฉพาะข้อเท็จจริงที่ถูกบันทึก ไม่ใช่ค่าที่คำนวณมาหรือค่าที่เป็นตัวตนของบัญชี' · screens.json ถูกทำใหม่ตามด้วย: UI-miniloan-012 ได้ field adjustment-target-record (io capture, required) อยู่หัว zone adjustment-form และ adjustment-field-name ชี้ไปที่ ENT-010.fieldName ว่าเป็นที่อยู่ของรายการค่า โดยไม่คัดลอกค่าทั้ง 5 มาไว้บนหน้าจอ · ยืนยันบนดิสก์: check.mjs = PASS no violations (40 rules), approve --ready = 10 ready of 10 โดย datamodel.json signed by aplus191 2026-09-06T14:55:02Z และ screens.json signed 2026-09-06T14:57:54Z",
+      "answered_in": "datamodel.json",
+      "closed_by": "aplus191",
       "blocks": [
         "FE-miniloan-016"
       ]
@@ -3502,6 +3502,19 @@
       "to": "req",
       "about": "BR-miniloan-040@v1",
       "question_th": "FE-miniloan-017 ปฏิเสธการล้างค่า role ผู้อนุมัติให้กลับเป็นว่าง (ApproverRoleRequiredException · commit e41cff3) — เป็นคำตัดสินของ dev เอง ไม่มีเกณฑ์รับใบไหนขอ จึงเป็น Class B ที่ขึ้นไปอยู่บนของจริงแล้ว · เหตุผลที่ทำไว้แบบนั้น: ENT-011 ประกาศ approverRole เป็น required: false ซึ่งแปลว่า null เก็บได้ แต่ BR-miniloan-040@v1 พูดถึง \"ยังไม่ได้ตั้ง\" ในฐานะสถานะที่ต้องออกไป ไม่ใช่สถานะที่เดินกลับเข้าไปได้ และไม่มีกฎข้อไหนบอกว่าคำขอที่สถานะ Pending ค้างอยู่จะเป็นอย่างไรถ้าผู้อนุมัติหายไป ขอให้ req ตัดสิน: (1) Loan Officer ล้างค่า role ผู้อนุมัติกลับเป็นว่างได้หรือไม่ตาม BR-miniloan-048@v1 (2) ถ้าได้ คำขอที่ Pending อยู่ตอนนั้นเป็นอย่างไร — ค้างต่อจนกว่าจะตั้งใหม่ ถูกปฏิเสธอัตโนมัติ หรืออนุมัติไม่ได้ชั่วคราว · ถ้าคำตอบคือล้างไม่ได้ ขอให้เขียนลงใน BR-miniloan-040@v1 เพื่อให้โค้ดที่ commit ไปแล้วมีต้นน้ำรองรับ ไม่ใช่ยืนอยู่ด้วยการตัดสินของ dev",
+      "found_at": "2026-09-06",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-009",
+      "to": "req",
+      "about": "BR-miniloan-021@v1",
+      "question_th": "ADR-006 เปิดทางให้แก้ Payment.amount ของบัญชีที่ปิดแล้วผ่านคำขอปรับปรุงที่ได้รับอนุมัติ และจงใจไม่ตัดสินผลที่ตามมา เพราะเป็นคำถามเชิงกฎ ไม่ใช่รูปของข้อมูล · เมื่อยอดชำระที่ทำให้บัญชีปิดถูกแก้ให้ *น้อยลง* บัญชีนั้นยังถือ outstandingPrincipal = 0.00 กับ closeReason = FullyPaid อยู่ ซึ่ง BR-miniloan-021@v1 เป็นเจ้าของทั้งสองค่า ขอให้ req ตอบว่า (1) เงินต้นคงเหลือถูกคำนวณใหม่ตามยอดที่แก้แล้วหรือไม่ — ถ้าใช่ บัญชีที่กลายเป็นยังค้างชำระต้องกลับไปเป็น Active หรืออยู่ในสถานะใหม่ที่ยังไม่มีใน STM-miniloan-002 (2) ถ้าไม่คำนวณใหม่ ตัวเลขบนบัญชีกับรายการชำระที่ถูกแก้แล้วขัดกันโดยตั้งใจใช่หรือไม่ และผู้ใช้เห็นความต่างนั้นที่ไหน (3) ตารางผ่อนถูกกันออกจากทุกกรณีอยู่แล้วตาม BR-miniloan-045@v1 และ AC-miniloan-108 — ยืนยันว่าคำตอบข้อ 1/2 ไม่ไปแตะข้อนี้ · หมายเหตุ: ไม่มีหน่วยไหนถูกบล็อกวันนี้ เพราะ FE-miniloan-016 เป็นผู้ apply ค่าที่อนุมัติแล้ว และจะชนคำถามนี้ก็ต่อเมื่อฟิลด์ที่ถูกแก้เป็น Payment.amount",
       "found_at": "2026-09-06",
       "found_by": "/dev:plan",
       "status": "open",
