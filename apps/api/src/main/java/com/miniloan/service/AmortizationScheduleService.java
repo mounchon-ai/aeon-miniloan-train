@@ -107,6 +107,61 @@ public class AmortizationScheduleService {
         return new Schedule(instalment, List.copyOf(rows), principalSoFar, interestSoFar);
     }
 
+    /**
+     * The overpayment shape (BR-miniloan-046@v2 · AC-miniloan-086): the borrower keeps paying the
+     * SAME instalment and the table simply ends sooner — "ค่างวดยังเท่าเดิมทุกงวด และจำนวนงวดที่
+     * เหลือลดลง". {@link #build} answers the other question (given n, what is the instalment), so it
+     * cannot be reused here.
+     *
+     * <p><b>Nothing new is computed.</b> There is a closed form for n, and it is deliberately not
+     * used: it would be arithmetic no {@code CALC-} contract defines and no golden dataset signs.
+     * What runs instead is CALC-miniloan-001@v2's own per-row recurrence — {@code interest =
+     * round(balance × r, 2)}, {@code principal = instalment − interest}, {@code balance −=
+     * principal} — with the instalment held fixed and rows counted until the balance is gone. Every
+     * figure is therefore produced by the same signed step {@link #build} uses; the only thing this
+     * method adds is where to stop, and the contract's {@code residual_policy} already says what the
+     * last row does: it absorbs the remainder, so the table closes at exactly 0.00.
+     *
+     * @param instalment the EMI to hold — the one the account is already paying
+     * @throws IllegalArgumentException if the instalment cannot cover the first month's interest, in
+     *     which case the balance would grow and no table exists. Unreachable from an overpayment
+     *     (the principal only ever falls) and refused rather than looped for ever.
+     */
+    public Schedule buildAtFixedInstalment(
+            BigDecimal principal, BigDecimal annualRate, BigDecimal instalment) {
+        BigDecimal monthlyRate = annualRate.divide(MONTHS_PER_YEAR, RATE_SCALE, RoundingMode.HALF_UP);
+        BigDecimal fixed = Money.round(instalment);
+        BigDecimal balance = Money.round(principal);
+
+        if (balance.signum() <= 0) {
+            throw new IllegalArgumentException("ไม่มีเงินต้นคงเหลือให้ออกตารางผ่อน");
+        }
+        BigDecimal firstInterest = Money.round(balance.multiply(monthlyRate, WORKING));
+        if (fixed.compareTo(firstInterest) <= 0) {
+            throw new IllegalArgumentException("ค่างวดไม่พอชำระดอกเบี้ยงวดแรก — ตารางผ่อนจะไม่มีวันหมด");
+        }
+
+        List<Row> rows = new ArrayList<>();
+        BigDecimal principalSoFar = BigDecimal.ZERO.setScale(2);
+        BigDecimal interestSoFar = BigDecimal.ZERO.setScale(2);
+
+        while (balance.signum() > 0) {
+            BigDecimal interest = Money.round(balance.multiply(monthlyRate, WORKING));
+            BigDecimal rowPrincipal = fixed.subtract(interest);
+            // The last row is the one that would overshoot: it takes exactly what is left, which is
+            // CALC-miniloan-001@v2's residual_policy read from this end of the table.
+            if (rowPrincipal.compareTo(balance) >= 0) {
+                rowPrincipal = balance;
+            }
+            balance = balance.subtract(rowPrincipal);
+            principalSoFar = principalSoFar.add(rowPrincipal);
+            interestSoFar = interestSoFar.add(interest);
+            rows.add(new Row(rows.size() + 1, interest.add(rowPrincipal), interest, rowPrincipal, balance));
+        }
+
+        return new Schedule(fixed, List.copyOf(rows), principalSoFar, interestSoFar);
+    }
+
     /** BR-miniloan-016@v1, with the r = 0 branch CALC-miniloan-001@v2 names. */
     private static BigDecimal emiOf(BigDecimal principal, BigDecimal monthlyRate, int termMonths) {
         if (monthlyRate.signum() == 0) {

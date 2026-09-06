@@ -24,9 +24,14 @@ import java.util.UUID;
  * AC-miniloan-104): an account opened under an old version still reads that version rate after two
  * more have been published.
  *
- * <p><b>What is deliberately not here.</b> ENT-006 also declares {@code closedAt} and
- * {@code closeReason}. Closing an account is FE-miniloan-013 work, and a field arrives with the unit
- * that first needs it. ENT-006 declares no account number either, while AC-miniloan-058 renders
+ * <p><b>Closing is two doors and no others</b> (BR-miniloan-021@v1). {@link #close} is the only way
+ * the status leaves Active, it demands a {@link CloseReason}, and {@link CloseReason} has exactly
+ * the two values ENT-006 declares — so a third way to close cannot be expressed here at all, let
+ * alone reached. Closed is final: {@link #close} on a closed account throws rather than moving the
+ * timestamp, which is AC-miniloan-007's "ปิดซ้ำไม่ได้" at the layer that owns the invariant.
+ *
+ * <p><b>What is deliberately not here.</b> ENT-006 declares no account number, while AC-miniloan-058
+ * renders
  * "เลขบัญชีเลขที่ {เลขบัญชี}" — the account id IS that number, raised for design with the other
  * enumeration gaps rather than answered with a second identifier nobody asked for.
  */
@@ -41,6 +46,16 @@ public class LoanAccount {
     public enum Status {
         Active,
         Closed
+    }
+
+    /**
+     * ENT-006's two values, which are BR-miniloan-021@v1's two doors: every instalment paid, or the
+     * early-settlement amount paid in full. There is no third constant because there is no third
+     * way, and AC-miniloan-006 refuses the direct close precisely because it belongs to neither.
+     */
+    public enum CloseReason {
+        FullyPaid,
+        EarlySettlement
     }
 
     @Id
@@ -77,6 +92,13 @@ public class LoanAccount {
     @Column(nullable = false)
     private Instant disbursedAt;
 
+    @Column
+    private Instant closedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private CloseReason closeReason;
+
     protected LoanAccount() {
         // JPA
     }
@@ -97,8 +119,46 @@ public class LoanAccount {
         this.disbursedAt = Instant.now();
     }
 
+    /**
+     * BR-miniloan-020@v1: the balance falls by the PRINCIPAL of what was paid, never by the amount
+     * handed over — the interest portion of an instalment was never owed as principal. Already
+     * rounded on the way in, because BR-miniloan-035@v1 leaves no fuller copy to disagree with.
+     */
+    public void reducePrincipal(BigDecimal amount) {
+        if (amount.signum() < 0) {
+            throw new IllegalArgumentException("ยอดตัดเงินต้นติดลบไม่ได้");
+        }
+        BigDecimal reduced = Money.round(this.outstandingPrincipal.subtract(Money.round(amount)));
+        if (reduced.signum() < 0) {
+            throw new IllegalArgumentException("ตัดเงินต้นเกินยอดคงเหลือไม่ได้");
+        }
+        this.outstandingPrincipal = reduced;
+    }
+
+    /**
+     * BR-miniloan-021@v1 · AC-miniloan-007. The caller names which of the two doors it came through,
+     * and a closed account refuses to be closed again here rather than only at the route — a second
+     * close must not be able to move {@code closedAt}, whichever caller reaches this object.
+     */
+    public void close(CloseReason reason, Instant at) {
+        if (this.status == Status.Closed) {
+            throw new IllegalStateException("บัญชีนี้ปิดแล้ว — ปิดซ้ำไม่ได้");
+        }
+        this.status = Status.Closed;
+        this.closeReason = reason;
+        this.closedAt = at;
+    }
+
     public UUID getId() {
         return id;
+    }
+
+    public Instant getClosedAt() {
+        return closedAt;
+    }
+
+    public CloseReason getCloseReason() {
+        return closeReason;
     }
 
     public UUID getApplicationId() {

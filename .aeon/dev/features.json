@@ -995,16 +995,8 @@
           "hash": "sha256:0290bb2f51c3a070c7c8c4b27bdf7daff261c687c345d1a349c87502a85e97f8"
         },
         {
-          "ref": "API-005",
-          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
-        },
-        {
           "ref": "API-007",
           "hash": "sha256:a3fee741a54ea2534e4d7d44f7aef3f3b0bb89eb0695a50c7b75d8efece43a71"
-        },
-        {
-          "ref": "API-013",
-          "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
         }
       ],
       "status": "validated",
@@ -1727,13 +1719,16 @@
       "title_th": "บันทึกการชำระ ปิดบัญชีอัตโนมัติ และปิดก่อนกำหนด",
       "app_ref": "api",
       "type": "command",
-      "origin": "new",
+      "origin": "bind",
       "files_planned": [
         "apps/api/src/main/java/com/miniloan/controller/PaymentController.java",
         "apps/api/src/main/java/com/miniloan/service/PaymentService.java",
         "apps/api/src/main/java/com/miniloan/domain/Payment.java",
         "apps/api/src/main/java/com/miniloan/repository/PaymentRepository.java",
-        "apps/api/src/test/java/com/miniloan/service/PaymentServiceTest.java"
+        "apps/api/src/test/java/com/miniloan/service/PaymentServiceTest.java",
+        "apps/api/src/main/java/com/miniloan/controller/LoanAccountController.java",
+        "apps/api/src/main/java/com/miniloan/service/LoanAccountScopeService.java",
+        "apps/api/src/test/java/com/miniloan/controller/PaymentControllerTest.java"
       ],
       "depends_on": [
         "FE-miniloan-010",
@@ -1858,10 +1853,6 @@
           "hash": "sha256:ae5125718e3e8efd44634645f4688128092dfc5b60b2e50209f6919e9a768bb8"
         },
         {
-          "ref": "API-005",
-          "hash": "sha256:492f0f3cd5bdc56b5cb04cec78fc037fbb4166f077e29f922bcc2252729c376d"
-        },
-        {
           "ref": "API-013",
           "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
         },
@@ -1874,7 +1865,67 @@
           "hash": "sha256:a4b2eee47d720f4b8df7faf4e1f75a0e80189d3dfb776a11f3805cee561b55ba"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 212, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (33 new: PaymentServiceTest 15 + its nested Overpayment 5 + FixedInstalmentTable 3, and PaymentControllerTest 10, on top of the 179 FE-001..012 had). Green on round 1 -- build.iterations stays 0, and no assertion, golden row or health check was touched. origin is bind: every one of the 8 files was already on disk when this unit was opened and none was rewritten, so the run is the whole proof. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it ran in the container FE-miniloan-010/011/012 already recorded, against the same volume-cached repo.",
+            "at": "2026-09-06T08:35:20Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57877485 bytes",
+            "at": "2026-09-06T08:41:10Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/PaymentController.java",
+          "apps/api/src/main/java/com/miniloan/service/PaymentService.java",
+          "apps/api/src/main/java/com/miniloan/domain/Payment.java",
+          "apps/api/src/main/java/com/miniloan/repository/PaymentRepository.java",
+          "apps/api/src/test/java/com/miniloan/service/PaymentServiceTest.java",
+          "apps/api/src/main/java/com/miniloan/controller/LoanAccountController.java",
+          "apps/api/src/main/java/com/miniloan/service/LoanAccountScopeService.java",
+          "apps/api/src/test/java/com/miniloan/controller/PaymentControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/PaymentServiceTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/controller/PaymentControllerTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-014",
+            "route": "POST /loan-accounts/{id}/payments",
+            "file": "apps/api/src/main/java/com/miniloan/controller/PaymentController.java"
+          },
+          {
+            "api_ref": "API-013",
+            "route": "GET /loan-accounts",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanAccountController.java"
+          },
+          {
+            "api_ref": "API-023",
+            "route": "GET /loan-accounts/{id}",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanAccountController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-014",
@@ -3228,11 +3279,12 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 12,
-      "draft": 17
+      "validated": 13,
+      "draft": 16
     },
     "by_origin": {
-      "new": 29
+      "new": 28,
+      "bind": 1
     },
     "by_app": {
       "web": 10,

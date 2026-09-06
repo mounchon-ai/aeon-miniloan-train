@@ -205,6 +205,28 @@ public class RepaymentScheduleReissueService {
         BigDecimal principal = account.getOutstandingPrincipal();
         Schedule computed = amortization.build(principal, rateVersion.annualRateFraction(), remainingTerm);
 
+        return issueRevision(account, computed);
+    }
+
+    /**
+     * Put {@code computed} into force as the account's next revision, and keep every revision before
+     * it. This is the WRITE half of {@link #reissue} with none of its guards: the caller decides
+     * whether a reissue is allowed and what the new table contains, and the bookkeeping — supersede
+     * the current revision, claim the next number, write the rows — happens in exactly one place.
+     *
+     * <p>FE-miniloan-013 is why it is separated. BR-miniloan-046@v2 reissues on every overpayment,
+     * from a table computed the other way round (instalment fixed, term reduced), and a second copy
+     * of this method would mean a second copy of {@code uk_repayment_schedule_revision}'s race fence
+     * — the one thing that must not exist twice.
+     */
+    @Transactional
+    public Reissue issueRevision(LoanAccount account, Schedule computed) {
+        UUID loanAccountId = account.getId();
+        RepaymentSchedule previous =
+                schedules
+                        .findByLoanAccountIdAndCurrentIsTrue(loanAccountId)
+                        .orElseThrow(() -> new NoCurrentScheduleException(loanAccountId));
+
         // Flushed before the insert: both rows are RepaymentSchedule, and Hibernate orders its
         // statements by entity type rather than by call order. Without this the INSERT can reach the
         // database while the old row still reads current = true.

@@ -12,6 +12,16 @@ public interface LoanAccountRepository extends JpaRepository<LoanAccount, UUID> 
     Optional<LoanAccount> findByApplicationId(UUID applicationId);
 
     /**
+     * BR-miniloan-054@v1 · AC-miniloan-137: the scope of a LIST, which is where a scope hole
+     * actually lives — "รายบัญชีมักมีการตรวจ แต่รายการมักลืม". Filtering happens in the query, so
+     * there is no moment at which every account has been loaded and only the rendering is scoped.
+     */
+    List<LoanAccount> findByAssignedOperationsIdOrderByDisbursedAtAsc(String assignedOperationsId);
+
+    /** The Applicant half of API-013's scope — the accounts behind that person's applications. */
+    List<LoanAccount> findByApplicationIdInOrderByDisbursedAtAsc(List<UUID> applicationIds);
+
+    /**
      * AC-miniloan-105 · AC-miniloan-106: the moment the first account points at a rate version, that
      * version may never be deleted. The count is the answer to "{จำนวน} บัญชี" in that refusal —
      * the administrative action itself has no unit and no API yet.
