@@ -4,7 +4,7 @@
   "project": "miniloan",
   "module": "miniloan",
   "status": "approved",
-  "approvedAt": "2026-09-03T05:17:39Z",
+  "approvedAt": "2026-09-06T14:57:54Z",
   "approvedBy": "aplus191",
   "screens": [
     {
@@ -1460,13 +1460,25 @@
           ]
         },
         {
+          "name": "รายการที่ขอแก้",
+          "key": "adjustment-target-record",
+          "entity": "ENT-010",
+          "attribute": "targetRecordId",
+          "io": "capture",
+          "required": true,
+          "validation": "ระบุแถวที่ถูกแก้ — เมื่อฟิลด์ที่เลือกเป็นของบัญชี ค่านี้คือบัญชีที่กำลังเปิดอยู่ · เมื่อเป็นของรายการชำระ ค่านี้คือรายการชำระของบัญชีเดียวกัน (ADR-006) · บังคับกรอกเมื่อยื่นคำขอปรับปรุงบัญชีที่ปิดแล้วตาม BR-miniloan-041@v1",
+          "rules": [
+            "BR-miniloan-041@v1"
+          ]
+        },
+        {
           "name": "ชื่อฟิลด์ที่ขอแก้",
           "key": "adjustment-field-name",
           "entity": "ENT-010",
           "attribute": "fieldName",
           "io": "capture",
           "required": true,
-          "validation": "บังคับกรอกเมื่อยื่นคำขอปรับปรุงบัญชีที่ปิดแล้วตาม BR-miniloan-041@v1",
+          "validation": "บังคับกรอกเมื่อยื่นคำขอปรับปรุงบัญชีที่ปิดแล้วตาม BR-miniloan-041@v1 · ค่าที่รับได้เป็นรายการปิดที่ ENT-010.fieldName ประกาศไว้ (ADR-006) — ไม่มีสำเนาของรายการนั้นอยู่บนหน้าจอนี้",
           "rules": [
             "BR-miniloan-041@v1"
           ]
@@ -1585,6 +1597,7 @@
         {
           "name": "adjustment-form",
           "fields": [
+            "adjustment-target-record",
             "adjustment-field-name",
             "adjustment-old-value",
             "adjustment-new-value"
