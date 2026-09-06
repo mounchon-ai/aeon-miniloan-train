@@ -6,6 +6,7 @@ import com.miniloan.service.LoanApplicationApprovalService;
 import com.miniloan.service.LoanApplicationApprovalService.ApplicationNotFoundException;
 import com.miniloan.service.LoanApplicationApprovalService.AssessmentMissingException;
 import com.miniloan.service.LoanApplicationApprovalService.DuplicateCommandException;
+import com.miniloan.service.LoanApplicationCancellationService;
 import com.miniloan.service.LoanApplicationRejectionService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -26,6 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
  * ACL-005: the Loan Officer the application was assigned to, and only from UnderReview. The two
  * outcomes of one review sit on one controller because they share every guard and differ only in
  * what they record.
+ *
+ * <p>API-009 (POST /applications/{id}/cancel) is the third way a review ends and the one whose
+ * holder moves: ACL-006 gives it to the assigned officer, ACL-007 to the supervisor while nobody is
+ * assigned. This route therefore admits both roles and lets the service decide which of the two the
+ * row is asking for — refusing before loading the application would be answering AC-miniloan-091
+ * and AC-miniloan-092 with the same sentence.
  *
  * <p>Every refusal here is the API's own (BR-miniloan-025@v1 · AC-miniloan-062 · AC-miniloan-113/114):
  * calling the route directly with curl gets exactly what pressing the button gets, and nothing is
@@ -55,14 +62,22 @@ public class LoanApplicationDecisionController {
     private static final String REJECT_ASSIGNED_TO_ANOTHER_MESSAGE =
             "ปฏิเสธไม่ได้ — ใบสมัครนี้มอบหมายให้ผู้พิจารณาคนอื่น";
 
+    private static final String ONLY_DECIDER_CANCEL_MESSAGE = "ไม่มีสิทธิ์ยกเลิกใบสมัคร";
+
+    private static final String LOAN_OFFICER = "ROLE-002";
+    private static final String SUPERVISOR = "ROLE-003";
+
     private final LoanApplicationApprovalService approvalService;
     private final LoanApplicationRejectionService rejectionService;
+    private final LoanApplicationCancellationService cancellationService;
 
     public LoanApplicationDecisionController(
             LoanApplicationApprovalService approvalService,
-            LoanApplicationRejectionService rejectionService) {
+            LoanApplicationRejectionService rejectionService,
+            LoanApplicationCancellationService cancellationService) {
         this.approvalService = approvalService;
         this.rejectionService = rejectionService;
+        this.cancellationService = cancellationService;
     }
 
     @PostMapping("/{id}/approve")
@@ -99,11 +114,39 @@ public class LoanApplicationDecisionController {
         }
     }
 
+    /**
+     * API-009 — UC-miniloan-007 and UC-miniloan-008 through one route, because they are one action
+     * whose holder depends on whether the application has been assigned (BR-miniloan-031@v2).
+     * AC-miniloan-091 is explicit that the refusal happens here and not by hiding a button.
+     */
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<CancellationResponse> cancel(
+            @PathVariable UUID id,
+            @RequestBody(required = false) CancelRequest request,
+            HttpServletRequest httpRequest) {
+        String actorId = requireOfficerOrSupervisor(httpRequest);
+        String reason = request == null ? null : request.reason();
+        return ResponseEntity.ok(
+                CancellationResponse.from(cancellationService.cancel(id, reason, actorId)));
+    }
+
     private String requireLoanOfficer(
             HttpServletRequest httpRequest, Supplier<ForbiddenRoleException> refusal) {
         Object role = httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
-        if (!"ROLE-002".equals(role)) {
+        if (!LOAN_OFFICER.equals(role)) {
             throw refusal.get();
+        }
+        return (String) role;
+    }
+
+    /**
+     * Everyone else is refused here; which of the two admitted roles may act on THIS application is
+     * a question only the row can answer, and the service answers it.
+     */
+    private String requireOfficerOrSupervisor(HttpServletRequest httpRequest) {
+        Object role = httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
+        if (!LOAN_OFFICER.equals(role) && !SUPERVISOR.equals(role)) {
+            throw new CancelForbiddenRoleException();
         }
         return (String) role;
     }
@@ -199,7 +242,64 @@ public class LoanApplicationDecisionController {
                 .body(new ErrorResponse("DUPLICATE_REJECT", ex.getMessage()));
     }
 
+    @ExceptionHandler(CancelForbiddenRoleException.class)
+    public ResponseEntity<ErrorResponse> handleCancelForbiddenRole() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse(ONLY_LOAN_OFFICER_CODE, ONLY_DECIDER_CANCEL_MESSAGE));
+    }
+
+    @ExceptionHandler(LoanApplicationCancellationService.SupervisorOnlyException.class)
+    public ResponseEntity<ErrorResponse> handleSupervisorOnly(
+            LoanApplicationCancellationService.SupervisorOnlyException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("CANCEL_SUPERVISOR_ONLY", ex.getMessage()));
+    }
+
+    @ExceptionHandler(LoanApplicationCancellationService.AssignedOfficerOnlyException.class)
+    public ResponseEntity<ErrorResponse> handleAssignedOfficerOnly(
+            LoanApplicationCancellationService.AssignedOfficerOnlyException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("CANCEL_ASSIGNED_OFFICER_ONLY", ex.getMessage()));
+    }
+
+    @ExceptionHandler(LoanApplicationCancellationService.SupervisorScopeEndedException.class)
+    public ResponseEntity<ErrorResponse> handleSupervisorScopeEnded(
+            LoanApplicationCancellationService.SupervisorScopeEndedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("CANCEL_SUPERVISOR_SCOPE_ENDED", ex.getMessage()));
+    }
+
+    @ExceptionHandler(LoanApplication.NotCancellableException.class)
+    public ResponseEntity<ErrorResponse> handleNotCancellable(LoanApplication.NotCancellableException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse("APPLICATION_NOT_CANCELLABLE", ex.getMessage()));
+    }
+
+    /** AC-miniloan-068: turned down, and the application has not moved. */
+    @ExceptionHandler(LoanApplication.CancellationReasonRequiredException.class)
+    public ResponseEntity<ErrorResponse> handleCancelReasonRequired(
+            LoanApplication.CancellationReasonRequiredException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+                .body(new ErrorResponse("CANCELLATION_REASON_REQUIRED", ex.getMessage()));
+    }
+
+    @ExceptionHandler(LoanApplicationCancellationService.ApplicationNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCancelNotFound(
+            LoanApplicationCancellationService.ApplicationNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse("APPLICATION_NOT_FOUND", ex.getMessage()));
+    }
+
+    @ExceptionHandler(LoanApplicationCancellationService.DuplicateCommandException.class)
+    public ResponseEntity<ErrorResponse> handleCancelDuplicate(
+            LoanApplicationCancellationService.DuplicateCommandException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse("DUPLICATE_CANCEL", ex.getMessage()));
+    }
+
     static class ForbiddenRoleException extends RuntimeException {}
+
+    static class CancelForbiddenRoleException extends ForbiddenRoleException {}
 
     static class RejectForbiddenRoleException extends ForbiddenRoleException {}
 
@@ -211,6 +311,22 @@ public class LoanApplicationDecisionController {
 
     /** API-008 declares no body in interfaces.json; BR-miniloan-013@v1 is what makes one required. */
     public record RejectRequest(String reason) {}
+
+    /** Likewise API-009 — BR-miniloan-047@v1 is what makes the reason required. */
+    public record CancelRequest(String reason) {}
+
+    public record CancellationResponse(
+            UUID id, String status, String cancellationReason, String cancelledBy, Instant cancelledAt) {
+
+        static CancellationResponse from(LoanApplication application) {
+            return new CancellationResponse(
+                    application.getId(),
+                    application.getStatus().name(),
+                    application.getCancellationReason(),
+                    application.getCancelledBy(),
+                    application.getCancelledAt());
+        }
+    }
 
     public record RejectionResponse(
             UUID id, String status, String rejectionReason, String rejectedBy, Instant rejectedAt) {

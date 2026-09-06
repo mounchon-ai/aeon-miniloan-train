@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.miniloan.controller.LoanApplicationDecisionController.ApproveRequest;
+import com.miniloan.controller.LoanApplicationDecisionController.CancelRequest;
 import com.miniloan.controller.LoanApplicationDecisionController.RejectRequest;
+import com.miniloan.service.LoanApplicationCancellationService;
 import com.miniloan.domain.LoanApplication;
 import com.miniloan.repository.ApplicationAssignmentRepository;
 import com.miniloan.repository.CreditAssessmentRepository;
@@ -34,6 +36,7 @@ class LoanApplicationDecisionControllerTest {
     private static final String OFFICER = "ROLE-002";
     private static final String SUPERVISOR = "ROLE-003";
     private static final String REASON = "ภาระหนี้ต่อรายได้สูงเกินเกณฑ์";
+    private static final String CANCEL_REASON = "ผู้สมัครแจ้งขอถอนเรื่อง";
 
     @Autowired private LoanApplicationDecisionController controller;
     @Autowired private ApplicationAssignmentService assignmentService;
@@ -56,6 +59,21 @@ class LoanApplicationDecisionControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.setAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE, role);
         return request;
+    }
+
+    private UUID unassigned() {
+        return draftService
+                .saveNewDraft(
+                        APPLICANT,
+                        new DraftFields(
+                                "ทดสอบ ผู้สมัคร",
+                                35,
+                                new BigDecimal("30000.00"),
+                                24,
+                                new BigDecimal("1000.00"),
+                                new BigDecimal("100000.00"),
+                                12))
+                .getId();
     }
 
     private UUID assignedTo(String officer) {
@@ -241,6 +259,110 @@ class LoanApplicationDecisionControllerTest {
         var refusal = controller.handleRejectAssignedToAnother();
         assertThat(refusal.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
         assertThat(refusal.getBody().message()).isEqualTo("ปฏิเสธไม่ได้ — ใบสมัครนี้มอบหมายให้ผู้พิจารณาคนอื่น");
+        assertThat(applications.findById(id)).get()
+                .extracting(LoanApplication::getStatus)
+                .isEqualTo(LoanApplication.Status.UnderReview);
+    }
+
+    /** AC-miniloan-090 through the route alone — the supervisor's half of API-009. */
+    @Test
+    void theSupervisorMayCancelAnUnassignedApplicationThroughTheRouteAlone() {
+        UUID id = unassigned();
+
+        var response = controller.cancel(id, new CancelRequest(CANCEL_REASON), as(SUPERVISOR));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().status()).isEqualTo("Cancelled");
+        assertThat(response.getBody().cancellationReason()).isEqualTo(CANCEL_REASON);
+        assertThat(response.getBody().cancelledBy()).isEqualTo(SUPERVISOR);
+        assertThat(response.getBody().cancelledAt()).isNotNull();
+    }
+
+    /** AC-miniloan-067 through the route alone — the assigned officer's half of the same API. */
+    @Test
+    void theAssignedOfficerMayCancelThroughTheRouteAlone() {
+        UUID id = assignedTo(OFFICER);
+
+        var response = controller.cancel(id, new CancelRequest(CANCEL_REASON), as(OFFICER));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().status()).isEqualTo("Cancelled");
+        assertThat(response.getBody().cancelledBy()).isEqualTo(OFFICER);
+    }
+
+    /**
+     * AC-miniloan-091 names both doors — "ทั้งจากหน้าจอและด้วยการเรียก API ตรง" — and says the
+     * refusal happens at the API rather than by not drawing a button (BR-miniloan-025@v1).
+     */
+    @Test
+    void aLoanOfficerCallingCancelOnAnUnassignedApplicationIsRefusedByTheApi() {
+        UUID id = unassigned();
+
+        assertThatThrownBy(() -> controller.cancel(id, new CancelRequest(CANCEL_REASON), as(OFFICER)))
+                .isInstanceOf(LoanApplicationCancellationService.SupervisorOnlyException.class);
+
+        var refusal =
+                controller.handleSupervisorOnly(
+                        new LoanApplicationCancellationService.SupervisorOnlyException());
+        assertThat(refusal.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(refusal.getBody().message())
+                .isEqualTo("ยกเลิกใบสมัครที่ยังไม่ถูกมอบหมายได้เฉพาะหัวหน้าเจ้าหน้าที่สินเชื่อ");
+        assertThat(applications.findById(id)).get()
+                .extracting(LoanApplication::getStatus)
+                .isEqualTo(LoanApplication.Status.Draft);
+    }
+
+    /** AC-miniloan-092 at the route: the right moved, and the API is where that is enforced. */
+    @Test
+    void theSupervisorCallingCancelOnAnAssignedApplicationIsRefusedByTheApi() {
+        UUID id = assignedTo(OFFICER);
+
+        assertThatThrownBy(() -> controller.cancel(id, new CancelRequest(CANCEL_REASON), as(SUPERVISOR)))
+                .isInstanceOf(LoanApplicationCancellationService.AssignedOfficerOnlyException.class);
+
+        var refusal =
+                controller.handleAssignedOfficerOnly(
+                        new LoanApplicationCancellationService.AssignedOfficerOnlyException());
+        assertThat(refusal.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(refusal.getBody().message())
+                .isEqualTo("ใบสมัครนี้ถูกมอบหมายแล้ว ยกเลิกได้เฉพาะเจ้าหน้าที่ที่รับผิดชอบใบนี้");
+        assertThat(applications.findById(id)).get()
+                .extracting(LoanApplication::getStatus)
+                .isEqualTo(LoanApplication.Status.UnderReview);
+    }
+
+    /** rbac defaults to deny — the applicant and the two back-office roles never reach the service. */
+    @Test
+    void noRoleOutsideTheTwoMayCallCancel() {
+        UUID id = assignedTo(OFFICER);
+
+        for (String role : new String[] {APPLICANT, "ROLE-004", "ROLE-005"}) {
+            assertThatThrownBy(() -> controller.cancel(id, new CancelRequest(CANCEL_REASON), as(role)))
+                    .isInstanceOf(LoanApplicationDecisionController.CancelForbiddenRoleException.class);
+        }
+
+        var refusal = controller.handleCancelForbiddenRole();
+        assertThat(refusal.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(refusal.getBody().message()).isEqualTo("ไม่มีสิทธิ์ยกเลิกใบสมัคร");
+        assertThat(applications.findById(id)).get()
+                .extracting(LoanApplication::getStatus)
+                .isEqualTo(LoanApplication.Status.UnderReview);
+    }
+
+    /** AC-miniloan-068 at the API, body or no body. */
+    @Test
+    void cancellingWithNoReasonIsRefusedByTheApi() {
+        UUID id = assignedTo(OFFICER);
+
+        assertThatThrownBy(() -> controller.cancel(id, new CancelRequest("   "), as(OFFICER)))
+                .isInstanceOf(LoanApplication.CancellationReasonRequiredException.class);
+        assertThatThrownBy(() -> controller.cancel(id, null, as(OFFICER)))
+                .isInstanceOf(LoanApplication.CancellationReasonRequiredException.class);
+
+        var refusal =
+                controller.handleCancelReasonRequired(new LoanApplication.CancellationReasonRequiredException());
+        assertThat(refusal.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(refusal.getBody().message()).isEqualTo("ยกเลิกไม่ได้ — ต้องระบุเหตุผลการยกเลิก");
         assertThat(applications.findById(id)).get()
                 .extracting(LoanApplication::getStatus)
                 .isEqualTo(LoanApplication.Status.UnderReview);

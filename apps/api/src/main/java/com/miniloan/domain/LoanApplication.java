@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -139,6 +140,20 @@ public class LoanApplication {
     private String rejectedBy;
 
     private Instant rejectedAt;
+
+    /**
+     * BR-miniloan-047@v1 — the same standard the rejection reason is held to, said so in the rule
+     * itself. ENT-002 enumerates {@code cancellationReason} and {@code cancelledBy} but no
+     * {@code cancelledAt}, while AC-miniloan-067 asks the page for "ยกเลิกโดย ก. เมื่อ {วันที่เวลา}"
+     * and AC-miniloan-090 requires the actor and the time be recorded per NFR-miniloan-002. The
+     * moment is kept here for the same reason the other two outcomes keep theirs; the enumeration
+     * gap across all three terminal transitions is raised for design as one datamodel note.
+     */
+    private String cancellationReason;
+
+    private String cancelledBy;
+
+    private Instant cancelledAt;
 
     protected LoanApplication() {
         // JPA
@@ -390,6 +405,72 @@ public class LoanApplication {
         }
     }
 
+    /**
+     * Draft · Submitted · UnderReview · Approved → Cancelled (STM-miniloan-001 ·
+     * BR-miniloan-047@v1). WHO may take this edge is not a question the aggregate can answer — it
+     * depends on whether the application has been assigned, and that is BR-miniloan-031@v2's split
+     * between UC-miniloan-007 and UC-miniloan-008 (ACL-006 · ACL-007), settled by the caller. What
+     * is settled here is the state, the reason and the record.
+     *
+     * <p>The reason is checked before anything is written, for AC-miniloan-068's reason — the same
+     * as {@link #reject}: the criterion requires the application to still read its old status after
+     * a blank one is turned down, and a rollback is not a guard.
+     */
+    public void cancel(String reason, String cancelledBy) {
+        if (!CANCELLABLE.contains(status)) {
+            throw new NotCancellableException(this);
+        }
+        String stated = reason == null ? "" : reason.trim();
+        if (stated.isEmpty()) {
+            throw new CancellationReasonRequiredException();
+        }
+        this.cancellationReason = stated;
+        this.cancelledBy = cancelledBy;
+        Instant now = Instant.now();
+        this.cancelledAt = now;
+        this.status = Status.Cancelled;
+        this.updatedAt = now;
+    }
+
+    /** The four states STM-miniloan-001 draws an edge to Cancelled from, and no others. */
+    public static final Set<Status> CANCELLABLE =
+            Set.of(Status.Draft, Status.Submitted, Status.UnderReview, Status.Approved);
+
+    /** AC-miniloan-068's wording, to the character. */
+    public static class CancellationReasonRequiredException extends RuntimeException {
+        public CancellationReasonRequiredException() {
+            super("ยกเลิกไม่ได้ — ต้องระบุเหตุผลการยกเลิก");
+        }
+    }
+
+    /**
+     * Every state with no edge to Cancelled, each told apart because they are different situations
+     * to be in. Disbursed is the one AC-miniloan-048 measures: the loan account already exists, so
+     * the answer is not "no" but "close the account instead".
+     */
+    public static class NotCancellableException extends RuntimeException {
+        private final Status status;
+
+        public NotCancellableException(LoanApplication application) {
+            super(messageFor(application));
+            this.status = application.status;
+        }
+
+        private static String messageFor(LoanApplication application) {
+            return switch (application.status) {
+                case Disbursed ->
+                        "ยกเลิกใบสมัครที่เบิกจ่ายแล้วไม่ได้ — ใบนี้มีบัญชีสินเชื่อเปิดอยู่ ให้ดำเนินการทางปิดบัญชีแทน";
+                case Cancelled -> "ยกเลิกไม่ได้ — ใบสมัครนี้ถูกยกเลิกไปแล้วเมื่อ " + application.cancelledAt;
+                case Rejected -> "ยกเลิกไม่ได้ — ใบสมัครนี้ถูกปฏิเสธไปแล้ว";
+                default -> "ยกเลิกไม่ได้ — ใบสมัครนี้อยู่สถานะ " + application.status;
+            };
+        }
+
+        public Status getStatus() {
+            return status;
+        }
+    }
+
     public static class NotAssignableException extends RuntimeException {
         public NotAssignableException(Status status) {
             super("มอบหมายไม่ได้ — ใบสมัครนี้อยู่สถานะ " + status + " ไม่ใช่ UnderReview");
@@ -523,5 +604,17 @@ public class LoanApplication {
 
     public Instant getRejectedAt() {
         return rejectedAt;
+    }
+
+    public String getCancellationReason() {
+        return cancellationReason;
+    }
+
+    public String getCancelledBy() {
+        return cancelledBy;
+    }
+
+    public Instant getCancelledAt() {
+        return cancelledAt;
     }
 }

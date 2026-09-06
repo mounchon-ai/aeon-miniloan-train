@@ -200,7 +200,9 @@ public class LoanApplicationController {
      * AC-miniloan-049's "อนุมัติโดย ก. เมื่อ …" can be rendered from what API-004 returns, and
      * {@code rejectionReason} / {@code rejectedBy} / {@code rejectedAt} travel for the same reason
      * on the other outcome — AC-miniloan-055's "ปฏิเสธโดย … เมื่อ … · เหตุผล: …" is a line the web
-     * renders and never assembles from anything it worked out itself (REQ-miniloan-006).
+     * renders and never assembles from anything it worked out itself (REQ-miniloan-006). The
+     * cancellation trio rides along for AC-miniloan-067's "เปิดดูย้อนหลังได้" — the reason is kept
+     * with the application and readable afterwards, not only echoed by the command that set it.
      */
     public record LoanApplicationResponse(
             UUID id,
@@ -218,6 +220,9 @@ public class LoanApplicationController {
             String rejectionReason,
             String rejectedBy,
             Instant rejectedAt,
+            String cancellationReason,
+            String cancelledBy,
+            Instant cancelledAt,
             Instant createdAt,
             Instant updatedAt) {
 
@@ -238,6 +243,9 @@ public class LoanApplicationController {
                     application.getRejectionReason(),
                     application.getRejectedBy(),
                     application.getRejectedAt(),
+                    application.getCancellationReason(),
+                    application.getCancelledBy(),
+                    application.getCancelledAt(),
                     application.getCreatedAt(),
                     application.getUpdatedAt());
         }
