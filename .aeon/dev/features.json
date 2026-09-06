@@ -1267,7 +1267,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationDecisionController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "c3a2dedfa0373112bf2f261fff73647abc18aff1"
+      ]
     },
     {
       "id": "FE-miniloan-010",
