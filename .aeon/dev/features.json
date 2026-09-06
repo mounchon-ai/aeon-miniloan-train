@@ -2120,7 +2120,58 @@
           "hash": "sha256:7c26e1458b79466d1fa5d88d5bcae669a7a4e578c646b08a686db4fad5fd36b8"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 274, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (23 new on top of the 251 FE-001..014+017 had: ClosedAccountAdjustmentServiceTest 2 + its nested FilingARequest 4, WithNoApproverRoleSet 3, WhoMayFileIt 4, TheRequestsOwnLifeCycle 3 -- counted separately by surefire -- and ClosedAccountAdjustmentControllerTest 7). Round 1 was RED with 1 failure and build.iterations records it: FilingARequest.filingTouchesNothingOnTheAccount compared closedAt nanosecond-exact (expected 2026-09-06T13:35:25.061221586Z, was ...061222Z) -- H2 stores an Instant at microsecond precision and rounds on the way in, so the assertion was measuring the storage engine rather than the rule. Fixed as an assertion written wrong (one of the three things a repair round may touch): isCloseTo(closedAt, within(1, MILLIS)), which a closedAt that had actually moved would still fail. No production code changed between the two rounds, and no golden row or health check was touched. ContractOpenApiTest (FE-miniloan-003) proves the springdoc MECHANISM against a test-only fixture controller and enumerates no real route, so ClosedAccountAdjustmentControllerTest is what proves API-016 and the two declared refusal routes exist, over real HTTP through AuthTokenFilter. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: mvn is not on PATH, so it ran in the container FE-miniloan-010..014/017 already recorded, against the same volume-cached repo.",
+            "at": "2026-09-06T13:36:31Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57947820 bytes",
+            "at": "2026-09-06T13:36:54Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-06"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/ClosedAccountAdjustmentController.java",
+          "apps/api/src/main/java/com/miniloan/service/ClosedAccountAdjustmentService.java",
+          "apps/api/src/main/java/com/miniloan/domain/ClosedAccountAdjustment.java",
+          "apps/api/src/main/java/com/miniloan/repository/ClosedAccountAdjustmentRepository.java",
+          "apps/api/src/test/java/com/miniloan/service/ClosedAccountAdjustmentServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/controller/ClosedAccountAdjustmentControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/ClosedAccountAdjustmentServiceTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/controller/ClosedAccountAdjustmentControllerTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-016",
+            "route": "POST /loan-accounts/{id}/adjustments",
+            "file": "apps/api/src/main/java/com/miniloan/controller/ClosedAccountAdjustmentController.java"
+          }
+        ]
+      },
+      "commits": [
+        "1687dd70cfd6dcd3a1536076a095fc7a20e7bee5"
+      ]
     },
     {
       "id": "FE-miniloan-016",
@@ -3421,8 +3472,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 15,
-      "draft": 14
+      "validated": 16,
+      "draft": 13
     },
     "by_origin": {
       "new": 28,
