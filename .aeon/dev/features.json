@@ -2526,7 +2526,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/DashboardController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "b650d3c192eb084d90c6ff1772ca8f968856661e"
+      ]
     },
     {
       "id": "FE-miniloan-019",
