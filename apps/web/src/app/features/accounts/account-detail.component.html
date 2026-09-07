@@ -1,0 +1,130 @@
+<!--
+  Zones from screens.json UI-miniloan-012, in the order design lists them: account-summary,
+  schedule-table, payment-form, adjustment-form. Every data-testid is mock's, copied verbatim
+  (gate 63).
+
+  There is no "ปิดบัญชี" button and no "ดูฉบับก่อนหน้า" control here on purpose: screens.json
+  declares four actions on this screen and mock minted four action ids, none of which is either.
+  See the component's note and the cards raised for AC-miniloan-006 and AC-miniloan-008.
+-->
+<section class="account-detail">
+  @if (loading()) {
+    <p class="account-detail__spinner" aria-busy="true">กำลังโหลดบัญชี…</p>
+  } @else if (notAllowed(); as refusal) {
+    <p class="account-detail__unauthorized">{{ refusal }}</p>
+  } @else if (failed(); as problem) {
+    <div class="account-detail__error">
+      <p>{{ problem }}</p>
+      <button type="button" (click)="load()">ลองใหม่</button>
+    </div>
+  } @else if (account(); as loaded) {
+    <!-- zone: account-summary -->
+    <div class="account-detail__summary">
+      <h1>รายละเอียดบัญชีสินเชื่อ</h1>
+
+      <dl>
+        <dt>เงินต้น</dt>
+        <dd data-testid="ui-miniloan-012-ent-006-principal-amount">{{ loaded.principalAmount }}</dd>
+
+        <dt>เงินต้นคงเหลือ</dt>
+        <dd data-testid="ui-miniloan-012-ent-006-outstanding-principal">
+          {{ loaded.outstandingPrincipal }}
+        </dd>
+
+        <dt>จำนวนงวด</dt>
+        <dd data-testid="ui-miniloan-012-ent-006-term-months">{{ loaded.termMonths }}</dd>
+
+        <dt>สถานะ</dt>
+        <dd data-testid="ui-miniloan-012-ent-006-status">{{ statusLabel(loaded.status) }}</dd>
+
+        <dt>วันที่เบิกจ่าย</dt>
+        <dd data-testid="ui-miniloan-012-ent-006-disbursed-at">{{ loaded.disbursedAt }}</dd>
+
+        <dt>วันที่ปิดบัญชี</dt>
+        <dd data-testid="ui-miniloan-012-ent-006-closed-at">{{ loaded.closedAt ?? '—' }}</dd>
+      </dl>
+
+      <!-- AC-miniloan-004 · AC-miniloan-005 — the wording follows closeReason, which is the API's. -->
+      @if (closingSentence(); as closing) {
+        <p class="account-detail__closed">{{ closing }}</p>
+      }
+
+      <button
+        data-testid="ui-miniloan-012-reschedule"
+        type="button"
+        [disabled]="rescheduling()"
+        (click)="reschedule()"
+      >
+        {{ rescheduling() ? 'กำลังออกฉบับใหม่…' : 'ออกตารางผ่อนฉบับใหม่ทับ' }}
+      </button>
+
+      @if (rescheduleFailed(); as refusal) {
+        <p class="account-detail__error">{{ refusal }}</p>
+      }
+    </div>
+
+    <!-- zone: schedule-table -->
+    <div class="account-detail__schedule">
+      <h2>ตารางผ่อน</h2>
+
+      @if (schedule(); as table) {
+        <!-- AC-miniloan-008 · AC-miniloan-011: exactly one revision is ever marked "ใช้อยู่". -->
+        <p>ฉบับที่ {{ table.revisionNumber }} (ใช้อยู่) — ออกเมื่อ {{ table.issuedAt }}</p>
+
+        @if (revisions().length > 1) {
+          <ul>
+            @for (revision of revisions(); track revision.revisionNumber) {
+              <li>
+                @if (revision.current) {
+                  ฉบับที่ {{ revision.revisionNumber }} (ใช้อยู่)
+                } @else {
+                  ฉบับที่ {{ revision.revisionNumber }} — ถูกแทนที่เมื่อ {{ revision.supersededAt }}
+                }
+              </li>
+            }
+          </ul>
+        }
+
+        <table class="account-detail__table">
+          <thead>
+            <tr>
+              <th scope="col">งวดที่</th>
+              <th scope="col">ครบกำหนด</th>
+              <th scope="col">ยอดงวด</th>
+              <th scope="col">สถานะ</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of table.installments; track row.number) {
+              <tr>
+                <td data-testid="ui-miniloan-012-ent-008-installment-number">{{ row.number }}</td>
+                <td data-testid="ui-miniloan-012-ent-008-due-date">{{ row.dueDate }}</td>
+                <td data-testid="ui-miniloan-012-ent-008-emi-amount">{{ row.emiAmount }}</td>
+                <td data-testid="ui-miniloan-012-ent-008-status">{{ installmentLabel(row) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else if (scheduleFailed(); as problem) {
+        <p class="account-detail__error">{{ problem }}</p>
+      }
+    </div>
+
+    <!-- zone: payment-form -->
+    <app-record-payment
+      [accountId]="id()"
+      [nextDueInstallment]="nextDueInstallment()"
+      (recorded)="load()"
+    />
+
+    <!--
+      zone: adjustment-form. Rendered only for a Closed account, which is ACL-015's own declared
+      condition (state: ["Closed"]) and AC-miniloan-077's "หน้าบัญชีที่ปิดแล้ว" — not a rule invented
+      here. The refusals are still the API's: AC-miniloan-080 and AC-miniloan-081 both require the
+      unset-approver refusal to come back from the server, and this form always sends what it holds.
+    -->
+    @if (closed()) {
+      <app-submit-adjustment [accountId]="id()" (submitted)="load()" />
+    }
+  }
+</section>

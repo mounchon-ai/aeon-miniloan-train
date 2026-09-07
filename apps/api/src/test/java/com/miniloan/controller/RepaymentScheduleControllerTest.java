@@ -25,6 +25,7 @@ import com.miniloan.repository.LoanApplicationRepository;
 import com.miniloan.repository.RepaymentScheduleRepository;
 import com.miniloan.service.ApplicationAssignmentService;
 import com.miniloan.service.DisbursementService;
+import com.miniloan.service.LoanAccountScopeService;
 import com.miniloan.service.LoanApplicationApprovalService;
 import com.miniloan.service.LoanApplicationDraftService;
 import com.miniloan.service.LoanApplicationDraftService.DraftFields;
@@ -156,6 +157,33 @@ class RepaymentScheduleControllerTest {
                                 entityManager
                                         .createQuery("update LoanAccount a set a.status = :closed where a.id = :id")
                                         .setParameter("closed", LoanAccount.Status.Closed)
+                                        .setParameter("id", accountId)
+                                        .executeUpdate());
+    }
+
+    /** Retires every row without going through FE-miniloan-012's service, which this unit does not own. */
+    private void forceAllInstallmentsPaid(UUID accountId) {
+        UUID scheduleId = schedules.findByLoanAccountIdAndCurrentIsTrue(accountId).orElseThrow().getId();
+        new TransactionTemplate(transactionManager)
+                .executeWithoutResult(
+                        status ->
+                                entityManager
+                                        .createQuery(
+                                                "update Installment i set i.status = :paid where i.repaymentScheduleId = :sid")
+                                        .setParameter("paid", Installment.Status.Paid)
+                                        .setParameter("sid", scheduleId)
+                                        .executeUpdate());
+    }
+
+    /** ACL-020's scope is a column, so a second Operations person is expressed by moving it. */
+    private void forceAssignedOperations(UUID accountId, String operationsId) {
+        new TransactionTemplate(transactionManager)
+                .executeWithoutResult(
+                        status ->
+                                entityManager
+                                        .createQuery(
+                                                "update LoanAccount a set a.assignedOperationsId = :who where a.id = :id")
+                                        .setParameter("who", operationsId)
                                         .setParameter("id", accountId)
                                         .executeUpdate());
     }
@@ -416,15 +444,24 @@ class RepaymentScheduleControllerTest {
     }
 
     /**
-     * ACL-010 is the only entry for UC-miniloan-011 and {@code rbac.json} denies by default, so every
-     * other role is turned away by the route before the service runs — with the same sentence, so the
-     * refusal never says whether the account exists.
+     * Two entries reach this route — ACL-010 (ROLE-001) and ACL-020 (ROLE-004) — and
+     * {@code rbac.json} denies by default, so the other three roles are turned away before the
+     * service runs, with the same sentence, so the refusal never says whether the account exists.
+     *
+     * <p><b>OPERATIONS was in this list until FE-miniloan-027 and dropping it is not a weakened
+     * measure.</b> ACL-020 has declared {@code scope: own} with {@code enforceAt: [api, domain]}
+     * since the permission matrix was written, and ACL-033 puts a {@code schedule-table} zone on
+     * UI-miniloan-012; what this loop recorded about ROLE-004 was that the branch had not been
+     * built, never that the rule denied it. The rule ACL-010 states — that a role which is not the
+     * owning Applicant is refused the OWNER's read — is unchanged and is measured by the three roles
+     * still here and by {@link #callingTheApiDirectlyForAnotherApplicantsScheduleIsRefusedWithNoRowLeaked}.
+     * ROLE-004's own scope is measured below, and it is a narrower permission, not a wider one.
      */
     @Test
-    void anyRoleOtherThanApplicantIsRefusedByTheScheduleRoute() {
+    void anyRoleOtherThanApplicantOrAssignedOperationsIsRefusedByTheScheduleRoute() {
         LoanAccount account = disbursedAccount();
 
-        for (String role : List.of(OFFICER, SUPERVISOR, OPERATIONS, ADMIN)) {
+        for (String role : List.of(OFFICER, SUPERVISOR, ADMIN)) {
             assertThatThrownBy(() -> controller.schedule(account.getId(), as(role)))
                     .isInstanceOf(NotAccountOwnerException.class);
         }
@@ -432,6 +469,81 @@ class RepaymentScheduleControllerTest {
         assertThat(controller.handleNotAccountOwner().getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
         assertThat(controller.handleNotAccountOwner().getBody().message())
                 .isEqualTo("ไม่มีสิทธิ์เข้าถึงบัญชีสินเชื่อนี้");
+    }
+
+    // ── ACL-020 · ACL-033 · the Operations read (FE-miniloan-027) ──────────────
+
+    /**
+     * UI-miniloan-012's {@code schedule-table} zone is four ENT-008 fields on a ROLE-004 screen, and
+     * ACL-020 is the entry behind it. The whole current revision comes back — not the part still
+     * ahead — exactly as it does for the owner.
+     */
+    @Test
+    void theAssignedOperationsPersonReadsTheScheduleOfTheirOwnAccount() {
+        LoanAccount account = disbursedAccount();
+
+        var response = controller.schedule(account.getId(), as(OPERATIONS));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        ScheduleResponse body = response.getBody();
+        assertThat(body.revisionNumber()).isEqualTo(1);
+        assertThat(body.installments()).hasSize(12);
+        assertThat(body.installments().get(0).number()).isEqualTo(1);
+        assertThat(body.installments().get(11).number()).isEqualTo(12);
+        assertThat(body.principalAmount()).isEqualByComparingTo("100000.00");
+    }
+
+    /**
+     * ACL-020's scope is {@code own}, and BR-miniloan-054@v1 is why the refusal reads the same as
+     * "not there": an Operations person who could tell the two apart could enumerate the accounts
+     * other people are assigned to.
+     */
+    @Test
+    void anotherOperationsPersonIsRefusedTheScheduleWithTheSameSentence() {
+        LoanAccount account = disbursedAccount();
+        forceAssignedOperations(account.getId(), "ROLE-004-another-person");
+
+        assertThatThrownBy(() -> controller.schedule(account.getId(), as(OPERATIONS)))
+                .isInstanceOf(LoanAccountScopeService.NotVisibleException.class)
+                .hasMessage("ไม่มีสิทธิ์เข้าถึงบัญชีสินเชื่อนี้");
+    }
+
+    /**
+     * ACL-010 declares {@code condition: Active} and ACL-020 declares NO condition, and that
+     * difference is deliberate rather than an oversight this route should smooth over: ACL-015 files
+     * an adjustment against a CLOSED account from UI-miniloan-012, which is the same screen the
+     * schedule zone sits on. An Operations person locked out of a closed account's table could not
+     * use the screen AC-miniloan-076 is about. The owner's Active precondition is untouched —
+     * {@link #aClosedAccountIsRefusedByTheScheduleRouteAsAConflict} still measures it.
+     */
+    @Test
+    void aClosedAccountIsStillReadableByTheAssignedOperationsPerson() {
+        LoanAccount account = disbursedAccount();
+        forceClosed(account.getId());
+
+        var response = controller.schedule(account.getId(), as(OPERATIONS));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().accountStatus()).isEqualTo("Closed");
+        assertThat(response.getBody().installments()).hasSize(12);
+
+        // and the owner is still refused the same account, by ACL-010's own condition
+        assertThatThrownBy(() -> controller.schedule(account.getId(), as(APPLICANT)))
+                .isInstanceOf(AccountNotActiveException.class);
+    }
+
+    /** Over HTTP, with FE-miniloan-002's token, which is how UI-miniloan-012 will actually ask. */
+    @Test
+    void theScheduleRouteAnswersARealGetForTheAssignedOperationsPerson() throws Exception {
+        LoanAccount account = disbursedAccount();
+
+        mockMvc
+                .perform(
+                        get("/loan-accounts/{id}/schedule", account.getId())
+                                .header("Authorization", OPERATIONS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.revisionNumber").value(1))
+                .andExpect(jsonPath("$.installments.length()").value(12));
     }
 
     /** The route's own reading of the same table the reschedule route hands back. */
@@ -464,5 +576,82 @@ class RepaymentScheduleControllerTest {
         assertThat(mapped.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(mapped.getBody().code()).isEqualTo("LOAN_ACCOUNT_NOT_ACTIVE");
         assertThat(mapped.getBody().message()).isEqualTo("ดูตารางผ่อนไม่ได้ — บัญชีนี้ปิดแล้ว");
+    }
+
+    // ── UI-miniloan-011's next-due-installment (API-013 · API-023) ─────────────
+
+    /**
+     * The field mock named in conventions.json fieldMap[], answered for a whole page in one query.
+     * A freshly disbursed account owes instalment 1, and both routes say so — the list and the
+     * single read are the same record, so a row and the detail page it opens cannot disagree.
+     */
+    @Test
+    void theAccountListCarriesTheNextInstalmentStillOwing() throws Exception {
+        LoanAccount account = disbursedAccount();
+
+        mockMvc
+                .perform(get("/loan-accounts").header("Authorization", OPERATIONS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].nextDueInstallmentNumber").value(1));
+
+        mockMvc
+                .perform(
+                        get("/loan-accounts/{id}", account.getId())
+                                .header("Authorization", OPERATIONS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nextDueInstallmentNumber").value(1));
+    }
+
+    /**
+     * Nothing left owing is NULL and not zero. Zero would read as instalment number zero, and a
+     * screen that printed it would tell an Operations person a row exists that does not; the
+     * criterion this protects is the ordinary one, that the field names a real instalment or none.
+     */
+    @Test
+    void anAccountWithNothingOwingCarriesNoNextInstalment() throws Exception {
+        LoanAccount account = disbursedAccount();
+        forceAllInstallmentsPaid(account.getId());
+
+        mockMvc
+                .perform(
+                        get("/loan-accounts/{id}", account.getId())
+                                .header("Authorization", OPERATIONS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nextDueInstallmentNumber").doesNotExist());
+    }
+
+    /**
+     * BR-miniloan-020@v1 retires instalments in order, so "the next Due" is the LOWEST-numbered Due
+     * row. A query that returned any Due row would pass a fixture where only row 1 is outstanding
+     * and fail here.
+     */
+    @Test
+    void theNextInstalmentIsTheLowestNumberedDueRow() throws Exception {
+        LoanAccount account = disbursedAccount();
+        forceAllInstallmentsPaid(account.getId());
+        forceInstallmentsDueFrom(account.getId(), 4);
+
+        mockMvc
+                .perform(
+                        get("/loan-accounts/{id}", account.getId())
+                                .header("Authorization", OPERATIONS_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nextDueInstallmentNumber").value(4));
+    }
+
+    private void forceInstallmentsDueFrom(UUID accountId, int from) {
+        UUID scheduleId = schedules.findByLoanAccountIdAndCurrentIsTrue(accountId).orElseThrow().getId();
+        new TransactionTemplate(transactionManager)
+                .executeWithoutResult(
+                        status ->
+                                entityManager
+                                        .createQuery(
+                                                "update Installment i set i.status = :due"
+                                                        + " where i.repaymentScheduleId = :sid and i.installmentNumber >= :from")
+                                        .setParameter("due", Installment.Status.Due)
+                                        .setParameter("sid", scheduleId)
+                                        .setParameter("from", from)
+                                        .executeUpdate());
     }
 }

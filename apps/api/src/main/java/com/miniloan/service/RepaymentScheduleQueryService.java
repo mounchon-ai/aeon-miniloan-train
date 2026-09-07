@@ -48,16 +48,19 @@ public class RepaymentScheduleQueryService {
     private final LoanApplicationRepository applications;
     private final RepaymentScheduleRepository schedules;
     private final InstallmentRepository installments;
+    private final LoanAccountScopeService scope;
 
     public RepaymentScheduleQueryService(
             LoanAccountRepository accounts,
             LoanApplicationRepository applications,
             RepaymentScheduleRepository schedules,
-            InstallmentRepository installments) {
+            InstallmentRepository installments,
+            LoanAccountScopeService scope) {
         this.accounts = accounts;
         this.applications = applications;
         this.schedules = schedules;
         this.installments = installments;
+        this.scope = scope;
     }
 
     public static class LoanAccountNotFoundException extends RuntimeException {
@@ -113,6 +116,38 @@ public class RepaymentScheduleQueryService {
         if (account.getStatus() != LoanAccount.Status.Active) {
             throw new AccountNotActiveException();
         }
+
+        RepaymentSchedule current =
+                schedules
+                        .findByLoanAccountIdAndCurrentIsTrue(loanAccountId)
+                        .orElseThrow(() -> new NoCurrentScheduleException(loanAccountId));
+
+        return new ScheduleView(
+                account,
+                current,
+                installments.findByRepaymentScheduleIdOrderByInstallmentNumberAsc(current.getId()));
+    }
+
+    /**
+     * ACL-020 · ACL-033 — the Operations person reads the schedule of an account assigned to them
+     * (FE-miniloan-027).
+     *
+     * <p><b>Why a second entry point rather than a role added to {@link #view}.</b> The two are
+     * different scopes answering to different entries. {@code view} is ACL-010: the Applicant who
+     * owns the account, and it keeps its {@code Active} precondition because ACL-010 declares one.
+     * This one is ACL-020's "ดูและดำเนินการกับบัญชีสินเชื่อที่ตนถูก assign", which declares NO
+     * condition — and UI-miniloan-012 is where a Closed account's adjustment is filed (ACL-015), so
+     * an Operations person who could not open a Closed account's table could not use the screen the
+     * criterion is about. Adding the Active check here would be inventing a condition design did not
+     * write; adding ROLE-004 to {@code view} would delete one design did.
+     *
+     * <p>The refusal is {@link LoanAccountScopeService.NotVisibleException} — the one sentence that
+     * covers "not yours", "no scope" and "not there" alike, so an Operations caller cannot tell an
+     * account that exists from one that does not, which is the whole of BR-miniloan-054@v1.
+     */
+    @Transactional(readOnly = true)
+    public ScheduleView viewAsAssignedOperations(UUID loanAccountId, String operationsId) {
+        LoanAccount account = scope.visibleTo(operationsId, loanAccountId);
 
         RepaymentSchedule current =
                 schedules

@@ -1,0 +1,48 @@
+<!--
+  Zone from screens.json UI-miniloan-012: payment-form — one capture field, two actions.
+  Every data-testid is mock's, copied verbatim (gate 63).
+
+  There is no instalment picker here on purpose: design declares ONE field in this zone and mock
+  minted one field id. The instalment sent is the earliest Due row of the schedule the page already
+  holds, which is what ACL-011's and ACL-012's own condition names. See the component's note.
+-->
+<section class="payment-form">
+  <h2>บันทึกการชำระ</h2>
+
+  <label for="payment-amount">ยอดที่ชำระ</label>
+  <input
+    id="payment-amount"
+    data-testid="ui-miniloan-012-ent-009-amount"
+    type="text"
+    inputmode="decimal"
+    [formControl]="amount"
+  />
+
+  <div class="payment-form__actions">
+    <button
+      data-testid="ui-miniloan-012-record-payment"
+      type="button"
+      [disabled]="busy() !== ''"
+      (click)="recordPayment()"
+    >
+      {{ busy() === 'payment' ? 'กำลังบันทึก…' : 'บันทึกการชำระ' }}
+    </button>
+
+    <button
+      data-testid="ui-miniloan-012-record-payoff-payment"
+      type="button"
+      [disabled]="busy() !== ''"
+      (click)="recordPayoffPayment()"
+    >
+      {{ busy() === 'payoff' ? 'กำลังบันทึก…' : 'บันทึกการชำระยอดปิดบัญชี' }}
+    </button>
+  </div>
+
+  @if (outcome(); as sentence) {
+    <p class="payment-form__outcome">{{ sentence }}</p>
+  }
+
+  @if (failed(); as refusal) {
+    <p class="payment-form__error">{{ refusal }}</p>
+  }
+</section>

@@ -52,6 +52,23 @@ export const routes: Routes = [
         (m) => m.EarlyClosureQuoteComponent,
       ),
   },
+  // FE-miniloan-027. /loan-accounts is the path nav.component.ts committed to for UI-miniloan-011
+  // (ROLE-004) when FE-miniloan-001 built the shell, so it is honoured here rather than reinvented.
+  // The detail path is this unit's own, in the same shape as its neighbours. It is declared AFTER
+  // the two three-segment paths above so a reader sees the specific ones first; Angular matches on
+  // whole segment counts, so /loan-accounts/x/schedule could never fall into /loan-accounts/:id.
+  {
+    path: 'loan-accounts',
+    loadComponent: () =>
+      import('../features/accounts/my-accounts-list.component').then(
+        (m) => m.MyAccountsListComponent,
+      ),
+  },
+  {
+    path: 'loan-accounts/:id',
+    loadComponent: () =>
+      import('../features/accounts/account-detail.component').then((m) => m.AccountDetailComponent),
+  },
   // FE-miniloan-023. Neither screen is a sitemap entry node, so nav.component.ts committed to no
   // path for them: the officer reaches the queue from UI-miniloan-009 and the review page from the
   // queue's own ui-miniloan-006-open-application link. These two paths are this unit's contract,

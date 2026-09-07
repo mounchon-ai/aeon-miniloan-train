@@ -35,11 +35,15 @@ import org.springframework.web.bind.annotation.RestController;
  * API-011 (POST /loan-accounts/{id}/reschedule) — ACL-009: the Operations person the account is
  * assigned to, while the account is Active, and nobody else.
  *
- * <p>API-012 (GET /loan-accounts/{id}/schedule) — ACL-010: the Applicant who owns the account, and
- * nobody else. {@code rbac.json} is default-deny and ACL-010 is the only entry for UC-miniloan-011,
- * so every other role is refused here even though Operations can already reissue the very same
- * table. If Operations should be able to READ it, that is an entry design has to add — not a second
- * role written into this route on the way past.
+ * <p>API-012 (GET /loan-accounts/{id}/schedule) — two entries reach this route, and they are not the
+ * same permission. ACL-010 is the Applicant who owns the account, scope {@code own}, condition
+ * {@code Active}. ACL-020 is "ดูและดำเนินการกับบัญชีสินเชื่อที่ตนถูก assign" — scope {@code own}, and
+ * NO condition — which with ACL-033 is what puts a {@code schedule-table} zone on UI-miniloan-012.
+ * The earlier note here said ACL-010 was the only entry for UC-miniloan-011 and inferred from that
+ * that every other role was refused; the first half is still true and the inference was not, because
+ * ACL-020 names a different resource (UC-miniloan-024). Each branch keeps its own scope check and
+ * its own precondition — see {@code RepaymentScheduleQueryService#viewAsAssignedOperations}.
+ * {@code rbac.json} is default-deny, so the three roles neither entry names are still refused.
  *
  * <p><b>Two routes here answer to no API- id, and that is deliberate.</b> BR-miniloan-044@v1 names
  * the surface it fences — "แก้แถวในฉบับเดิมไม่ได้ทั้งจากหน้าจอและ API" — and AC-miniloan-009 and
@@ -114,6 +118,11 @@ public class RepaymentScheduleController {
     @GetMapping("/{id}/schedule")
     public ResponseEntity<ScheduleResponse> schedule(
             @PathVariable UUID id, HttpServletRequest httpRequest) {
+        Object role = httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
+        if (OPERATIONS.equals(role)) {
+            return ResponseEntity.ok(
+                    ScheduleResponse.from(queryService.viewAsAssignedOperations(id, (String) role)));
+        }
         String applicantId = requireApplicant(httpRequest);
         return ResponseEntity.ok(ScheduleResponse.from(queryService.view(id, applicantId)));
     }
@@ -145,7 +154,10 @@ public class RepaymentScheduleController {
         return (String) role;
     }
 
-    /** ACL-010 is ROLE-001 only, and {@code rbac.json} denies by default. */
+    /**
+     * ACL-010 is ROLE-001 only. ROLE-004 does not come through here — it is answered by ACL-020 above,
+     * against its own scope — and {@code rbac.json} denies the rest by default.
+     */
     private String requireApplicant(HttpServletRequest httpRequest) {
         Object role = httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
         if (!APPLICANT.equals(role)) {

@@ -1,0 +1,62 @@
+<!--
+  Zones from screens.json UI-miniloan-011: assigned-accounts, in the order design lists its fields.
+  Every data-testid is mock's, copied verbatim (gate 63) — including ui-miniloan-011-next-due-installment,
+  which mock named in conventions.json fieldMap[] because design binds that field to no entity (gate 45).
+-->
+<section class="my-accounts">
+  <h1>บัญชีสินเชื่อที่ฉันดูแล</h1>
+
+  @if (loading()) {
+    <p class="my-accounts__spinner" aria-busy="true">กำลังโหลดรายการ…</p>
+  } @else if (failed()) {
+    <div class="my-accounts__error">
+      <p>โหลดรายการไม่สำเร็จ</p>
+      <button type="button" (click)="load()">ลองใหม่</button>
+    </div>
+  } @else if (accounts().length === 0) {
+    <!-- screens.json empty, word for word. -->
+    <p class="my-accounts__empty">ไม่มีบัญชีในความดูแล</p>
+  } @else {
+    <table class="my-accounts__table">
+      <thead>
+        <tr>
+          <th scope="col">สถานะ</th>
+          <th scope="col">เงินต้นคงเหลือ</th>
+          <th scope="col">งวดค้างถัดไป</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (account of visible(); track account.accountNumber) {
+          <tr>
+            <td data-testid="ui-miniloan-011-ent-006-status">{{ statusLabel(account.status) }}</td>
+            <td data-testid="ui-miniloan-011-ent-006-outstanding-principal">
+              {{ account.outstandingPrincipal }}
+            </td>
+            <!-- null is "nothing owing" and prints a dash; 0 would read as instalment number zero. -->
+            <td data-testid="ui-miniloan-011-next-due-installment">
+              {{ account.nextDueInstallmentNumber ?? '—' }}
+            </td>
+            <td>
+              <a
+                data-testid="ui-miniloan-011-open-account"
+                [routerLink]="['/loan-accounts', account.accountNumber]"
+                >เปิดบัญชี</a
+              >
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (pageCount() > 1) {
+      <div class="my-accounts__pager">
+        <button type="button" [disabled]="page() === 0" (click)="goToPage(page() - 1)">ก่อนหน้า</button>
+        <span>หน้า {{ page() + 1 }} จาก {{ pageCount() }}</span>
+        <button type="button" [disabled]="page() === pageCount() - 1" (click)="goToPage(page() + 1)">
+          ถัดไป
+        </button>
+      </div>
+    }
+  }
+</section>

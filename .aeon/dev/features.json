@@ -4576,7 +4576,312 @@
           "hash": "sha256:ead7de14ebb171e73189c952a7b102e0e715512108db32bb126afa9823aab080"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 2,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v <repo>/apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 361, Failures: 0, Errors: 0, Skipped: 0 -- BUILD SUCCESS. Seven new on top of the 354 FE-miniloan-026 recorded, all in RepaymentScheduleControllerTest. GREEN on round 1; the apps/api half of this unit needed no fix round. WHY apps/api was touched from a web unit, for the fourth time and on the same terms as FE-miniloan-023's band: UI-miniloan-012 declares a schedule-table zone of four ENT-008 fields on a ROLE-004 screen, but GET /loan-accounts/{id}/schedule called requireApplicant() -- ROLE-001 only -- so Operations could not read the table their own screen is built around. ACL-020 has declared scope own with enforceAt [api, domain] since the matrix was written, and ACL-033 puts the screen in front of ROLE-004; the branch had simply never been built. Added RepaymentScheduleQueryService#viewAsAssignedOperations, routed through LoanAccountScopeService#visibleTo(role, id) so the refusal is NotVisibleException's ONE sentence for \"not yours\" / \"no scope\" / \"not there\" alike (BR-miniloan-054@v1) rather than the applicant's NotAccountOwnerException, which would let an Operations caller tell an account that exists from one that does not. ACL-010 keeps its condition Active; ACL-020 declares none, and that difference is honoured rather than smoothed over -- ACL-015 files an adjustment against a CLOSED account from this same screen, so an Operations person locked out of a closed account's table could not use the screen AC-miniloan-076 is about. SECOND api change: UI-miniloan-011's next-due-installment is a field design binds to no entity (gate 45) that mock named in conventions.json fieldMap[], and nothing on ENT-006 could answer it; LoanAccountSummary gained nextDueInstallmentNumber, computed in two queries for a whole page (the shape ScopedListingService#bandsFor already uses), null when nothing is owing -- a zero would read as instalment number zero. TEST REWORKED, and it is not a weakened measure: anyRoleOtherThanApplicantIsRefusedByTheScheduleRoute looped over OFFICER, SUPERVISOR, OPERATIONS, ADMIN with a note inferring from \"ACL-010 is the only entry for UC-miniloan-011\" that every other role was refused. The first half is still true; the inference was not, because ACL-020 names a DIFFERENT resource (UC-miniloan-024). OPERATIONS was dropped from the loop and the other three stay; what the loop recorded about ROLE-004 was that the branch was unbuilt, never that a rule denied it. ACL-010's own rule is still measured by those three and by callingTheApiDirectlyForAnotherApplicantsScheduleIsRefusedWithNoRowLeaked, and ROLE-004's own scope is now measured by four new tests including another Operations person being refused with the same sentence. No assertion, golden row or health check was weakened.",
+            "at": "2026-09-07T04:52:00Z"
+          },
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 17 passed (17); Tests 130 passed (130) (vitest v4.1.11) -- 33 new on top of the 97 FE-miniloan-026 recorded: MyAccountsListComponent 8, AccountDetailComponent 12, RecordPaymentComponent 9, SubmitAdjustmentComponent 4. The last two are UI-miniloan-012's own zones, built as child components because files_planned names them. RED on round 1 and on round 2 -- build.iterations is 2. Round 1 was a compile error and nothing else: TS2353/TS2339 across four files, because apps/api's LoanAccountSummary gained nextDueInstallmentNumber and the web interface had not; the field was added to the interface. Round 2 was a mis-written assertion of mine: \"shows no pager when everything fits\" searched the page text for the pager's label, which the column heading also contains, so the check could never fail; it now asserts the pager ELEMENT is absent and that pageCount() is 1. Both are inside P13's three allowed fixes (compile, mis-written assertion, wiring) and neither touched a measurement. THE SHARPEST TEST IN THIS UNIT is AC-miniloan-086's sentence, asserted whole rather than by looking for its numbers somewhere on the page: all three figures are different and one is a trap -- a component that put overpaymentAmount in the principal-cut slot would print 20,000.00 there and would pass any weaker check. The criterion's whole point is that the principal fell by 19,800.00 and not by the 20,000.00 handed over. AC-miniloan-087's hedge is STALE and is recorded as such: it says the number of decimal places is not yet settled (DQ-miniloan-001), and DQ-miniloan-001 closed at design's desk with decimal(18,2) round-half-up at two places -- so a 0.00 fee is settled, exactly as ADR-007 settled AC-miniloan-112's scope question, and the test asserts 0.00 rather than hedging with it.",
+            "at": "2026-09-07T04:53:00Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete -- exit 0. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T04:53:30Z"
+          },
+          {
+            "cmd": "(decisions this unit made about controls it did NOT build)",
+            "result": "FOUR criteria are measured as an ABSENCE, and each is carried up as a gap card rather than closed by minting an id gate 37 would never let anybody change. (1) AC-miniloan-006 and AC-miniloan-069 speak of a close-account button; screens.json declares four actions on UI-miniloan-012 and mock minted four ids, none of them a close. POST /loan-accounts/{id}/close exists and its only behaviour is to refuse (refuseDirectClose never returns normally), and that refusal is measured in PaymentControllerTest -- so the rule is enforced where BR-miniloan-025@v1 puts it and only the BUTTON is missing. record-payment.component.spec.ts asserts the zone has exactly two buttons, by testid, so adding an unminted third fails. (2) AC-miniloan-008's view-previous-revision control, and with it the rows of a superseded revision. RescheduleResponse.revisions[] carries revisionNumber, issuedAt, supersededAt and current, so AC-miniloan-008's current-revision line and AC-miniloan-011's list of every prior revision DO render -- that half is built and asserted, with exactly one row ever marked as in force. What has neither an endpoint nor a minted control is OPENING revision 1's rows: installments[] is the current revision only, and no route lists revisions on a plain read either, so the list appears only after a reschedule in this session. (3) AC-miniloan-077's read-only fields and AC-miniloan-078's cancel/delete are structural rather than gated: the summary is rendered as text with no editable control over it, and this screen declares no delete action at all; both refusals are also measured at the API. (4) The payment-form zone declares ONE capture field and PaymentRequest needs two values. installmentNumber is NOT an absence and is deliberately not carded: ACL-011 and ACL-012 both carry condition { STM-miniloan-003, state: [Due] }, which is design saying the payment targets a Due instalment, and the page already holds the schedule the API sent -- so it sends the earliest Due row's number and lets the API refuse if it disagrees. An int has no empty value; sending 0 would be inventing a sentinel nobody declared. SettlementRequest.closingDate is today for the same reason, exactly as FE-miniloan-022's quote page sends it. AC-miniloan-070's screen half is already true from the sitemap: UI-miniloan-012 declares roles [ROLE-004] and nav links it to nobody else, the same way AC-miniloan-083's menu half was already true from entry:false -- so the buttons are NOT re-gated inside the component, which would be a second answer to a question the sitemap settled.",
+            "at": "2026-09-07T04:53:30Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/accounts/my-accounts-list.component.ts",
+          "apps/web/src/app/features/accounts/my-accounts-list.component.html",
+          "apps/web/src/app/features/accounts/my-accounts-list.component.scss",
+          "apps/web/src/app/features/accounts/my-accounts-list.component.spec.ts",
+          "apps/web/src/app/features/accounts/account-detail.component.ts",
+          "apps/web/src/app/features/accounts/account-detail.component.html",
+          "apps/web/src/app/features/accounts/account-detail.component.scss",
+          "apps/web/src/app/features/accounts/account-detail.component.spec.ts",
+          "apps/web/src/app/features/accounts/record-payment.component.ts",
+          "apps/web/src/app/features/accounts/record-payment.component.html",
+          "apps/web/src/app/features/accounts/record-payment.component.scss",
+          "apps/web/src/app/features/accounts/record-payment.component.spec.ts",
+          "apps/web/src/app/features/accounts/submit-adjustment.component.ts",
+          "apps/web/src/app/features/accounts/submit-adjustment.component.html",
+          "apps/web/src/app/features/accounts/submit-adjustment.component.scss",
+          "apps/web/src/app/features/accounts/submit-adjustment.component.spec.ts",
+          "apps/web/src/app/core/services/loan-account.service.ts",
+          "apps/web/src/app/core/app.routes.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/accounts/my-accounts-list.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/accounts/account-detail.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/accounts/record-payment.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/accounts/submit-adjustment.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [
+          {
+            "id": "MyAccountsListComponent.statusLabel",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-011-ent-006-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "MyAccountsListComponent.outstandingPrincipal",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-011-ent-006-outstanding-principal",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "MyAccountsListComponent.openAccountLink",
+            "kind": "view",
+            "dd_ref": null,
+            "testid": "ui-miniloan-011-open-account",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.principalAmount",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-006-principal-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.outstandingPrincipal",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-006-outstanding-principal",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.termMonths",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-006-term-months",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.statusLabel",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-006-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.disbursedAt",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-006-disbursed-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.closedAt",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-006-closed-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.installmentNumber",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-008-installment-number",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.dueDate",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-008-due-date",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.emiAmount",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-008-emi-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.installmentLabel",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-008-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "RecordPaymentComponent.amount",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-009-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "SubmitAdjustmentComponent.form.targetRecordId",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-010-target-record-id",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "SubmitAdjustmentComponent.form.fieldName",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-010-field-name",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "SubmitAdjustmentComponent.form.oldValue",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-010-old-value",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "SubmitAdjustmentComponent.form.newValue",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-ent-010-new-value",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "RecordPaymentComponent.recordPayment",
+            "kind": "create",
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-record-payment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "RecordPaymentComponent.recordPayoffPayment",
+            "kind": "create",
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-record-payoff-payment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AccountDetailComponent.reschedule",
+            "kind": "command",
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-reschedule",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "SubmitAdjustmentComponent.submit",
+            "kind": "create",
+            "dd_ref": null,
+            "testid": "ui-miniloan-012-submit-adjustment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "MyAccountsListComponent.nextDueInstallmentNumber",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-011-next-due-installment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      }
     },
     {
       "id": "FE-miniloan-028",
@@ -4890,8 +5195,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 26,
-      "draft": 3
+      "validated": 27,
+      "draft": 2
     },
     "by_origin": {
       "new": 27,

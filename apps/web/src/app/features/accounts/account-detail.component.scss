@@ -1,0 +1,24 @@
+.account-detail {
+  display: grid;
+  gap: 1.5rem;
+
+  &__table {
+    border-collapse: collapse;
+    width: 100%;
+
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+      padding: 0.4rem 0.75rem;
+      text-align: left;
+    }
+  }
+
+  &__closed {
+    color: #14532d;
+  }
+
+  &__error {
+    color: #b91c1c;
+  }
+}

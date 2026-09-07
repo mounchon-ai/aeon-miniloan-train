@@ -1,0 +1,58 @@
+<!--
+  Zone from screens.json UI-miniloan-012: adjustment-form — four capture fields and one action,
+  in the order design lists them. Every data-testid is mock's, copied verbatim (gate 63).
+
+  The five field names are ENT-010's declared enum, shown as design spells them: nothing in design
+  names them in Thai, and inventing labels here would put words in the client's mouth.
+-->
+<form class="adjustment-form" [formGroup]="form" (ngSubmit)="submit()">
+  <h2>ยื่นคำขอปรับปรุงบัญชีที่ปิดแล้ว</h2>
+
+  <label for="adjustment-target">ระเบียนที่ต้องการแก้</label>
+  <input
+    id="adjustment-target"
+    data-testid="ui-miniloan-012-ent-010-target-record-id"
+    type="text"
+    formControlName="targetRecordId"
+  />
+
+  <label for="adjustment-field">ช่องที่ต้องการแก้</label>
+  <select
+    id="adjustment-field"
+    data-testid="ui-miniloan-012-ent-010-field-name"
+    formControlName="fieldName"
+  >
+    <option value=""></option>
+    @for (field of fields; track field) {
+      <option [value]="field">{{ field }}</option>
+    }
+  </select>
+
+  <label for="adjustment-old">ค่าเดิม</label>
+  <input
+    id="adjustment-old"
+    data-testid="ui-miniloan-012-ent-010-old-value"
+    type="text"
+    formControlName="oldValue"
+  />
+
+  <label for="adjustment-new">ค่าใหม่</label>
+  <input
+    id="adjustment-new"
+    data-testid="ui-miniloan-012-ent-010-new-value"
+    type="text"
+    formControlName="newValue"
+  />
+
+  <button data-testid="ui-miniloan-012-submit-adjustment" type="submit" [disabled]="busy()">
+    {{ busy() ? 'กำลังส่ง…' : 'ยื่นคำขอปรับปรุง' }}
+  </button>
+
+  @if (outcome(); as sentence) {
+    <p class="adjustment-form__outcome">{{ sentence }}</p>
+  }
+
+  @if (failed(); as refusal) {
+    <p class="adjustment-form__error">{{ refusal }}</p>
+  }
+</form>
