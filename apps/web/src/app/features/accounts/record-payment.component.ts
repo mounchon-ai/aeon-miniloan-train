@@ -16,9 +16,13 @@ import { LoanAccountService, PaymentResult } from '../../core/services/loan-acco
  *   <li><b>installmentNumber</b> — ACL-011 and ACL-012 both carry
  *       `condition: { stateMachine: STM-miniloan-003, state: ["Due"] }`, which is design saying the
  *       payment targets a Due instalment; the page is already holding the schedule the API sent, so
- *       it sends the earliest Due row's number and lets the API refuse if it disagrees. Unlike the
- *       officer picker FE-miniloan-024 could not fill, an int has no empty value — sending 0 would
- *       be inventing a sentinel nobody declared.
+ *       it sends the earliest Due row's number and lets the API refuse if it disagrees. When nothing
+ *       is owing it sends 0, and the attempt still goes out: AC-miniloan-088 requires Operations to
+ *       press this on a Closed account and be refused BY THE API, so a page that declined to call
+ *       would break the criterion's screen half. ENT-008 numbers instalments from 1, so 0 names no
+ *       row and can only be refused — it never mis-targets a live one. This is why the field is not
+ *       the absence FE-miniloan-024's officer picker was: there, an empty string was a value the
+ *       API could act on wrongly.
  *   <li><b>closingDate</b> — today, exactly as FE-miniloan-022's quote page sends it. The endpoint
  *       takes a date; the day the request is made is not a business decision.
  * </ul>

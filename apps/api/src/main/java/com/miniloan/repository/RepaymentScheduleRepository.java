@@ -1,6 +1,7 @@
 package com.miniloan.repository;
 
 import com.miniloan.domain.RepaymentSchedule;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -13,6 +14,13 @@ public interface RepaymentScheduleRepository extends JpaRepository<RepaymentSche
      * of them is current.
      */
     Optional<RepaymentSchedule> findByLoanAccountIdAndCurrentIsTrue(UUID loanAccountId);
+
+    /**
+     * The same question for a whole page of accounts (FE-miniloan-027 · UI-miniloan-011). Exactly one
+     * revision per account is current, so this returns at most one row per id — the batched twin of
+     * the single read above, and the reason API-013 costs two queries however many rows it lists.
+     */
+    List<RepaymentSchedule> findByLoanAccountIdInAndCurrentIsTrue(Collection<UUID> loanAccountIds);
 
     /**
      * AC-miniloan-011: every revision an account has ever been issued, oldest first — nothing is

@@ -219,12 +219,20 @@ describe('RecordPaymentComponent (UI-miniloan-012 · payment-form)', () => {
     expect(fixture.componentInstance.amount.value).toBe('9583.32');
   });
 
-  /** AC-miniloan-088 — a closed account refuses further payment, in the API's own words. */
-  it('renders the closed-account refusal in the API words', () => {
+  /**
+   * AC-miniloan-088 — a closed account refuses further payment, in the API's own words, and the
+   * criterion measures Operations ATTEMPTING it. So the call goes out even with nothing owing, and
+   * the instalment sent is 0: ENT-008 numbers instalments from 1, so 0 names no row and can only be
+   * refused, never mis-targeted onto a live one. A page that disabled the button here would fail
+   * the criterion by never reaching the API at all.
+   */
+  it('still calls the API with nothing owing, and renders the closed-account refusal', () => {
     const fixture = render(null);
     type(fixture, '5000.00');
     press(fixture, 'ui-miniloan-012-record-payment');
-    httpTesting.expectOne(PAYMENTS).flush(
+    const attempt = httpTesting.expectOne(PAYMENTS);
+    expect(attempt.request.body).toEqual({ installmentNumber: 0, amount: '5000.00' });
+    attempt.flush(
       { code: 'LOAN_ACCOUNT_CLOSED', message: 'บัญชีนี้ปิดแล้ว — บันทึกการชำระเพิ่มไม่ได้' },
       { status: 409, statusText: 'Conflict' },
     );

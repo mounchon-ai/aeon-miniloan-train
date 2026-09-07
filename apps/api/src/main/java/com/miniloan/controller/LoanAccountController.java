@@ -91,12 +91,10 @@ public class LoanAccountController {
         if (visible.isEmpty()) {
             return Map.of();
         }
+        List<UUID> accountIds = visible.stream().map(LoanAccount::getId).toList();
         Map<UUID, UUID> accountOfSchedule = new HashMap<>();
-        for (LoanAccount account : visible) {
-            schedules
-                    .findByLoanAccountIdAndCurrentIsTrue(account.getId())
-                    .map(RepaymentSchedule::getId)
-                    .ifPresent(scheduleId -> accountOfSchedule.put(scheduleId, account.getId()));
+        for (RepaymentSchedule current : schedules.findByLoanAccountIdInAndCurrentIsTrue(accountIds)) {
+            accountOfSchedule.put(current.getId(), current.getLoanAccountId());
         }
         if (accountOfSchedule.isEmpty()) {
             return Map.of();
