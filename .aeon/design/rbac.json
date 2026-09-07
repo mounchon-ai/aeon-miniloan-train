@@ -318,7 +318,7 @@
       "role": "ROLE-002",
       "resource": "UC-miniloan-020",
       "action": "ดูแดชบอร์ดภาพรวมสถานะ",
-      "scope": "own",
+      "scope": "all",
       "enforceAt": [
         "api",
         "domain"
@@ -450,7 +450,7 @@
       "role": "ROLE-002",
       "resource": "UI-miniloan-009",
       "action": "เปิดหน้าแดชบอร์ดภาพรวมสถานะ",
-      "scope": "own",
+      "scope": "all",
       "enforceAt": [
         "api",
         "domain"
