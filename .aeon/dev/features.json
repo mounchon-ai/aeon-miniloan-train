@@ -3948,7 +3948,8 @@
         "apis": []
       },
       "commits": [
-        "<the commit hash>"
+        "<the commit hash>",
+        "e66f8292a282ffa6dd9a9793e075837eb08a2b2d"
       ]
     },
     {
