@@ -2,9 +2,9 @@
   "schemaVersion": "1.0",
   "producedBy": "design · scripts/rbac.mjs",
   "project": "miniloan",
-  "status": "draft",
-  "approvedAt": null,
-  "approvedBy": null,
+  "status": "approved",
+  "approvedAt": "2026-09-07T03:59:08Z",
+  "approvedBy": "aplus191",
   "defaultEffect": "deny",
   "roles": [
     {
