@@ -4025,7 +4025,107 @@
           "hash": "sha256:b39736d10ffdc4a1156433375f2ecf3f0b833e122ece2e6c1bd676b47a68f06a"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 11 passed (11); Tests 76 passed (76) (vitest v4.1.11) -- 10 new on top of the 66 FE-miniloan-023 recorded, all UnassignedQueueComponent. RED on round 1, green on round 2 -- build.iterations is 1. Both failures were compile errors, not measurements: TS2741 and TS2322, because adding the required field assignedLoanOfficerId to the LoanApplication interface left two FE-miniloan-023 fixtures short of it. The field was added to each fixture's BASE object rather than only to an override, so the spread of Partial<LoanApplication> keeps the type string | null instead of widening to include undefined. No assertion, golden row or health check was touched. AC-miniloan-064's and AC-miniloan-090's success paths are NOT asserted and cannot be: screens.json declares two actions on UI-miniloan-010 and zero capture fields, so neither the officer to assign to nor the cancellation reason can be supplied from this screen -- both are measured as an absence plus the API's own refusal, and two cards are open for design.",
+            "at": "2026-09-07T04:06:58Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.796 seconds] -- Output location apps/web/dist/miniloan-web, one new lazy chunk unassigned-queue-component. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T04:07:11Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"<repo>\u0007pps\u0007pi:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 354, Failures: 0, Errors: 0, Skipped: 0 -- BUILD SUCCESS. 353 before this unit, +1. This is a web unit and its manifest.files are all under apps/web (DV15), but it changed apps/api, so the suite was re-run and the numbers are recorded rather than assumed. ONE api file was edited -- LoanApplicationController.java, already owned by FE-miniloan-004/005/019/023 (the FE-miniloan-021 submittedAt precedent) -- to put ENT-002's assignedLoanOfficerId on LoanApplicationResponse. UI-miniloan-010 is the queue of applications nobody holds yet and had no way to tell an unassigned row from an assigned one; ACL-031 gives ROLE-003 scope: all, so being unassigned is the SCREEN's subject rather than a scope, and the page narrows rows the API already decided it may see. Whom the field discloses to was CHECKED, not assumed: it rides on ROLE-001's own list too, and that discloses nothing new because findDetail already hands an applicant the same fact through AssignmentResponse.loanOfficerId. rbac.json's fieldRules has 5 entries and none covers this attribute, so no rule was bypassed -- but nobody has decided who may read it either, which is a question for design. RED on round 1: ScopedListingControllerTest's new assertion compared a JSONPath filter result [null] against nullValue(); the field really was null and the matcher was wrong, so it became contains(nullValue()). A mis-written assertion, one of the three P13 allows.",
+            "at": "2026-09-07T04:05:50Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/assignment/unassigned-queue.component.ts",
+          "apps/web/src/app/features/assignment/unassigned-queue.component.html",
+          "apps/web/src/app/features/assignment/unassigned-queue.component.scss",
+          "apps/web/src/app/core/services/loan-application.service.ts",
+          "apps/web/src/app/core/app.routes.ts",
+          "apps/web/src/app/features/assignment/unassigned-queue.component.spec.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/assignment/unassigned-queue.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-010-ent-001-full-name",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-010-ent-002-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-010-ent-003-band",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-010-ent-002-requested-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-010-assign-officer",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-010-cancel-application",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      },
+      "commits": [
+        "<the commit hash>"
+      ]
     },
     {
       "id": "FE-miniloan-025",
@@ -4605,8 +4705,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 23,
-      "draft": 6
+      "validated": 24,
+      "draft": 5
     },
     "by_origin": {
       "new": 27,

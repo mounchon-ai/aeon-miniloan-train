@@ -60,6 +60,9 @@ describe('ApplicationReviewComponent (UI-miniloan-007)', () => {
       id: 'app-1',
       status: 'UnderReview',
       band: null,
+      // FE-miniloan-024. This application is the one assigned to the officer reviewing it, which is
+      // what ACL-028 requires for the page to open at all.
+      assignedLoanOfficerId: 'ROLE-002',
       fullName: 'สมชาย ใจดี',
       age: 35,
       monthlyIncome: '30000.00',

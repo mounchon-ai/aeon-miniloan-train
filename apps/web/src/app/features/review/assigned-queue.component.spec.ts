@@ -41,6 +41,9 @@ describe('AssignedQueueComponent (UI-miniloan-006)', () => {
     id: 'app-1',
     status: 'UnderReview',
     band: 'B',
+    // FE-miniloan-024 made this a required field on the row; it is on the base object rather than
+    // only in the override so the spread keeps the type string | null.
+    assignedLoanOfficerId: 'ROLE-002',
     fullName: 'สมชาย ใจดี',
     age: 35,
     monthlyIncome: '30000.00',

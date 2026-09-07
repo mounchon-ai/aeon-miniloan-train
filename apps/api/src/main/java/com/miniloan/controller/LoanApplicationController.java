@@ -262,11 +262,27 @@ public class LoanApplicationController {
      * there is no assessment — a draft has none (AC-miniloan-035) — and null on every route that
      * answers about one application it has just written, where {@link #from(LoanApplication)} is used
      * and no assessment has been read.
+     *
+     * <p>{@code assignedLoanOfficerId} was added while building FE-miniloan-024. ENT-002 declares the
+     * attribute and BR-miniloan-032@v1 owns it; UI-miniloan-010 is "คิวใบสมัครที่ยังไม่ถูกมอบหมาย" and
+     * cannot tell an unassigned row from an assigned one without it. ACL-031 gives ROLE-003
+     * {@code scope: all}, so being unassigned is the SCREEN's subject rather than a scope, and the
+     * page narrows rows the API already decided it may see — the same shape as UI-miniloan-006's
+     * status filter, and not the browser choosing its own scope.
+     *
+     * <p><b>Whom this discloses it to was checked, not assumed.</b> The field rides on every route
+     * that returns this record, ROLE-001's own list included. That discloses nothing new: {@code
+     * findDetail} already hands an applicant the same fact through {@link AssignmentResponse}, which
+     * carries {@code loanOfficerId} for anyone who may open the application. rbac.json's
+     * {@code fieldRules} has five entries and none of them covers this attribute, so no rule was
+     * bypassed either — but that also means nobody has decided who may read it, which is a question
+     * for design rather than a hole to fill here.
      */
     public record LoanApplicationResponse(
             UUID id,
             String status,
             String band,
+            String assignedLoanOfficerId,
             String fullName,
             Integer age,
             BigDecimal monthlyIncome,
@@ -296,6 +312,7 @@ public class LoanApplicationController {
                     application.getId(),
                     application.getStatus().name(),
                     band == null ? null : band.name(),
+                    application.getAssignedLoanOfficerId(),
                     application.getFullName(),
                     application.getAge(),
                     application.getMonthlyIncome(),

@@ -1,0 +1,109 @@
+// Tokens only — mock's theme owns every value here.
+.unassigned-queue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.unassigned-queue__zone {
+  padding: var(--space-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.unassigned-queue__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.unassigned-queue__row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)) auto auto;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  button {
+    font: inherit;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--text-muted);
+      cursor: progress;
+    }
+  }
+}
+
+.unassigned-queue__outcome {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-raised);
+  border-radius: var(--radius);
+  color: var(--brand-primary);
+  font-size: var(--text-sm);
+}
+
+.unassigned-queue__command-error {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+  font-size: var(--text-sm);
+}
+
+.unassigned-queue__skeleton,
+.unassigned-queue__empty {
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--bg-raised);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+}
+
+.unassigned-queue__unauthorized {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+}
+
+.unassigned-queue__error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-5);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+
+  button {
+    font: inherit;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--danger);
+    cursor: pointer;
+  }
+}

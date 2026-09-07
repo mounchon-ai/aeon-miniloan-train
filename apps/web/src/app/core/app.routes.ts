@@ -68,4 +68,14 @@ export const routes: Routes = [
         (m) => m.ApplicationReviewComponent,
       ),
   },
+  // FE-miniloan-024. Unlike the two above, this path is NOT this unit's to pick: UI-miniloan-010 is
+  // a sitemap entry node and nav.component.ts committed to /assignment-queue when FE-miniloan-001
+  // built the shell, so it is honoured here rather than reinvented.
+  {
+    path: 'assignment-queue',
+    loadComponent: () =>
+      import('../features/assignment/unassigned-queue.component').then(
+        (m) => m.UnassignedQueueComponent,
+      ),
+  },
 ];

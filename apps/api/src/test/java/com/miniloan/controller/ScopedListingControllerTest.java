@@ -157,6 +157,30 @@ class ScopedListingControllerTest {
     }
 
     /**
+     * ENT-002's assignedLoanOfficerId travels with the row too (FE-miniloan-024) — UI-miniloan-010 is
+     * the queue of applications nobody holds yet, and without this field the page cannot tell an
+     * unassigned row from an assigned one. Asserted on the supervisor's list, where both kinds sit
+     * side by side, because that is the only place the difference is visible.
+     */
+    @Test
+    void theSupervisorListSaysWhichApplicationsAreAlreadyAssigned() throws Exception {
+        UUID assigned = submittedAndAssigned("ROLE-001", "ROLE-002");
+        UUID unassigned = draftFor(ANOTHER_APPLICANT);
+
+        mockMvc
+                .perform(get(APPLICATIONS).header("Authorization", SUPERVISOR_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.hasSize(2)))
+                .andExpect(jsonPath("$[?(@.id=='" + assigned + "')].assignedLoanOfficerId").value("ROLE-002"))
+                // The filter expression yields a LIST, so the matcher has to be about the list: a
+                // bare nullValue() compares [null] against null and fails while the field really is
+                // null. contains() says "one element, and it is null", which is the fact meant here.
+                .andExpect(
+                        jsonPath("$[?(@.id=='" + unassigned + "')].assignedLoanOfficerId")
+                                .value(Matchers.contains(Matchers.nullValue())));
+    }
+
+    /**
      * The other half of that field: a draft has no assessment (AC-miniloan-035), so its band is null
      * rather than a value that looks like a verdict nobody reached. Asserted on the applicant's own
      * list, where drafts live.

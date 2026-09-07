@@ -26,6 +26,12 @@ export interface LoanApplication {
    * Null while the application has no assessment — a draft has none (AC-miniloan-035).
    */
   band: string | null;
+  /**
+   * ENT-002's assignedLoanOfficerId (BR-miniloan-032@v1). Null while nobody holds the application —
+   * which is UI-miniloan-010's whole subject, and the only way the page can tell its queue apart
+   * from every other application ROLE-003 may see under ACL-031's scope: all.
+   */
+  assignedLoanOfficerId: string | null;
   fullName: string | null;
   age: number | null;
   monthlyIncome: string | null;
@@ -71,6 +77,19 @@ export interface ApplicationDetail {
   assessment: CreditAssessment | null;
   assessmentNote: string | null;
   assignment: Assignment | null;
+}
+
+/**
+ * apps/api ApplicationAssignmentController.AssignmentResponse (API-006) — deliberately NOT the same
+ * shape as {@link Assignment}, which is the ENT-013 round the detail route returns. This one is what
+ * the assign command answers with, and it carries the application's new status.
+ */
+export interface AssignmentResult {
+  applicationId: string;
+  status: string;
+  assignedLoanOfficerId: string;
+  assignedBy: string;
+  assignedAt: string;
 }
 
 /** apps/api LoanApplicationDecisionController.ApprovalResponse (API-007). */
@@ -186,6 +205,18 @@ export class LoanApplicationService {
   /** API-010 — สั่งเบิกจ่าย. No body: everything the disbursement needs is already on the application. */
   disburse(id: string): Observable<DisbursementResult> {
     return this.http.post<DisbursementResult>(`${API_BASE_URL}/applications/${id}/disburse`, {});
+  }
+
+  /**
+   * API-006 — มอบหมายใบสมัครให้ Loan Officer (BR-miniloan-032@v1). The officer is sent as the API
+   * declares it; UI-miniloan-010 has no field to choose one, so this screen sends what it has and the
+   * API decides — LOAN_OFFICER_REQUIRED is the answer to an empty one, and that refusal is the API
+   * enforcing BR-miniloan-032@v1 rather than the page pretending to.
+   */
+  assign(id: string, loanOfficerId: string): Observable<AssignmentResult> {
+    return this.http.post<AssignmentResult>(`${API_BASE_URL}/applications/${id}/assign`, {
+      loanOfficerId,
+    });
   }
 
   /** API-013 — รายการบัญชีสินเชื่อที่ผู้เรียกมีสิทธิ์เห็น. */
