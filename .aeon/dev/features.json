@@ -3693,8 +3693,8 @@
         "proof": [
           {
             "cmd": "cd apps/web && npm test",
-            "result": "Test Files 10 passed (10); Tests 65 passed (65) (vitest v4.1.11) -- 21 new on top of the 44 FE-miniloan-022 recorded: AssignedQueueComponent 7 and ApplicationReviewComponent 14. RED on round 1, green on round 2 -- build.iterations is 1. All 14 review failures were one wiring fault, not a measurement: NG0950 \"Input id is required but no value is available yet\", because the first load() ran from the constructor, before TestBed.setInput and before the router binds the route parameter. Fixed the way FE-miniloan-022's two screens already do it, queueMicrotask(() => this.load()). No assertion, golden row or health check was touched.",
-            "at": "2026-09-07T02:09:00Z"
+            "result": "Test Files 10 passed (10); Tests 66 passed (66) (vitest v4.1.11) -- 22 new on top of the 44 FE-miniloan-022 recorded: AssignedQueueComponent 7 and ApplicationReviewComponent 15. RED on round 1, green on round 2 -- build.iterations is 1. All 14 review failures were one wiring fault, not a measurement: NG0950 \"Input id is required but no value is available yet\", because the first load() ran from the constructor, before TestBed.setInput and before the router binds the route parameter. Fixed the way FE-miniloan-022's two screens already do it, queueMicrotask(() => this.load()). No assertion, golden row or health check was touched. AC-miniloan-068 is measured as the MIRROR of AC-miniloan-056 rather than on its own terms, because the criterion's content is the symmetry -- \"เงื่อนไขเดียวกับการปฏิเสธ … ไม่ใช่คนละมาตรฐาน\" -- and two textareas on two command paths are exactly where reject and cancel could drift apart.",
+            "at": "2026-09-07T02:13:35Z"
           },
           {
             "cmd": "cd apps/web && npx ng build",

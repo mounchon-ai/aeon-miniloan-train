@@ -18,6 +18,22 @@ import { ApplicationDetail } from '../../core/services/loan-application.service'
  * press produces exactly one request, that the sentence the API answers with reaches the screen
  * unchanged, and that a refusal changes nothing on the page but the message.
  *
+ * <p><b>AC-miniloan-048, 050, 051, 057, 059 and 060 are the same shape and are carved out for the
+ * same reason.</b> Each presses a command the current status forbids and expects the API's refusal —
+ * whether a status may move is a rule, and it is measured where it lives ({@code
+ * LoanApplicationApprovalServiceTest}, {@code LoanApplicationRejectionServiceTest}, {@code
+ * LoanApplicationCancellationServiceTest} and {@code DisbursementServiceTest}, from FE-miniloan-007
+ * through FE-miniloan-010). The web half of all six is one behaviour, not six: a refusal reaches
+ * {@link ApplicationReviewComponent#commandError} and {@link ApplicationReviewComponent#status} does
+ * not move. That is proved by shape in the AC-miniloan-053 and AC-miniloan-056 tests below, and
+ * repeating it with a different error code would measure the fixture rather than the page.
+ *
+ * <p><b>Which is why the buttons are gated on Cancelled alone.</b> AC-miniloan-057 has the officer
+ * press approve on a Rejected application "ทั้งจากหน้าจอ และด้วยการเรียก API ตรง" and be refused by
+ * both — a screen that hid the button once the status was Rejected or Disbursed would make the
+ * screen half of that criterion unmeasurable. AC-miniloan-047 names exactly one status where the
+ * three buttons must be gone, and that is the only one this page hides them for.
+ *
  * <p><b>AC-miniloan-054 is measured as an absence.</b> The criterion has the officer lower the
  * approved amount to 150,000 and approve again, but screens.json declares two capture fields on this
  * screen and mock minted ids for exactly those two. An amount input here would be a control nobody
@@ -253,6 +269,30 @@ describe('ApplicationReviewComponent (UI-miniloan-007)', () => {
 
     expect(fixture.componentInstance.commandError()).toBe('ปฏิเสธไม่ได้ — ต้องระบุเหตุผลการปฏิเสธ');
     expect(fixture.componentInstance.status()).toBe('UnderReview');
+  });
+
+  /**
+   * AC-miniloan-068 — "เงื่อนไขเดียวกับการปฏิเสธตาม BR-miniloan-013@v1 ไม่ใช่คนละมาตรฐาน". The
+   * criterion's content IS the symmetry, so it is measured as the mirror of AC-miniloan-056 above:
+   * two textareas and two command paths are exactly where reject and cancel could drift into two
+   * standards, and only a test on both sides can catch it. The blank reason is sent here too, the
+   * API refuses, and the status does not move.
+   */
+  it('sends an empty cancellation reason too, and shows the API refusal', async () => {
+    const fixture = await render();
+
+    press(fixture, 'ui-miniloan-007-cancel');
+    const request = httpTesting.expectOne(`${API_BASE_URL}/applications/app-1/cancel`);
+    expect(request.request.body).toEqual({ reason: '' });
+    request.flush(
+      { code: 'CANCELLATION_REASON_REQUIRED', message: 'ยกเลิกไม่ได้ — ต้องระบุเหตุผลการยกเลิก' },
+      { status: 422, statusText: 'Unprocessable Entity' },
+    );
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.commandError()).toBe('ยกเลิกไม่ได้ — ต้องระบุเหตุผลการยกเลิก');
+    expect(fixture.componentInstance.status()).toBe('UnderReview');
+    expect(fixture.componentInstance.outcome()).toBeNull();
   });
 
   /**
