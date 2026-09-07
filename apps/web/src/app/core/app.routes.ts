@@ -35,4 +35,21 @@ export const routes: Routes = [
         (m) => m.ApplicationDetailComponent,
       ),
   },
+  // FE-miniloan-022. `/loan-accounts` itself belongs to UI-miniloan-011 (ROLE-004) and is the path
+  // nav.component.ts committed to; these two are the applicant's views of one account, reached from
+  // UI-miniloan-002's ui-miniloan-002-view-schedule link and from each other.
+  {
+    path: 'loan-accounts/:id/schedule',
+    loadComponent: () =>
+      import('../features/applications/repayment-schedule.component').then(
+        (m) => m.RepaymentScheduleComponent,
+      ),
+  },
+  {
+    path: 'loan-accounts/:id/payoff-quote',
+    loadComponent: () =>
+      import('../features/applications/early-closure-quote.component').then(
+        (m) => m.EarlyClosureQuoteComponent,
+      ),
+  },
 ];

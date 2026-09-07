@@ -3258,7 +3258,194 @@
           "hash": "sha256:17093dc2b47ef05275a15dd64446622cdac5e373d7bc833d3853994caa383c6f"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 8 passed (8); Tests 44 passed (44) (vitest v4.1.11) -- 15 new on top of the 29 FE-miniloan-021 recorded: RepaymentScheduleComponent 6 and EarlyClosureQuoteComponent 9. RED on round 1, green on round 2 -- build.iterations is 1. The single failure was a compile error, not a measurement: TS2345 in the payoff spec, because the renderWith helper took the fixture as `unknown` and HttpTestingController.flush does not accept that type; the parameter is now typed PayoffQuote. No assertion, golden row or health check was touched. AC-miniloan-073/074/075 are measured with GD-miniloan-005 rows C1, C2 and C3 quoted word for word (proves CALC-miniloan-004@v1 and BR-miniloan-022@v1, status validated, verifiedBy aplus191 on 2026-09-01) -- nothing is computed in these tests, and the day count is asserted beside each amount because the criteria quote it as part of what the borrower reads (\"ดอกเบี้ยค้างจ่าย 10 วัน\", C2's \"0 วัน — 0.00\" boundary a page rendering only the amount would silently pass).",
+            "at": "2026-09-07T01:36:53Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.210 seconds] -- Initial total 267.10 kB (70.81 kB transfer); five lazy chunks, one per screen built so far, the two new ones repayment-schedule-component 6.39 kB and early-closure-quote-component 5.67 kB. Output location apps/web/dist/miniloan-web. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T01:37:02Z"
+          },
+          {
+            "cmd": "(apps/api not run)",
+            "result": "No file under apps/api was touched by this unit, so the container mvn test was deliberately NOT re-run: recording an unchanged 346 here would read as evidence this unit produced it. The API halves these screens depend on were built and measured earlier -- API-012 by FE-miniloan-012 (RepaymentScheduleQueryServiceTest, AC-miniloan-098/099) and API-015 by FE-miniloan-014 (EarlyClosureQuoteServiceTest$GoldenRows, 7 rows of GD-miniloan-005) -- and both were green at 346 as of commit 61c6e3e.",
+            "at": "2026-09-07T01:37:02Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/applications/repayment-schedule.component.ts",
+          "apps/web/src/app/features/applications/repayment-schedule.component.html",
+          "apps/web/src/app/features/applications/repayment-schedule.component.scss",
+          "apps/web/src/app/features/applications/early-closure-quote.component.ts",
+          "apps/web/src/app/features/applications/early-closure-quote.component.html",
+          "apps/web/src/app/features/applications/early-closure-quote.component.scss",
+          "apps/web/src/app/core/services/loan-account.service.ts",
+          "apps/web/src/app/core/app.routes.ts",
+          "apps/web/src/app/features/applications/repayment-schedule.component.spec.ts",
+          "apps/web/src/app/features/applications/early-closure-quote.component.spec.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/applications/repayment-schedule.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/applications/early-closure-quote.component.spec.ts",
+            "calc_ref": "CALC-miniloan-004@v1",
+            "gd_ref": "GD-miniloan-005"
+          }
+        ],
+        "ui_controls": [
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-installment-number",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-due-date",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-emi-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-interest-portion",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-principal-portion",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-remaining-balance",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-008-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-ent-007-total-principal",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-004-request-payoff-quote",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-005-ent-006-outstanding-principal",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-005-accrued-interest",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-005-early-closure-fee",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-005-total-payoff-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-005-quote-calculated-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-005-back-to-schedule",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      }
     },
     {
       "id": "FE-miniloan-023",
@@ -4086,8 +4273,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 21,
-      "draft": 8
+      "validated": 22,
+      "draft": 7
     },
     "by_origin": {
       "new": 27,

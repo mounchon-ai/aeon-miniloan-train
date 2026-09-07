@@ -1,0 +1,101 @@
+// Tokens only — mock's theme owns every value here.
+.repayment-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.repayment-schedule__zone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+
+  h2 {
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+  }
+
+  a {
+    color: var(--text-link);
+    font-size: var(--text-sm);
+  }
+}
+
+// screens.json overflow: "จำนวนงวดมากไม่มีการตัดหน้า … จึงเลื่อนดูในตารางเดียวได้เสมอ"
+.repayment-schedule__table {
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+
+  th,
+  td {
+    padding: var(--space-2) var(--space-3);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  th {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  td {
+    color: var(--text-primary);
+  }
+}
+
+.repayment-schedule__summary {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+}
+
+.repayment-schedule__skeleton {
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--bg-raised);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+}
+
+.repayment-schedule__unauthorized {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+}
+
+.repayment-schedule__error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-5);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+
+  button {
+    font: inherit;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--danger);
+    cursor: pointer;
+  }
+}
