@@ -1,0 +1,120 @@
+// Tokens only — mock's theme owns every value here.
+.approver-role-setting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 560px;
+}
+
+.approver-role-setting__zone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+
+  h2 {
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+  }
+
+  label {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  select {
+    font: inherit;
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+  }
+
+  button {
+    font: inherit;
+    align-self: flex-start;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    cursor: pointer;
+
+    &:disabled {
+      color: var(--text-muted);
+      cursor: progress;
+    }
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: minmax(0, 14rem) 1fr;
+    gap: var(--space-2) var(--space-4);
+    margin: 0;
+  }
+
+  dt {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+  }
+}
+
+.approver-role-setting__warning {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.approver-role-setting__outcome {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-raised);
+  border-radius: var(--radius);
+  color: var(--brand-primary);
+  font-size: var(--text-sm);
+}
+
+.approver-role-setting__unauthorized {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+}
+
+.approver-role-setting__error {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-5);
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+  color: var(--danger);
+
+  button {
+    font: inherit;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--danger);
+    cursor: pointer;
+  }
+}

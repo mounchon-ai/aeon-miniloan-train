@@ -4170,7 +4170,89 @@
           "hash": "sha256:cd8cba3798219848b73f57c714d4e24ae32351234bdfc415e5b6d7a1a30da4a9"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 12 passed (12); Tests 86 passed (86) (vitest v4.1.11) -- 10 new on top of the 76 FE-miniloan-024 recorded, all ApproverRoleSettingComponent. GREEN on the first run, so build.iterations is 0 and no fix round happened. The two sentences of AC-miniloan-082 and AC-miniloan-089 are asserted as SEPARATE tests flushing the same response shape with a different message, because which one applies depends on whether a row already existed -- a fact only the API can see. A component that chose between them from its own loaded state would say \"ตั้งค่า …\" to somebody who had just changed the setting, and would still pass a test that only checked one of the two.",
+            "at": "2026-09-07T04:16:14Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.299 seconds] -- Output location apps/web/dist/miniloan-web, one new lazy chunk approver-role-setting-component. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T04:16:26Z"
+          },
+          {
+            "cmd": "(apps/api not run)",
+            "result": "No file under apps/api was touched by this unit, so the container mvn test was deliberately NOT re-run: recording an unchanged 354 here would read as evidence this unit produced it. The API halves this screen depends on were built and measured by FE-miniloan-017 -- API-019 and API-022 in ApproverRoleSettingController, with ApproverRoleSettingServiceTest covering AC-miniloan-082, AC-miniloan-083 and AC-miniloan-089 -- and the suite was green at 354 as of commit 8ebbfd2. This unit needed no API change: unlike FE-miniloan-021/023/024, every field UI-miniloan-008 declares was already on the wire (approverRole, updatedBy, updatedAt) and the confirmation sentence already travels in the response's message field.",
+            "at": "2026-09-07T04:16:26Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/settings/approver-role-setting.component.ts",
+          "apps/web/src/app/features/settings/approver-role-setting.component.html",
+          "apps/web/src/app/features/settings/approver-role-setting.component.scss",
+          "apps/web/src/app/core/services/approver-role-setting.service.ts",
+          "apps/web/src/app/core/app.routes.ts",
+          "apps/web/src/app/features/settings/approver-role-setting.component.spec.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/settings/approver-role-setting.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-008-ent-011-approver-role",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-008-ent-011-updated-by",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-008-ent-011-updated-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-008-save-setting",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      },
+      "commits": [
+        "<the commit hash>"
+      ]
     },
     {
       "id": "FE-miniloan-026",
@@ -4706,8 +4788,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 24,
-      "draft": 5
+      "validated": 25,
+      "draft": 4
     },
     "by_origin": {
       "new": 27,

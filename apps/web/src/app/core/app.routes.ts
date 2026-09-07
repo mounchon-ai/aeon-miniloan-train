@@ -78,4 +78,13 @@ export const routes: Routes = [
         (m) => m.UnassignedQueueComponent,
       ),
   },
+  // FE-miniloan-025. sitemap.json marks UI-miniloan-008 entry: false, so nav.component.ts links no
+  // role to it and this path is this unit's own — picked in the same shape as the others.
+  {
+    path: 'settings/approver-role',
+    loadComponent: () =>
+      import('../features/settings/approver-role-setting.component').then(
+        (m) => m.ApproverRoleSettingComponent,
+      ),
+  },
 ];

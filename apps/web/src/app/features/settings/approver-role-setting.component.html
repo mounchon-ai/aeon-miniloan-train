@@ -1,0 +1,59 @@
+<!--
+  Zones from screens.json UI-miniloan-008: setting-form · setting-audit.
+  Every data-testid is mock's, copied verbatim from the wireframe (gate 63).
+-->
+<section class="approver-role-setting">
+  @if (notAllowed()) {
+    <p class="approver-role-setting__unauthorized">{{ notAllowed() }}</p>
+  } @else {
+    @if (isUnset()) {
+      <p class="approver-role-setting__warning">
+        ยังไม่เคยตั้งค่า role ผู้อนุมัติ — คำขอปรับปรุงบัญชีที่ปิดแล้วจะถูกปฏิเสธทั้งหมดจนกว่าจะตั้งค่า
+      </p>
+    }
+
+    @if (outcome()) {
+      <p class="approver-role-setting__outcome">{{ outcome() }}</p>
+    }
+    @if (failed()) {
+      <div class="approver-role-setting__error">
+        <p>{{ failed() }}</p>
+        <button type="button" (click)="save()">ลองใหม่</button>
+      </div>
+    }
+
+    <div class="approver-role-setting__zone">
+      <label for="approver-role">Role ผู้อนุมัติ</label>
+      <select
+        id="approver-role"
+        data-testid="ui-miniloan-008-ent-011-approver-role"
+        [formControl]="approverRole"
+      >
+        <!-- The empty option is BR-miniloan-040@v1's unset state, not a fourth role. -->
+        <option value="">— ยังไม่ได้ตั้ง —</option>
+        @for (role of roles; track role) {
+          <option [value]="role">{{ role }}</option>
+        }
+      </select>
+
+      <button
+        type="button"
+        data-testid="ui-miniloan-008-save-setting"
+        [disabled]="saving()"
+        (click)="save()"
+      >
+        {{ saving() ? 'กำลังบันทึก…' : 'บันทึกการตั้งค่า' }}
+      </button>
+    </div>
+
+    <div class="approver-role-setting__zone">
+      <h2>ประวัติการแก้ไข</h2>
+      <dl>
+        <dt>แก้ไขล่าสุดโดย</dt>
+        <dd data-testid="ui-miniloan-008-ent-011-updated-by">{{ updatedBy() ?? '—' }}</dd>
+        <dt>แก้ไขล่าสุดเมื่อ</dt>
+        <dd data-testid="ui-miniloan-008-ent-011-updated-at">{{ updatedAt() ?? '—' }}</dd>
+      </dl>
+    </div>
+  }
+</section>
