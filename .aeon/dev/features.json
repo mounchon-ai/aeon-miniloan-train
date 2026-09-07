@@ -2875,7 +2875,313 @@
           "hash": "sha256:3f713fd3f35a02a766ef755fd35f96134a6f5456cc068ff341eaa5ea2108984a"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 6 passed (6); Tests 29 passed (29) (vitest v4.1.11) -- 20 new on top of the 9 FE-miniloan-001 recorded: ApplicationFormComponent 9, MyApplicationsListComponent 6, ApplicationDetailComponent 5. RED on round 1, green on round 2 -- build.iterations is 1. Both failures were in the tests' own wiring, neither in what is measured, and no assertion was weakened: (a) 'Cannot flush a cancelled request' in the list spec, because forkJoin cancels its sibling the moment one source errors -- the fix answers the accounts call first so the failure can be observed rather than fought, and the cancellation is the behaviour the screen wants (one failure is one error state, not half a list); (b) NG04002 'Cannot match any routes: applications/app-1' in the form spec, because a successful submit navigates to UI-miniloan-003 per screens.json destinationRef and provideRouter([]) had no such path -- the test router now declares it. No golden row, health check or expected value was touched.",
+            "at": "2026-09-07T01:20:20Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.560 seconds] -- Initial total 266.56 kB (70.78 kB transfer); three lazy chunks, one per screen: application-form-component 41.62 kB, application-detail-component 6.46 kB, my-applications-list-component 5.89 kB. Output location apps/web/dist/miniloan-web. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T01:20:33Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 346, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS -- unchanged from FE-miniloan-020, re-run because this unit had to change apps/api. ENT-002 declares submittedAt, LoanApplication has stored it since FE-miniloan-005, and UI-miniloan-002 and UI-miniloan-003 both display it as \"วันที่ยื่น\" with a testid mock minted for each -- but it had never left the API, so the only way a screen could have shown it was by deriving it from updatedAt, which is the web deciding a business fact (REQ-miniloan-006 · BR-miniloan-027@v1), and it is not the same date as createdAt. One field was added to LoanApplicationController.LoanApplicationResponse. That path is NOT in this unit's manifest.files because DV15 fences a web unit to apps/web; the file is already recorded under FE-miniloan-004, FE-miniloan-005 and FE-miniloan-019, which own it, so it is no orphan. The api suite was re-run to prove the DTO change broke nothing.",
+            "at": "2026-09-07T01:19:00Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/applications/application-form.component.ts",
+          "apps/web/src/app/features/applications/application-form.component.html",
+          "apps/web/src/app/features/applications/application-form.component.scss",
+          "apps/web/src/app/features/applications/my-applications-list.component.ts",
+          "apps/web/src/app/features/applications/my-applications-list.component.html",
+          "apps/web/src/app/features/applications/my-applications-list.component.scss",
+          "apps/web/src/app/features/applications/application-detail.component.ts",
+          "apps/web/src/app/features/applications/application-detail.component.html",
+          "apps/web/src/app/features/applications/application-detail.component.scss",
+          "apps/web/src/app/core/services/loan-application.service.ts",
+          "apps/web/src/app/core/api-base-url.ts",
+          "apps/web/src/app/core/app.routes.ts",
+          "apps/web/src/app/core/app.config.ts",
+          "apps/web/src/app/features/applications/application-form.component.spec.ts",
+          "apps/web/src/app/features/applications/my-applications-list.component.spec.ts",
+          "apps/web/src/app/features/applications/application-detail.component.spec.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/applications/application-form.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/applications/my-applications-list.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/applications/application-detail.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-001-full-name",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-002-age",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-002-monthly-income",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-002-current-employment-months",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-002-existing-monthly-debt",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-002-requested-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-ent-002-requested-term-months",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-estimated-max-approved-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-save-draft",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-001-submit",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-ent-002-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-ent-002-requested-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-ent-002-submitted-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-ent-006-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-ent-006-outstanding-principal",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-view-application",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-view-schedule",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-002-new-application",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-002-status",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-002-requested-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-002-requested-term-months",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-002-submitted-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-003-band",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-003-max-approvable-amount",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-003-reasons",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-ent-002-rejection-reason",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-003-back-to-list",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      }
     },
     {
       "id": "FE-miniloan-022",
@@ -3777,8 +4083,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 20,
-      "draft": 9
+      "validated": 21,
+      "draft": 8
     },
     "by_origin": {
       "new": 27,

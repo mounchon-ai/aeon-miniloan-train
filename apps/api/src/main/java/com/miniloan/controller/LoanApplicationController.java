@@ -246,6 +246,13 @@ public class LoanApplicationController {
      * renders and never assembles from anything it worked out itself (REQ-miniloan-006). The
      * cancellation trio rides along for AC-miniloan-067's "เปิดดูย้อนหลังได้" — the reason is kept
      * with the application and readable afterwards, not only echoed by the command that set it.
+     *
+     * <p>{@code submittedAt} was added while building FE-miniloan-021. ENT-002 declares the attribute,
+     * {@link LoanApplication} has stored it since FE-miniloan-005, and UI-miniloan-002 and
+     * UI-miniloan-003 both display it as "วันที่ยื่น" — but it had never left the API, so the only way
+     * a screen could have shown it was by deriving it from {@code updatedAt}, which is the web
+     * deciding a business fact (REQ-miniloan-006 · BR-miniloan-027@v1). It is not the same date as
+     * {@code createdAt}: a draft saved on one day and submitted on another has two.
      */
     public record LoanApplicationResponse(
             UUID id,
@@ -266,6 +273,7 @@ public class LoanApplicationController {
             String cancellationReason,
             String cancelledBy,
             Instant cancelledAt,
+            Instant submittedAt,
             Instant createdAt,
             Instant updatedAt) {
 
@@ -289,6 +297,7 @@ public class LoanApplicationController {
                     application.getCancellationReason(),
                     application.getCancelledBy(),
                     application.getCancelledAt(),
+                    application.getSubmittedAt(),
                     application.getCreatedAt(),
                     application.getUpdatedAt());
         }

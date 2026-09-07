@@ -1,0 +1,63 @@
+<!--
+  Zones from screens.json UI-miniloan-002: applications-list · accounts-list.
+  Every data-testid is mock's, copied verbatim from the wireframe (gate 63).
+-->
+<section class="my-applications">
+  @if (loading()) {
+    <p class="my-applications__skeleton">กำลังโหลดรายการ…</p>
+  } @else if (failed()) {
+    <div class="my-applications__error">
+      <p>โหลดรายการไม่สำเร็จ</p>
+      <button type="button" (click)="load()">ลองใหม่</button>
+    </div>
+  } @else if (isEmpty()) {
+    <div class="my-applications__empty">
+      <p>ยังไม่มีใบสมัครหรือบัญชีสินเชื่อ</p>
+      <a data-testid="ui-miniloan-002-new-application" routerLink="/applications/new">ยื่นใบสมัครใหม่</a>
+    </div>
+  } @else {
+    <div class="my-applications__zone">
+      <h2>ใบสมัครของฉัน</h2>
+      <a data-testid="ui-miniloan-002-new-application" routerLink="/applications/new">ยื่นใบสมัครใหม่</a>
+
+      <ul class="my-applications__list">
+        @for (application of applications(); track application.id) {
+          <li class="my-applications__row">
+            <span data-testid="ui-miniloan-002-ent-002-status">{{ application.status }}</span>
+            <span data-testid="ui-miniloan-002-ent-002-requested-amount">{{
+              application.requestedAmount ?? '—'
+            }}</span>
+            <span data-testid="ui-miniloan-002-ent-002-submitted-at">{{
+              application.submittedAt ?? '—'
+            }}</span>
+            <a
+              data-testid="ui-miniloan-002-view-application"
+              [routerLink]="['/applications', application.id]"
+              >ดูรายละเอียดใบสมัคร</a
+            >
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="my-applications__zone">
+      <h2>บัญชีสินเชื่อของฉัน</h2>
+
+      <ul class="my-applications__list">
+        @for (account of accounts(); track account.accountNumber) {
+          <li class="my-applications__row">
+            <span data-testid="ui-miniloan-002-ent-006-status">{{ account.status }}</span>
+            <span data-testid="ui-miniloan-002-ent-006-outstanding-principal">{{
+              account.outstandingPrincipal
+            }}</span>
+            <a
+              data-testid="ui-miniloan-002-view-schedule"
+              [routerLink]="['/loan-accounts', account.accountNumber, 'schedule']"
+              >ดูตารางผ่อนชำระ</a
+            >
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</section>

@@ -1,0 +1,119 @@
+<!--
+  Zones and their order come from screens.json UI-miniloan-001:
+  personal-info · financial-info · loan-request · form-actions.
+  Every data-testid below was minted by mock on the wireframe (gate 63) and is copied verbatim.
+-->
+<form class="application-form" [formGroup]="form" (ngSubmit)="$event.preventDefault()">
+  <fieldset class="application-form__zone" [disabled]="locked()">
+    <legend>ข้อมูลส่วนตัว</legend>
+
+    <label>
+      ชื่อ-นามสกุล
+      <input data-testid="ui-miniloan-001-ent-001-full-name" formControlName="fullName" />
+    </label>
+
+    <label>
+      อายุ
+      <input data-testid="ui-miniloan-001-ent-002-age" type="number" formControlName="age" />
+    </label>
+
+    <label>
+      อายุงาน (เดือน)
+      <input
+        data-testid="ui-miniloan-001-ent-002-current-employment-months"
+        type="number"
+        formControlName="currentEmploymentMonths"
+      />
+    </label>
+  </fieldset>
+
+  <fieldset class="application-form__zone" [disabled]="locked()">
+    <legend>ข้อมูลทางการเงิน</legend>
+
+    <label>
+      รายได้ต่อเดือน
+      <input
+        data-testid="ui-miniloan-001-ent-002-monthly-income"
+        formControlName="monthlyIncome"
+        (change)="onIncomeChange(form.controls.monthlyIncome.value ?? '')"
+      />
+    </label>
+
+    <label>
+      ภาระหนี้เดิมต่อเดือน
+      <input
+        data-testid="ui-miniloan-001-ent-002-existing-monthly-debt"
+        formControlName="existingMonthlyDebt"
+      />
+    </label>
+  </fieldset>
+
+  <fieldset class="application-form__zone" [disabled]="locked()">
+    <legend>วงเงินที่ขอ</legend>
+
+    <label>
+      จำนวนเงินกู้ที่ขอ
+      <input
+        data-testid="ui-miniloan-001-ent-002-requested-amount"
+        formControlName="requestedAmount"
+      />
+    </label>
+
+    <label>
+      จำนวนงวดที่ขอ
+      <input
+        data-testid="ui-miniloan-001-ent-002-requested-term-months"
+        type="number"
+        formControlName="requestedTermMonths"
+      />
+    </label>
+
+    <!--
+      AC-miniloan-117 · AC-miniloan-118: whatever API-021 returned, or BR-miniloan-028@v1's
+      sentence. Never a figure this page worked out.
+    -->
+    <p class="application-form__preview" data-testid="ui-miniloan-001-estimated-max-approved-amount">
+      วงเงินอนุมัติสูงสุดโดยประมาณ:
+      @if (previewError()) {
+        <span class="application-form__preview-error">{{ previewError() }}</span>
+      } @else {
+        <span>{{ maxApprovablePreview() ?? '—' }}</span>
+      }
+    </p>
+  </fieldset>
+
+  <div class="application-form__zone application-form__actions">
+    <button
+      type="button"
+      data-testid="ui-miniloan-001-save-draft"
+      [disabled]="saving() || locked()"
+      (click)="onSaveDraft()"
+    >
+      {{ saving() ? 'กำลังบันทึก…' : 'บันทึกร่าง' }}
+    </button>
+
+    <button
+      type="button"
+      data-testid="ui-miniloan-001-submit"
+      [disabled]="submitting() || locked() || !applicationId()"
+      (click)="onSubmit()"
+    >
+      {{ submitting() ? 'กำลังยื่น…' : 'ยื่นใบสมัคร' }}
+    </button>
+  </div>
+
+  <!-- Whatever the API said, rendered as it arrived (AC-miniloan-026 · 030 · 031 · 133). -->
+  @if (message()) {
+    <p class="application-form__message">{{ message() }}</p>
+  }
+  @if (fieldErrors().length) {
+    <ul class="application-form__field-errors">
+      @for (missing of fieldErrors(); track missing) {
+        <li>{{ missing }}</li>
+      }
+    </ul>
+  }
+  @if (locked()) {
+    <p class="application-form__locked">ยื่นใบสมัครเรียบร้อย — แก้ไขข้อมูลไม่ได้อีก</p>
+  }
+</form>
