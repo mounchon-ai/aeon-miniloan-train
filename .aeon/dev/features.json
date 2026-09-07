@@ -2728,7 +2728,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/CreditPreviewController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "61c6e3ea45ad5852822ab96411cf8eca64925c16"
+      ]
     },
     {
       "id": "FE-miniloan-021",
