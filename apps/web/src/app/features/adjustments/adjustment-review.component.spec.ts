@@ -264,6 +264,45 @@ describe('AdjustmentReviewComponent (UI-miniloan-014)', () => {
     expect(fixture.componentInstance.decided()).toBe(true);
   });
 
+  /**
+   * The refusal that is NOT a 403, on the one path a real approver can reach it: the request was
+   * Pending when the page loaded and somebody else decided it before this POST landed. `decided()`
+   * disables both buttons on a row that arrives already decided, so this race is the only way in —
+   * and it is the case that proves a decision refusal lands BESIDE the request rather than in the
+   * unauthorized branch, whatever its status code. Both were routed by status until this unit
+   * rewrote refuse(); this is what measures the rewrite.
+   */
+  it('renders a 409 already-decided refusal beside the request, not in place of it', async () => {
+    const fixture = await render();
+
+    button(fixture, 'ui-miniloan-014-approve-adjustment').click();
+    httpTesting.expectOne(APPROVE_URL).flush(
+      {
+        code: 'ADJUSTMENT_ALREADY_DECIDED',
+        message: 'คำขอปรับปรุงนี้ถูกพิจารณาไปแล้ว — พิจารณาซ้ำไม่ได้',
+      },
+      { status: 409, statusText: 'Conflict' },
+    );
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.failed()).toBe(
+      'คำขอปรับปรุงนี้ถูกพิจารณาไปแล้ว — พิจารณาซ้ำไม่ได้',
+    );
+    expect(fixture.componentInstance.notAllowed()).toBeNull();
+    expect(fixture.componentInstance.outcome()).toBeNull();
+    // the five declared fields are all still on screen
+    for (const id of [
+      'ui-miniloan-014-ent-010-field-name',
+      'ui-miniloan-014-ent-010-old-value',
+      'ui-miniloan-014-ent-010-new-value',
+      'ui-miniloan-014-ent-010-requested-by',
+      'ui-miniloan-014-ent-010-requested-at',
+    ]) {
+      expect(el(fixture, id)).not.toBeNull();
+    }
+    expect(button(fixture, 'ui-miniloan-014-approve-adjustment').disabled).toBe(false);
+  });
+
   /** screens.json loading — the pressed button is disabled while its own call is in flight. */
   it('disables both actions while a decision is in flight', async () => {
     const fixture = await render();
