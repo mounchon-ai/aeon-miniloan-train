@@ -2478,7 +2478,55 @@
           "hash": "sha256:083cae3a7c15f958ce3b8b5be49e62bcd9bd82dd2268740c7f844a0fd34a8cf1"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 313, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (9 new on top of the 304 FE-001..017 had: DashboardSummaryServiceTest 5 and DashboardControllerTest 4). Green on round 1 -- build.iterations stays 0, and no assertion, golden row or health check was touched. BR-miniloan-024@v1 is a policy with no CALC- contract and no signed dataset, so no golden row is quoted anywhere in this unit; what the tests measure is that the counts match rows built through the real services (draft -> submit -> assign -> approve -> disburse), with Closed written through JPQL because LoanAccount exposes no status mutator -- the same arrangement RepaymentScheduleQueryServiceTest uses. A durably-Submitted application is reached the only way STM-miniloan-001 allows: a Band C assessment that does not move to UnderReview. DashboardControllerTest is what proves API-020 is registered at GET /dashboard over real HTTP through AuthTokenFilter, on the FE-miniloan-017 reading that ContractOpenApiTest proves the springdoc MECHANISM against a test-only fixture controller and enumerates no real route. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: neither mvn nor java is on PATH and there is no ~/.m2, so it ran in the container every api unit since FE-miniloan-010 has recorded, against the same volume-cached repo.",
+            "at": "2026-09-07T00:45:00Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS (quiet mode, no output; exit code 0) -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57981819 bytes, up from the 57926003 bytes FE-miniloan-017 recorded",
+            "at": "2026-09-07T00:46:00Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/DashboardController.java",
+          "apps/api/src/main/java/com/miniloan/service/DashboardSummaryService.java",
+          "apps/api/src/main/java/com/miniloan/repository/LoanApplicationRepository.java",
+          "apps/api/src/main/java/com/miniloan/repository/LoanAccountRepository.java",
+          "apps/api/src/test/java/com/miniloan/service/DashboardSummaryServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/controller/DashboardControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/DashboardSummaryServiceTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/controller/DashboardControllerTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-020",
+            "route": "GET /dashboard",
+            "file": "apps/api/src/main/java/com/miniloan/controller/DashboardController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-019",
@@ -3603,13 +3651,26 @@
       "answered_in": null,
       "closed_by": null,
       "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-011",
+      "to": "mock",
+      "about": "conventions.json (shell)",
+      "question_th": "GAP-miniloan-002 ปิดไปด้วยคำตอบของ design ว่า \"เปลือกของแอป (แถบเมนู) เป็นของ mock ไม่ใช่ของ design\" และบ้านของมันคือ conventions.json ของ mock — คำตอบนั้นย้ายเจ้าของ แต่ยังไม่มีใครมินต์ id ให้จริง ตรวจบนดิสก์วันนี้: conventions.json.shell ถือแค่ productName · confirmedBy · confirmedAt เท่านั้น ไม่มี control สักตัว และ wireframe ทั้ง 14 ใบรวม 116 control ไม่มีใบไหนวาดลิงก์เมนู แถบบน หรือตัวสลับบทบาทเลย (ที่ใกล้ที่สุดคือ ui-miniloan-008-ent-011-approver-role ซึ่งเป็นฟิลด์ในหน้า ไม่ใช่ของเปลือก) ผลคือ FE-miniloan-001 ซึ่ง build และ commit ไปแล้ว (validated · 2 commits) render ลิงก์เมนู 4 อันอยู่บนของจริง — UI-miniloan-002 · UI-miniloan-009 · UI-miniloan-010 · UI-miniloan-011 ตาม entry:true และ ACL-023/030/031/032 — โดยไม่มี data-testid ที่ใครประกาศให้ใช้ได้ manifest.ui_controls จึงว่างเปล่า และ DV13 เตือนทุกรอบว่า qa เลือก element บนเปลือกไม่ได้สักอัน · dev มินต์ id เองไม่ได้ (ประตู 37) ขอให้ mock ประกาศ control ของเปลือกแอป web ลง conventions.json.shell (หรือ artifact ของ mock ที่เหมาะกว่า) ให้ครบ: (1) ลิงก์เมนู 4 อันข้างต้น (2) ตัวสลับบทบาท ซึ่ง GAP-miniloan-003 ตอบไว้แล้วว่า absorb เข้าเปลือกและบ้านของมันคือ conventions.json เช่นกัน (3) ระบุรูปของ id ให้ชัด เพราะรูปที่ใช้อยู่คือ <screen-id>-<key> ซึ่งต้องมี screen ผูก แต่ control ของเปลือกไม่สังกัดหน้าไหน — ถ้าใช้รูปอื่น (เช่น shell-<key>) ขอให้เขียนกำกับไว้ เพื่อให้ DV13 สาขา e ยอมรับ id ที่ไม่ได้อยู่บน wireframe ใบใดใบหนึ่ง",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
     }
   ],
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 17,
-      "draft": 12
+      "validated": 18,
+      "draft": 11
     },
     "by_origin": {
       "new": 27,
@@ -3620,7 +3681,7 @@
       "web": 10,
       "api": 19
     },
-    "gaps_open": 5,
+    "gaps_open": 6,
     "ready_for_phase5": false
   }
 }

@@ -27,4 +27,10 @@ public interface LoanAccountRepository extends JpaRepository<LoanAccount, UUID> 
      * the administrative action itself has no unit and no API yet.
      */
     List<LoanAccount> findByInterestRateVersionId(UUID interestRateVersionId);
+
+    /**
+     * FE-miniloan-018 · BR-miniloan-024@v1 — the two account squares of the dashboard. STM-miniloan-002
+     * has exactly two states, so these two counts together are every account there is.
+     */
+    long countByStatus(LoanAccount.Status status);
 }

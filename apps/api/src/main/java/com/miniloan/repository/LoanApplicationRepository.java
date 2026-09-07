@@ -13,4 +13,12 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
     /** The same scope as a list — used to reach the accounts an Applicant owns (API-013). */
     List<LoanApplication> findByApplicantId(String applicantId);
+
+    /**
+     * FE-miniloan-018 · BR-miniloan-024@v1 — one bucket of the dashboard, counted in the database
+     * rather than by loading rows and sizing a list. {@code Disbursed} is deliberately never asked
+     * for here: AC-miniloan-112 says that state has no square of its own, and the account it
+     * produced is what the "ใช้งานอยู่" square counts.
+     */
+    long countByStatus(LoanApplication.Status status);
 }
