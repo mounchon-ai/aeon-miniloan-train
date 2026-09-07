@@ -4297,7 +4297,107 @@
           "hash": "sha256:129f466541fe63c6446f10cf744758e02883084a5ef76690be9d3d6f188709eb"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 13 passed (13); Tests 92 passed (92) (vitest v4.1.11) -- 6 new on top of the 86 FE-miniloan-025 recorded, all DashboardComponent. GREEN on the first run, so build.iterations is 0 and no fix round happened. AC-miniloan-110's five figures are asserted one field at a time and are all DIFFERENT (3 - 2 - 1 - 5 - 4), so a template that crossed Approved into Active cannot pass; a fixture of five equal numbers would hide exactly that. AC-miniloan-111 is asserted as the strings \"0\" plus the ABSENCE of \"—\" and of \"ไม่มีข้อมูล\" anywhere on the page, because every other list screen in this app renders a missing value as a dash and the criterion forbids it here. AC-miniloan-112's arithmetic is NOT recomputed: the fixture is the answer DashboardSummaryServiceTest already proved (Active 1, Approved 0) and what is measured is that the page prints both as they arrived rather than topping Approved up.",
+            "at": "2026-09-07T04:21:57Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.322 seconds] -- Output location apps/web/dist/miniloan-web, one new lazy chunk dashboard-component. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T04:22:05Z"
+          },
+          {
+            "cmd": "(apps/api not run)",
+            "result": "No file under apps/api was touched by this unit, so the container mvn test was deliberately NOT re-run: recording an unchanged 354 here would read as evidence this unit produced it. The API half was built and measured by FE-miniloan-018 -- API-020 in DashboardController, with DashboardSummaryServiceTest covering AC-miniloan-110, AC-miniloan-111 and AC-miniloan-112 including the cross-aggregate trap -- and the suite was green at 354 as of commit 8ebbfd2. Every field UI-miniloan-009 declares was already on the wire, so no API change was needed. Note for the record: AC-miniloan-112 closes with \"ขอบเขตข้อมูลที่ Loan Officer แต่ละคนเห็นยังไม่ตัดสิน (DQ-miniloan-004)\" and that is no longer true -- ADR-007 settled it on 2026-09-07, ACL-018 and ACL-030 are scope: all, so these five numbers are the system's totals and FE-miniloan-018's implementation now has an upstream behind it.",
+            "at": "2026-09-07T04:22:05Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/dashboard/dashboard.component.ts",
+          "apps/web/src/app/features/dashboard/dashboard.component.html",
+          "apps/web/src/app/features/dashboard/dashboard.component.scss",
+          "apps/web/src/app/core/services/dashboard.service.ts",
+          "apps/web/src/app/core/app.routes.ts",
+          "apps/web/src/app/features/dashboard/dashboard.component.spec.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/dashboard/dashboard.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-009-count-applications-submitted",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-009-count-applications-under-review",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-009-count-applications-approved",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-009-count-accounts-active",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-009-count-accounts-closed",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-009-refresh",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      },
+      "commits": [
+        "<the commit hash>"
+      ]
     },
     {
       "id": "FE-miniloan-027",
@@ -4789,8 +4889,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 25,
-      "draft": 4
+      "validated": 26,
+      "draft": 3
     },
     "by_origin": {
       "new": 27,

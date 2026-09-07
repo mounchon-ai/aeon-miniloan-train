@@ -87,4 +87,11 @@ export const routes: Routes = [
         (m) => m.ApproverRoleSettingComponent,
       ),
   },
+  // FE-miniloan-026. /dashboard is the path nav.component.ts committed to for UI-miniloan-009 when
+  // FE-miniloan-001 built the shell (ROLE-002 only), so it is honoured here rather than reinvented.
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('../features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+  },
 ];

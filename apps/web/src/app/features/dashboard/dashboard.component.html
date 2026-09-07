@@ -1,0 +1,43 @@
+<!--
+  Zone from screens.json UI-miniloan-009: summary-counts.
+  The five count ids are mock's fieldMap[] slugs (conventions.json, gate 45) and the refresh id is the
+  wireframe's; both are copied verbatim (gates 37 · 63).
+-->
+<section class="dashboard">
+  @if (loading()) {
+    <p class="dashboard__skeleton">กำลังโหลดแดชบอร์ด…</p>
+  } @else if (failed()) {
+    <div class="dashboard__error">
+      <p>โหลดแดชบอร์ดไม่สำเร็จ</p>
+      <button type="button" data-testid="ui-miniloan-009-refresh" (click)="load()">ลองใหม่</button>
+    </div>
+  } @else if (summary(); as counts) {
+    <div class="dashboard__zone">
+      <!--
+        AC-miniloan-111: zero is printed as 0. There is no ?? fallback on any of these five, and no
+        "ยังไม่มีข้อมูล" branch — an empty system is five zeros, which is a different screen from a
+        broken one.
+      -->
+      <dl>
+        <dt>ยื่นแล้ว</dt>
+        <dd data-testid="ui-miniloan-009-count-applications-submitted">
+          {{ counts.submittedApplications }}
+        </dd>
+        <dt>อยู่ระหว่างพิจารณา</dt>
+        <dd data-testid="ui-miniloan-009-count-applications-under-review">
+          {{ counts.underReviewApplications }}
+        </dd>
+        <dt>อนุมัติแล้ว</dt>
+        <dd data-testid="ui-miniloan-009-count-applications-approved">
+          {{ counts.approvedApplications }}
+        </dd>
+        <dt>ใช้งานอยู่</dt>
+        <dd data-testid="ui-miniloan-009-count-accounts-active">{{ counts.activeLoanAccounts }}</dd>
+        <dt>ปิดแล้ว</dt>
+        <dd data-testid="ui-miniloan-009-count-accounts-closed">{{ counts.closedLoanAccounts }}</dd>
+      </dl>
+
+      <button type="button" data-testid="ui-miniloan-009-refresh" (click)="load()">รีเฟรชข้อมูล</button>
+    </div>
+  }
+</section>
