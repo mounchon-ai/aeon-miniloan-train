@@ -3948,7 +3948,6 @@
         "apis": []
       },
       "commits": [
-        "<the commit hash>",
         "e66f8292a282ffa6dd9a9793e075837eb08a2b2d",
         "1b2ac4e66ba2db462e198ff691db74dd4adc19fe"
       ]
@@ -4124,7 +4123,6 @@
         "apis": []
       },
       "commits": [
-        "<the commit hash>",
         "8ebbfd2dcaf3395fa0029b6aa58a76b84ae2b4a8"
       ]
     },
@@ -4251,7 +4249,6 @@
         "apis": []
       },
       "commits": [
-        "<the commit hash>",
         "502ca248fee7f339c532e937c7a08d0918bc3dcb"
       ]
     },
@@ -4396,7 +4393,6 @@
         "apis": []
       },
       "commits": [
-        "<the commit hash>",
         "de434d75cb0f076e3aee3db461e9d39e3a92b080"
       ]
     },
@@ -5377,10 +5373,10 @@
       "question_th": "ACL-018 ให้ ROLE-002 ดู UC-miniloan-020 (แดชบอร์ดภาพรวมสถานะ) ด้วย scope: own และ enforceAt: [api, domain] แต่ AC-miniloan-110 วัดตัวเลขบนแดชบอร์ดว่าต้องตรงกับ \"จำนวนใบสมัครและบัญชีทั้งหมดในระบบ\" ซึ่งเป็นภาพรวม ไม่ใช่ของตัวเอง · สองข้อนี้เขียนคนละอย่างและไม่มีทางเป็นจริงพร้อมกัน: ถ้า own แปลว่า \"ใบที่มอบหมายให้ฉัน\" ตัวเลขจะน้อยกว่าที่ AC-110 นับ และถ้า own แปลว่าภาพรวม คำว่า scope ก็ไม่ได้กันอะไรเลย · ตรวจต้นน้ำวันนี้: STM-miniloan-001 ไม่มีสถานะไหนผูกกับผู้ดู และ rbac.json ไม่มี ACL ใบอื่นให้ ROLE-002 มองภาพรวม จึงไม่มีเอกสารใบไหนอธิบายว่า own ในบรรทัดนี้หมายถึงอะไร · FE-miniloan-018 สร้างและ commit ไปแล้วด้วยตัวเลขทั้งระบบ (commit b650d3c) เพราะเป็นการอ่านแบบเดียวที่ทำให้ AC-miniloan-110 ผ่านโดยไม่ต้องแก้เกณฑ์รับ และได้จดเหตุผลไว้ใน DashboardSummaryService · ขอให้ design ตัดสินว่า (ก) ACL-018 ควรเป็น scope: all ⇒ สิ่งที่สร้างไว้ถูกแล้วและแก้ที่ rbac.json หรือ (ข) own ถูกแล้วและ AC-miniloan-110 ต้องแก้ให้นับเฉพาะของผู้เรียก ⇒ ต้องแก้โค้ดที่ commit ไปแล้ว และต้องระบุว่า \"ของฉัน\" ของแดชบอร์ดวัดจากอะไร เพราะ ENT-006 (บัญชีสินเชื่อ) ไม่มีฟิลด์ที่ผูกกับ Loan Officer เลย",
       "found_at": "2026-09-07",
       "found_by": "/dev:plan",
-      "status": "open",
-      "answer_th": null,
-      "answered_in": null,
-      "closed_by": null,
+      "status": "answered",
+      "answer_th": "design ตัดสินแล้วผ่าน ADR-007 และเลือกทาง (ก) ของการ์ดใบนี้เอง — ACL-018 กับ ACL-030 เปลี่ยนเป็น scope: all · ยืนยันบนดิสก์วันนี้: rbac.json entries ACL-018 (ROLE-002 · UC-miniloan-020 · ดูแดชบอร์ดภาพรวมสถานะ) และ ACL-030 (ROLE-002 · UI-miniloan-009 · เปิดหน้าแดชบอร์ดภาพรวมสถานะ) ทั้งคู่ถือ scope: all กับ enforceAt: [api, domain] · เส้นทางที่เดินคือรูปเดียวกับ ADR-003..006 คือ /design:change บันทึก ADR-007 -> /design:approve --revoke rbac.json --because ADR-007 -> /design:rbac เขียนใหม่ -> /design:export re-render -> absorb -> sign ใหม่ (check.mjs = PASS, --ready 10 of 10) · เหตุผลที่ตัดสินแบบนี้ ไม่ใช่แค่ว่าโค้ดสร้างไปแล้ว แต่มีข้อเท็จจริงสี่ข้อ: (1) ENT-006 ไม่มี attribute ใดผูกบัญชีกับ Loan Officer เลย ครึ่ง 'บัญชีของฉัน' ของคำตอบเดิมจึงไม่มีทาง สร้างได้ตั้งแต่ต้น (2) BR-miniloan-024@v1 ไม่ได้พูดถึงขอบเขต และคำพูดของลูกค้าที่อ้างอิงมาก็ไม่ได้พูด (3) flow ของ UC-miniloan-020 เองอ่านเป็นภาพรวมทั้งระบบ (4) AC-miniloan-110/111 เป็นของ req และ design ลบล้างไม่ได้ · เจ้าของโปรเจกต์เป็นผู้เลือกทาง (ก) เอง · ผลคือ FE-miniloan-018 ที่ commit ไปแล้ว (b650d3c) ถูกต้องอยู่แล้วและไม่ต้องแก้โค้ดสักบรรทัด · หมายเหตุ: DQ-miniloan-004 ที่ req render ไว้ ยังเขียนคำตอบเก่าว่า own อยู่ ซึ่งเป็นไฟล์ derived ที่ตามหลัง — ยกเป็น GAP-miniloan-022 แยกไว้แล้ว",
+      "answered_in": "rbac.json",
+      "closed_by": "aplus191",
       "blocks": []
     },
     {
@@ -5434,6 +5430,84 @@
       "answered_in": null,
       "closed_by": null,
       "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-017",
+      "to": "design",
+      "about": "UI-miniloan-010",
+      "question_th": "action assign-officer ของ UI-miniloan-010 ประกาศ effect ว่า 'บันทึกการมอบหมายและเปิดสิทธิ์อนุมัติ/ปฏิเสธให้ Loan Officer ที่เลือก' — คำว่า 'ที่เลือก' บังคับให้มีการเลือก แต่ต้นน้ำไม่มีทั้งช่องรับและ แหล่งข้อมูลให้เลือก · ตรวจบนดิสก์วันนี้: (1) UI-miniloan-010 ประกาศ fields ไว้สี่ช่องและทั้งสี่เป็น io: display (ชื่อผู้สมัคร · สถานะ · Credit Band · จำนวนเงินกู้ที่ขอ) ไม่มี io: capture สักช่อง และ mock มินต์ id ให้ครบเท่าที่ประกาศพอดี จึงไม่มี testid สำหรับตัวเลือก Loan Officer (2) ไม่มี endpoint ใบไหน คืนรายชื่อ Loan Officer เลย — ENT-004 Staff มีอยู่ใน datamodel.json แต่ไม่มี API- ใบไหนใน interfaces.json เปิดมันออกมา และไม่มี controller ใดใน apps/api ที่ทำ (LoanApplicationDecisionController จดไว้เองว่าไม่มีแผนสร้าง roster ของ ENT-004) · FE-miniloan-024 จึงสร้างและ commit ไปแล้วโดยส่ง loanOfficerId เป็นค่าว่าง แล้วปล่อยให้ API ปฏิเสธ พร้อมเทสต์ยืนยันว่าหน้านี้ไม่มีช่อง capture ตามที่ ประกาศ (commit 8ebbfd2) · ขอให้ design ตัดสินสองข้อที่ต้องมาคู่กัน: (ก) เพิ่ม field io: capture ผูก ENT-004 ลง zone unassigned-queue ของ UI-miniloan-010 เพื่อให้ mock มินต์ id ได้ และ (ข) ประกาศ API- ที่คืนรายชื่อ Loan Officer ที่มอบหมายได้ พร้อมระบุว่าใครเห็นรายชื่อนั้นได้บ้าง (rbac.json ยังไม่มี ACL ใบไหนพูดถึงการอ่าน ENT-004 เลย) · ข้อ (ก) อย่างเดียวไม่พอ เพราะช่องเลือกที่ไม่มีอะไรให้เลือกก็ยังกด ไม่ได้อยู่ดี",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-018",
+      "to": "design",
+      "about": "AC-miniloan-090",
+      "question_th": "AC-miniloan-090 วัดการยกเลิกใบสมัครบน UI-miniloan-010 ว่า 'บันทึกเหตุผล' และ action cancel-application ก็ประกาศ effect ว่า 'เปลี่ยนสถานะเป็น Cancelled พร้อมบันทึกเหตุผล' — แต่ UI-miniloan-010 ไม่มี field io: capture สักช่อง (ทั้งสี่ช่องเป็น display) จึงไม่มีที่ให้พิมพ์เหตุผล และ mock ก็ไม่ได้มินต์ id ให้ · นี่เป็นคนละใบกับ GAP-miniloan-017: ฝั่งนี้ขาดแค่ 'ช่อง' ไม่ได้ขาด 'แหล่งข้อมูล' เพราะ API พร้อมแล้ว — API-009 รับ body { reason } และ LoanApplicationCancellationService ใช้ค่านั้นจริง โดย FE-miniloan-008 วัด AC-miniloan-047/067 ไว้ครบ ที่ชั้นนั้นแล้ว · FE-miniloan-024 จึงสร้างและ commit ไปแล้วโดยส่ง reason เป็นค่าว่าง แล้วให้ API ปฏิเสธ (commit 8ebbfd2) · หมายเหตุที่ควรตัดสินไปพร้อมกัน: UI-miniloan-007 มี cancel-reason-input อยู่แล้วสำหรับ action เดียวกัน สองหน้าจึงประกาศไม่เหมือนกันสำหรับคำสั่งเดียวกัน · ขอให้ design ตัดสินว่า (ก) เพิ่ม field io: capture รับเหตุผลลง UI-miniloan-010 ให้ตรงกับ UI-miniloan-007 ⇒ mock มินต์ id แล้ว dev ต่อสายเข้า API-009 ที่มีอยู่ หรือ (ข) การยกเลิกจากหน้านี้ไม่ต้องมีเหตุผล ⇒ ขอให้แก้ทั้ง effect ของ action และ AC-miniloan-090 ให้ตรงกัน เพราะตอนนี้ทั้งสองที่เขียนว่าต้องมี",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-019",
+      "to": "design",
+      "about": "AC-miniloan-006",
+      "question_th": "AC-miniloan-006 กับ AC-miniloan-069 พูดถึงปุ่ม 'ปิดบัญชี' บนหน้าบัญชี — 006 วัดว่า 'Operations กดปุ่ม ปิดบัญชี บนหน้าบัญชีนั้น' แล้วถูกปฏิเสธด้วยประโยคที่ระบุจำนวนงวดค้าง และ 069 วัดว่า 'ปุ่ม บันทึกการชำระ และ ปิดบัญชี แสดงให้กดได้กับบทบาท Operations เท่านั้น' — แต่ screens.json ของ UI-miniloan-012 ประกาศ action ไว้สี่ใบ (reschedule · record-payment · record-payoff-payment · submit-adjustment) และ mock มินต์ id ให้ครบสี่ใบพอดี ไม่มีใบไหนเป็นการปิดบัญชี · ฝั่ง API มีอยู่แล้วและทำหน้าที่ครบ: POST /loan-accounts/{id}/close มีจริง และพฤติกรรมเดียวของมันคือปฏิเสธ (refuseDirectClose ไม่เคย return ตามปกติ) โดย PaymentControllerTest วัด AC-006/007 ไว้ที่ชั้นนั้นแล้ว ⇒ กฎถูกบังคับตรงที่ BR-miniloan-025@v1 กำหนดไว้แล้ว สิ่งที่ขาดคือ 'ปุ่ม' อย่างเดียว · FE-miniloan-027 จึงสร้างและ commit ไปแล้วโดยไม่ใส่ปุ่ม และเขียนเทสต์ยืนยันว่า zone payment-form มีปุ่มสองใบพอดีตามที่ประกาศ (commit bbace81) เพราะปุ่มที่ไม่มีใครขอพร้อม testid ที่ไม่มีใครมินต์ คือ DV17 Class B บวกการฝ่าประตู 37 พร้อมกัน · นี่เป็นใบพี่น้องของ GAP-miniloan-013 (AC-miniloan-072 บน UI-miniloan-005) ซึ่งเป็นรูป เดียวกันคนละหน้าจอ · ขอให้ design ตัดสินว่า (ก) เพิ่ม action ปิดบัญชีลง UI-miniloan-012 ⇒ mock มินต์ id แล้ว dev ต่อสายเข้า endpoint ที่มีอยู่ซึ่งจะปฏิเสธให้เอง หรือ (ข) ไม่มีปุ่มนี้บนหน้าจอโดยตั้งใจ ⇒ ขอให้แก้ AC-miniloan-006 และ AC-miniloan-069 ให้ไม่วัดที่ปุ่ม เพราะตอนนี้เกณฑ์รับสองใบพิสูจน์ครึ่งเดียว",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-020",
+      "to": "design",
+      "about": "AC-miniloan-008",
+      "question_th": "AC-miniloan-008 ให้หน้าตารางผ่อน 'มีตัวเลือก ดูฉบับก่อนหน้า ที่เปิดฉบับที่ 1 ขึ้นมาดูได้ครบทุกแถว' และ AC-miniloan-011 ให้ 'รายการฉบับก่อนหน้าแสดงทั้ง ฉบับที่ 1 และ ฉบับที่ 2 และเปิดดูได้ทั้งคู่' — เกณฑ์ สองใบนี้แยกเป็นสองครึ่งที่สถานะไม่เหมือนกัน และขอให้ design ตัดสินเฉพาะครึ่งหลัง · ครึ่งแรก สร้างแล้ว: RescheduleResponse ของ API-011 คืน revisions[] ที่ถือ revisionNumber · issuedAt · supersededAt · current จึง render บรรทัด 'ฉบับที่ 2 (ใช้อยู่) — ออกเมื่อ …' และ 'ฉบับที่ 1 — ถูกแทนที่ เมื่อ …' ได้จริง และ FE-miniloan-027 วัดไว้แล้วว่ามีฉบับที่กำกับ 'ใช้อยู่' ได้ใบเดียวเสมอ (commit bbace81) · ครึ่งหลังไม่มีบ้านเลยสองชั้น: (1) ไม่มี endpoint ใดคืนแถวของฉบับที่ถูกแทนที่ — ScheduleResponse ของ API-012 คืน installments[] ของฉบับที่ใช้อยู่เท่านั้น และไม่มี route ไหนรับ revisionNumber เป็นพารามิเตอร์ (RepaymentScheduleQueryService จดข้อจำกัดนี้ไว้เองว่าแถวยังอยู่ครบแต่ ไม่มีทางที่ถูกออกแบบไว้ให้ขอ) (2) ไม่มี action ใดบน UI-miniloan-012 ที่เป็นการเปิดฉบับก่อนหน้า mock จึงไม่ได้มินต์ id ให้ · ข้อจำกัดที่สาม: ไม่มี endpoint ไหนคืน 'รายการฉบับทั้งหมด' ตอนเปิดหน้าธรรมดา — revisions[] มากับผลของการออกฉบับใหม่เท่านั้น รายการจึงปรากฏเฉพาะหลังกดออกฉบับใหม่ในรอบนั้น · ขอให้ design ตัดสินสามข้อ: (ก) API- ใบไหนคืนรายการฉบับของบัญชีหนึ่งบัญชีตอนเปิดหน้า (ข) API- ใบไหนคืนแถว ของฉบับที่ระบุ (ค) เพิ่ม action เปิดฉบับก่อนหน้าลง UI-miniloan-012 หรือให้เป็นการ display อย่างเดียว โดยไม่ต้องเปิด — ถ้าเลือกอย่างหลัง ขอให้แก้ AC-miniloan-008/011 ให้ไม่ใช้คำว่า 'เปิดดูได้'",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-021",
+      "to": "mock",
+      "about": "UI-miniloan-012",
+      "question_th": "สคริปต์สองตัวของ dev อ่าน wireframe ใบเดียวกันแล้วตอบไม่ตรงกันเรื่อง control ตัวเดียว และ dev แก้ทั้ง สองทางไม่ได้ · ข้อเท็จจริง: build.mjs --testids FE-miniloan-027 พิมพ์ ui-miniloan-012-ent-010-target-record-id ไว้ใต้หัวข้อ 'UI-miniloan-012 — drawn: every id below is the wireframe's, one for one (normative · gate 63)' แปลว่ามันอ่านว่า id นี้มาจาก wireframe · แต่ verify-features.mjs DV13 รายงานว่า testid ตัวเดียวกันนี้ 'is on no wireframe of UI-miniloan-011 · UI-miniloan-012, and every one of those pages IS drawn — so the drawing is the complete list and this control is one nobody put in the picture' · หลักฐานที่ทำให้ใบนี้ไม่ใช่เรื่องชื่อ ENT-010 เพี้ยนทั้งระบบ: อีกสาม id ของ ENT-010 บนหน้าจอเดียวกัน (field-name · old-value · new-value) ไม่ติด DV13 เลยสักตัว และ FE-miniloan-028 ซึ่งใช้ฟิลด์ ENT-010 ชุดเดียวกันบน UI-miniloan-013/014 ก็ไม่ติดสักตัวเช่นกัน — ผิดปกติเฉพาะ control ใบเดียวนี้ · ที่มาที่เป็นไปได้: ADR-006 เพิ่ม attribute targetRecordId ให้ ENT-010 และทำ screens.json ใหม่ (UI-miniloan-012 ได้ field adjustment-target-record) ซึ่งอาจเกิดหลังจาก wireframe ใบนั้นถูกวาด · dev แตะไม่ได้ทั้งสองทาง: เปลี่ยน testid ผิดประตู 37 และลบแถวใน manifest.ui_controls ผิด Step 7 ของ /dev:build · ขอให้ mock ตรวจ wireframe ของ UI-miniloan-012 ว่ามี control สำหรับ adjustment-target-record อยู่จริงหรือไม่ ถ้าไม่มีขอให้วาดเพิ่มและมินต์ id เป็นสตริง เดียวกับที่ --testids คำนวณได้ คือ ui-miniloan-012-ent-010-target-record-id เพื่อให้สอง script ตอบ ตรงกัน (ประตู 37 บังคับว่าต้องเป็นสตริงเดิม เพราะ FE-miniloan-027 commit id นี้ลงโค้ดไปแล้ว)",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-022",
+      "to": "req",
+      "about": "DQ-miniloan-004",
+      "question_th": "หน้า wiki ที่ req render ไว้สำหรับ DQ-miniloan-004 ตามหลัง rbac.json ที่เซ็นแล้ว — ขอให้ re-render ไม่ใช่ตอบคำถามใหม่ · ข้อเท็จจริง: docs/wiki/questions/DQ-miniloan-004.md เขียนคำตอบว่าแดชบอร์ดใช้ 'scope: own ไม่ใช่ทั้งระบบ' และอ้าง ACL-018 กับ ACL-030 ว่าเป็น own (คำว่า scope: own ปรากฏสามครั้ง ในไฟล์) แต่ .aeon/design/rbac.json วันนี้ถือ ACL-018 scope: all และ ACL-030 scope: all · หน้าถูก render 2026-09-05 ส่วน ADR-007 ที่กลับคำตอบคือ 2026-09-07 · คำถามเชิงเนื้อหาปิดไปแล้วและไม่ได้ขอให้ เปิดใหม่ — GAP-miniloan-012 ปิดด้วยคำตอบของ design ในรอบนี้ สิ่งที่ค้างคือไฟล์ derived หนึ่งไฟล์ที่ยัง แสดงคำตอบเก่า · dev ไม่แก้ให้เพราะ docs/wiki เป็น output ที่ renderer ของ req เป็นเจ้าของ การแก้มือ จะทำให้ไบต์บนดิสก์ไม่ตรงกับ JSON ที่อยู่เบื้องหลัง และเป็นการซ่อน drift แทนที่จะบันทึก · ไฟล์ถูก commit ไว้ตามสภาพจริงพร้อมกำกับใน commit message แล้ว (commit 39ff1c9) · ขอให้ req รัน renderer ใหม่เพื่อให้ DQ-miniloan-004 สะท้อน ADR-007 · ตรวจแล้วว่าเป็นหน้าเดียวที่ได้รับผลกระทบ — ไม่มี DQ ใบอื่นพูดถึง แดชบอร์ด",
+      "found_at": "2026-09-07",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": []
     }
   ],
   "rollup": {
@@ -5450,7 +5524,7 @@
       "web": 10,
       "api": 19
     },
-    "gaps_open": 11,
+    "gaps_open": 16,
     "ready_for_phase5": false
   }
 }
