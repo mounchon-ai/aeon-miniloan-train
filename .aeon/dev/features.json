@@ -2637,7 +2637,10 @@
             "file": "apps/api/src/main/java/com/miniloan/controller/LoanAccountController.java"
           }
         ]
-      }
+      },
+      "commits": [
+        "557980d188714dfa0e38a27201b422bb095c9561"
+      ]
     },
     {
       "id": "FE-miniloan-020",
