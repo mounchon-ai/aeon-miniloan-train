@@ -1,0 +1,93 @@
+<!--
+  Zone from screens.json UI-miniloan-014: adjustment-detail — five display fields and two actions,
+  in the order design lists them. Every data-testid is mock's, copied verbatim (gate 63).
+
+  ผู้อนุมัติ and เวลาอนุมัติ are NOT on this page: screens.json declares five fields here and neither
+  is among them, so mock minted no id for either and gate 37 forbids inventing one. AC-miniloan-084
+  and AC-miniloan-085 want both, on a per-account history page nothing upstream declares — that is
+  GAP-miniloan-010, open since 2026-09-06. See the component's note.
+-->
+<section class="adjustment-review">
+  @if (loading()) {
+    <p class="adjustment-review__spinner" aria-busy="true">กำลังโหลดคำขอ…</p>
+  } @else if (notAllowed(); as refusal) {
+    <!-- ACL-016 · ACL-035 — the READ was refused, so there is nothing to show. A refused DECISION
+         is different and lands beside the request below: AC-miniloan-079 says the row is still
+         there and still Pending afterwards. -->
+    <p class="adjustment-review__unauthorized">{{ refusal }}</p>
+  } @else if (adjustment(); as request) {
+    <h1>พิจารณาคำขอปรับปรุงบัญชีที่ปิดแล้ว</h1>
+
+    <dl>
+      <dt>ช่องที่ขอแก้</dt>
+      <dd data-testid="ui-miniloan-014-ent-010-field-name">{{ request.fieldName }}</dd>
+
+      <dt>ค่าเดิม</dt>
+      <dd data-testid="ui-miniloan-014-ent-010-old-value">{{ request.oldValue }}</dd>
+
+      <dt>ค่าใหม่</dt>
+      <dd data-testid="ui-miniloan-014-ent-010-new-value">{{ request.newValue }}</dd>
+
+      <dt>ผู้ยื่นคำขอ</dt>
+      <dd data-testid="ui-miniloan-014-ent-010-requested-by">{{ request.requestedBy }}</dd>
+
+      <dt>วันที่ยื่นคำขอ</dt>
+      <dd data-testid="ui-miniloan-014-ent-010-requested-at">{{ request.requestedAt }}</dd>
+    </dl>
+
+    <div class="adjustment-review__actions">
+      <!--
+        AC-miniloan-079: the button is SHOWN and cannot be pressed on a request the viewer filed.
+        The API refuses the same call anyway (BR-miniloan-025@v1) — this is the screen half, not a
+        replacement for it.
+      -->
+      <button
+        data-testid="ui-miniloan-014-approve-adjustment"
+        type="button"
+        [disabled]="busy() !== '' || ownRequest() || decided()"
+        (click)="approve()"
+      >
+        {{ busy() === 'approve' ? 'กำลังอนุมัติ…' : 'อนุมัติคำขอ' }}
+      </button>
+
+      <!--
+        Reject stays enabled on one's own request: BR-miniloan-049@v1 is about approval, and
+        disabling this too would be a rule this screen invented.
+      -->
+      <button
+        data-testid="ui-miniloan-014-reject-adjustment"
+        type="button"
+        [disabled]="busy() !== '' || decided()"
+        (click)="reject()"
+      >
+        {{ busy() === 'reject' ? 'กำลังปฏิเสธ…' : 'ปฏิเสธคำขอ' }}
+      </button>
+    </div>
+
+    <!--
+      screens.json error: "แสดงข้อความปฏิเสธการอนุมัติ เมื่อผู้ยื่นคำขอพยายามอนุมัติของตัวเอง … ตาม
+      BR-miniloan-049@v1". With the button disabled the API is never called, so this line has to be
+      written here — and it REFERENCES the rule rather than restating the API's sentence, which stays
+      the server's alone (W3: reference, do not copy). A caller who reaches the endpoint directly
+      still gets that sentence, and it renders untouched in the block above.
+    -->
+    @if (ownRequest() && !decided()) {
+      <p class="adjustment-review__four-eyes">
+        คำขอนี้คุณเป็นผู้ยื่นเอง — พิจารณาอนุมัติเองไม่ได้ตาม BR-miniloan-049@v1
+      </p>
+    }
+
+    @if (outcome(); as sentence) {
+      <p class="adjustment-review__outcome">{{ sentence }}</p>
+    }
+
+    @if (failed(); as refusal) {
+      <p class="adjustment-review__error">{{ refusal }}</p>
+    }
+  } @else if (failed(); as problem) {
+    <div class="adjustment-review__error">
+      <p>{{ problem }}</p>
+      <button type="button" (click)="load()">ลองใหม่</button>
+    </div>
+  }
+</section>

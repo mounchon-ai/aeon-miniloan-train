@@ -4938,7 +4938,194 @@
           "hash": "sha256:3d5f5950c3a3022f43ac337c1760ce4405e021682a8189ec7621053b05aade18"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 1,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 19 passed (19); Tests 151 passed (151) (vitest v4.1.11) -- 21 new on top of the 130 FE-miniloan-027 recorded: PendingAdjustmentsListComponent 9 and AdjustmentReviewComponent 12. RED on round 1 -- build.iterations is 1. The single failure was a compile error and nothing else: TS2349 \"Type 'CurrentRoleService' has no call signatures\", because the component called the injected service as if it were the signal; the signal is its `role` field. Wiring, which is one of P13's three allowed fixes, and no assertion, golden row or health check was touched. THE SHARPEST TEST IN THIS UNIT is AC-miniloan-079's screen clause, which is the OPPOSITE of every absence this project has measured so far: AC-miniloan-070 and AC-miniloan-083 said the control must not be there, and this one says it IS there in a state that cannot be pressed -- so the test asserts the approve button EXISTS and is disabled on a request the viewer filed, while reject on the same fixture is still pressable, because BR-miniloan-049@v1 is about approval and disabling reject too would be a rule invented here. A second test asserts the mirror: somebody else's request leaves approve pressable, so the disable is about WHO filed it and not about the page giving up.",
+            "at": "2026-09-07T05:31:10Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.436 seconds] -- Initial total 273.38 kB (74.14 kB transfer). Output location apps/web/dist/miniloan-web. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T05:31:21Z"
+          },
+          {
+            "cmd": "(apps/api not run)",
+            "result": "No file under apps/api was touched by this unit, so the container mvn test was deliberately NOT re-run: recording an unchanged 361 here would read as evidence this unit produced it. Every endpoint these two screens need was built and measured by FE-miniloan-016 -- API-017 approve, API-018 reject, API-024 GET /adjustments?status=Pending and API-025 GET /adjustments/{id}, with AdjustmentControllerTest and ClosedAccountAdjustmentDecisionServiceTest covering four-eyes (BR-miniloan-049@v1), the Pending-only condition (ACL-016 on STM-miniloan-004) and the approver role gate -- and all of it was green at 361 as of commit 0de9cb1. This is the first web unit in the project that needed no api change at all, which is what an API built ahead of its screens is supposed to look like.",
+            "at": "2026-09-07T05:31:21Z"
+          },
+          {
+            "cmd": "(decisions this unit made)",
+            "result": "THREE decisions a reader of the diff should see. (1) AC-miniloan-079's screen half is BUILT rather than measured as an absence, and it is the first criterion in this project to ask for a control that is present-but-unpressable. The comparison the page makes -- adjustment.requestedBy against the current role id -- is the SAME string SelfApprovalRefusedException compares on the server under the mock scheme, so the button and the endpoint cannot disagree about who filed the request. The disabled button does NOT replace the API refusal: AC-miniloan-079 measures both ways and BR-miniloan-025@v1 puts the rule at the API, so the web test still flushes the 403 ADJUSTMENT_SELF_APPROVAL_REFUSED on a path that reaches approve() and asserts the server's sentence renders untouched AND that the request is still on screen and still Pending afterwards, which is what the criterion says did not change. (2) ONE sentence is written on this screen rather than taken from the API, and it is deliberate and narrow. screens.json's error state asks this screen to say why an approval is barred for the four-eyes case, but with the button disabled the API is never called and there is no server sentence to render. So the line beside the button REFERENCES BR-miniloan-049@v1 instead of restating the rule's wording -- the API's sentence keeps one home (W3), and a caller who reaches the endpoint directly still gets it verbatim. Both buttons are also disabled once the request is decided, which is ACL-016's own condition (STM-miniloan-004 state Pending) and not a rule added here; the API refuses a second decision anyway. (3) AC-miniloan-084 and AC-miniloan-085 are only PARTLY provable on these two screens and the card for that is ALREADY OPEN -- GAP-miniloan-010, raised by /dev:plan on 2026-09-06, naming both criteria and both missing halves: no endpoint answers a per-account adjustment history (API-024 is system-wide and Pending-only, API-025 is one request) and no screen in sitemap.json shows ENT-010.approvedBy or approvedAt, so mock minted no id for either and gate 37 forbids inventing one. NO DUPLICATE CARD WAS OPENED. What IS measured here is the half these screens can see: a Pending request arrives with both fields null (AC-miniloan-085's premise), and after an approval the row comes back carrying both with requestedBy != approvedBy (AC-miniloan-084's four-eyes record). A test also asserts this screen's testid roster is exactly mock's seven, so an eighth control added later without a minted id fails.",
+            "at": "2026-09-07T05:31:21Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/features/adjustments/pending-adjustments-list.component.ts",
+          "apps/web/src/app/features/adjustments/pending-adjustments-list.component.html",
+          "apps/web/src/app/features/adjustments/pending-adjustments-list.component.scss",
+          "apps/web/src/app/features/adjustments/pending-adjustments-list.component.spec.ts",
+          "apps/web/src/app/features/adjustments/adjustment-review.component.ts",
+          "apps/web/src/app/features/adjustments/adjustment-review.component.html",
+          "apps/web/src/app/features/adjustments/adjustment-review.component.scss",
+          "apps/web/src/app/features/adjustments/adjustment-review.component.spec.ts",
+          "apps/web/src/app/core/services/closed-account-adjustment.service.ts",
+          "apps/web/src/app/core/app.routes.ts"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/features/adjustments/pending-adjustments-list.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/web/src/app/features/adjustments/adjustment-review.component.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [
+          {
+            "id": "PendingAdjustmentsListComponent.fieldName",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-013-ent-010-field-name",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "PendingAdjustmentsListComponent.oldValue",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-013-ent-010-old-value",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "PendingAdjustmentsListComponent.newValue",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-013-ent-010-new-value",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "PendingAdjustmentsListComponent.requestedBy",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-013-ent-010-requested-by",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "PendingAdjustmentsListComponent.requestedAt",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-013-ent-010-requested-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "PendingAdjustmentsListComponent.openAdjustmentLink",
+            "kind": "view",
+            "dd_ref": null,
+            "testid": "ui-miniloan-013-open-adjustment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.fieldName",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-ent-010-field-name",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.oldValue",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-ent-010-old-value",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.newValue",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-ent-010-new-value",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.requestedBy",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-ent-010-requested-by",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.requestedAt",
+            "kind": null,
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-ent-010-requested-at",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.approve",
+            "kind": "command",
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-approve-adjustment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          },
+          {
+            "id": "AdjustmentReviewComponent.reject",
+            "kind": "command",
+            "dd_ref": null,
+            "testid": "ui-miniloan-014-reject-adjustment",
+            "binding": null,
+            "validation_refs": [],
+            "depends_on": null,
+            "roles": []
+          }
+        ],
+        "apis": []
+      }
     },
     {
       "id": "FE-miniloan-029",
@@ -5198,8 +5385,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 27,
-      "draft": 2
+      "validated": 28,
+      "draft": 1
     },
     "by_origin": {
       "new": 27,

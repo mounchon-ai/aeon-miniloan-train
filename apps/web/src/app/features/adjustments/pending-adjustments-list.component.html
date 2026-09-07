@@ -1,0 +1,65 @@
+<!--
+  Zone from screens.json UI-miniloan-013: pending-adjustments, in the order design lists its fields.
+  Every data-testid is mock's, copied verbatim from the wireframe (gate 63).
+
+  The five field names are ENT-010's declared enum, printed as design spells them: no document in
+  design gives them a Thai label, and inventing one here would put a word in the client's mouth.
+-->
+<section class="pending-adjustments">
+  <h1>คำขอปรับปรุงบัญชีที่รออนุมัติ</h1>
+
+  @if (loading()) {
+    <p class="pending-adjustments__spinner" aria-busy="true">กำลังโหลดรายการ…</p>
+  } @else if (notAllowed(); as refusal) {
+    <p class="pending-adjustments__unauthorized">{{ refusal }}</p>
+  } @else if (failed()) {
+    <div class="pending-adjustments__error">
+      <p>โหลดรายการไม่สำเร็จ</p>
+      <button type="button" (click)="load()">ลองใหม่</button>
+    </div>
+  } @else if (adjustments().length === 0) {
+    <!-- screens.json empty, word for word. -->
+    <p class="pending-adjustments__empty">ไม่มีคำขอรออนุมัติ</p>
+  } @else {
+    <table class="pending-adjustments__table">
+      <thead>
+        <tr>
+          <th scope="col">ช่องที่ขอแก้</th>
+          <th scope="col">ค่าเดิม</th>
+          <th scope="col">ค่าใหม่</th>
+          <th scope="col">ผู้ยื่นคำขอ</th>
+          <th scope="col">วันที่ยื่น</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (adjustment of visible(); track adjustment.id) {
+          <tr>
+            <td data-testid="ui-miniloan-013-ent-010-field-name">{{ adjustment.fieldName }}</td>
+            <td data-testid="ui-miniloan-013-ent-010-old-value">{{ adjustment.oldValue }}</td>
+            <td data-testid="ui-miniloan-013-ent-010-new-value">{{ adjustment.newValue }}</td>
+            <td data-testid="ui-miniloan-013-ent-010-requested-by">{{ adjustment.requestedBy }}</td>
+            <td data-testid="ui-miniloan-013-ent-010-requested-at">{{ adjustment.requestedAt }}</td>
+            <td>
+              <a
+                data-testid="ui-miniloan-013-open-adjustment"
+                [routerLink]="['/adjustments', adjustment.id]"
+                >เปิดพิจารณาคำขอ</a
+              >
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (pageCount() > 1) {
+      <div class="pending-adjustments__pager">
+        <button type="button" [disabled]="page() === 0" (click)="goToPage(page() - 1)">ก่อนหน้า</button>
+        <span>หน้า {{ page() + 1 }} จาก {{ pageCount() }}</span>
+        <button type="button" [disabled]="page() === pageCount() - 1" (click)="goToPage(page() + 1)">
+          ถัดไป
+        </button>
+      </div>
+    }
+  }
+</section>

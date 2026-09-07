@@ -104,6 +104,24 @@ export const routes: Routes = [
         (m) => m.ApproverRoleSettingComponent,
       ),
   },
+  // FE-miniloan-028. sitemap.json marks BOTH UI-miniloan-013 and UI-miniloan-014 entry: false, so
+  // nav.component.ts links no role to either and these two paths are this unit's own -- picked in
+  // the same shape as the others. The approver reaches the queue directly and the review page from
+  // the queue's own ui-miniloan-013-open-adjustment link (screens.json destinationRef).
+  {
+    path: 'adjustments',
+    loadComponent: () =>
+      import('../features/adjustments/pending-adjustments-list.component').then(
+        (m) => m.PendingAdjustmentsListComponent,
+      ),
+  },
+  {
+    path: 'adjustments/:id',
+    loadComponent: () =>
+      import('../features/adjustments/adjustment-review.component').then(
+        (m) => m.AdjustmentReviewComponent,
+      ),
+  },
   // FE-miniloan-026. /dashboard is the path nav.component.ts committed to for UI-miniloan-009 when
   // FE-miniloan-001 built the shell (ROLE-002 only), so it is honoured here rather than reinvented.
   {

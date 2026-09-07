@@ -1,0 +1,22 @@
+.adjustment-review {
+  display: grid;
+  gap: 1rem;
+  max-width: 40rem;
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  &__four-eyes {
+    color: #92400e;
+  }
+
+  &__outcome {
+    color: #14532d;
+  }
+
+  &__error {
+    color: #b91c1c;
+  }
+}
