@@ -6,6 +6,13 @@
   <app-nav />
 
   <main class="app-shell__content">
+    <!--
+      FE-miniloan-029 · AC-miniloan-119: beside the page, never in place of it. The nav above stays
+      clickable and the router outlet below keeps whatever it was showing — "เมนูและส่วนอื่นของหน้า
+      ยังกดได้ ไม่พังทั้งแอป". It disappears on its own as soon as any call succeeds (AC-miniloan-120).
+    -->
+    <app-error-banner [message]="apiError()" />
+
     <router-outlet />
   </main>
 </div>

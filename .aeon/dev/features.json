@@ -5162,7 +5162,55 @@
           "hash": "sha256:f8354993256d39a01679d5fdacc595c045f143c004d52ef3b1de841d5acee85c"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "cd apps/web && npm test",
+            "result": "Test Files 20 passed (20); Tests 159 passed (159) (vitest v4.1.11) -- 7 new on top of the 152 FE-miniloan-028 recorded, all in api-error.interceptor.spec.ts. GREEN on round 1: build.iterations is 0. THE SHARPEST TEST IN THIS UNIT is not the one AC-miniloan-119 asks for -- it is the one that stops this unit breaking the other nine. An interceptor that rewrote EVERY failure would pass a spec that only checked the unreachable path, and would silently replace the API's own sentence on every screen at once: the sentences AC-miniloan-012, AC-miniloan-079, AC-miniloan-088 and a dozen others quote word for word, which this project has spent twenty-eight units keeping in one home. So the pass-through is asserted as hard as the rewrite -- a 403 is delivered with its body byte-identical (the same ADJUSTMENT_SELF_APPROVAL_REFUSED body FE-miniloan-028 renders), and 409, 422 and 500 are each checked to arrive with their own message and to raise no banner. AC-miniloan-120 is measured as a SEQUENCE in one running app rather than by calling the service's setter: the call fails, the banner shows, the same call is re-issued and succeeds, the banner clears -- no new TestBed and no reload between the two, which is what \"ไม่ต้องปิดแล้วเปิดแอปใหม่ ไม่ต้องล็อกอินใหม่\" means. UC-miniloan-026's exception flow is measured too (retry while the API is still down: same state, and the caller still hears back rather than hanging), and afterEach's httpTesting.verify() is what proves nothing retries on its own, which REQ-miniloan-006 puts out of scope.",
+            "at": "2026-09-07T05:39:04Z"
+          },
+          {
+            "cmd": "cd apps/web && npx ng build",
+            "result": "Application bundle generation complete. [1.468 seconds] -- Initial total 274.90 kB (74.64 kB transfer). Output location apps/web/dist/miniloan-web. Run because the angular-developer skill requires it after generating code and will not let it be skipped.",
+            "at": "2026-09-07T05:39:14Z"
+          },
+          {
+            "cmd": "(apps/api not run)",
+            "result": "No file under apps/api was touched by this unit, so the container mvn test was deliberately NOT re-run: recording an unchanged 361 here would read as evidence this unit produced it. This unit reaches no endpoint at all -- UC-miniloan-026 is about what the WEB does when there is no answer, and the api suite was green at 361 as of commit 0de9cb1.",
+            "at": "2026-09-07T05:39:14Z"
+          },
+          {
+            "cmd": "(decisions this unit made)",
+            "result": "FOUR decisions a reader of the diff should see. (1) THIS UNIT EDITS FE-miniloan-001'S FILES: core/app.component.ts, core/app.component.html and core/app.config.ts, all three tracked in FE-miniloan-001's manifest. The banner has to be in the DOM and the interceptor has to be registered, and neither is possible from outside the shell; both files are listed in this unit's manifest.files because it really did change them, the same way FE-miniloan-023/024/027 recorded their apps/api edits. (2) The banner is imported from `shared` by the shell, which is in `core`. structure.apps[web].layers declares Core and Shared each with depends: [], and DV15's own LIMIT says it reads paths and never imports -- so this edge is recorded here rather than left for somebody to find. It is the wiring files_planned itself asks for: design put the interceptor in core/interceptors and the banner in shared/components, and the two have to meet somewhere. The banner injects NOTHING and takes its whole state as an input, which is what keeps it a shared component rather than a core one wearing shared's clothes. (3) A FOURTH file beyond files_planned: core/services/api-error.service.ts holds the one signal the interceptor writes and the shell reads. A module-level mutable signal parked in the interceptor file would be shared across every TestBed in the suite with nothing to reset it. All three files_planned entries are present; manifest.files is the superset the writer allows. (4) THE BANNER CARRIES NO RETRY BUTTON. AC-miniloan-120's retry is \"ปุ่มลองใหม่บนหน้าเดิม\" -- the one each screen already has and each screen's own spec already measures -- and a second retry here would be a control nobody declared, on a component no wireframe draws. manifest.ui_controls is empty for the same reason --fences reports: this unit touches no screen, traces no UI-, and mints no testid.",
+            "at": "2026-09-07T05:39:14Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/web/src/app/core/interceptors/api-error.interceptor.ts",
+          "apps/web/src/app/core/interceptors/api-error.interceptor.spec.ts",
+          "apps/web/src/app/core/services/api-error.service.ts",
+          "apps/web/src/app/shared/components/error-banner.component.ts",
+          "apps/web/src/app/core/app.config.ts",
+          "apps/web/src/app/core/app.component.ts",
+          "apps/web/src/app/core/app.component.html"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/web/src/app/core/interceptors/api-error.interceptor.spec.ts",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": []
+      }
     }
   ],
   "gaps": [
@@ -5388,8 +5436,7 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 28,
-      "draft": 1
+      "validated": 29
     },
     "by_origin": {
       "new": 27,
