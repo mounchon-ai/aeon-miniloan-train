@@ -72,7 +72,7 @@
     {
       "id": "rbac",
       "command": "/design:rbac",
-      "status": "done",
+      "status": "stale",
       "requires": [
         "function",
         "datamodel"
@@ -80,8 +80,9 @@
       "artifacts": [
         "rbac.json"
       ],
-      "attempts": 3,
-      "updatedAt": "2026-09-03T04:33:26Z"
+      "attempts": 0,
+      "updatedAt": "2026-09-07T03:40:55Z",
+      "staleBecause": "ADR-007"
     },
     {
       "id": "nfr",
@@ -128,7 +129,7 @@
     {
       "id": "export",
       "command": "/design:export",
-      "status": "done",
+      "status": "stale",
       "requires": [
         "overview",
         "function",
@@ -143,7 +144,8 @@
         "../export/design-document.md"
       ],
       "attempts": 0,
-      "updatedAt": "2026-09-06T14:58:25Z"
+      "updatedAt": "2026-09-07T03:40:55Z",
+      "staleBecause": "ADR-007"
     }
   ],
   "openQuestions": []
