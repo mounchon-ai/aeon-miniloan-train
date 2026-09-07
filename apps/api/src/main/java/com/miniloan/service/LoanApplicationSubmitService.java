@@ -150,6 +150,13 @@ public class LoanApplicationSubmitService {
      * applications assigned to them — {@code assignedLoanOfficerId} is BR-miniloan-032@v1's field and
      * FE-miniloan-006 is the unit that adds it, so that branch belongs there and is refused rather
      * than widened to "any application" here.
+     *
+     * <p><b>The applicant's miss is a refusal, not a 404</b> (AC-miniloan-127 · FE-miniloan-019).
+     * "ก. เรียก API เปิดดูใบสมัครของ ข. ด้วย id ของ ข. โดยตรง ไม่ผ่านหน้าจอ" must be answered by the
+     * API itself with "ไม่มีสิทธิ์เข้าถึงใบสมัครนี้", and the one sentence covers "not yours" and
+     * "not there" alike so the response can never be used to learn which ids exist. The supervisor
+     * branch keeps {@link ApplicationNotFoundException}: with scope=all, not found really is not
+     * found and there is nothing the answer could give away.
      */
     @Transactional(readOnly = true)
     public SubmitResult findDetail(UUID id, String role) {
@@ -157,7 +164,7 @@ public class LoanApplicationSubmitService {
                 switch (role) {
                     case "ROLE-001" -> applications
                             .findByIdAndApplicantId(id, role)
-                            .orElseThrow(() -> new ApplicationNotFoundException(id));
+                            .orElseThrow(ScopedListingService.ApplicationNotVisibleException::new);
                     case "ROLE-003" -> applications.findById(id).orElseThrow(() -> new ApplicationNotFoundException(id));
                     default -> throw new ViewNotPermittedException();
                 };

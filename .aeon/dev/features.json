@@ -2584,7 +2584,60 @@
           "hash": "sha256:1f4b0ae0734734245bc0d682420694829abf94b55407aa917ddd2395623c92ac"
         }
       ],
-      "status": "draft"
+      "status": "validated",
+      "build": {
+        "iterations": 0,
+        "proof": [
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 326, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS (13 new on top of the 313 FE-001..018 had: ScopedListingServiceTest 6 and ScopedListingControllerTest 7). Green on round 1 -- build.iterations stays 0, and no assertion, golden row or health check was touched. BR-miniloan-033@v1 is a scope rule with no CALC- contract and no signed dataset, so no golden row is quoted. AC-miniloan-128 is measured on the COUNT as well as the contents, with another applicant's rows in the same table: a list that returned all five would still contain the caller's own and would pass a weaker check. AC-miniloan-127's refusal changed the ROLE-001 branch of LoanApplicationSubmitService.findDetail from ApplicationNotFoundException (404, \"...\") to ScopedListingService.ApplicationNotVisibleException (403, the criterion's own sentence); no test asserted the old wording or status and none covered AC-miniloan-127 at all, so this filled a hole rather than relaxing a measure. Every other call site of an ApplicationNotFoundException was left alone -- submit, assign, approve, reject, cancel and disburse each own their own nested class. API-013 (GET /loan-accounts) is recorded in manifest.apis because UC-miniloan-023 traces it and AC-miniloan-126 counts the account half, but no line of it was written here: LoanAccountController and LoanAccountScopeService already carry API-013's scope and its own note says this unit extends that surface rather than adding a second one, so what FE-miniloan-019 contributes to that route is the criterion's proof, not its code. scripts/dev-test.ps1 was read for the command it declares (mvn test in apps/api) but cannot run on this machine: neither mvn nor java is on PATH and there is no ~/.m2, so it ran in the container every api unit since FE-miniloan-010 has recorded.",
+            "at": "2026-09-07T00:57:00Z"
+          },
+          {
+            "cmd": "docker run --rm -v \"D:\\Claude-Training\\workshop\\aeon-miniloan-train\\apps\\api:/src\" -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
+            "result": "BUILD SUCCESS (quiet mode, no output; exit code 0) -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 57985259 bytes, up from the 57981819 bytes FE-miniloan-018 recorded",
+            "at": "2026-09-07T00:57:40Z"
+          }
+        ],
+        "last_error": null,
+        "recorded_by": "aplus191",
+        "recorded_at": "2026-09-07"
+      },
+      "manifest": {
+        "files": [
+          "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java",
+          "apps/api/src/main/java/com/miniloan/service/ScopedListingService.java",
+          "apps/api/src/main/java/com/miniloan/service/LoanApplicationSubmitService.java",
+          "apps/api/src/main/java/com/miniloan/repository/LoanApplicationRepository.java",
+          "apps/api/src/test/java/com/miniloan/service/ScopedListingServiceTest.java",
+          "apps/api/src/test/java/com/miniloan/controller/ScopedListingControllerTest.java"
+        ],
+        "unit_tests": [
+          {
+            "file": "apps/api/src/test/java/com/miniloan/service/ScopedListingServiceTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          },
+          {
+            "file": "apps/api/src/test/java/com/miniloan/controller/ScopedListingControllerTest.java",
+            "calc_ref": null,
+            "gd_ref": null
+          }
+        ],
+        "ui_controls": [],
+        "apis": [
+          {
+            "api_ref": "API-005",
+            "route": "GET /applications",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanApplicationController.java"
+          },
+          {
+            "api_ref": "API-013",
+            "route": "GET /loan-accounts",
+            "file": "apps/api/src/main/java/com/miniloan/controller/LoanAccountController.java"
+          }
+        ]
+      }
     },
     {
       "id": "FE-miniloan-020",
@@ -3672,8 +3725,8 @@
   "rollup": {
     "features_total": 29,
     "by_status": {
-      "validated": 18,
-      "draft": 11
+      "validated": 19,
+      "draft": 10
     },
     "by_origin": {
       "new": 27,

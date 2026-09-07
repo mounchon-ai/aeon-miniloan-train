@@ -21,4 +21,13 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
      * produced is what the "ใช้งานอยู่" square counts.
      */
     long countByStatus(LoanApplication.Status status);
+
+    /**
+     * FE-miniloan-019 · AC-miniloan-128 — the scope of a LIST, applied in the query. Oldest first so
+     * the order is the order they were filed, not whatever the database returned.
+     */
+    List<LoanApplication> findByApplicantIdOrderByCreatedAtAsc(String applicantId);
+
+    /** ACL-003 · ACL-031 give ROLE-003 scope: all — the same rows, in the same order. */
+    List<LoanApplication> findAllByOrderByCreatedAtAsc();
 }

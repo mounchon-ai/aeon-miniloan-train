@@ -17,6 +17,9 @@ import com.miniloan.service.LoanApplicationSubmitService.NotSubmittableException
 import com.miniloan.service.LoanApplicationSubmitService.OutOfRangeException;
 import com.miniloan.service.LoanApplicationSubmitService.SubmitResult;
 import com.miniloan.service.LoanApplicationSubmitService.ViewNotPermittedException;
+import com.miniloan.service.ScopedListingService;
+import com.miniloan.service.ScopedListingService.ApplicationNotVisibleException;
+import com.miniloan.service.ScopedListingService.ListingNotPermittedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -36,7 +39,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * API-001 (POST /applications) · API-002 (PUT /applications/{id}) — ACL-001, ROLE-001 only ·
  * API-003 (POST /applications/{id}/submit) — ACL-002, ROLE-001 own · API-004
- * (GET /applications/{id}) — ACL-024 own / ACL-031 all.
+ * (GET /applications/{id}) — ACL-024 own / ACL-031 all · API-005 (GET /applications) —
+ * ACL-019 own / ACL-003 · ACL-031 all.
  *
  * <p>BR-miniloan-025@v1: the rules are refused here as well as on screen, so calling the endpoint
  * directly gets the same answer the UI would have given (AC-miniloan-031).
@@ -55,14 +59,17 @@ public class LoanApplicationController {
     private final LoanApplicationDraftService draftService;
     private final LoanApplicationSubmitService submitService;
     private final ApplicationAssignmentService assignmentService;
+    private final ScopedListingService scopedListingService;
 
     public LoanApplicationController(
             LoanApplicationDraftService draftService,
             LoanApplicationSubmitService submitService,
-            ApplicationAssignmentService assignmentService) {
+            ApplicationAssignmentService assignmentService,
+            ScopedListingService scopedListingService) {
         this.draftService = draftService;
         this.submitService = submitService;
         this.assignmentService = assignmentService;
+        this.scopedListingService = scopedListingService;
     }
 
     @PostMapping
@@ -87,6 +94,25 @@ public class LoanApplicationController {
             @PathVariable UUID id, HttpServletRequest httpRequest) {
         String applicantId = requireApplicant(httpRequest);
         return ResponseEntity.ok(detailOf(submitService.submit(id, applicantId), id));
+    }
+
+    /**
+     * API-005 (GET /applications) — "ดูรายการใบสมัครที่ผู้เรียกมีสิทธิ์เห็น — ขอบเขตจำกัดตามผู้เรียก
+     * ที่ API ชั้นนี้เป็นด่านสุดท้าย" (UC-miniloan-023 · ACL-019 · BR-miniloan-033@v1).
+     *
+     * <p>No parameter: design declares none, and a role or owner filter accepted from the caller
+     * would be a scope the caller chooses. Which rows come back is decided by {@link
+     * ScopedListingService} from the resolved role alone — AC-miniloan-128's point is that the list
+     * is where a scope hole lives, so the route hands the question straight to the service and never
+     * narrows a wider result on the way out.
+     */
+    @GetMapping
+    public ResponseEntity<List<LoanApplicationResponse>> list(HttpServletRequest httpRequest) {
+        String role = (String) httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
+        return ResponseEntity.ok(
+                scopedListingService.applicationsVisibleTo(role).stream()
+                        .map(LoanApplicationResponse::from)
+                        .toList());
     }
 
     /** API-004 — scope is decided per role in the service, from rbac.json. */
@@ -133,6 +159,23 @@ public class LoanApplicationController {
     public ResponseEntity<ErrorResponse> handleApplicationNotFound(ApplicationNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse("APPLICATION_NOT_FOUND", ex.getMessage()));
+    }
+
+    /**
+     * AC-miniloan-127 — 403 rather than 404, and the sentence never says which of the two it is. The
+     * refusal happens here at the API, which is the half of the criterion a screen cannot satisfy.
+     */
+    @ExceptionHandler(ApplicationNotVisibleException.class)
+    public ResponseEntity<ErrorResponse> handleNotVisible(ApplicationNotVisibleException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("APPLICATION_NOT_VISIBLE", ex.getMessage()));
+    }
+
+    /** rbac.json's default effect on API-005 — a role with no declared list gets no list. */
+    @ExceptionHandler(ListingNotPermittedException.class)
+    public ResponseEntity<ErrorResponse> handleListingNotPermitted(ListingNotPermittedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorResponse("APPLICATION_LIST_FORBIDDEN", ex.getMessage()));
     }
 
     @ExceptionHandler(ViewNotPermittedException.class)
