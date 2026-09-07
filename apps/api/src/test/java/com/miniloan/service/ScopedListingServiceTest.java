@@ -56,6 +56,9 @@ class ScopedListingServiceTest {
     private static final String ANOTHER_APPLICANT = "ROLE-001-another-person";
 
     private static final String OFFICER = "ROLE-002";
+
+    /** ACL-027's "another officer" — one role, several people, the same shape as ANOTHER_APPLICANT. */
+    private static final String ANOTHER_OFFICER = "ROLE-002-another-person";
     private static final String SUPERVISOR = "ROLE-003";
     private static final String OPERATIONS = "ROLE-004";
     private static final String ADJUSTMENT_APPROVER = "ROLE-005";
@@ -184,18 +187,76 @@ class ScopedListingServiceTest {
     }
 
     /**
-     * Default-deny. ACL-027 gives ROLE-002 scope=own over UI-miniloan-006's queue, but that is the
-     * officer's assigned work and no unit has built its API surface — {@code findDetail} refuses the
-     * same role for the same reason. ROLE-004 and ROLE-005 have no application row at all.
+     * Default-deny. ROLE-004 and ROLE-005 have no ACL over an application list at all, so the route
+     * refuses rather than returning an empty array — an empty array would read as "you have none".
+     *
+     * <p>ROLE-002 <b>used to be asserted here</b> and no longer is. That assertion was not a measure
+     * of a rule; it recorded that ACL-027's branch had no screen behind it yet and was therefore
+     * left unbuilt. ACL-027 always said {@code scope: own}, FE-miniloan-023 builds the queue it was
+     * written for, and the two tests below now measure what that scope actually is.
      */
     @Test
     void aRoleWithNoDeclaredApplicationListIsRefused() {
         draftFor(APPLICANT);
 
-        for (String role : new String[] {OFFICER, OPERATIONS, ADJUSTMENT_APPROVER}) {
+        for (String role : new String[] {OPERATIONS, ADJUSTMENT_APPROVER}) {
             assertThatThrownBy(() -> listing.applicationsVisibleTo(role))
                     .isInstanceOf(ListingNotPermittedException.class);
         }
+    }
+
+    /**
+     * ACL-027 · UI-miniloan-006 — "own" is <b>assigned to me</b>. Three applications exist and only
+     * one is handed to this officer; the size is asserted as well as the contents, because a queue
+     * that merely contains the assigned row also passes when it contains every application in the
+     * system, which is exactly the hole AC-miniloan-128 describes.
+     */
+    @Test
+    void theOfficerQueueHoldsOnlyTheApplicationsAssignedToThatOfficer() {
+        UUID mine = draftFor(APPLICANT);
+        submitService.submit(mine, APPLICANT);
+        assignmentService.assign(mine, OFFICER, SUPERVISOR);
+
+        UUID somebodyElses = draftFor(ANOTHER_APPLICANT);
+        submitService.submit(somebodyElses, ANOTHER_APPLICANT);
+        assignmentService.assign(somebodyElses, ANOTHER_OFFICER, SUPERVISOR);
+
+        draftFor(ANOTHER_APPLICANT); // never assigned to anyone
+
+        List<LoanApplication> queue = listing.applicationsVisibleTo(OFFICER);
+
+        assertThat(queue).hasSize(1);
+        assertThat(queue.get(0).getId()).isEqualTo(mine);
+    }
+
+    /**
+     * ACL-028 · UI-miniloan-007's unauthorized state — "พยายามเปิดใบที่มอบหมายให้ Loan Officer คนอื่น".
+     * The refusal is the same sentence the applicant gets, and it is the same sentence for an id that
+     * exists but belongs to another officer as for one that does not exist: an officer who could tell
+     * the two apart could walk ids to learn which applications are in the system.
+     */
+    @Test
+    void openingAnotherOfficersApplicationIsTheSameRefusalAsOpeningNothing() {
+        UUID theirs = draftFor(ANOTHER_APPLICANT);
+        submitService.submit(theirs, ANOTHER_APPLICANT);
+        assignmentService.assign(theirs, ANOTHER_OFFICER, SUPERVISOR);
+
+        assertThatThrownBy(() -> submitService.findDetail(theirs, OFFICER))
+                .isInstanceOf(ApplicationNotVisibleException.class)
+                .hasMessage("ไม่มีสิทธิ์เข้าถึงใบสมัครนี้");
+        assertThatThrownBy(() -> submitService.findDetail(UUID.randomUUID(), OFFICER))
+                .isInstanceOf(ApplicationNotVisibleException.class)
+                .hasMessage("ไม่มีสิทธิ์เข้าถึงใบสมัครนี้");
+    }
+
+    /** The other half of ACL-028 — the assigned one really does open. */
+    @Test
+    void theOfficerOpensTheApplicationAssignedToThem() {
+        UUID mine = draftFor(APPLICANT);
+        submitService.submit(mine, APPLICANT);
+        assignmentService.assign(mine, OFFICER, SUPERVISOR);
+
+        assertThat(submitService.findDetail(mine, OFFICER).application().getId()).isEqualTo(mine);
     }
 
     // ── arrangement ──────────────────────────────────────────────────────────

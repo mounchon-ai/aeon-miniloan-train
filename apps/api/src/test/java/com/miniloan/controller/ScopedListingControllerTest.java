@@ -12,8 +12,10 @@ import com.miniloan.repository.InterestRateVersionRepository;
 import com.miniloan.repository.LoanAccountRepository;
 import com.miniloan.repository.LoanApplicationRepository;
 import com.miniloan.repository.RepaymentScheduleRepository;
+import com.miniloan.service.ApplicationAssignmentService;
 import com.miniloan.service.LoanApplicationDraftService;
 import com.miniloan.service.LoanApplicationDraftService.DraftFields;
+import com.miniloan.service.LoanApplicationSubmitService;
 import java.math.BigDecimal;
 import java.util.UUID;
 import org.hamcrest.Matchers;
@@ -50,11 +52,18 @@ class ScopedListingControllerTest {
     private static final String OFFICER_TOKEN = "Bearer mock-role-002";
     private static final String SUPERVISOR_TOKEN = "Bearer mock-role-003";
 
+    private static final String OPERATIONS_TOKEN = "Bearer mock-role-004";
+
+    /** ACL-027's "another officer" — one role, several people. */
+    private static final String ANOTHER_OFFICER = "ROLE-002-another-person";
+
     /** There is no second Applicant token, so "ผู้สมัคร ข." is a different applicant id. */
     private static final String ANOTHER_APPLICANT = "ROLE-001-another-person";
 
     @Autowired private MockMvc mockMvc;
     @Autowired private LoanApplicationDraftService draftService;
+    @Autowired private LoanApplicationSubmitService submitService;
+    @Autowired private ApplicationAssignmentService assignmentService;
     @Autowired private LoanApplicationRepository applications;
     @Autowired private LoanAccountRepository accounts;
     @Autowired private InterestRateVersionRepository rateVersions;
@@ -109,15 +118,84 @@ class ScopedListingControllerTest {
                 .andExpect(jsonPath("$", Matchers.hasSize(3)));
     }
 
-    /** Default-deny on API-005 — a role with no declared list gets a refusal, not an empty array. */
+    /**
+     * Default-deny on API-005 — a role with no declared list gets a refusal, not an empty array.
+     *
+     * <p>This test used to send OFFICER_TOKEN. ROLE-002 was never a role rbac.json denies: ACL-027
+     * grants it {@code scope: own} and the branch was simply unbuilt until FE-miniloan-023 built the
+     * queue it serves. ROLE-004 has no application-list ACL at all and is what default-deny means.
+     */
     @Test
     void aRoleWithNoDeclaredListIsRefusedByTheRoute() throws Exception {
         draftFor("ROLE-001");
 
         mockMvc
-                .perform(get(APPLICATIONS).header("Authorization", OFFICER_TOKEN))
+                .perform(get(APPLICATIONS).header("Authorization", OPERATIONS_TOKEN))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value("APPLICATION_LIST_FORBIDDEN"));
+    }
+
+    /**
+     * ACL-027 over the real route — UI-miniloan-006's queue. Two applications are assigned, one to
+     * this officer and one to another person in the same role, and a third is assigned to nobody.
+     * The size is asserted: a route that returned all three would still "contain the officer's work".
+     */
+    @Test
+    void theQueueRouteReturnsOnlyTheApplicationsAssignedToTheCallingOfficer() throws Exception {
+        UUID assignedToMe = submittedAndAssigned("ROLE-001", "ROLE-002");
+        submittedAndAssigned(ANOTHER_APPLICANT, ANOTHER_OFFICER);
+        draftFor(ANOTHER_APPLICANT);
+
+        mockMvc
+                .perform(get(APPLICATIONS).header("Authorization", OFFICER_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(jsonPath("$[0].id").value(assignedToMe.toString()))
+                // ENT-003's band travels with the row — UI-miniloan-006 shows it on every line, and
+                // without it the queue would need one detail call per application to render a column.
+                .andExpect(jsonPath("$[0].band").value(Matchers.notNullValue()));
+    }
+
+    /**
+     * The other half of that field: a draft has no assessment (AC-miniloan-035), so its band is null
+     * rather than a value that looks like a verdict nobody reached. Asserted on the applicant's own
+     * list, where drafts live.
+     */
+    @Test
+    void anUnassessedApplicationCarriesNoBand() throws Exception {
+        draftFor("ROLE-001");
+
+        mockMvc
+                .perform(get(APPLICATIONS).header("Authorization", APPLICANT_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].band").value(Matchers.nullValue()));
+    }
+
+    /**
+     * ACL-028 over the real route — UI-miniloan-007's unauthorized state. The application exists and
+     * is assigned to somebody else in the same role, and the officer gets AC-miniloan-127's sentence
+     * rather than the row or a 404.
+     */
+    @Test
+    void openingAnotherOfficersApplicationIsRefusedByTheApi() throws Exception {
+        UUID theirs = submittedAndAssigned(ANOTHER_APPLICANT, ANOTHER_OFFICER);
+
+        mockMvc
+                .perform(get(APPLICATIONS + "/" + theirs).header("Authorization", OFFICER_TOKEN))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("APPLICATION_NOT_VISIBLE"))
+                .andExpect(jsonPath("$.message").value("ไม่มีสิทธิ์เข้าถึงใบสมัครนี้"));
+    }
+
+    /** The other half — the assigned application really does open for the officer holding it. */
+    @Test
+    void theAssignedApplicationOpensForTheOfficerHoldingIt() throws Exception {
+        UUID mine = submittedAndAssigned("ROLE-001", "ROLE-002");
+
+        mockMvc
+                .perform(get(APPLICATIONS + "/" + mine).header("Authorization", OFFICER_TOKEN))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.application.id").value(mine.toString()));
     }
 
     /**
@@ -163,6 +241,13 @@ class ScopedListingControllerTest {
     @Test
     void anUnauthenticatedCallNeverReachesTheList() throws Exception {
         mockMvc.perform(get(APPLICATIONS)).andExpect(status().isUnauthorized());
+    }
+
+    private UUID submittedAndAssigned(String applicantId, String loanOfficerId) {
+        UUID id = draftFor(applicantId);
+        submitService.submit(id, applicantId);
+        assignmentService.assign(id, loanOfficerId, "ROLE-003");
+        return id;
     }
 
     private UUID draftFor(String applicantId) {

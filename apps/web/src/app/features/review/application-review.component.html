@@ -1,0 +1,149 @@
+<!--
+  Zones from screens.json UI-miniloan-007: applicant-info · loan-request · assessment · decision.
+  Every data-testid is mock's, copied verbatim from the wireframe (gate 63).
+-->
+<section class="application-review">
+  @if (loading()) {
+    <p class="application-review__skeleton">กำลังโหลดใบสมัคร…</p>
+  } @else if (notAllowed()) {
+    <p class="application-review__unauthorized">{{ notAllowed() }}</p>
+  } @else if (failed()) {
+    <div class="application-review__error">
+      <p>โหลดใบสมัครไม่สำเร็จ</p>
+      <button type="button" (click)="load()">ลองใหม่</button>
+    </div>
+  } @else if (detail(); as loaded) {
+    <div class="application-review__zone">
+      <h2>ข้อมูลผู้สมัคร</h2>
+      <dl>
+        <dt>ชื่อผู้สมัคร</dt>
+        <dd data-testid="ui-miniloan-007-ent-001-full-name">{{ loaded.application.fullName ?? '—' }}</dd>
+        <dt>อายุ</dt>
+        <dd data-testid="ui-miniloan-007-ent-002-age">{{ loaded.application.age ?? '—' }}</dd>
+        <dt>รายได้ต่อเดือน</dt>
+        <dd data-testid="ui-miniloan-007-ent-002-monthly-income">
+          {{ loaded.application.monthlyIncome ?? '—' }}
+        </dd>
+        <dt>อายุงาน (เดือน)</dt>
+        <dd data-testid="ui-miniloan-007-ent-002-current-employment-months">
+          {{ loaded.application.currentEmploymentMonths ?? '—' }}
+        </dd>
+        <dt>ภาระหนี้เดิมต่อเดือน</dt>
+        <dd data-testid="ui-miniloan-007-ent-002-existing-monthly-debt">
+          {{ loaded.application.existingMonthlyDebt ?? '—' }}
+        </dd>
+      </dl>
+    </div>
+
+    <div class="application-review__zone">
+      <h2>คำขอสินเชื่อ</h2>
+      <dl>
+        <dt>จำนวนเงินกู้ที่ขอ</dt>
+        <dd data-testid="ui-miniloan-007-ent-002-requested-amount">
+          {{ loaded.application.requestedAmount ?? '—' }}
+        </dd>
+        <dt>จำนวนงวดที่ขอ</dt>
+        <dd data-testid="ui-miniloan-007-ent-002-requested-term-months">
+          {{ loaded.application.requestedTermMonths ?? '—' }}
+        </dd>
+      </dl>
+    </div>
+
+    <div class="application-review__zone">
+      <h2>ผลการประเมิน</h2>
+      @if (loaded.assessment; as assessment) {
+        <dl>
+          <dt>Credit Band</dt>
+          <dd data-testid="ui-miniloan-007-ent-003-band">{{ assessment.band }}</dd>
+          <dt>วงเงินอนุมัติสูงสุด</dt>
+          <dd data-testid="ui-miniloan-007-ent-003-max-approvable-amount">
+            {{ assessment.maxApprovableAmount }}
+          </dd>
+          <!--
+            The API sends both dtiRatio and the percentage it decided to show. The percentage is
+            rendered because the API computed it (BR-miniloan-002@v1); formatting the ratio here
+            would be the browser deciding how a rule reads.
+          -->
+          <dt>DTI</dt>
+          <dd data-testid="ui-miniloan-007-ent-003-dti-ratio">{{ assessment.dtiShown }}</dd>
+        </dl>
+        <ul data-testid="ui-miniloan-007-ent-003-reasons" class="application-review__reasons">
+          @for (reason of assessment.reasons; track reason) {
+            <li>{{ reason }}</li>
+          }
+        </ul>
+      } @else {
+        <!-- AC-miniloan-035: a draft has no assessment, and the API says so rather than leaving a hole. -->
+        <p class="application-review__note">{{ loaded.assessmentNote }}</p>
+      }
+    </div>
+
+    <div class="application-review__zone application-review__zone--decision">
+      <h2>การตัดสินใจ</h2>
+      <p class="application-review__status">สถานะปัจจุบัน: {{ status() }}</p>
+
+      @if (outcome()) {
+        <p class="application-review__outcome">{{ outcome() }}</p>
+      }
+      @if (commandError()) {
+        <p class="application-review__command-error">{{ commandError() }}</p>
+      }
+
+      <!--
+        Both reasons stay on the page whatever the status: they are ENT-002 attributes the criteria
+        want readable afterwards ("เหตุผลถูกเก็บไว้กับใบสมัคร เปิดดูย้อนหลังได้", AC-miniloan-067),
+        and screens.json puts them in this zone as capture fields.
+      -->
+      <label for="reject-reason">เหตุผลที่ปฏิเสธ</label>
+      <textarea
+        id="reject-reason"
+        data-testid="ui-miniloan-007-ent-002-rejection-reason"
+        [formControl]="rejectionReason"
+      ></textarea>
+
+      <label for="cancel-reason">เหตุผลที่ยกเลิก</label>
+      <textarea
+        id="cancel-reason"
+        data-testid="ui-miniloan-007-ent-002-cancellation-reason"
+        [formControl]="cancellationReason"
+      ></textarea>
+
+      <div class="application-review__actions">
+        @if (decidable()) {
+          <button
+            type="button"
+            data-testid="ui-miniloan-007-approve"
+            [disabled]="busy() === 'approve'"
+            (click)="approve()"
+          >
+            {{ busy() === 'approve' ? 'กำลังอนุมัติ…' : 'อนุมัติ' }}
+          </button>
+          <button
+            type="button"
+            data-testid="ui-miniloan-007-reject"
+            [disabled]="busy() === 'reject'"
+            (click)="reject()"
+          >
+            {{ busy() === 'reject' ? 'กำลังปฏิเสธ…' : 'ปฏิเสธ' }}
+          </button>
+          <button
+            type="button"
+            data-testid="ui-miniloan-007-disburse"
+            [disabled]="busy() === 'disburse'"
+            (click)="disburse()"
+          >
+            {{ busy() === 'disburse' ? 'กำลังเบิกจ่าย…' : 'สั่งเบิกจ่าย' }}
+          </button>
+        }
+        <button
+          type="button"
+          data-testid="ui-miniloan-007-cancel"
+          [disabled]="busy() === 'cancel'"
+          (click)="cancel()"
+        >
+          {{ busy() === 'cancel' ? 'กำลังยกเลิก…' : 'ยกเลิกใบสมัคร' }}
+        </button>
+      </div>
+    </div>
+  }
+</section>

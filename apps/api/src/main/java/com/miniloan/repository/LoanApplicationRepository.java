@@ -30,4 +30,18 @@ public interface LoanApplicationRepository extends JpaRepository<LoanApplication
 
     /** ACL-003 · ACL-031 give ROLE-003 scope: all — the same rows, in the same order. */
     List<LoanApplication> findAllByOrderByCreatedAtAsc();
+
+    /**
+     * FE-miniloan-023 · ACL-027 (UI-miniloan-006, scope=own) — the officer's queue is the
+     * applications handed to THEM, matched on BR-miniloan-032@v1's field. Oldest first, the same
+     * order the applicant's own list uses.
+     */
+    List<LoanApplication> findByAssignedLoanOfficerIdOrderByCreatedAtAsc(String assignedLoanOfficerId);
+
+    /**
+     * FE-miniloan-023 · ACL-028 (UI-miniloan-007, scope=own) — the single read of one of those, with
+     * the scope in the query rather than checked after loading. UI-miniloan-007's unauthorized state
+     * is "พยายามเปิดใบที่มอบหมายให้ Loan Officer คนอื่น", and this is where that is decided.
+     */
+    Optional<LoanApplication> findByIdAndAssignedLoanOfficerId(UUID id, String assignedLoanOfficerId);
 }

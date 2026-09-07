@@ -146,10 +146,12 @@ public class LoanApplicationSubmitService {
      * on a draft (AC-miniloan-035).
      *
      * <p>Scope comes straight from rbac.json: the applicant sees their own (ACL-024, scope=own), the
-     * supervisor sees all (ACL-031, scope=all). ACL-028 gives a Loan Officer scope=own, meaning the
-     * applications assigned to them — {@code assignedLoanOfficerId} is BR-miniloan-032@v1's field and
-     * FE-miniloan-006 is the unit that adds it, so that branch belongs there and is refused rather
-     * than widened to "any application" here.
+     * supervisor sees all (ACL-031, scope=all), and the Loan Officer sees the ones assigned to them
+     * (ACL-028, scope=own, {@code enforceAt: [api, domain]}) — matched on {@code
+     * assignedLoanOfficerId}, BR-miniloan-032@v1's field. That last branch was left out until now and
+     * this note used to name FE-miniloan-006 as its home; that unit shipped without it, and
+     * FE-miniloan-023 is the unit that builds UI-miniloan-007, the review screen ACL-028 was written
+     * for, so it lands here. "own" is still <b>assigned to me</b> and never "any application".
      *
      * <p><b>The applicant's miss is a refusal, not a 404</b> (AC-miniloan-127 · FE-miniloan-019).
      * "ก. เรียก API เปิดดูใบสมัครของ ข. ด้วย id ของ ข. โดยตรง ไม่ผ่านหน้าจอ" must be answered by the
@@ -157,6 +159,11 @@ public class LoanApplicationSubmitService {
      * "not there" alike so the response can never be used to learn which ids exist. The supervisor
      * branch keeps {@link ApplicationNotFoundException}: with scope=all, not found really is not
      * found and there is nothing the answer could give away.
+     *
+     * <p><b>The officer's miss is the same refusal, for the same reason.</b> UI-miniloan-007's
+     * unauthorized state is "ไม่มีสิทธิ์ดำเนินการกับใบสมัครนี้ เมื่อพยายามเปิดใบที่มอบหมายให้ Loan
+     * Officer คนอื่น" — not-mine and not-there are one answer, or an officer could walk application
+     * ids and learn which ones exist by the shape of the error.
      */
     @Transactional(readOnly = true)
     public SubmitResult findDetail(UUID id, String role) {
@@ -164,6 +171,9 @@ public class LoanApplicationSubmitService {
                 switch (role) {
                     case "ROLE-001" -> applications
                             .findByIdAndApplicantId(id, role)
+                            .orElseThrow(ScopedListingService.ApplicationNotVisibleException::new);
+                    case "ROLE-002" -> applications
+                            .findByIdAndAssignedLoanOfficerId(id, role)
                             .orElseThrow(ScopedListingService.ApplicationNotVisibleException::new);
                     case "ROLE-003" -> applications.findById(id).orElseThrow(() -> new ApplicationNotFoundException(id));
                     default -> throw new ViewNotPermittedException();

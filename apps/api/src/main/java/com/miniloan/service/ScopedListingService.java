@@ -1,8 +1,13 @@
 package com.miniloan.service;
 
+import com.miniloan.domain.CreditAssessment;
 import com.miniloan.domain.LoanApplication;
+import com.miniloan.repository.CreditAssessmentRepository;
 import com.miniloan.repository.LoanApplicationRepository;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +31,12 @@ import org.springframework.transaction.annotation.Transactional;
  *       reads the unassigned queue, so every application is in scope. {@link
  *       LoanApplicationSubmitService#findDetail} already gives that role the same answer on the
  *       single read, and a list that disagreed with the detail would be two scopes for one role.
- *   <li>ROLE-002 — ACL-027 {@code scope: own} means "assigned to me" and is deliberately NOT served
- *       here. {@code findDetail} refuses the same role for the same reason and names the unit that
- *       owns it; UI-miniloan-006's queue has no unit that built its API surface yet, and inventing
- *       the branch under UC-miniloan-023 — whose actor is the Applicant and whose three criteria
- *       never mention an officer — would be this unit answering a question design asked elsewhere.
+ *   <li>ROLE-002 — ACL-027 {@code scope: own}, where "own" means <b>assigned to me</b>: the
+ *       applications whose {@code assignedLoanOfficerId} is this officer, and never "every
+ *       application". FE-miniloan-019 left this branch out on purpose and said so — UC-miniloan-023's
+ *       actor is the Applicant and its three criteria never mention an officer, so the branch had no
+ *       screen behind it then. FE-miniloan-023 builds UI-miniloan-006, the officer's queue, which is
+ *       the screen ACL-027 was written for ({@code enforceAt: [api, domain]}), so it lands here now.
  * </ul>
  *
  * <p><b>One sentence for "not yours", for "no scope" and for "not there"</b> ({@link
@@ -43,12 +49,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScopedListingService {
 
     private static final String APPLICANT = "ROLE-001";
+    private static final String OFFICER = "ROLE-002";
     private static final String SUPERVISOR = "ROLE-003";
 
     private final LoanApplicationRepository applications;
+    private final CreditAssessmentRepository assessments;
 
-    public ScopedListingService(LoanApplicationRepository applications) {
+    public ScopedListingService(
+            LoanApplicationRepository applications, CreditAssessmentRepository assessments) {
         this.applications = applications;
+        this.assessments = assessments;
     }
 
     /**
@@ -78,9 +88,35 @@ public class ScopedListingService {
         if (APPLICANT.equals(callerRole)) {
             return applications.findByApplicantIdOrderByCreatedAtAsc(callerRole);
         }
+        if (OFFICER.equals(callerRole)) {
+            return applications.findByAssignedLoanOfficerIdOrderByCreatedAtAsc(callerRole);
+        }
         if (SUPERVISOR.equals(callerRole)) {
             return applications.findAllByOrderByCreatedAtAsc();
         }
         throw new ListingNotPermittedException();
+    }
+
+    /**
+     * ENT-003's band for each row of a list, keyed by application id.
+     *
+     * <p>UI-miniloan-006 puts "Credit Band" on every row of the officer's queue and screens.json
+     * binds that field to ENT-003, but API-005 returns applications and the band lives on the
+     * assessment — the same shape of hole {@code submittedAt} was in when FE-miniloan-021 found it.
+     * The alternative on the web side would be one detail call per row, which would make a queue's
+     * length the number of requests it issues; this is one read for the page.
+     *
+     * <p>An application with no assessment is simply absent from the map. A draft has none
+     * (AC-miniloan-035), and the queue must be able to say so rather than show a blank that looks
+     * like a band.
+     */
+    @Transactional(readOnly = true)
+    public Map<UUID, CreditAssessment.Band> bandsFor(List<LoanApplication> rows) {
+        if (rows.isEmpty()) {
+            return Map.of();
+        }
+        List<UUID> ids = rows.stream().map(LoanApplication::getId).toList();
+        return assessments.findByApplicationIdIn(ids).stream()
+                .collect(Collectors.toMap(CreditAssessment::getApplicationId, CreditAssessment::getBand));
     }
 }

@@ -21,6 +21,11 @@ import { API_BASE_URL } from '../api-base-url';
 export interface LoanApplication {
   id: string;
   status: string;
+  /**
+   * ENT-003's band, carried on the row so UI-miniloan-006 can show a column without a call per row.
+   * Null while the application has no assessment — a draft has none (AC-miniloan-035).
+   */
+  band: string | null;
   fullName: string | null;
   age: number | null;
   monthlyIncome: string | null;
@@ -53,10 +58,56 @@ export interface CreditAssessment {
 }
 
 /** apps/api LoanApplicationController.ApplicationDetailResponse. */
+/** apps/api LoanApplicationController.AssignmentResponse (ENT-013). Null until a supervisor assigns. */
+export interface Assignment {
+  loanOfficerId: string;
+  assignedBy: string;
+  assignedAt: string;
+}
+
+/** apps/api LoanApplicationController.ApplicationDetailResponse. */
 export interface ApplicationDetail {
   application: LoanApplication;
   assessment: CreditAssessment | null;
   assessmentNote: string | null;
+  assignment: Assignment | null;
+}
+
+/** apps/api LoanApplicationDecisionController.ApprovalResponse (API-007). */
+export interface ApprovalResult {
+  id: string;
+  status: string;
+  approvedAmount: string;
+  approvedBy: string;
+  approvedAt: string;
+}
+
+/** apps/api LoanApplicationDecisionController.RejectionResponse (API-008). */
+export interface RejectionResult {
+  id: string;
+  status: string;
+  rejectionReason: string;
+  rejectedBy: string;
+  rejectedAt: string;
+}
+
+/** apps/api LoanApplicationDecisionController.CancellationResponse (API-009). */
+export interface CancellationResult {
+  id: string;
+  status: string;
+  cancellationReason: string;
+  cancelledBy: string;
+  cancelledAt: string;
+}
+
+/** apps/api DisbursementController.DisbursementResponse (API-010) — the part UI-miniloan-007 reads. */
+export interface DisbursementResult {
+  accountNumber: string;
+  applicationStatus: string;
+  accountStatus: string;
+  principalAmount: string;
+  termMonths: number;
+  disbursedAt: string;
 }
 
 /** apps/api LoanAccountController.LoanAccountSummary (API-013). */
@@ -110,6 +161,31 @@ export class LoanApplicationService {
   /** API-004 — รายละเอียดใบสมัครหนึ่งใบ. */
   detail(id: string): Observable<ApplicationDetail> {
     return this.http.get<ApplicationDetail>(`${API_BASE_URL}/applications/${id}`);
+  }
+
+  /**
+   * API-007 — อนุมัติใบสมัคร. The body is omitted entirely when the officer approves at the amount
+   * that was requested: the route reads a missing body as "the requested amount" and a body carrying
+   * null would say the same thing in more characters. UI-miniloan-007 declares no field for a reduced
+   * amount, so this screen never sends one.
+   */
+  approve(id: string): Observable<ApprovalResult> {
+    return this.http.post<ApprovalResult>(`${API_BASE_URL}/applications/${id}/approve`, {});
+  }
+
+  /** API-008 — ปฏิเสธใบสมัคร. BR-miniloan-013@v1 makes the reason required, and the API decides that. */
+  reject(id: string, reason: string): Observable<RejectionResult> {
+    return this.http.post<RejectionResult>(`${API_BASE_URL}/applications/${id}/reject`, { reason });
+  }
+
+  /** API-009 — ยกเลิกใบสมัคร. BR-miniloan-047@v1 makes the reason required, likewise on the API side. */
+  cancel(id: string, reason: string): Observable<CancellationResult> {
+    return this.http.post<CancellationResult>(`${API_BASE_URL}/applications/${id}/cancel`, { reason });
+  }
+
+  /** API-010 — สั่งเบิกจ่าย. No body: everything the disbursement needs is already on the application. */
+  disburse(id: string): Observable<DisbursementResult> {
+    return this.http.post<DisbursementResult>(`${API_BASE_URL}/applications/${id}/disburse`, {});
   }
 
   /** API-013 — รายการบัญชีสินเชื่อที่ผู้เรียกมีสิทธิ์เห็น. */

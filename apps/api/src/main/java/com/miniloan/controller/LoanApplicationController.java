@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,10 +110,10 @@ public class LoanApplicationController {
     @GetMapping
     public ResponseEntity<List<LoanApplicationResponse>> list(HttpServletRequest httpRequest) {
         String role = (String) httpRequest.getAttribute(AuthTokenFilter.RESOLVED_ROLE_ATTRIBUTE);
+        List<LoanApplication> rows = scopedListingService.applicationsVisibleTo(role);
+        Map<UUID, CreditAssessment.Band> bands = scopedListingService.bandsFor(rows);
         return ResponseEntity.ok(
-                scopedListingService.applicationsVisibleTo(role).stream()
-                        .map(LoanApplicationResponse::from)
-                        .toList());
+                rows.stream().map(row -> LoanApplicationResponse.from(row, bands.get(row.getId()))).toList());
     }
 
     /** API-004 — scope is decided per role in the service, from rbac.json. */
@@ -253,10 +254,19 @@ public class LoanApplicationController {
      * a screen could have shown it was by deriving it from {@code updatedAt}, which is the web
      * deciding a business fact (REQ-miniloan-006 · BR-miniloan-027@v1). It is not the same date as
      * {@code createdAt}: a draft saved on one day and submitted on another has two.
+     *
+     * <p>{@code band} was added while building FE-miniloan-023, for the same reason and by the same
+     * reading. UI-miniloan-006 puts "Credit Band" on every row of the officer's queue and screens.json
+     * binds it to ENT-003, but the band lives on the assessment and API-005 returns applications, so
+     * the only way the queue could have shown it was one detail call per row. It is null wherever
+     * there is no assessment — a draft has none (AC-miniloan-035) — and null on every route that
+     * answers about one application it has just written, where {@link #from(LoanApplication)} is used
+     * and no assessment has been read.
      */
     public record LoanApplicationResponse(
             UUID id,
             String status,
+            String band,
             String fullName,
             Integer age,
             BigDecimal monthlyIncome,
@@ -278,9 +288,14 @@ public class LoanApplicationController {
             Instant updatedAt) {
 
         static LoanApplicationResponse from(LoanApplication application) {
+            return from(application, null);
+        }
+
+        static LoanApplicationResponse from(LoanApplication application, CreditAssessment.Band band) {
             return new LoanApplicationResponse(
                     application.getId(),
                     application.getStatus().name(),
+                    band == null ? null : band.name(),
                     application.getFullName(),
                     application.getAge(),
                     application.getMonthlyIncome(),

@@ -52,4 +52,20 @@ export const routes: Routes = [
         (m) => m.EarlyClosureQuoteComponent,
       ),
   },
+  // FE-miniloan-023. Neither screen is a sitemap entry node, so nav.component.ts committed to no
+  // path for them: the officer reaches the queue from UI-miniloan-009 and the review page from the
+  // queue's own ui-miniloan-006-open-application link. These two paths are this unit's contract,
+  // in the same shape as the ones above, and later units must link to them rather than invent more.
+  {
+    path: 'review',
+    loadComponent: () =>
+      import('../features/review/assigned-queue.component').then((m) => m.AssignedQueueComponent),
+  },
+  {
+    path: 'review/:id',
+    loadComponent: () =>
+      import('../features/review/application-review.component').then(
+        (m) => m.ApplicationReviewComponent,
+      ),
+  },
 ];
