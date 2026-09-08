@@ -1,0 +1,5 @@
+# /dev:scan ignore — vendored skill content only (Step 3: generated output + vendored code).
+# NEVER add apps/** or .aeon/** here — hiding unowned code is bucket 2, not something to skip.
+.agents*
+.claude*
+skills-lock.json
