@@ -5529,6 +5529,21 @@
       "answered_in": null,
       "closed_by": null,
       "blocks": []
+    },
+    {
+      "id": "GAP-miniloan-023",
+      "to": "design",
+      "about": "sitemap.json (landing)",
+      "question_th": "ไม่มี artifact ใบไหนของ design ประกาศว่าหน้าแรกของ apps/web คือหน้าอะไร ผลคือ apps/web/src/app/core/app.routes.ts ถือ route ครบ 14 หน้าแต่ไม่มีใบไหน path เป็น '' ⇒ เปิด http://localhost:3000 แล้ว router ไม่แมตช์อะไรเลย <router-outlet> ว่าง เห็นแต่แถบหัวเรื่องกับเมนู (ยืนยันบนของจริงวันนี้: หน้า / ว่างเปล่า ส่วน /applications แสดงผลปกติ) · เจ้าของโปรเจกต์ระบุความต้องการไว้แล้วว่าอยากให้ '' เด้งตาม role — ROLE-001→/applications · ROLE-002→/dashboard · ROLE-003→/assignment-queue · ROLE-004→/loan-accounts · ROLE-005→/adjustments — แต่ dev เขียนเองไม่ได้เพราะเป็น Class B ตาม /dev:revise Step 0 (route ที่ผู้ใช้ใช้เดินทาง ซึ่งไม่มี artifact ไหนประกาศ) และคลัง recipe ของ /dev:revise มีแค่ master-detail-grid กับ row-control-opens-related --classify จึงตอบ CANNOT CLASSIFY ⇒ ไม่มีตัวเขียนไหนบันทึก class + gap_ref ให้ได้เลย · ขอให้ design ตัดสินสองข้อ: (1) หน้าแรกของ apps/web คือหน้าอะไร และประกาศไว้ที่ไฟล์ไหน — ถ้าเป็นแบบเด้งตาม role ขอให้ประกาศคู่ role→หน้า ให้ครบทั้ง 5 role (2) ROLE-005 (ผู้อนุมัติการปรับปรุงบัญชีที่ปิดแล้ว) เป็นข้อที่ต้องตอบเป็นพิเศษ เพราะ sitemap.json ไม่มีโหนดไหนที่ entry:true ให้ role นี้เลยสักหน้า nav.component.ts จึงไม่แสดงลิงก์ให้มันแม้แต่อันเดียว และ UI-miniloan-013/014 ที่ role นี้ใช้งานถูกทำเครื่องหมาย entry:false ทั้งคู่ ⇒ การเด้ง ROLE-005 ไป /adjustments เท่ากับยกหน้าที่ผังประกาศว่าไม่ใช่ทางเข้า ขึ้นเป็นหน้าแรกของ role นั้น ซึ่งเป็นการตัดสินของ design ไม่ใช่ของ dev",
+      "found_at": "2026-09-08",
+      "found_by": "/dev:plan",
+      "status": "open",
+      "answer_th": null,
+      "answered_in": null,
+      "closed_by": null,
+      "blocks": [
+        "FE-miniloan-001"
+      ]
     }
   ],
   "rollup": {
@@ -5545,7 +5560,7 @@
       "web": 10,
       "api": 19
     },
-    "gaps_open": 16,
+    "gaps_open": 17,
     "ready_for_phase5": false
   },
   "deploy": {
