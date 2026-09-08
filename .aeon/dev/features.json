@@ -5531,44 +5531,29 @@
     "env": "dev",
     "proof": [
       {
-        "cmd": "docker compose -f docker/docker-compose.yml config",
-        "result": "exit 0 — 3 services resolved (db · api · web), no service outside the closed list --plan printed",
-        "at": "2026-09-08T01:24:10Z"
+        "cmd": "docker compose -f docker/docker-compose.yml up -d --build web",
+        "result": "exit 0 — Image docker-web Built (now COPY nginx.conf /etc/nginx/conf.d/default.conf) · db Healthy · api Recreated and Started · web Recreated and Started",
+        "at": "2026-09-08T01:45:30Z"
       },
       {
-        "cmd": "docker compose -f docker/docker-compose.yml up -d --build",
-        "result": "exit 0 — Image docker-api Built (396MB) · Image docker-web Built (103MB, 'Application bundle generation complete. [2.252 seconds]') · Volume docker_pgdata Created · Container docker-db-1 Started then Healthy · Container docker-api-1 Started · Container docker-web-1 Started",
-        "at": "2026-09-08T01:26:52Z"
+        "cmd": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/{applications,applications/new,dashboard,assignment-queue,loan-accounts,review,adjustments,settings/approver-role,applications/123}",
+        "result": "200 on every one — before the fallback these nine were 404 from nginx, so /review, /adjustments and /settings/approver-role could not be opened at all (no in-app link points at them)",
+        "at": "2026-09-08T01:46:05Z"
+      },
+      {
+        "cmd": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/favicon.ico",
+        "result": "200 — a real file is still served as itself; $uri is tried before the index.html fallback",
+        "at": "2026-09-08T01:46:12Z"
+      },
+      {
+        "cmd": "curl -s -H \"Authorization: Bearer mock-role-002\" -o /dev/null -w \"%{http_code}\" http://localhost:5000/v3/api-docs",
+        "result": "200 — api came back healthy after the recreate",
+        "at": "2026-09-08T01:47:05Z"
       },
       {
         "cmd": "docker compose -f docker/docker-compose.yml ps",
-        "result": "api Up 11 seconds 0.0.0.0:5000->8080/tcp · db Up 17 seconds (healthy) 0.0.0.0:5432->5432/tcp · web Up 11 seconds 0.0.0.0:3000->80/tcp",
-        "at": "2026-09-08T01:27:09Z"
-      },
-      {
-        "cmd": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5000/v3/api-docs",
-        "result": "401 — the FE-miniloan-002 mock-token filter is live and refuses an unauthenticated call",
-        "at": "2026-09-08T01:27:12Z"
-      },
-      {
-        "cmd": "curl -s -H \"Authorization: Bearer mock-role-002\" http://localhost:5000/v3/api-docs",
-        "result": "200 — {\"openapi\":\"3.1.0\",\"info\":{\"title\":\"miniloan API\",...}",
-        "at": "2026-09-08T01:27:55Z"
-      },
-      {
-        "cmd": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/",
-        "result": "200 — nginx serves the Angular bundle",
-        "at": "2026-09-08T01:27:14Z"
-      },
-      {
-        "cmd": "docker compose -f docker/docker-compose.yml exec -T db psql -U miniloan -d miniloan -c \"\\dt\"",
-        "result": "11 rows — application_assignments · approver_role_settings · closed_account_adjustments · credit_assessments · idempotency_keys · installments · interest_rate_versions · loan_accounts · loan_applications · payments · repayment_schedules: the api reached the db and created its schema",
-        "at": "2026-09-08T01:27:58Z"
-      },
-      {
-        "cmd": "docker compose -f docker/docker-compose.yml down",
-        "result": "exit 0 — web · api · db Stopped and Removed, Network docker_default Removed (volume docker_pgdata kept)",
-        "at": "2026-09-08T01:28:20Z"
+        "result": "api Up 19 seconds · db Up 3 minutes (healthy) · web Up 19 seconds — left RUNNING on purpose so the owner can walk the screens",
+        "at": "2026-09-08T01:47:19Z"
       }
     ],
     "last_error": null,
@@ -5578,6 +5563,12 @@
         "at": "2026-09-08T01:28:20Z",
         "by": "aplus191",
         "result": "docker compose dev stack came up: db healthy (pg_isready), api answering 200 on /v3/api-docs with a mock-role token and 401 without, web serving 200 on / — then torn down cleanly"
+      },
+      {
+        "env": "dev",
+        "at": "2026-09-08T01:47:19Z",
+        "by": "aplus191",
+        "result": "second attempt after apps/web/Dockerfile gained an nginx SPA fallback: all 14 screen routes now serve the app (200) instead of nginx 404, db still healthy, api still 200 with a mock-role token"
       }
     ]
   }

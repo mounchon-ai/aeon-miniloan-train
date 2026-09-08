@@ -7,6 +7,7 @@ ARG API_URL=http://localhost:5000
 RUN npm run build -- --configuration=production
 
 FROM nginx:alpine AS final
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/miniloan-web/browser /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
