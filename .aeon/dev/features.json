@@ -297,22 +297,42 @@
       ],
       "status": "validated",
       "build": {
-        "iterations": 0,
+        "iterations": 1,
         "proof": [
           {
-            "cmd": "docker run --rm -v apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
-            "result": "Tests run: 3, Failures: 0, Errors: 0, Skipped: 0 -- in com.miniloan.controller.AuthTokenFilterTest; Tests run: 9, Failures: 0, Errors: 0, Skipped: 0 -- in com.miniloan.service.MockTokenServiceTest; Results: Tests run: 12, Failures: 0, Errors: 0, Skipped: 0; BUILD SUCCESS",
-            "at": "2026-09-04T08:19:00Z"
+            "cmd": "docker run --rm -v D:/Claude-Training/workshop/aeon-miniloan-train/apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn test",
+            "result": "Tests run: 363, Failures: 0, Errors: 0, Skipped: 0 — BUILD SUCCESS. AuthTokenFilterTest went 3 -> 5: the three AC-miniloan-123/124/125 assertions are untouched, the two new ones cover the preflight short-circuit and the Allow-Origin header on the 401 (surefire-reports/com.miniloan.controller.AuthTokenFilterTest.txt: Tests run: 5, Failures: 0)",
+            "at": "2026-09-08T02:03:20Z"
           },
           {
-            "cmd": "docker run --rm -v apps/api:/src -v miniloan-maven-repo:/root/.m2 -w /src maven:3.9-eclipse-temurin-21 mvn -q package -DskipTests",
-            "result": "BUILD SUCCESS (quiet mode, no output) -- target/miniloan-api-0.0.1-SNAPSHOT.jar produced, 20967429 bytes, executable Spring Boot jar",
-            "at": "2026-09-04T08:20:07Z"
+            "cmd": "docker compose -f docker/docker-compose.yml up -d --build api",
+            "result": "exit 0 — Image docker-api Built · db Healthy · api Recreated and Started",
+            "at": "2026-09-08T02:03:50Z"
+          },
+          {
+            "cmd": "curl -i -X OPTIONS http://localhost:5000/applications -H \"Origin: http://localhost:3000\" -H \"Access-Control-Request-Method: GET\" -H \"Access-Control-Request-Headers: authorization\"",
+            "result": "204 · Access-Control-Allow-Origin: http://localhost:3000 · Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS · Allow-Headers: Authorization, Content-Type · Max-Age: 3600 — was 401 with the Thai unauthorized body before this round",
+            "at": "2026-09-08T02:03:57Z"
+          },
+          {
+            "cmd": "curl -i -H \"Origin: http://localhost:3000\" -H \"Authorization: Bearer mock-role-001\" http://localhost:5000/applications",
+            "result": "200 · Access-Control-Allow-Origin: http://localhost:3000 · Vary: Origin · body []",
+            "at": "2026-09-08T02:03:57Z"
+          },
+          {
+            "cmd": "curl -i -H \"Origin: http://localhost:3000\" http://localhost:5000/applications",
+            "result": "401 · Access-Control-Allow-Origin: http://localhost:3000 — the rejection is still a rejection and the browser can now read it, so FE-miniloan-029's banner can say what happened instead of showing a network error",
+            "at": "2026-09-08T02:03:57Z"
+          },
+          {
+            "cmd": "playwright: navigate http://localhost:3000/applications then read console at error level",
+            "result": "0 errors (was 2: \"blocked by CORS policy: No 'Access-Control-Allow-Origin' header\" and net::ERR_FAILED). The page now renders the real empty state — 'ยังไม่มีใบสมัครหรือบัญชีสินเชื่อ' with the 'ยื่นใบสมัครใหม่' link — instead of FE-miniloan-029's connection banner",
+            "at": "2026-09-08T02:04:00Z"
           }
         ],
         "last_error": null,
         "recorded_by": "aplus191",
-        "recorded_at": "2026-09-04"
+        "recorded_at": "2026-09-08"
       },
       "manifest": {
         "files": [

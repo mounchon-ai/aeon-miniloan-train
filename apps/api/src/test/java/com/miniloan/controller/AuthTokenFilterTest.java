@@ -56,4 +56,38 @@ class AuthTokenFilterTest {
         assertThat(response.getStatus()).isEqualTo(HttpServletResponse.SC_UNAUTHORIZED);
         assertThat(response.getContentAsString()).contains(AuthTokenFilter.UNAUTHORIZED_MESSAGE);
     }
+    // The browser sends a CORS preflight BY ITSELF and, per spec, without the Authorization header.
+    // Before FE-miniloan-002's revision the token check 401'd it and the real request was never sent,
+    // so every screen showed FE-miniloan-029's connection banner instead of data.
+    @Test
+    void answersACorsPreflightWithoutATokenAndNeverRunsTheChain() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod("OPTIONS");
+        request.addHeader("Origin", AuthTokenFilter.WEB_ORIGIN);
+        request.addHeader("Access-Control-Request-Method", "GET");
+        request.addHeader("Access-Control-Request-Headers", "authorization");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain chain = new MockFilterChain();
+
+        filter.doFilter(request, response, chain);
+
+        assertThat(chain.getRequest()).isNull();
+        assertThat(response.getStatus()).isEqualTo(HttpServletResponse.SC_NO_CONTENT);
+        assertThat(response.getHeader("Access-Control-Allow-Origin")).isEqualTo(AuthTokenFilter.WEB_ORIGIN);
+        assertThat(response.getHeader("Access-Control-Allow-Headers")).contains("Authorization");
+    }
+
+    // A rejection the browser cannot read is a network error to the page, not a 401: the header has to
+    // be on the refusal too, or FE-miniloan-029's banner can never say what actually happened.
+    @Test
+    void putsTheAllowOriginHeaderOnTheRejectionAsWell() throws Exception {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockFilterChain chain = new MockFilterChain();
+
+        filter.doFilter(request, response, chain);
+
+        assertThat(response.getStatus()).isEqualTo(HttpServletResponse.SC_UNAUTHORIZED);
+        assertThat(response.getHeader("Access-Control-Allow-Origin")).isEqualTo(AuthTokenFilter.WEB_ORIGIN);
+    }
 }
