@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -37,6 +38,7 @@ const NAV_ENTRIES: readonly NavEntry[] = [
 })
 export class NavComponent {
   private readonly currentRole = inject(CurrentRoleService);
+  private readonly document = inject(DOCUMENT);
 
   /**
    * The nav link's data-testid, keyed by the DESTINATION screen — mock's own
@@ -57,7 +59,19 @@ export class NavComponent {
     NAV_ENTRIES.filter((entry) => entry.role === this.currentRole.role().id),
   );
 
+  /**
+   * Switching role changes WHO is asking, so everything already on screen belongs to somebody
+   * else: each feature component loads once in its constructor and listens to no role signal, so
+   * without this the previous role's rows stay rendered while the API would answer differently
+   * (a Loan Officer kept seeing the applicant's own list, which GET /applications answers with []
+   * for that token). A reload is the honest scope of the change rather than a re-fetch bolted onto
+   * eight components: the token, every list and every unsent form belonged to the role that just
+   * left. CurrentRoleService writes the choice to sessionStorage first, so the reload comes back
+   * as the role that was picked and not as ROLE-001.
+   */
   onRoleChange(roleId: string): void {
-    this.currentRole.setRole(roleId);
+    if (this.currentRole.setRole(roleId)) {
+      this.document.defaultView?.location.reload();
+    }
   }
 }
