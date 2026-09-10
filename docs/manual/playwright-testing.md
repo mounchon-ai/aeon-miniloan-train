@@ -34,11 +34,21 @@ apps/web/
    ├─ assignment-queue-known-gap.spec.ts   — GAP-017/018 (ดูข้อ 7)
    ├─ role-switch-regression.spec.ts
    ├─ recorded-application-smoke.spec.ts   — human-record + data-driven
-   └─ support/
-      ├─ roles.ts                 — ROLE id, token, loginAs()
-      ├─ api.ts                   — เรียก apps/api ตรง ใช้เป็น setup เท่านั้น
-      └─ application-examples.ts  — ก้อนข้อมูลสำหรับ data-driven
+   ├─ support/
+   │  ├─ roles.ts                 — ROLE id, token, loginAs()
+   │  ├─ api.ts                   — เรียก apps/api ตรง ใช้เป็น setup เท่านั้น
+   │  ├─ application-examples.ts  — ก้อนข้อมูลสำหรับ data-driven
+   │  └─ screenshot.ts            — ห่อ test/expect เพิ่ม afterEach ถ่ายภาพหน้าจอ (ดูข้อ 4.1)
+   └─ screenshots/                — ผลลัพธ์ที่ afterEach สร้าง (gitignored, ทับทุกรอบรัน)
+      ├─ applicant-application/
+      │  ├─ SCN-miniloan-001_ ....png
+      │  └─ SCN-miniloan-004_ ....png
+      └─ loan-officer-review/
+         └─ ...
 ```
+
+ทุกไฟล์ `.spec.ts` import `test`/`expect` จาก `./support/screenshot` แทน `@playwright/test`
+ตรงๆ — ไฟล์อื่นทั้งหมดที่ import type อย่าง `Page` ยังดึงจาก `@playwright/test` ได้ตามปกติ
 
 **กติกาการตั้งชื่อ:** ชื่อเทสขึ้นต้นด้วย id จริงเสมอเมื่อมี — `SCN-miniloan-xxx` จาก
 `.aeon/design/modules/miniloan/scenarios.json`. ถ้าไม่มี scenario รองรับ (เช่นเทส regression
@@ -79,12 +89,80 @@ await page.locator('.app-nav__role-switcher select').selectOption('ROLE-002');
 // onRoleChange() เขียน sessionStorage แล้วสั่ง location.reload() เอง — ไม่ต้อง goto ซ้ำ
 ```
 
+## 3.1 ถ่ายภาพหน้าจอทุกเทส แยกโฟลเดอร์ตามชุดทดสอบ
+
+`support/screenshot.ts` ห่อ `test` เดิมของ Playwright ด้วย `test.afterEach` เดียว — ทุกเทสที่ผ่านหรือ
+พัง จะได้ภาพ `fullPage` หนึ่งใบเสมอ เก็บที่ `e2e/screenshots/<ชื่อไฟล์ .spec.ts>/<ชื่อเทส>.png`
+กล่าวคือ **หนึ่งโฟลเดอร์ต่อหนึ่งไฟล์เทส (ชุดทดสอบ)** ไม่ปนกัน
+
+ทำไมไม่ใช้ `use: { screenshot: 'on' }` ใน `playwright.config.ts` เฉยๆ — ค่านั้นถ่ายเหมือนกันแต่โยนไฟล์
+ทั้งหมดไว้แบนใต้ `test-results/` เป็นคนละโฟลเดอร์ต่อ "หนึ่งเทส" (ชื่อโฟลเดอร์ยาวเป็น slug ของ title เต็ม)
+ไม่ได้จัดกลุ่มเป็นโฟลเดอร์ต่อไฟล์อย่างที่ต้องการ และปกติ Playwright จะเก็บให้เฉพาะเทสที่ **พัง** เท่านั้น
+เว้นแต่ตั้ง `'on'` ตรงๆ
+
+`e2e/screenshots/` ถูก gitignore ไว้แล้ว (ผลลัพธ์รันแต่ละรอบทับของเดิม ไม่ commit)
+
+### 3.1.1 โค้ดของ function capture
+
+```ts
+// e2e/support/screenshot.ts
+export const test = base;
+export { expect };
+
+const CAPTURE_ENABLED = process.env.PW_SCREENSHOT !== '0';
+
+test.afterEach(async ({ page }, testInfo) => {
+  if (!CAPTURE_ENABLED) return;              // ปิดได้ด้วย env var — ดูข้อ 4
+
+  const suiteName = path.basename(testInfo.file).replace(/\.spec\.ts$/, '');
+  const safeTitle = testInfo.title.replace(/[\\/:*?"<>|]+/g, '_').trim();
+  const dir = path.join(__dirname, '..', 'screenshots', suiteName);
+  fs.mkdirSync(dir, { recursive: true });
+
+  try {
+    await page.screenshot({ path: path.join(dir, `${safeTitle}.png`), fullPage: true });
+  } catch {
+    // เพจถูกปิด/เปลี่ยนหน้าไปแล้วหลังพังหนักๆ — ไม่มีอะไรให้ถ่ายแล้ว ไม่ต้อง fail เทสซ้ำ
+  }
+});
+```
+
+`testInfo.file` ให้ path เต็มของไฟล์ `.spec.ts` ที่กำลังรัน — เอาแค่ basename ตัดคำว่า `.spec.ts`
+ออกก็ได้ชื่อโฟลเดอร์ (= ชื่อชุดทดสอบ) แล้ว; `testInfo.title` คือชื่อเทสที่เห็นตอน `--list`
+(รวม describe ด้านนอกด้วยถ้ามีซ้อน) เอามาล้างอักขระที่ Windows ห้ามใช้ในชื่อไฟล์ก่อนใช้เป็นชื่อ .png
+
+### 3.1.2 เพิ่ม capture ให้ไฟล์เทสใหม่
+
+ไฟล์เทสใหม่ทุกไฟล์ต้อง import `test`/`expect` จาก `./support/screenshot` แทน `@playwright/test`
+ตรงๆ ถึงจะได้ afterEach นี้ติดไปด้วย — ไม่มีขั้นตอนอื่นอีกแล้ว ไม่ต้องเขียน `page.screenshot()` เองในแต่ละเทส
+
+```ts
+// ❌ ผิด — import ตรงจาก @playwright/test เทสไฟล์นี้จะไม่มีการถ่ายภาพให้เลย
+import { expect, test } from '@playwright/test';
+
+// ✅ ถูก — เทสทุกตัวในไฟล์นี้จะมีภาพเก็บใน e2e/screenshots/<ชื่อไฟล์นี้>/ อัตโนมัติ
+import { expect, test } from './support/screenshot';
+```
+
+ถ้าไฟล์นั้นต้อง import type อย่าง `Page`/`Locator` ด้วย ให้แยกบรรทัดไปดึงจาก `@playwright/test`
+ตามปกติ (type เฉยๆ ไม่ผูกกับ fixture ของ `test`) — ดูตัวอย่างจริงที่ทำไว้แล้ว:
+
+```ts
+// e2e/recorded-application-smoke.spec.ts
+import type { Page } from '@playwright/test';
+
+import { expect, test } from './support/screenshot';
+```
+
+ไม่ต้องแก้ `playwright.config.ts` หรือไฟล์อื่นใดๆ — โฟลเดอร์ `e2e/screenshots/<ชื่อไฟล์ .spec.ts>/`
+จะถูกสร้างเองตอนรันครั้งแรกของไฟล์นั้น (`fs.mkdirSync(..., { recursive: true })`)
+
 ## 4. คำสั่งที่ใช้บ่อย
 
 | คำสั่ง | ใช้เมื่อ |
 |---|---|
-| `npm run e2e` | รันทั้งชุด headless เต็มความเร็ว (project `chromium`) |
-| `npm run e2e:demo` | รันแบบเปิดเบราว์เซอร์จริง + ช้าลง 900ms/action ให้คนดูทัน (project `demo`) |
+| `npm run e2e` | รันทั้งชุด headless เต็มความเร็ว (project `chromium`) — **มี capture** (ค่าเริ่มต้น) |
+| `npm run e2e:demo` | รันแบบเปิดเบราว์เซอร์จริง + ช้าลง 900ms/action ให้คนดูทัน (project `demo`) — มี capture ด้วย |
 | `npx playwright test loan-officer-review` | รันเฉพาะไฟล์ที่ชื่อขึ้นต้นแบบนี้ |
 | `npx playwright test -g "SCN-miniloan-016"` | รันเฉพาะเทสที่ชื่อมีคำนี้ ข้ามไฟล์ก็ได้ |
 | `npx playwright test --debug` | เปิด Inspector หยุดทีละบรรทัด กด step เอง |
@@ -95,6 +173,31 @@ await page.locator('.app-nav__role-switcher select').selectOption('ROLE-002');
 flag หรือ env var เอง แค่พิมพ์ `npm run e2e:demo` คำสั่งเดียว ส่วน `npm run e2e` ปกติ (ที่ CI ใช้)
 ไม่ถูกกระทบเลยเพราะ pin ไว้ที่ `--project=chromium` ตายตัว อยากได้ความเร็วอื่นก็แก้ตัวเลข
 `slowMo` ใน config ได้ตรงๆ หรือรันเฉพาะไฟล์เดียวแบบ `npm run e2e:demo -- recorded-application-smoke`
+
+### 4.1 รันแบบมี capture (ค่าเริ่มต้น) กับแบบธรรมดา (ไม่ capture)
+
+ทุกไฟล์เทส import `test`/`expect` จาก `./support/screenshot` อยู่แล้ว (ข้อ 3.1) เพราะฉะนั้น
+**ค่าเริ่มต้นของทุกคำสั่งด้านบนคือมี capture เสมอ** — ไม่ต้องเติมอะไรเพิ่ม ต้องการปิดถึงจะต้องเติม
+`PW_SCREENSHOT=0` ก่อนคำสั่ง:
+
+**bash** (Git Bash / macOS / Linux):
+
+```bash
+npm run e2e                                    # แบบมี capture (ค่าเริ่มต้น)
+PW_SCREENSHOT=0 npm run e2e                    # แบบธรรมดา ไม่ capture
+PW_SCREENSHOT=0 npx playwright test loan-officer-review   # เจาะไฟล์เดียว + ไม่ capture
+```
+
+**PowerShell** (`$env:` ตั้งแล้วติดกับ session จนกว่าจะปิด shell หรือ set ใหม่):
+
+```powershell
+npm run e2e                                    # แบบมี capture (ค่าเริ่มต้น)
+$env:PW_SCREENSHOT = '0'; npm run e2e          # แบบธรรมดา ไม่ capture
+Remove-Item Env:\PW_SCREENSHOT                 # เลิกปิด กลับไปมี capture ในรอบต่อไป
+```
+
+สลับได้เพราะ `support/screenshot.ts` เช็ก `process.env.PW_SCREENSHOT !== '0'` ก่อนถ่ายภาพทุกครั้ง
+(ดูโค้ดเต็มข้อ 3.1.1) — ไม่ต้องแก้ playwright.config.ts หรือสลับ import กลับไป `@playwright/test`
 
 ## 5. Human-record เทสด้วย codegen
 

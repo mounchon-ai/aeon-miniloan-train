@@ -1,6 +1,7 @@
-import { expect, test, type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
 
 import { ELIGIBLE_EXAMPLES, INELIGIBLE_EXAMPLES, type ApplicationExample } from './support/application-examples';
+import { expect, test } from './support/screenshot';
 
 async function fillAndSubmit(page: Page, fields: ApplicationExample['fields']): Promise<void> {
   await page.goto('http://localhost:3000/applications/new');

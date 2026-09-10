@@ -1,6 +1,5 @@
-import { expect, test } from '@playwright/test';
-
 import { createSubmittedApplication, uniqueApplicant } from './support/api';
+import { expect, test } from './support/screenshot';
 import { loginAs, ROLE } from './support/roles';
 
 /**
